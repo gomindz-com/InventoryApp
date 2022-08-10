@@ -32,30 +32,30 @@ Create Virtual Environment
   Activating the virtual environment in our command prompt. This allows us to run the python intepreter inside the
   virtual environment not the one installed globally.
  
-  : pipenv shell
+  pipenv shell
   
 - Configure VSCode to use the python intepreter inside our virtual environment
 
-  : In VSCode, View -> Command Palette -> Search for python intepreter
-  : Get The Path to our virtual environment : $ pipenv --venv
-  : Copy the path and paste in the vscode python intepreter path and append \bin\python
+  In VSCode, View -> Command Palette -> Search for python intepreter
+  Get The Path to our virtual environment : $ pipenv --venv
+  Copy the path and paste in the vscode python intepreter path and append \bin\python
 
 
 - Install Requirements File
 
-  : pip install -r requirements.txt
+  pip install -r requirements.txt
 
 - Migrate Database
 
-  : python manage.py migrate
+  python manage.py migrate
 
 - Create Super User
 
-  : python manage.py createsuperuser
+  python manage.py createsuperuser
 
 - Run Project
 
-  : python manage.py runserver
+  python manage.py runserver
   
   
 
@@ -73,7 +73,7 @@ Active Virtual Environment
 
 - source venv/bin/activate
 
-- Install Requirements File
+Install Requirements File
 
 pip install -r requirements.txt
 
