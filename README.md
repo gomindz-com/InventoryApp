@@ -11,6 +11,7 @@ Getting Started
 
 - cd frontend
 - npm install
+- npm start
 
 
 
