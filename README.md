@@ -92,7 +92,11 @@ Run Project
 
 
 
-#GITHUB COLLABORATION
+
+
+# Git Collaboration
+
+
 
 - Do a pull to keep your local files up to date with the git repo
   Make sure you are in the master branch
