@@ -13,6 +13,35 @@ Getting Started
 - npm install
 - npm start
 
+In case of error with $ npm install, use the commands 
+$ npm install --legacy-peer-deps
+$ npm fund
+
+
+- Do a pull to keep your local files up to date with the git repo
+  Make sure you are in the master branch
+
+$ git checkout master
+
+$ git branch
+
+$ git pull origin {main/master}
+
+- Create a new branch To work on
+
+$ git checkout -b {New Branch Name}
+
+  Work on your feature and edit or updates or add files or deletes files etc
+
+- Once done
+
+$ git add .
+$ git commit  -m "Added index.html" 
+
+- Then push the branch to the remote repo
+
+$ git push origin {Branch Name}
+
 
 
 # Backend Djnago - Windows Setup
