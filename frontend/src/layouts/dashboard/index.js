@@ -51,32 +51,32 @@ function Default() {
         <Grid container spacing={3} mb={3}>
           <Grid item xs={12} md={6} lg={3}>
             <DetailedStatisticsCard
-              title="today's money"
-              count="$53,000"
+              title="Sales"
+              count="D53,000"
               icon={{ color: "info", component: <i className="ni ni-money-coins" /> }}
               percentage={{ color: "success", count: "+55%", text: "since yesterday" }}
             />
           </Grid>
           <Grid item xs={12} md={6} lg={3}>
             <DetailedStatisticsCard
-              title="today's users"
-              count="2,300"
+              title="Profits"
+              count="D2,300"
               icon={{ color: "error", component: <i className="ni ni-world" /> }}
               percentage={{ color: "success", count: "+3%", text: "since last week" }}
             />
           </Grid>
           <Grid item xs={12} md={6} lg={3}>
             <DetailedStatisticsCard
-              title="new clients"
-              count="+3,462"
+              title="loss"
+              count="D3,462"
               icon={{ color: "success", component: <i className="ni ni-paper-diploma" /> }}
               percentage={{ color: "error", count: "-2%", text: "since last quarter" }}
             />
           </Grid>
           <Grid item xs={12} md={6} lg={3}>
             <DetailedStatisticsCard
-              title="sales"
-              count="$103,430"
+              title="Invoive"
+              count="D103,430"
               icon={{ color: "warning", component: <i className="ni ni-cart" /> }}
               percentage={{ color: "success", count: "+5%", text: "than last month" }}
             />
@@ -84,7 +84,7 @@ function Default() {
         </Grid>
         <Grid container spacing={3} mb={3}>
           <Grid item xs={12} lg={7}>
-            <GradientLineChart
+            {/* <GradientLineChart
               title="Sales Overview"
               description={
                 <ArgonBox display="flex" alignItems="center">
@@ -100,22 +100,22 @@ function Default() {
                 </ArgonBox>
               }
               chart={gradientLineChartData}
-            />
+            /> */}
           </Grid>
           <Grid item xs={12} lg={5}>
-            <Slider />
+            {/* <Slider /> */}
           </Grid>
         </Grid>
-        <Grid container spacing={3}>
+        {/* <Grid container spacing={3}>
           <Grid item xs={12} md={8}>
             <SalesTable title="Sales by Country" rows={salesTableData} />
-          </Grid>
-          <Grid item xs={12} md={4}>
+          </Grid> */}
+        {/* <Grid item xs={12} md={4}>
             <CategoriesList title="categories" categories={categoriesListData} />
-          </Grid>
-        </Grid>
+          </Grid> */}
+        {/* </Grid> */}
       </ArgonBox>
-      <Footer />
+      {/* <Footer /> */}
     </DashboardLayout>
   );
 }
