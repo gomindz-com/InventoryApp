@@ -64,7 +64,7 @@ function RTL() {
           <Grid item xs={12} md={6} lg={3}>
             <DetailedStatisticsCard
               title="today's money"
-              count="$53,000"
+              count="D53,000"
               icon={{ color: "info", component: <i className="ni ni-money-coins" /> }}
               percentage={{ color: "success", count: "+55%", text: "since yesterday" }}
             />
