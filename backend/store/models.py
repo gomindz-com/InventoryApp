@@ -2,6 +2,127 @@ from django.db import models
 
 from users.models import User
 
+# ==================Created Models=========================
+class Shop(models.Model):
+    name = models.CharField(max_length=120, unique=True)
+    id = models.OneToOneField(User, on_delete=models.CASCADE)
+    location = models.CharField(max_length=120, unique=True)
+    user_id = models.IntegerField(max_length=220)
+    user_name = models.IntegerField(max_length=220)
+    product_id = models.IntegerField(max_length=220)
+    created_date = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+    
+    
+class Sales(models.Model):
+    name = models.CharField(max_length=120, unique=True)
+    id = models.OneToOneField(User, on_delete=models.CASCADE)
+    price = models.CharField(max_length=220)
+    product_id = models.IntegerField(max_length=220)
+    total = models.IntegerField(max_length=220)
+    qty = models.IntegerField(max_length=220)
+    shop_id = models.IntegerField(max_length=220)
+    created_date = models.DateField(auto_now_add=True)
+    # user = models.OneToOneField(User, on_delete=models.CASCADE)
+    # address = models.CharField(max_length=220)
+
+    def __str__(self):
+        return self.name
+    
+    
+class Product(models.Model):
+    id = models.OneToOneField(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=120, unique=True)
+    stock = models.CharField(max_length=220)
+    category_id = models.CharField(max_length=220)
+    price = models.CharField(max_length=220)
+    created_date = models.DateField(auto_now_add=True)
+    # image =models.CharField(max_length=220)
+    # user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+    
+    
+# class Supplier(models.Model):
+#     user = models.OneToOneField(User, on_delete=models.CASCADE)
+#     name = models.CharField(max_length=120, unique=True)
+#     address = models.CharField(max_length=220)
+#     created_date = models.DateField(auto_now_add=True)
+
+#     def __str__(self):
+#         return self.name
+    
+    
+# class Supplier(models.Model):
+#     user = models.OneToOneField(User, on_delete=models.CASCADE)
+#     name = models.CharField(max_length=120, unique=True)
+#     address = models.CharField(max_length=220)
+#     created_date = models.DateField(auto_now_add=True)
+
+#     def __str__(self):
+#         return self.name
+    
+    
+# class Supplier(models.Model):
+#     user = models.OneToOneField(User, on_delete=models.CASCADE)
+#     name = models.CharField(max_length=120, unique=True)
+#     address = models.CharField(max_length=220)
+#     created_date = models.DateField(auto_now_add=True)
+
+#     def __str__(self):
+#         return self.name
+    
+    
+
+# class Supplier(models.Model):
+#     user = models.OneToOneField(User, on_delete=models.CASCADE)
+#     name = models.CharField(max_length=120, unique=True)
+#     address = models.CharField(max_length=220)
+#     created_date = models.DateField(auto_now_add=True)
+
+#     def __str__(self):
+#         return self.name
+    
+    
+# class Supplier(models.Model):
+#     user = models.OneToOneField(User, on_delete=models.CASCADE)
+#     name = models.CharField(max_length=120, unique=True)
+#     address = models.CharField(max_length=220)
+#     created_date = models.DateField(auto_now_add=True)
+
+#     def __str__(self):
+#         return self.name
+    
+    
+# class Supplier(models.Model):
+#     user = models.OneToOneField(User, on_delete=models.CASCADE)
+#     name = models.CharField(max_length=120, unique=True)
+#     address = models.CharField(max_length=220)
+#     created_date = models.DateField(auto_now_add=True)
+
+#     def __str__(self):
+#         return self.name
+    
+    
+# class Supplier(models.Model):
+#     user = models.OneToOneField(User, on_delete=models.CASCADE)
+#     name = models.CharField(max_length=120, unique=True)
+#     address = models.CharField(max_length=220)
+#     created_date = models.DateField(auto_now_add=True)
+
+#     def __str__(self):
+#         return self.name
+
+
+
+# ========================Created models end=========================
+
+
+
+
 
 class Supplier(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
