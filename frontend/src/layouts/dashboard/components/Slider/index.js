@@ -118,7 +118,7 @@ function Slider() {
                 </ArgonTypography>
               </ArgonBox>
               <ArgonTypography variant="h5" color="white" mb={0.5}>
-                mansa k
+                Get started with Argon
               </ArgonTypography>
               <ArgonTypography variant="body2" color="white">
                 There&apos;s nothing I really wanted to do in life that I wasn&apos;t able to get
