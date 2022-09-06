@@ -45,6 +45,7 @@ import SignUp from "layouts/authentication/sign-up";
 
 // Argon Dashboard 2 MUI components
 import ArgonBox from "components/ArgonBox";
+import Suppliers from "layouts/suppliers";
 
 const routes = [
   {
@@ -54,6 +55,16 @@ const routes = [
     route: "/dashboard",
     icon: <ArgonBox component="i" color="primary" fontSize="14px" className="ni ni-tv-2" />,
     component: <Dashboard />,
+  },
+  {
+    type: "route",
+    name: "Suppliers",
+    key: "suppliers",
+    route: "/suppliers",
+    icon: (
+      <ArgonBox component="i" color="warning" fontSize="14px" className="ni ni-bus-front-12" />
+    ),
+    component: <Suppliers />,
   },
   {
     type: "route",
