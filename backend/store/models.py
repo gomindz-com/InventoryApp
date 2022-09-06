@@ -5,25 +5,25 @@ from users.models import User
 # ==================Created Models=========================
 class Shop(models.Model):
     name = models.CharField(max_length=120, unique=True)
-    id = models.OneToOneField(User, on_delete=models.CASCADE)
+    # id = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     location = models.CharField(max_length=120, unique=True)
-    user_id = models.IntegerField(max_length=220)
+    # user_id = models.IntegerField(max_length=220)
     user_name = models.IntegerField(max_length=220)
-    product_id = models.IntegerField(max_length=220)
+    # product_id = models.IntegerField(max_length=220)
     created_date = models.DateField(auto_now_add=True)
 
     def __str__(self):
         return self.name
     
     
-class Sales(models.Model):
+class Sale(models.Model):
     name = models.CharField(max_length=120, unique=True)
-    id = models.OneToOneField(User, on_delete=models.CASCADE)
+    # id = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     price = models.CharField(max_length=220)
-    product_id = models.IntegerField(max_length=220)
+    # product_id = models.IntegerField(max_length=220)
     total = models.IntegerField(max_length=220)
     qty = models.IntegerField(max_length=220)
-    shop_id = models.IntegerField(max_length=220)
+    # shop_id = models.IntegerField(max_length=220)
     created_date = models.DateField(auto_now_add=True)
     # user = models.OneToOneField(User, on_delete=models.CASCADE)
     # address = models.CharField(max_length=220)
@@ -33,7 +33,7 @@ class Sales(models.Model):
     
     
 class Product(models.Model):
-    id = models.OneToOneField(User, on_delete=models.CASCADE)
+    # id = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     name = models.CharField(max_length=120, unique=True)
     stock = models.CharField(max_length=220)
     category_id = models.CharField(max_length=220)
@@ -46,45 +46,45 @@ class Product(models.Model):
         return self.name
     
     
-# class Supplier(models.Model):
-#     user = models.OneToOneField(User, on_delete=models.CASCADE)
-#     name = models.CharField(max_length=120, unique=True)
-#     address = models.CharField(max_length=220)
-#     created_date = models.DateField(auto_now_add=True)
+class Transaction(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=120, unique=True)
+    address = models.CharField(max_length=220)
+    created_date = models.DateField(auto_now_add=True)
 
-#     def __str__(self):
-#         return self.name
+    def __str__(self):
+        return self.name
     
     
-# class Supplier(models.Model):
-#     user = models.OneToOneField(User, on_delete=models.CASCADE)
-#     name = models.CharField(max_length=120, unique=True)
-#     address = models.CharField(max_length=220)
-#     created_date = models.DateField(auto_now_add=True)
+class Invoice(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=120, unique=True)
+    address = models.CharField(max_length=220)
+    created_date = models.DateField(auto_now_add=True)
 
-#     def __str__(self):
-#         return self.name
+    def __str__(self):
+        return self.name
     
     
-# class Supplier(models.Model):
-#     user = models.OneToOneField(User, on_delete=models.CASCADE)
-#     name = models.CharField(max_length=120, unique=True)
-#     address = models.CharField(max_length=220)
-#     created_date = models.DateField(auto_now_add=True)
+class Categorie(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=120, unique=True)
+    address = models.CharField(max_length=220)
+    created_date = models.DateField(auto_now_add=True)
 
-#     def __str__(self):
-#         return self.name
+    def __str__(self):
+        return self.name
     
     
 
-# class Supplier(models.Model):
-#     user = models.OneToOneField(User, on_delete=models.CASCADE)
-#     name = models.CharField(max_length=120, unique=True)
-#     address = models.CharField(max_length=220)
-#     created_date = models.DateField(auto_now_add=True)
+class User_Order(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=120, unique=True)
+    address = models.CharField(max_length=220)
+    created_date = models.DateField(auto_now_add=True)
 
-#     def __str__(self):
-#         return self.name
+    def __str__(self):
+        return self.name
     
     
 # class Supplier(models.Model):

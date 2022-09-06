@@ -1,13 +1,20 @@
 from django.contrib import admin
 
 from .models import (
+    Invoice,
     Supplier,
     Buyer,
     Season,
     Drop,
     Product,
+    Sale,
+    User_Order,
+    Shop,
     Order,
-    Delivery
+    Delivery,
+    Transaction,
+    Invoice,
+    Categorie
 )
 
 
@@ -26,3 +33,9 @@ admin.site.register(Drop)
 admin.site.register(Product)
 admin.site.register(Order)
 admin.site.register(Delivery)
+admin.site.register(Shop)
+admin.site.register(Sale)
+admin.site.register(Transaction)
+admin.site.register(Invoice)
+admin.site.register(Categorie)
+admin.site.register(User_Order)
