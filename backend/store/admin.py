@@ -14,7 +14,8 @@ from .models import (
     Delivery,
     Transaction,
     Invoice,
-    Categorie
+    Categorie,
+    Customer
 )
 
 
@@ -39,3 +40,4 @@ admin.site.register(Transaction)
 admin.site.register(Invoice)
 admin.site.register(Categorie)
 admin.site.register(User_Order)
+admin.site.register(Customer)
