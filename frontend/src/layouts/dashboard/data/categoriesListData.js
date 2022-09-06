@@ -20,7 +20,7 @@ const categoriesListData = [
   {
     color: "dark",
     icon: <i className="ni ni-mobile-button" style={{ fontSize: "12px" }} />,
-    name: "Devices",
+    name: "Mynase",
     description: (
       <>
         250 in stock,{" "}
@@ -34,7 +34,7 @@ const categoriesListData = [
   {
     color: "dark",
     icon: <i className="ni ni-tag" style={{ fontSize: "12px" }} />,
-    name: "Tickets",
+    name: "Coffie",
     description: (
       <>
         123 closed,{" "}
@@ -48,7 +48,7 @@ const categoriesListData = [
   {
     color: "dark",
     icon: <i className="ni ni-box-2" style={{ fontSize: "12px" }} />,
-    name: "Error logs",
+    name: "Tomato",
     description: (
       <>
         1 is active,{" "}
@@ -62,7 +62,7 @@ const categoriesListData = [
   {
     color: "dark",
     icon: <i className="ni ni-satisfied" style={{ fontSize: "12px" }} />,
-    name: "Happy Users",
+    name: "jembow",
     description: (
       <>
         <ArgonTypography variant="caption" color="text" fontWeight="medium">

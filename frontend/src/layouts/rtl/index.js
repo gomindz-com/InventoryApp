@@ -64,7 +64,7 @@ function RTL() {
           <Grid item xs={12} md={6} lg={3}>
             <DetailedStatisticsCard
               title="today's money"
-              count="$53,000"
+              count="D53,000"
               icon={{ color: "info", component: <i className="ni ni-money-coins" /> }}
               percentage={{ color: "success", count: "+55%", text: "since yesterday" }}
             />
@@ -72,7 +72,7 @@ function RTL() {
           <Grid item xs={12} md={6} lg={3}>
             <DetailedStatisticsCard
               title="today's users"
-              count="2,300"
+              count="D2,300"
               icon={{ color: "error", component: <i className="ni ni-world" /> }}
               percentage={{ color: "success", count: "+3%", text: "since last week" }}
             />
@@ -88,7 +88,7 @@ function RTL() {
           <Grid item xs={12} md={6} lg={3}>
             <DetailedStatisticsCard
               title="sales"
-              count="$103,430"
+              count="D103,430"
               icon={{ color: "warning", component: <i className="ni ni-cart" /> }}
               percentage={{ color: "success", count: "+5%", text: "than last month" }}
             />
