@@ -32,12 +32,14 @@ import IllustrationLayout from "layouts/authentication/components/IllustrationLa
 
 // Image
 const bgImage =
-  "https://raw.githubusercontent.com/creativetimofficial/public-assets/master/argon-dashboard-pro/assets/img/signin-ill.jpg";
+  "https://us.123rf.com/450wm/kostsov/kostsov1906/kostsov190600026/126080344-modern-showcase-with-empty-space-on-pedestal-on-blue-background-3d-rendering-.jpg?ver=6";
 
 function Illustration() {
   const [rememberMe, setRememberMe] = useState(false);
 
-  const handleSetRememberMe = () => setRememberMe(!rememberMe);
+  const handleSetRememberMe = () => {
+    console.log("you click me");
+  };
 
   return (
     <IllustrationLayout
@@ -69,7 +71,7 @@ function Illustration() {
           </ArgonTypography>
         </ArgonBox>
         <ArgonBox mt={4} mb={1}>
-          <ArgonButton color="info" size="large" fullWidth>
+          <ArgonButton onChange={handleSetRememberMe} color="info" size="large" fullWidth>
             Sign In
           </ArgonButton>
         </ArgonBox>

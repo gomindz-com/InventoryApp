@@ -20,6 +20,9 @@ import ArgonTypography from "components/ArgonTypography";
 import bg1 from "assets/images/img-2.jpg";
 import bg2 from "assets/images/img-1.jpg";
 import bg3 from "assets/images/img-3.jpg";
+import armanty from "assets/images/armanty.jpeg";
+import coffie from "assets/images/coffie.jpeg";
+import tomato from "assets/images/Tomato.jpeg";
 
 function Slider() {
   // install SwiperJS modules
@@ -96,7 +99,7 @@ function Slider() {
           <ArgonBox
             sx={{
               position: "relative",
-              backgroundImage: `url(${bg1})`,
+              backgroundImage: `url(${coffie})`,
               backgroundSize: "cover",
               height: "100%",
             }}
@@ -118,11 +121,10 @@ function Slider() {
                 </ArgonTypography>
               </ArgonBox>
               <ArgonTypography variant="h5" color="white" mb={0.5}>
-                Get started with Argon
+                Our products are avaible at all time
               </ArgonTypography>
               <ArgonTypography variant="body2" color="white">
-                There&apos;s nothing I really wanted to do in life that I wasn&apos;t able to get
-                good at.
+                Coffie avaible at a very chip price
               </ArgonTypography>
             </ArgonBox>
           </ArgonBox>
@@ -131,7 +133,7 @@ function Slider() {
           <ArgonBox
             sx={{
               position: "relative",
-              backgroundImage: `url(${bg2})`,
+              backgroundImage: `url(${armanty})`,
               backgroundSize: "cover",
               height: "100%",
             }}
@@ -153,11 +155,10 @@ function Slider() {
                 </ArgonTypography>
               </ArgonBox>
               <ArgonTypography variant="h5" color="white" mb={0.5}>
-                Faster way to create web pages
+                Our products are avaible at all time
               </ArgonTypography>
               <ArgonTypography variant="body2" color="white">
-                That&apos;s my skill. I&apos;m not really specifically talented at anything except
-                for the ability to learn.
+                Armanty avaible at a chip price
               </ArgonTypography>
             </ArgonBox>
           </ArgonBox>
@@ -166,7 +167,7 @@ function Slider() {
           <ArgonBox
             sx={{
               position: "relative",
-              backgroundImage: `url(${bg3})`,
+              backgroundImage: `url(${tomato})`,
               backgroundSize: "cover",
               height: "100%",
             }}
@@ -188,11 +189,10 @@ function Slider() {
                 </ArgonTypography>
               </ArgonBox>
               <ArgonTypography variant="h5" color="white" mb={0.5}>
-                Share with us your design tips!
+                Our products are avaible at all time
               </ArgonTypography>
               <ArgonTypography variant="body2" color="white">
-                Don&apos;t be afraid to be wrong because you can&apos;t learn anything from a
-                compliment.
+                Tomato avaible at a chip price
               </ArgonTypography>
             </ArgonBox>
           </ArgonBox>

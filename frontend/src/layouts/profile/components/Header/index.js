@@ -86,17 +86,17 @@ function Header() {
           <Grid item>
             <ArgonBox height="100%" mt={0.5} lineHeight={1}>
               <ArgonTypography variant="h5" fontWeight="medium">
-                Alex Thompson
+                Modou Jallow
               </ArgonTypography>
               <ArgonTypography variant="button" color="text" fontWeight="medium">
-                CEO / Co-Founder
+                Admin
               </ArgonTypography>
             </ArgonBox>
           </Grid>
           <Grid item xs={12} md={6} lg={4} sx={{ ml: "auto" }}>
             <AppBar position="static">
               <Tabs orientation={tabsOrientation} value={tabValue} onChange={handleSetTabValue}>
-                <Tab
+                {/* <Tab
                   label="App"
                   icon={
                     <i className="ni ni-app" style={{ marginTop: "6px", marginRight: "8px" }} />
@@ -110,7 +110,7 @@ function Header() {
                       style={{ marginTop: "6px", marginRight: "8px" }}
                     />
                   }
-                />
+                /> */}
                 <Tab
                   label="Settings"
                   icon={

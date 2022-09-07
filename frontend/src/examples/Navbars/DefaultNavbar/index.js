@@ -127,35 +127,7 @@ function DefaultNavbar({ brand, transparent, light, action }) {
               light={light}
             />
           </ArgonBox>
-          {action &&
-            (action.type === "internal" ? (
-              <ArgonBox display={{ xs: "none", lg: "inline-block" }}>
-                <ArgonButton
-                  component={Link}
-                  to={action.route}
-                  variant={action.variant ? action.variant : "contained"}
-                  color={action.color ? action.color : "info"}
-                  size="small"
-                >
-                  {action.label}
-                </ArgonButton>
-              </ArgonBox>
-            ) : (
-              <ArgonBox display={{ xs: "none", lg: "inline-block" }}>
-                <ArgonButton
-                  component="a"
-                  href={action.route}
-                  target="_blank"
-                  rel="noreferrer"
-                  variant={action.variant ? action.variant : "contained"}
-                  color={action.color ? action.color : "info"}
-                  size="small"
-                  sx={{ mt: -0.3 }}
-                >
-                  {action.label}
-                </ArgonButton>
-              </ArgonBox>
-            ))}
+          
           <ArgonBox
             display={{ xs: "inline-block", lg: "none" }}
             lineHeight={0}
@@ -176,7 +148,7 @@ function DefaultNavbar({ brand, transparent, light, action }) {
 
 // Declaring default props for DefaultNavbar
 DefaultNavbar.defaultProps = {
-  brand: "Argon Dashboard 2",
+  brand: "Gomindz Inventory",
   transparent: false,
   light: false,
   action: false,

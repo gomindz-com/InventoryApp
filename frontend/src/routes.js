@@ -45,6 +45,11 @@ import SignUp from "layouts/authentication/sign-up";
 
 // Argon Dashboard 2 MUI components
 import ArgonBox from "components/ArgonBox";
+import Suppliers from "layouts/suppliers";
+import Buyers from "layouts/buyers";
+import Products from "layouts/products";
+import Orders from "layouts/orders";
+import Deliveries from "layouts/deliveries";
 
 const routes = [
   {
@@ -57,6 +62,56 @@ const routes = [
   },
   {
     type: "route",
+    name: "Suppliers",
+    key: "suppliers",
+    route: "/suppliers",
+    icon: (
+      <ArgonBox component="i" color="warning" fontSize="14px" className="ni ni-bus-front-12" />
+    ),
+    component: <Suppliers />,
+  },
+  {
+    type: "route",
+    name: "Buyers",
+    key: "buyers",
+    route: "/buyers",
+    icon: (
+      <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-cart" />
+    ),
+    component: <Buyers />,
+  },
+  {
+    type: "route",
+    name: "Products",
+    key: "products",
+    route: "/products",
+    icon: (
+      <ArgonBox component="i" color="success" fontSize="14px" className="ni ni-bag-17" />
+    ),
+    component: <Products />,
+  },
+  {
+    type: "route",
+    name: "Orders",
+    key: "orders",
+    route: "/orders",
+    icon: (
+      <ArgonBox component="i" color="dark" fontSize="14px" className="ni ni-delivery-fast" />
+    ),
+    component: <Orders />,
+  },
+  {
+    type: "route",
+    name: "Deliveries",
+    key: "deliveries",
+    route: "/deliveries",
+    icon: (
+      <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-credit-card" />
+    ),
+    component: <Deliveries />,
+  },
+  /* {
+    type: "route",
     name: "Tables",
     key: "tables",
     route: "/tables",
@@ -64,7 +119,8 @@ const routes = [
       <ArgonBox component="i" color="warning" fontSize="14px" className="ni ni-calendar-grid-58" />
     ),
     component: <Tables />,
-  },
+  }, */
+/* 
   {
     type: "route",
     name: "Billing",
@@ -72,23 +128,23 @@ const routes = [
     route: "/billing",
     icon: <ArgonBox component="i" color="success" fontSize="14px" className="ni ni-credit-card" />,
     component: <Billing />,
-  },
-  {
+  }, */
+ /*  {
     type: "route",
     name: "Virtual Reality",
     key: "virtual-reality",
     route: "/virtual-reality",
     icon: <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-app" />,
     component: <VirtualReality />,
-  },
-  {
+  }, */
+  /* {
     type: "route",
     name: "RTL",
     key: "rtl",
     route: "/rtl",
     icon: <ArgonBox component="i" color="error" fontSize="14px" className="ni ni-world-2" />,
     component: <RTL />,
-  },
+  }, */
   { type: "title", title: "Account Pages", key: "account-pages" },
   {
     type: "route",
