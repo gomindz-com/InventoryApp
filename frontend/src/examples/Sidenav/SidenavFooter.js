@@ -47,35 +47,12 @@ function SidenavFooter() {
             Need help?
           </ArgonTypography>
           <ArgonTypography color="inherit" variant="caption">
-            Please check our docs
+            Please call us on 35636633 
           </ArgonTypography>
         </ArgonBox>
       </ArgonBox>
       <ArgonBox display="flex" flexDirection="column">
-        <ArgonButton
-          component={Link}
-          href="https://www.creative-tim.com/learning-lab/react/overview/argon-dashboard/"
-          target="_blank"
-          rel="noreferrer"
-          color="dark"
-          size="small"
-          fullWidth
-          sx={{ mb: 1 }}
-        >
-          Documentation
-        </ArgonButton>
-        <ArgonButton
-          component={Link}
-          href="https://www.creative-tim.com/product/argon-dashboard-material-ui"
-          target="_blank"
-          rel="noreferrer"
-          color="info"
-          size="small"
-          fullWidth
-          mb={2}
-        >
-          Upgrade to PRO
-        </ArgonButton>
+        
       </ArgonBox>
     </ArgonBox>
   );

@@ -34,7 +34,7 @@ function IllustrationLayout({ color, header, title, description, button, illustr
         action={{
           type: "external",
           route: "https://creative-tim.com/product/argon-dashboard-material-ui",
-          label: "Free Download",
+          label: "Free Downloffad",
           ...button,
         }}
       />

@@ -13,44 +13,76 @@ Coded by www.creative-tim.com
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
 
+// @mui material components
+import Card from "@mui/material/Card";
+
 import { useState } from "react";
 
-// react-router-dom components
-import { Link } from "react-router-dom";
-
-// @mui material components
-import Switch from "@mui/material/Switch";
 
 // Argon Dashboard 2 MUI components
 import ArgonBox from "components/ArgonBox";
 import ArgonTypography from "components/ArgonTypography";
+
+// Argon Dashboard 2 MUI examples
+import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
+import DashboardNavbar from "examples/Navbars/DashboardNavbar";
+import Footer from "examples/Footer";
+import Table from "examples/Tables/Table";
+
+// Data
+import suupliersTableData from "layouts/products/data/buyersTableData";
+import projectsTableData from "layouts/products/data/projectsTableData";
+
+// @mui material components
+import Switch from "@mui/material/Switch";
+
+
+import Icon from "@mui/material/Icon";
+
 import ArgonInput from "components/ArgonInput";
 import ArgonButton from "components/ArgonButton";
 
-// Authentication layout components
-import IllustrationLayout from "layouts/authentication/components/IllustrationLayout";
 
-// Image
-const bgImage =
-  "https://us.123rf.com/450wm/kostsov/kostsov1906/kostsov190600026/126080344-modern-showcase-with-empty-space-on-pedestal-on-blue-background-3d-rendering-.jpg?ver=6";
-
-function Illustration() {
+function Products() {
+  const { columns, rows } = suupliersTableData;
+  const { columns: prCols, rows: prRows } = projectsTableData;
   const [rememberMe, setRememberMe] = useState(false);
-
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
 
+
   return (
-    <IllustrationLayout
-      title="Sign In"
-      description="Enter your email and password to sign in"
-      illustration={{
-        image: bgImage,
-        title: '"Attention is the new currency"',
-        description:
-          "The more effortless the writing looks, the more effort the writer actually put into the process.",
-      }}
-    >
-      <ArgonBox component="form" role="form">
+    <DashboardLayout>
+      <DashboardNavbar />
+      <ArgonBox py={3}>
+      <ArgonBox mb={3}>
+          <Card>
+            <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
+              <ArgonTypography variant="h6">Products table</ArgonTypography>
+              <Icon fontSize="small" style={{ color: 'white',marginRight: "6px",  backgroundColor: 'blue' }}>
+                    add
+              </Icon>
+            </ArgonBox>
+            <ArgonBox
+              sx={{
+                "& .MuiTableRow-root:not(:last-child)": {
+                  "& td": {
+                    borderBottom: ({ borders: { borderWidth, borderColor } }) =>
+                      `${borderWidth[1]} solid ${borderColor}`,
+                  },
+                },
+              }}
+            >
+              <Table columns={columns} rows={rows} />
+            </ArgonBox>
+          </Card>
+
+
+        </ArgonBox>
+
+
+
+
+        <ArgonBox component="form" role="form">
         <ArgonBox mb={2}>
           <ArgonInput type="email" placeholder="Email" size="large" />
         </ArgonBox>
@@ -62,7 +94,7 @@ function Illustration() {
           <ArgonTypography
             variant="button"
             fontWeight="regular"
-            onClick={handleSetRememberMe}
+            //onClick={handleSetRememberMe}
             sx={{ cursor: "pointer", userSelect: "none" }}
           >
             &nbsp;&nbsp;Remember me
@@ -88,8 +120,12 @@ function Illustration() {
           </ArgonTypography>
         </ArgonBox>
       </ArgonBox>
-    </IllustrationLayout>
+        
+      
+      </ArgonBox>
+      <Footer />
+    </DashboardLayout>
   );
 }
 
-export default Illustration;
+export default Products;

@@ -132,7 +132,7 @@ export default function App() {
       zIndex={99}
       color="dark"
       sx={{ cursor: "pointer" }}
-      onClick={handleConfiguratorOpen}
+      //onClick={handleConfiguratorOpen}
     >
       <Icon fontSize="default" color="inherit">
         settings
