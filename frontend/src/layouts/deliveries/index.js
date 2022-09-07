@@ -30,37 +30,95 @@ import Table from "examples/Tables/Table";
 import suupliersTableData from "layouts/deliveries/data/buyersTableData";
 import projectsTableData from "layouts/deliveries/data/projectsTableData";
 
+import { useState } from "react";
+import ArgonInput from "components/ArgonInput";
+import ArgonButton from "components/ArgonButton";
+import { Button } from "@mui/material";
 
 function Deliveries() {
   const { columns, rows } = suupliersTableData;
   const { columns: prCols, rows: prRows } = projectsTableData;
 
+  const [rememberMe, setRememberMe] = useState(false);
+  const [showAddProductForm, setShowAddProductForm] = useState(false);
+  const handleSetRememberMe = () => setRememberMe(!rememberMe);
 
   return (
+    
     <DashboardLayout>
       <DashboardNavbar />
       <ArgonBox py={3}>
-      <ArgonBox mb={3}>
-          <Card>
-            <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
-              <ArgonTypography variant="h6">Deliveries table</ArgonTypography>
-            </ArgonBox>
-            <ArgonBox
-              sx={{
-                "& .MuiTableRow-root:not(:last-child)": {
-                  "& td": {
-                    borderBottom: ({ borders: { borderWidth, borderColor } }) =>
-                      `${borderWidth[1]} solid ${borderColor}`,
+        {!showAddProductForm ? (
+          <ArgonBox mb={3}>
+            <Card>
+              <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
+                <ArgonTypography variant="h6">Delivery table</ArgonTypography>
+                <Button onClick={() => setShowAddProductForm(!showAddProductForm)}>
+                  <h4 style={{ paddingRight: 10 }}>Add Delivery </h4>
+                  <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-fat-add" />
+                </Button>
+              </ArgonBox>
+              <ArgonBox
+                sx={{
+                  "& .MuiTableRow-root:not(:last-child)": {
+                    "& td": {
+                      borderBottom: ({ borders: { borderWidth, borderColor } }) =>
+                        `${borderWidth[1]} solid ${borderColor}`,
+                    },
                   },
-                },
-              }}
-            >
-              <Table columns={columns} rows={rows} />
-            </ArgonBox>
-          </Card>
-        </ArgonBox>
-        
-      
+                }}
+              >
+                <Table columns={columns} rows={rows} />
+              </ArgonBox>
+            </Card>
+          </ArgonBox>
+        ) : (
+          <ArgonBox mb={3}>
+            <Card>
+              <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
+                <ArgonTypography variant="h6">Delivery table</ArgonTypography>
+                <Button onClick={() => setShowAddProductForm(!showAddProductForm)}>
+                  <h4 style={{ paddingRight: 10 }}>Show Delivery Table </h4>
+                  <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-bold-right" />
+                </Button>
+              </ArgonBox>
+              <ArgonBox
+                sx={{
+                  "& .MuiTableRow-root:not(:last-child)": {
+                    "& td": {
+                      borderBottom: ({ borders: { borderWidth, borderColor } }) =>
+                        `${borderWidth[1]} solid ${borderColor}`,
+                    },
+                  },
+                }}
+              >
+                <ArgonBox mb={2} mx={5}>
+                  <ArgonInput type="title" placeholder="Reference" size="large" />
+                </ArgonBox>
+                <ArgonBox mb={2} mx={5}>
+                  <ArgonInput type="name" placeholder="Order" size="large" />
+                </ArgonBox>
+                <ArgonBox mb={2} mx={5}>
+                  <ArgonInput type="tags" placeholder="Courrier" size="large" />
+                </ArgonBox>
+                <ArgonBox mb={2} mx={5}>
+                  <ArgonInput type="name" placeholder="Date" size="large" />
+                </ArgonBox>
+                <ArgonBox mb={2} mx={5}>
+                  <ArgonInput type="name" placeholder="Status" size="large" />
+                </ArgonBox>
+                <ArgonBox mb={2} mx={5}>
+                  <ArgonInput type="name" placeholder="Reciept" size="large" />
+                </ArgonBox>
+                <ArgonBox mb={2} mx={5}>
+                  <ArgonButton onChange={handleSetRememberMe} color="info" size="large" fullWidth>
+                    Submit Form
+                  </ArgonButton>
+                </ArgonBox>
+              </ArgonBox>
+            </Card>
+          </ArgonBox>
+        )}
       </ArgonBox>
       <Footer />
     </DashboardLayout>

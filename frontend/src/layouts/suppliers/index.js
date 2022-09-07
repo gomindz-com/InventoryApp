@@ -16,6 +16,9 @@ Coded by www.creative-tim.com
 // @mui material components
 import Card from "@mui/material/Card";
 
+
+import { useState } from "react";
+
 // Argon Dashboard 2 MUI components
 import ArgonBox from "components/ArgonBox";
 import ArgonTypography from "components/ArgonTypography";
@@ -28,11 +31,16 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import Table from "examples/Tables/Table";
 
+import { Button } from "@mui/material";
+
 // Data
 import suupliersTableData from "layouts/suppliers/data/suppliersTableData";
 
 function Suppliers() {
   const { columns, rows } = suupliersTableData;
+  const [rememberMe, setRememberMe] = useState(false);
+  const [showAddProductForm, setShowAddProductForm] = useState(false);
+  const handleSetRememberMe = () => setRememberMe(!rememberMe);
 
   const handleForm = () => {
     console.log("supllier created");
@@ -42,75 +50,88 @@ function Suppliers() {
     <DashboardLayout>
       <DashboardNavbar />
       <ArgonBox py={3}>
-        <ArgonBox mb={3}>
-          <Card>
-            <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
-              <ArgonTypography variant="h6">Suppliers table</ArgonTypography>
-            </ArgonBox>
-            <ArgonBox
-              sx={{
-                "& .MuiTableRow-root:not(:last-child)": {
-                  "& td": {
-                    borderBottom: ({ borders: { borderWidth, borderColor } }) =>
-                      `${borderWidth[1]} solid ${borderColor}`,
+        {!showAddProductForm ? (
+          <ArgonBox mb={3}>
+            <Card>
+              <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
+                <ArgonTypography variant="h6">Suppliers table</ArgonTypography>
+                <Button onClick={() => setShowAddProductForm(!showAddProductForm)}>
+                  <h4 style={{ paddingRight: 10 }}>Add Supplier </h4>
+                  <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-fat-add" />
+                </Button>
+              </ArgonBox>
+              <ArgonBox
+                sx={{
+                  "& .MuiTableRow-root:not(:last-child)": {
+                    "& td": {
+                      borderBottom: ({ borders: { borderWidth, borderColor } }) =>
+                        `${borderWidth[1]} solid ${borderColor}`,
+                    },
                   },
-                },
-              }}
-            >
-              <Table columns={columns} rows={rows} />
-            </ArgonBox>
-          </Card>
-        </ArgonBox>
+                }}
+              >
+                <Table columns={columns} rows={rows} />
+              </ArgonBox>
+            </Card>
+          </ArgonBox>
+        ) : (
+          <ArgonBox mb={3}>
+            <Card>
+              <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
+                <ArgonTypography variant="h6">Suppliers table</ArgonTypography>
+                <Button onClick={() => setShowAddProductForm(!showAddProductForm)}>
+                  <h4 style={{ paddingRight: 10 }}>Show Suppliers Table</h4>
+                  <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-bold-right" />
+                </Button>
+              </ArgonBox>
+              <ArgonBox
+                sx={{
+                  "& .MuiTableRow-root:not(:last-child)": {
+                    "& td": {
+                      borderBottom: ({ borders: { borderWidth, borderColor } }) =>
+                        `${borderWidth[1]} solid ${borderColor}`,
+                    },
+                  },
+                }}
+              >
+                <ArgonBox mb={2} mx={5}>
+                  <ArgonInput type="title" placeholder="Company Name" size="large" />
+                </ArgonBox>
+                <ArgonBox mb={2} mx={5}>
+                  <ArgonInput type="name" placeholder="Country" size="large" />
+                </ArgonBox>
+                <ArgonBox mb={2} mx={5}>
+                  <ArgonInput type="tags" placeholder="Address" size="large" />
+                </ArgonBox>
+                <ArgonBox mb={2} mx={5}>
+                  <ArgonInput type="name" placeholder="Phone Number" size="large" />
+                </ArgonBox>
+                <ArgonBox mb={2} mx={5}>
+                  <ArgonInput type="name" placeholder="Industry" size="large" />
+                </ArgonBox>
+                <ArgonBox mb={2} mx={5}>
+                  <ArgonInput type="name" placeholder="Contact Name" size="large" />
+                </ArgonBox>
+                <ArgonBox mb={2} mx={5}>
+                  <ArgonInput type="name" placeholder="Email" size="large" />
+                </ArgonBox>
+                <ArgonBox mb={2} mx={5}>
+                  <ArgonInput type="name" placeholder="Additional Information" size="large" />
+                </ArgonBox>
+                <ArgonBox mb={2} mx={5}>
+                  <ArgonInput type="name" placeholder="Additional Files" size="large" />
+                </ArgonBox>
+                <ArgonBox mb={2} mx={5}>
+                  <ArgonButton onChange={handleSetRememberMe} color="info" size="large" fullWidth>
+                    Submit Form
+                  </ArgonButton>
+                </ArgonBox>
+              </ArgonBox>
+            </Card>
+          </ArgonBox>
+        )}
       </ArgonBox>
-
-      <Card>
-        <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
-          <ArgonTypography variant="h6">Create Supplier</ArgonTypography>
-        </ArgonBox>
-        <ArgonBox
-          sx={{
-            "& .MuiTableRow-root:not(:last-child)": {
-              "& td": {
-                borderBottom: ({ borders: { borderWidth, borderColor } }) =>
-                  `${borderWidth[1]} solid ${borderColor}`,
-              },
-            },
-          }}
-        ></ArgonBox>
-      </Card>
-
-      <ArgonTypography variant="h6">Name</ArgonTypography>
-      <ArgonInput></ArgonInput>
-
-      <ArgonTypography variant="h6">Address</ArgonTypography>
-      <ArgonInput></ArgonInput>
-
-      <ArgonTypography variant="h6">Email</ArgonTypography>
-      <ArgonInput></ArgonInput>
-
-      <ArgonTypography variant="h6">UserName</ArgonTypography>
-      <ArgonInput></ArgonInput>
-      <ArgonTypography variant="h6">Password</ArgonTypography>
-      <ArgonInput></ArgonInput>
-      <ArgonTypography variant="h6">RetypePassword</ArgonTypography>
-      <ArgonInput></ArgonInput>
-
-      <ArgonBox p={4} mb={1}>
-        <ArgonButton onClick={handleForm} p={5} color="info" size="large" fullWidth>
-          Create Supplier
-        </ArgonButton>
-      </ArgonBox>
-
-      {/* <ArgonBox p={3} mb={1} textAlign="center">
-        <ArgonTypography
-          onClick={handleSetRememberMe}
-          color="info"
-          variant="h5"
-          fontWeight="medium"
-        >
-          Register with
-        </ArgonTypography>
-      </ArgonBox> */}
+      <Footer />
     </DashboardLayout>
   );
 }
