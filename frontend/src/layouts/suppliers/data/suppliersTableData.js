@@ -11,7 +11,6 @@ import team3 from "assets/images/team-3.jpg";
 import team4 from "assets/images/team-4.jpg";
 import logoSpotify from "assets/images/small-logos/logo-spotify.svg";
 
-
 function Author({ image, name, email }) {
   return (
     <ArgonBox display="flex" alignItems="center" px={1} py={0.5}>
@@ -76,7 +75,6 @@ const authorsTableData = {
         </ArgonTypography>
       ),
     },
-   
   ],
 };
 

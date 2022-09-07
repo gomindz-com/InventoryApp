@@ -19,6 +19,8 @@ import Card from "@mui/material/Card";
 // Argon Dashboard 2 MUI components
 import ArgonBox from "components/ArgonBox";
 import ArgonTypography from "components/ArgonTypography";
+import ArgonInput from "components/ArgonInput";
+import ArgonButton from "components/ArgonButton";
 
 // Argon Dashboard 2 MUI examples
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
@@ -31,6 +33,10 @@ import suupliersTableData from "layouts/suppliers/data/suppliersTableData";
 
 function Suppliers() {
   const { columns, rows } = suupliersTableData;
+
+  const handleForm = () => {
+    console.log("supllier created");
+  };
 
   return (
     <DashboardLayout>
@@ -55,9 +61,56 @@ function Suppliers() {
             </ArgonBox>
           </Card>
         </ArgonBox>
-      
       </ArgonBox>
-      <Footer />
+
+      <Card>
+        <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
+          <ArgonTypography variant="h6">Create Supplier</ArgonTypography>
+        </ArgonBox>
+        <ArgonBox
+          sx={{
+            "& .MuiTableRow-root:not(:last-child)": {
+              "& td": {
+                borderBottom: ({ borders: { borderWidth, borderColor } }) =>
+                  `${borderWidth[1]} solid ${borderColor}`,
+              },
+            },
+          }}
+        ></ArgonBox>
+      </Card>
+
+      <ArgonTypography variant="h6">Name</ArgonTypography>
+      <ArgonInput></ArgonInput>
+
+      <ArgonTypography variant="h6">Address</ArgonTypography>
+      <ArgonInput></ArgonInput>
+
+      <ArgonTypography variant="h6">Email</ArgonTypography>
+      <ArgonInput></ArgonInput>
+
+      <ArgonTypography variant="h6">UserName</ArgonTypography>
+      <ArgonInput></ArgonInput>
+      <ArgonTypography variant="h6">Password</ArgonTypography>
+      <ArgonInput></ArgonInput>
+      <ArgonTypography variant="h6">RetypePassword</ArgonTypography>
+      <ArgonInput></ArgonInput>
+
+      <ArgonBox p={4} mb={1}>
+        <ArgonButton onClick={handleForm} p={5} color="info" size="large" fullWidth>
+          Create Supplier
+        </ArgonButton>
+      </ArgonBox>
+
+      {/* <ArgonBox p={3} mb={1} textAlign="center">
+        <ArgonTypography
+          onClick={handleSetRememberMe}
+          color="info"
+          variant="h5"
+          fontWeight="medium"
+        >
+          Register with
+        </ArgonTypography>
+      </ArgonBox> */}
     </DashboardLayout>
   );
 }

@@ -37,7 +37,9 @@ const bgImage =
 function Illustration() {
   const [rememberMe, setRememberMe] = useState(false);
 
-  const handleSetRememberMe = () => setRememberMe(!rememberMe);
+  const handleSetRememberMe = () => {
+    console.log("you click me");
+  };
 
   return (
     <IllustrationLayout
@@ -69,7 +71,7 @@ function Illustration() {
           </ArgonTypography>
         </ArgonBox>
         <ArgonBox mt={4} mb={1}>
-          <ArgonButton color="info" size="large" fullWidth>
+          <ArgonButton onChange={handleSetRememberMe} color="info" size="large" fullWidth>
             Sign In
           </ArgonButton>
         </ArgonBox>
