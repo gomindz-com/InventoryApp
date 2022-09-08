@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     # local
     'store.apps.StoreConfig',
     'users.apps.UsersConfig',
+
+    'rest_framework',
 ]
 
 MIDDLEWARE = [

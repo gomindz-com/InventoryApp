@@ -1,3 +1,4 @@
+import imp
 from django.urls import path
 
 from .views import (
@@ -15,9 +16,17 @@ from .views import (
     ProductListView,
     OrderListView,
     DeliveryListView,
+    product_details,
+    product_list
 )
 
+from store import views
+
 urlpatterns = [
+
+    path('products/', product_list),
+    path('products/<int:id>', product_details),
+
     path('create-supplier/', create_supplier, name='create-supplier'),
     path('create-buyer/', create_buyer, name='create-buyer'),
     path('create-season/', create_season, name='create-season'),

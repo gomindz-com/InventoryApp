@@ -42,6 +42,12 @@ class Drop(models.Model):
 
 class Product(models.Model):
     name = models.CharField(max_length=120, unique=True)
+    label = models.CharField(max_length=120, default='')
+    tags = models.CharField(max_length=120, default='')
+    price = models.CharField(max_length=120, default='')
+    stock = models.CharField(max_length=120, default='')
+    category_id = models.CharField(max_length=120 , default='')
+    images = models.CharField(max_length=120 , default='')
     sortno = models.PositiveIntegerField()
     created_date = models.DateField(auto_now_add=True)
 
