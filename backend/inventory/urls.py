@@ -23,6 +23,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', dashboard, name='dashboard'),
     path('api/',  include('store.urls')),
-    path('users/', include('users.urls')),
+    path('api/users/', include('users.urls')),
     path('store/', include('store.urls')),
 ]
