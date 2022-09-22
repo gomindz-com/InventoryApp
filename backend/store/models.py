@@ -13,7 +13,6 @@ class Supplier(models.Model):
     additional_information= models.CharField(max_length=200, default='')
     additional_files= models.CharField(max_length=200, default='')
     created_date = models.DateField(auto_now_add=True)
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=120, unique=True)
     address = models.CharField(max_length=220)
 

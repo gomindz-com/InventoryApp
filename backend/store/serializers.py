@@ -13,4 +13,4 @@ class SupplierSerializer(serializers.ModelSerializer):
         fields = ['id', 'companyName', 'country', 'address',
                   'phone_number', 'industry', 'contactName',
                   'email', 'additional_information', 'additional_files',
-                  'created_date', 'user', 'name']
+                  'created_date', 'name']
