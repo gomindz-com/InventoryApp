@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.views.generic import ListView
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from .serializers import ProductSerializer
+from .serializers import ProductSerializer, SupplierSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
@@ -71,6 +71,45 @@ def product_details(request, id):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+@api_view(['GET', 'POST'])
+def supplier_list(request):
+    if request.method == 'GET':
+        supplier = Supplier.objects.all()
+        serializer = SupplierSerializer(supplier, many=True)
+        return Response(serializer.data)
+
+    if request.method == 'POST':
+        serializer = SupplierSerializer(data=request.data)
+        if serializer.is_valid():
+            
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+        
+@api_view(['GET', 'PUT', 'DELETE'])
+def supplier_details(request, id):
+
+    try:
+        supplier = Supplier.objects.get(pk=id)
+
+    except Supplier.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = SupplierSerializer(supplier)
+        return Response({ "supplier" : serializer.data})
+
+    elif request.method == 'PUT':
+        serializer = SupplierSerializer(supplier, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    elif request.method == 'DELETE':
+        supplier.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)   
 
 # Supplier views
 @login_required(login_url='login')

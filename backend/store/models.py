@@ -4,13 +4,20 @@ from users.models import User
 
 
 class Supplier(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    companyName = models.CharField(max_length=200, default='')
+    country = models.CharField(max_length=200, default='')
+    phone_number = models.CharField(max_length=200, default='')
+    industry = models.CharField(max_length=200, default='')
+    contactName = models.CharField(max_length=200, default='')
+    email = models.CharField(max_length=200, default='')
+    additional_information= models.CharField(max_length=200, default='')
+    additional_files= models.CharField(max_length=200, default='')
+    created_date = models.DateField(auto_now_add=True)
     name = models.CharField(max_length=120, unique=True)
     address = models.CharField(max_length=220)
-    created_date = models.DateField(auto_now_add=True)
 
     def __str__(self):
-        return self.name
+        return self.companyName
 
 
 class Buyer(models.Model):
