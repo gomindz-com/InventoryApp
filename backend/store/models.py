@@ -21,11 +21,14 @@ class Supplier(models.Model):
 
 
 class Buyer(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=120, unique=True)
-    address = models.CharField(max_length=220)
+    address = models.CharField(max_length=220, default='')
+    mobile_number = models.CharField(max_length=220, default='')
+    email = models.CharField(max_length=220, default='')
+    tax_id = models.CharField(max_length=220, default='')
     created_date = models.DateField(auto_now_add=True)
 
+    # user = models.OneToOneField(User, on_delete=models.CASCADE)
     def __str__(self):
         return self.name
 

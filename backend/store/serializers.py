@@ -1,7 +1,7 @@
 from dataclasses import field
 import imp
 from rest_framework import serializers
-from .models import Product, Supplier
+from .models import Product, Supplier, Buyer
 
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
@@ -14,3 +14,8 @@ class SupplierSerializer(serializers.ModelSerializer):
                   'phone_number', 'industry', 'contactName',
                   'email', 'additional_information', 'additional_files',
                   'created_date', 'name']
+class BuyerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Buyer
+        fields = ['id', 'name', 'email', 'address',
+                  'mobile_number', 'tax_id' ]
