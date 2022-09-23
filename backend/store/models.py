@@ -91,8 +91,11 @@ class Order(models.Model):
 
 
 class Delivery(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    courier_name = models.CharField(max_length=120)
+    reference=models.CharField(max_length=120, default='')
+    status=models.CharField(max_length=120, default='')
+    reciept=models.CharField(max_length=120, default='')
+    order = models.CharField(max_length=120, default='')
+    courier_name = models.CharField(max_length=120,default='')
     created_date = models.DateField(auto_now_add=True)
 
     def __str__(self):
