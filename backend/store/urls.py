@@ -18,7 +18,8 @@ from .views import (
     DeliveryListView,
     product_details,product_list, 
     supplier_list, supplier_details,
-    buyer_list, buyer_details
+    buyer_list, buyer_details,
+    order_list, order_details
 )
 
 from store import views
@@ -31,6 +32,8 @@ urlpatterns = [
     path('suppliers/<int:id>', supplier_details),
     path('buyers/', buyer_list),
     path('buyers/<int:id>', buyer_details),
+    path('orders/', order_list),
+    path('orders/<int:id>', order_details),
 
     path('create-supplier/', create_supplier, name='create-supplier'),
     path('create-buyer/', create_buyer, name='create-buyer'),
