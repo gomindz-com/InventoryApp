@@ -9,7 +9,7 @@ class Supplier(models.Model):
     phone_number = models.CharField(max_length=200, default='')
     industry = models.CharField(max_length=200, default='')
     contactName = models.CharField(max_length=200, default='')
-    email = models.CharField(max_length=200, default='')
+    email = models.EmailField(max_length=200, default='')
     additional_information= models.CharField(max_length=200, default='')
     additional_files= models.CharField(max_length=200, default='')
     created_date = models.DateField(auto_now_add=True)
@@ -24,7 +24,7 @@ class Buyer(models.Model):
     name = models.CharField(max_length=120, unique=True)
     address = models.CharField(max_length=220, default='')
     mobile_number = models.CharField(max_length=220, default='')
-    email = models.CharField(max_length=220, default='')
+    email = models.EmailField(max_length=220, default='')
     tax_id = models.CharField(max_length=220, default='')
     created_date = models.DateField(auto_now_add=True)
 
@@ -57,7 +57,7 @@ class Product(models.Model):
     price = models.CharField(max_length=120, default='')
     stock = models.CharField(max_length=120, default='')
     category_id = models.CharField(max_length=120 , default='')
-    images = models.CharField(max_length=120 , default='')
+    images = models.ImageField(max_length=120 , default='')
     sortno = models.PositiveIntegerField()
     created_date = models.DateField(auto_now_add=True)
 
@@ -74,10 +74,10 @@ class Order(models.Model):
         ('complete', 'Complete'),
         ('bulk', 'Bulk'),
     )
-    supplier = models.CharField(max_length=50, default='')
-    product = models.CharField(max_length=50, default='')
+    supplier = models.ForeignKey('Supplier', on_delete=models.CASCADE, default='')
+    product = models.ForeignKey('Product', on_delete=models.CASCADE, default='')
     color = models.CharField(max_length=50, default='')
-    buyer = models.CharField(max_length=50, default='')
+    buyer = models.ForeignKey('Buyer', on_delete=models.CASCADE, default='')
     status = models.CharField(max_length=10, default='')
     reciept = models.CharField(max_length=50, default='')
     created_date = models.DateField(auto_now_add=True)
@@ -94,7 +94,7 @@ class Delivery(models.Model):
     reference=models.CharField(max_length=120, default='')
     status=models.CharField(max_length=120, default='')
     reciept=models.CharField(max_length=120, default='')
-    order = models.CharField(max_length=120, default='')
+    order = models.ForeignKey('Order', on_delete=models.CASCADE, default='')
     courier_name = models.CharField(max_length=120,default='')
     created_date = models.DateField(auto_now_add=True)
 
