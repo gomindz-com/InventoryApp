@@ -6,6 +6,7 @@ from django.http import JsonResponse
 from .serializers import ProductSerializer, SupplierSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from django.http import JsonResponse
 from rest_framework import status
 
 
@@ -36,14 +37,17 @@ def product_list(request):
     if request.method == 'GET':
         products = Product.objects.all()
         serializer = ProductSerializer(products, many=True)
-        return Response(serializer.data)
+        return JsonResponse(status=200, data={'status':'true','message':'success', 'result': serializer.data})
+    
 
     if request.method == 'POST':
         serializer = ProductSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-    
+            return JsonResponse(status=status.HTTP_201_CREATED, data={'status':'true','message':'success', 'result': serializer.data})
+        else:
+            return JsonResponse(status=status.HTTP_400_BAD_REQUEST, data={'status':'false','message':'Bad Request'})
+
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
