@@ -56,6 +56,7 @@ class Product(models.Model):
     tags = models.CharField(max_length=120, default='')
     price = models.CharField(max_length=120, default='')
     stock = models.CharField(max_length=120, default='')
+    status = models.CharField(max_length=120, default='')
     category_id = models.CharField(max_length=120 , default='')
     images = models.ImageField(max_length=120 , default='')
     sortno = models.PositiveIntegerField()

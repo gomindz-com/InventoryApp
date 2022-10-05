@@ -6,8 +6,3 @@ pycodestyle==2.6.0
 pyflakes==2.2.0
 pytz==2020.1
 sqlparse==0.3.1
-
-PyJWT==2.5.0
-django-rest-framework==0.1.0
-django-cors-headers==3.13.0
-django-mysql==4.7.1
