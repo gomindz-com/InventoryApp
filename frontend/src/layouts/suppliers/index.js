@@ -16,14 +16,13 @@ Coded by www.creative-tim.com
 // @mui material components
 import Card from "@mui/material/Card";
 
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // Argon Dashboard 2 MUI components
 import ArgonBox from "components/ArgonBox";
 import ArgonTypography from "components/ArgonTypography";
-import ArgonInput from "components/ArgonInput";
-import ArgonButton from "components/ArgonButton";
+import ArgonAvatar from "components/ArgonAvatar";
+import ArgonBadge from "components/ArgonBadge";
 
 // Argon Dashboard 2 MUI examples
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
@@ -31,31 +30,135 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import Table from "examples/Tables/Table";
 
+import ArgonInput from "components/ArgonInput";
+import ArgonButton from "components/ArgonButton";
 import { Button } from "@mui/material";
-
-// Data
-import suupliersTableData from "layouts/suppliers/data/suppliersTableData";
+import logoSpotify from "assets/images/small-logos/logo-spotify.svg";
+import { getSuppliers } from "apiservices/supplierService";
 
 function Suppliers() {
-  const { columns, rows } = suupliersTableData;
-  const [rememberMe, setRememberMe] = useState(false);
-  const [showAddProductForm, setShowAddProductForm] = useState(false);
-  const handleSetRememberMe = () => setRememberMe(!rememberMe);
 
-  const handleForm = () => {
-    console.log("supllier created");
+
+  const [rememberMe, setRememberMe] = useState(false);
+  const [showAddForm, setShowAddForm] = useState(false);
+  const handleSetRememberMe = () => setRememberMe(!rememberMe);
+  const [screenloading, setScreenLoading] = useState(true);
+  const [supplierList, setSupplierList] = useState([]);
+
+  const handleGetSupplierList = async () => {
+    setSupplierList([]);
+    setScreenLoading(true);
+
+    try {
+      await getSuppliers()
+        .then((res) => {
+          console.log(res);
+          if (res.data?.status === "true") {
+            console.log("Suppliers List");
+            console.log(res.data.result);
+            setSupplierList(res.data.result);
+          } else {
+            setSupplierList([]);
+          }
+        })
+        .catch((err) => console.log("Error in Getting Products", err));
+
+      setScreenLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
   };
+
+  const columns = [
+    { name: "supplier", align: "left" },
+    { name: "stock", align: "left" },
+    { name: "status", align: "center" },
+    { name: "price", align: "center" },
+    { name: "edit", align: "right" },
+    { name: "delete", align: "center" },
+  ];
+
+  const rows = [];
+
+  supplierList.map(function (item, i) {
+    rows.push({
+      supplier: (
+        <ArgonBox display="flex" alignItems="center" px={1} py={0.5}>
+          <ArgonBox mr={2}>
+            <ArgonAvatar src={logoSpotify} alt={"name"} size="sm" variant="rounded" />
+          </ArgonBox>
+          <ArgonBox display="flex" flexDirection="column">
+            <ArgonTypography variant="button" fontWeight="medium">
+              {item.name}
+            </ArgonTypography>
+            <ArgonTypography variant="caption" color="secondary">
+              {item.label}
+            </ArgonTypography>
+          </ArgonBox>
+        </ArgonBox>
+      ),
+
+      stock: (
+        <ArgonBox display="flex" flexDirection="column">
+          <ArgonTypography variant="caption" fontWeight="medium" color="text">
+            {item.stock}
+          </ArgonTypography>
+          <ArgonTypography variant="caption" color="secondary"></ArgonTypography>
+        </ArgonBox>
+      ),
+      status: (
+        <ArgonBadge
+          variant="gradient"
+          badgeContent={item.status}
+          color="success"
+          size="xs"
+          container
+        />
+      ),
+      price: (
+        <ArgonTypography variant="caption" color="secondary" fontWeight="medium">
+          {item.price}
+        </ArgonTypography>
+      ),
+      edit: (
+        <ArgonTypography
+          component="a"
+          href="#"
+          variant="caption"
+          color="secondary"
+          fontWeight="medium"
+        >
+          Edit
+        </ArgonTypography>
+      ),
+      delete: (
+        <ArgonTypography
+          component="a"
+          href="#"
+          variant="caption"
+          color="secondary"
+          fontWeight="medium"
+        >
+          Delete
+        </ArgonTypography>
+      ),
+    });
+  });
+
+  useEffect(() => {
+    handleGetSupplierList();
+  }, []);
 
   return (
     <DashboardLayout>
       <DashboardNavbar />
       <ArgonBox py={3}>
-        {!showAddProductForm ? (
+        {!showAddForm ? (
           <ArgonBox mb={3}>
             <Card>
               <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
                 <ArgonTypography variant="h6">Suppliers table</ArgonTypography>
-                <Button onClick={() => setShowAddProductForm(!showAddProductForm)}>
+                <Button onClick={() => setShowAddForm(!showAddForm)}>
                   <h4 style={{ paddingRight: 10 }}>Add Supplier </h4>
                   <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-fat-add" />
                 </Button>
@@ -79,9 +182,14 @@ function Suppliers() {
             <Card>
               <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
                 <ArgonTypography variant="h6">Suppliers table</ArgonTypography>
-                <Button onClick={() => setShowAddProductForm(!showAddProductForm)}>
-                  <h4 style={{ paddingRight: 10 }}>Show Suppliers Table</h4>
-                  <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-bold-right" />
+                <Button onClick={() => setShowAddForm(!showAddForm)}>
+                  <h4 style={{ paddingRight: 10 }}>Show Supplier Table </h4>
+                  <ArgonBox
+                    component="i"
+                    color="info"
+                    fontSize="14px"
+                    className="ni ni-bold-right"
+                  />
                 </Button>
               </ArgonBox>
               <ArgonBox
@@ -95,35 +203,26 @@ function Suppliers() {
                 }}
               >
                 <ArgonBox mb={2} mx={5}>
-                  <ArgonInput type="title" placeholder="Company Name" size="large" />
+                  <ArgonInput type="title" placeholder="Suppliers Title" size="large" />
                 </ArgonBox>
                 <ArgonBox mb={2} mx={5}>
-                  <ArgonInput type="name" placeholder="Country" size="large" />
+                  <ArgonInput type="name" placeholder="Label" size="large" />
                 </ArgonBox>
                 <ArgonBox mb={2} mx={5}>
-                  <ArgonInput type="tags" placeholder="Address" size="large" />
+                  <ArgonInput type="tags" placeholder="Tags" size="large" />
                 </ArgonBox>
                 <ArgonBox mb={2} mx={5}>
-                  <ArgonInput type="name" placeholder="Phone Number" size="large" />
+                  <ArgonInput type="name" placeholder="Price" size="large" />
                 </ArgonBox>
                 <ArgonBox mb={2} mx={5}>
-                  <ArgonInput type="name" placeholder="Industry" size="large" />
+                  <ArgonInput type="name" placeholder="Category" size="large" />
                 </ArgonBox>
                 <ArgonBox mb={2} mx={5}>
-                  <ArgonInput type="name" placeholder="Contact Name" size="large" />
-                </ArgonBox>
-                <ArgonBox mb={2} mx={5}>
-                  <ArgonInput type="name" placeholder="Email" size="large" />
-                </ArgonBox>
-                <ArgonBox mb={2} mx={5}>
-                  <ArgonInput type="name" placeholder="Additional Information" size="large" />
-                </ArgonBox>
-                <ArgonBox mb={2} mx={5}>
-                  <ArgonInput type="name" placeholder="Additional Files" size="large" />
+                  <ArgonInput type="name" placeholder="Images" size="large" />
                 </ArgonBox>
                 <ArgonBox mb={2} mx={5}>
                   <ArgonButton onChange={handleSetRememberMe} color="info" size="large" fullWidth>
-                    Submit Form
+                    Add Supplier
                   </ArgonButton>
                 </ArgonBox>
               </ArgonBox>

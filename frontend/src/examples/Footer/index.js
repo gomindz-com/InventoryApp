@@ -61,18 +61,18 @@ function Footer({ company, links }) {
         px={1.5}
       >
         &copy; {new Date().getFullYear()}, made with
-        <ArgonBox fontSize={size.md} color="text" mb={-0.5} mx={0.25}>
-          <Icon color="inherit" fontSize="inherit">
+        <ArgonBox fontSize={size.md} color="text" mb={2.5} mt={0} mx={0.25}>
+          <Icon style={{marginTop: 30}} color="inherit" fontSize="inherit">
             favorite
           </Icon>
         </ArgonBox>
         by
         <Link href={href} target="_blank">
           <ArgonTypography variant="button" fontWeight="medium">
-            &nbsp;{name}&nbsp;
+            &nbsp;Gomindz&nbsp;
           </ArgonTypography>
         </Link>
-        for a better web.
+        for a better Inventory Management.
       </ArgonBox>
       <ArgonBox
         component="ul"
@@ -99,11 +99,11 @@ function Footer({ company, links }) {
 
 // Setting default values for the props of Footer
 Footer.defaultProps = {
-  company: { href: "https://www.creative-tim.com/", name: "Creative Tim" },
+  company: { href: "https://www.creative-tim.com/", name: "Gomindz" },
   links: [
-    { href: "https://www.creative-tim.com/", name: "Creative Tim" },
+    { href: "https://www.creative-tim.com/", name: "Gomindz" },
     { href: "https://www.creative-tim.com/presentation", name: "About Us" },
-    { href: "https://www.creative-tim.com/blog", name: "Blog" },
+    { href: "https://www.creative-tim.com/blog", name: "Contact Us" },
     { href: "https://www.creative-tim.com/license", name: "License" },
   ],
 };

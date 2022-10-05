@@ -145,8 +145,8 @@ function Products() {
     });
   });
 
-  useEffect(async () => {
-    await handleGetProductList();
+  useEffect(() => {
+    handleGetProductList();
   }, []);
 
   return (
