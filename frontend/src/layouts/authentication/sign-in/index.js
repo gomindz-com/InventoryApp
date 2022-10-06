@@ -70,7 +70,10 @@ function Illustration() {
             console.log("User Logged In Success");
             console.log(res.data.status);
             toast.success("User Login Successfully");
-            setUser(res.data.result)
+            setUser(res.data.result);
+            console.log(res.data.result);
+            localStorage.setItem("token", res.data.result.jwt);
+            localStorage.setItem("user", JSON.stringify(res.data.result.user));
           } else {
             console.log("User Could Not Be Logged In");
             console.log(res.data);
@@ -95,8 +98,7 @@ function Illustration() {
       illustration={{
         image: bgImage,
         title: '"Our Inventory App Is The One"',
-        description:
-          "The more difficult management looks, the more easy we make it for you.",
+        description: "The more difficult management looks, the more easy we make it for you.",
       }}
     >
       {user && <Navigate to="/dashboard" replace={true} />}

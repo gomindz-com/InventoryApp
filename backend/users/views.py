@@ -44,6 +44,11 @@ class Login(APIView):
             'iat': datetime.datetime.utcnow()
         }
 
+        userObject = {
+            'name': user.name,
+            'email': user.email,
+        }
+
         token = jwt.encode(payload, 'secret', algorithm='HS256')
         
         response = Response()
@@ -55,7 +60,8 @@ class Login(APIView):
         #return response
         return JsonResponse(status=status.HTTP_200_OK, data={'status':'true','message':'success', 'result': {
             'message': 'success',
-            'jwt': token
+            'jwt': token,
+            'user': userObject
         }})
     
 

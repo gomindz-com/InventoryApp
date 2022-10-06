@@ -41,9 +41,12 @@ import Slider from "layouts/dashboard/components/Slider";
 import gradientLineChartData from "layouts/dashboard/data/gradientLineChartData";
 import salesTableData from "layouts/dashboard/data/salesTableData";
 import categoriesListData from "layouts/dashboard/data/categoriesListData";
+
+
 // pro
 function Default() {
   const { size } = typography;
+
   return (
     <DashboardLayout>
       <DashboardNavbar />

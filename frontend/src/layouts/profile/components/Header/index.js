@@ -40,6 +40,11 @@ function Header() {
   const [tabsOrientation, setTabsOrientation] = useState("horizontal");
   const [tabValue, setTabValue] = useState(0);
 
+  
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
+  console.log(JSON.parse(localStorage.getItem("user")));
+
+
   useEffect(() => {
     // A function that sets the orientation state of the tabs.
     function handleTabsOrientation() {
@@ -86,7 +91,7 @@ function Header() {
           <Grid item>
             <ArgonBox height="100%" mt={0.5} lineHeight={1}>
               <ArgonTypography variant="h5" fontWeight="medium">
-                Modou Jallow
+                {user.name}
               </ArgonTypography>
               <ArgonTypography variant="button" color="text" fontWeight="medium">
                 Admin

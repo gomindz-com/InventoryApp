@@ -1,4 +1,3 @@
-import { toast } from "react-toastify";
 import axiosConfig from "./axios-config";
 
 export const getProducts = async () => {

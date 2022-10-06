@@ -63,6 +63,9 @@ export default function App() {
   const [rtlCache, setRtlCache] = useState(null);
   const { pathname } = useLocation();
 
+  const token = localStorage.getItem("token");
+
+
   // Cache for the rtl
   useMemo(() => {
     const cacheRtl = createCache({
@@ -184,8 +187,11 @@ export default function App() {
       )}
       {layout === "vr" && <Configurator />}
       <Routes>
+
         {getRoutes(routes)}
-        <Route path="/" element={<Navigate to="/authentication/sign-in" />} />
+        { token ? <Route path="/" element={<Navigate to="/dashboard" />} />:
+                <Route path="/" element={<Navigate to="/authentication/sign-in" />} /> }
+                
         <Route path="*" element={<Navigate to="/authentication/sign-in" />} />
       </Routes>
     </ThemeProvider>

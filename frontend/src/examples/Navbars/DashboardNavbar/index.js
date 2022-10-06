@@ -58,13 +58,20 @@ import {
 // Images
 import team2 from "assets/images/team-2.jpg";
 import logoSpotify from "assets/images/small-logos/logo-spotify.svg";
+import { Routes, Route, Navigate } from "react-router-dom";
+
 
 function DashboardNavbar({ absolute, light, isMini }) {
   const [navbarType, setNavbarType] = useState();
+
   const [controller, dispatch] = useArgonController();
   const { miniSidenav, transparentNavbar, fixedNavbar, openConfigurator } = controller;
   const [openMenu, setOpenMenu] = useState(false);
   const route = useLocation().pathname.split("/").slice(1);
+
+  const [token, setToken] = useState(localStorage.getItem("token"));
+  console.log("Token")
+  console.log(token)
 
   useEffect(() => {
     // Setting the navbar type
@@ -96,6 +103,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
   const handleConfiguratorOpen = () => setOpenConfigurator(dispatch, !openConfigurator);
   const handleOpenMenu = (event) => setOpenMenu(event.currentTarget);
   const handleCloseMenu = () => setOpenMenu(false);
+
 
   // Render the notifications menu
   const renderMenu = () => (
@@ -142,6 +150,9 @@ function DashboardNavbar({ absolute, light, isMini }) {
       color="inherit"
       sx={(theme) => navbar(theme, { transparentNavbar, absolute, light })}
     >
+
+      {token == null && <Navigate to="/authentication/sign-in" replace={true} />}
+
       <Toolbar sx={(theme) => navbarContainer(theme, { navbarType })}>
         <ArgonBox
           color={light && transparentNavbar ? "white" : "dark"}
@@ -171,25 +182,31 @@ function DashboardNavbar({ absolute, light, isMini }) {
               />
             </ArgonBox>
             <ArgonBox color={light ? "white" : "inherit"}>
-              <Link to="/authentication/sign-in">
-                <IconButton sx={navbarIconButton} size="small">
-                  <Icon
-                    sx={({ palette: { dark, white } }) => ({
-                      color: light && transparentNavbar ? white.main : dark.main,
-                    })}
-                  >
-                    account_circle
-                  </Icon>
-                  <ArgonTypography
-                    variant="button"
-                    fontWeight="medium"
-                    color={light && transparentNavbar ? "white" : "dark"}
-                  >
-                    Sign Out
-                  </ArgonTypography>
-                </IconButton>
-              </Link>
-             {/*  <IconButton
+              <IconButton
+                sx={navbarIconButton}
+                size="small"
+                onClick={() => {
+                  localStorage.removeItem("token");
+                  setToken(null)
+                }}
+              >
+                <Icon
+                  sx={({ palette: { dark, white } }) => ({
+                    color: light && transparentNavbar ? white.main : dark.main,
+                  })}
+                >
+                  account_circle
+                </Icon>
+                <ArgonTypography
+                  variant="button"
+                  fontWeight="medium"
+                  color={light && transparentNavbar ? "white" : "dark"}
+                >
+                  Sign Out
+                </ArgonTypography>
+              </IconButton>
+
+              {/*  <IconButton
                 size="small"
                 color={light && transparentNavbar ? "white" : "dark"}
                 sx={navbarMobileMenu}
