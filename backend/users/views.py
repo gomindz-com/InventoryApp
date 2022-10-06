@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.exceptions import AuthenticationFailed
 from .serializers import UserSerializer
@@ -16,7 +17,8 @@ class Register(APIView):
         serializer = UserSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return JsonResponse(status=status.HTTP_201_CREATED, data={'status':'true','message':'success', 'result': serializer.data})
+    
     
 
 class Login(APIView):
@@ -26,11 +28,14 @@ class Login(APIView):
         user = User.objects.filter(email=email).first()
 
         if user is None:
-            raise AuthenticationFailed('User Not Found')
+            return JsonResponse(status=status.HTTP_401_UNAUTHORIZED, data={'status':'false','message':'failure', 'result': {
+            'message': 'User Not Found',
+            }})
 
         if not user.check_password(password):
-            raise AuthenticationFailed('Incorrect Password')
-
+            return JsonResponse(status=status.HTTP_401_UNAUTHORIZED, data={'status':'false','message':'failure', 'result': {
+            'message': 'Incorrect Password',
+            }})
 
         payload = {
 
@@ -47,8 +52,13 @@ class Login(APIView):
             'message': 'success',
             'jwt': token
         }
-        return response
+        #return response
+        return JsonResponse(status=status.HTTP_200_OK, data={'status':'true','message':'success', 'result': {
+            'message': 'success',
+            'jwt': token
+        }})
     
+
 
 
 class AuthenticateUser(APIView):

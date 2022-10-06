@@ -57,7 +57,7 @@ def product_details(request, id):
         product = Product.objects.get(pk=id)
 
     except Product.DoesNotExist:
-        return JsonResponse(status=status.HTTP_404_NOT_FOUND,  data={'message':'Request not found'})
+        return JsonResponse(status=status.HTTP_404_NOT_FOUND,  data={'status':'true','message':'Product Does Not Exist', 'result': []})
 
     if request.method == 'GET':
         serializer = ProductSerializer(product)
@@ -72,7 +72,7 @@ def product_details(request, id):
     
     elif request.method == 'DELETE':
         product.delete()
-        return JsonResponse(status=status.HTTP_204_NO_CONTENT)
+        return JsonResponse(status=status.HTTP_200_OK, data={'status':'true','message':'success'})
     
 
 @api_view(['GET', 'POST'])
@@ -114,7 +114,7 @@ def delivery_details(request, id):
     
     elif request.method == 'DELETE':
         delivery.delete()
-        return JsonResponse(status=status.HTTP_204_NO_CONTENT)
+        return JsonResponse(status=status.HTTP_200_OK, data={'status':'true','message':'success'})
 
 
 @api_view(['GET', 'POST'])
@@ -130,7 +130,7 @@ def supplier_list(request):
             serializer.save()
             return JsonResponse(status=status.HTTP_201_CREATED, data={'status':'true','message':'success', 'result': serializer.data})
         else:
-            return JsonResponse(status=status.HTTP_400_BAD_REQUEST, data={'status':'false','message':'Bad Request'})
+            return JsonResponse(status=status.HTTP_400_BAD_REQUEST, data={'status':'false','message':'Bad Request','result': serializer.errors})
 
         
 
@@ -142,7 +142,7 @@ def supplier_details(request, id):
         supplier = Supplier.objects.get(pk=id)
 
     except Supplier.DoesNotExist:
-        return JsonResponse(status=status.HTTP_404_NOT_FOUND,  data={'message':'Request not found'})
+        return JsonResponse(status=status.HTTP_404_NOT_FOUND,  data={'status':'true','message':'Supplier Does Not Exist', 'result': []})
 
     if request.method == 'GET':
         serializer = SupplierSerializer(supplier)
@@ -157,7 +157,8 @@ def supplier_details(request, id):
     
     elif request.method == 'DELETE':
         supplier.delete()
-        return JsonResponse(status=status.HTTP_204_NO_CONTENT)
+        return JsonResponse(status=status.HTTP_200_OK, data={'status':'true','message':'success'})
+    
     
   
 @api_view(['GET', 'POST'])
@@ -174,7 +175,7 @@ def buyer_list(request):
             serializer.save()
             return JsonResponse(status=status.HTTP_201_CREATED, data={'status':'true','message':'success', 'result': serializer.data})
         else:
-            return JsonResponse(status=status.HTTP_400_BAD_REQUEST, data={'status':'false','message':'Bad Request'})
+            return JsonResponse(status=status.HTTP_400_BAD_REQUEST, data={'status':'false','message':'Bad Request', 'result': serializer.errors})
 
         
         
@@ -182,7 +183,7 @@ def buyer_list(request):
 def buyer_details(request, id):
 
     try:
-        buyer = Supplier.objects.get(pk=id)
+        buyer = Buyer.objects.get(pk=id)
 
     except Buyer.DoesNotExist:
         return JsonResponse(status=status.HTTP_404_NOT_FOUND,  data={'message':'Request not found'})
@@ -200,7 +201,7 @@ def buyer_details(request, id):
     
     elif request.method == 'DELETE':
         buyer.delete()
-        return JsonResponse(status=status.HTTP_204_NO_CONTENT)
+        return JsonResponse(status=status.HTTP_200_OK, data={'status':'true','message':'success'})
     
    
 @api_view(['GET', 'POST'])
@@ -243,7 +244,7 @@ def order_details(request, id):
     
     elif request.method == 'DELETE':
         order.delete()
-        return JsonResponse(status=status.HTTP_204_NO_CONTENT)   
+        return JsonResponse(status=status.HTTP_200_OK, data={'status':'true','message':'success'})
 
 # Supplier views
 @login_required(login_url='login')

@@ -185,7 +185,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
                     fontWeight="medium"
                     color={light && transparentNavbar ? "white" : "dark"}
                   >
-                    Sign in
+                    Sign Out
                   </ArgonTypography>
                 </IconButton>
               </Link>

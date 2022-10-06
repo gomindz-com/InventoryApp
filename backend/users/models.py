@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractUser
 
 
 class User(AbstractUser):
-    name = models.CharField(max_length=120, unique=True, default='')
+    name = models.CharField(max_length=120, default='')
     email = models.CharField(max_length=120, unique=True, default='')
     password = models.CharField(max_length=120, default='')
     is_buyer = models.BooleanField(default=False)
