@@ -52,17 +52,18 @@ class Drop(models.Model):
 
 class Product(models.Model):
     STATUS_CHOICE = (
-        ('instock', 'instock'),
-        ('notInstock', 'notInstock'),
+        ('In Stock', 'In Stock'),
+        ('Out of Stock', 'Out of Stock'),
     )
     name = models.CharField(max_length=120, unique=True)
     label = models.CharField(max_length=120, default='')
     tags = models.CharField(max_length=120, default='')
-    price = models.CharField(max_length=120, default='')
-    stock = models.CharField(max_length=120, default='')
-    status = models.CharField(max_length=20, choices=STATUS_CHOICE, default='')
+    price = models.DecimalField(max_digits=6, decimal_places=2)
+    stock = models.PositiveIntegerField(max_length=120, default='')
+    status = models.CharField(max_length=120, choices=STATUS_CHOICE, default='')
+
     category_id = models.CharField(max_length=120 , default='')
-    images = models.ImageField(max_length=120 , default='')
+    images = models.CharField(max_length=120 , default='')
     sortno = models.PositiveIntegerField()
     created_date = models.DateField(auto_now_add=True)
 

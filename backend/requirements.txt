@@ -11,3 +11,5 @@ PyJWT==2.5.0
 django-rest-framework==0.1.0
 django-cors-headers==3.13.0
 django-mysql==4.7.1
+Pillow==9.2.0
+

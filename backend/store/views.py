@@ -46,7 +46,7 @@ def product_list(request):
             serializer.save()
             return JsonResponse(status=status.HTTP_201_CREATED, data={'status':'true','message':'success', 'result': serializer.data})
         else:
-            return JsonResponse(status=status.HTTP_400_BAD_REQUEST, data={'status':'false','message':'Bad Request'})
+            return JsonResponse(status=status.HTTP_400_BAD_REQUEST, data={'status':'false','message':'Bad Request', 'result': serializer.errors})
 
 
 
@@ -127,7 +127,6 @@ def supplier_list(request):
     if request.method == 'POST':
         serializer = SupplierSerializer(data=request.data)
         if serializer.is_valid():
-            
             serializer.save()
             return JsonResponse(status=status.HTTP_201_CREATED, data={'status':'true','message':'success', 'result': serializer.data})
         else:
