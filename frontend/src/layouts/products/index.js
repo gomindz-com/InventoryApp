@@ -33,18 +33,88 @@ import Table from "examples/Tables/Table";
 import ArgonInput from "components/ArgonInput";
 import ArgonButton from "components/ArgonButton";
 import { Button } from "@mui/material";
-import { getProducts } from "apiservices/productService";
+import { getProducts, addProduct } from "apiservices/productService";
 import logoSpotify from "assets/images/small-logos/logo-spotify.svg";
+import { AddProductSchema } from "formValidation/addForm";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer, toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import Select from "react-select";
 
 function Products() {
-
-
   const [rememberMe, setRememberMe] = useState(false);
   const [showAddProductForm, setShowAddProductForm] = useState(false);
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
   const [screenloading, setScreenLoading] = useState(true);
   const [productList, setProductList] = useState([]);
 
+  const navigate = useNavigate();
+
+  //START ADDING NEW PRODUCT
+  const [productData, setProductData] = useState({
+    name: "",
+    sortno: "",
+    category_id: "",
+    images: "",
+    stock: "",
+    label: "",
+    price: "",
+    tags: "",
+    status: "",
+  });
+
+  const status_options = [
+    {
+      value: "In Stock",
+      label: "In Stock",
+      id: "1",
+    },
+    {
+      value: "Out of Stock",
+      label: "Out of Stock",
+      id: "2",
+    },
+  ];
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const isValid = await AddProductSchema.isValid(productData);
+    if (!isValid) {
+      toast.error("Please enter all the required fields!!");
+      console.log(productData);
+    } else {
+      console.log(productData);
+      await addProduct(productData)
+        .then((res) => {
+          if (res.data?.status === "true") {
+            console.log("Product Added");
+            toast.success("Product Added Successfully");
+            handleGetProductList();
+            console.log(res.data.result);
+          } else {
+            console.log("Product Could Not Be Added");
+            console.log(res.data.result);
+            toast.error("Product Could Not Be Added");
+          }
+        })
+        .catch((err) => {
+          console.log("Error Adding Product", err);
+        });
+    }
+  };
+
+  const handleChange = (e) => {
+    setProductData({ ...productData, [e.target.name]: e.target.value });
+  };
+
+  const handleChangeStatus = async (selectedOption) => {
+    setProductData({ ...productData, ["status"]: selectedOption.value });
+  };
+
+  //END ADDING NEW PRODUCT
+
+  //START GET PRODUCTS
   const handleGetProductList = async () => {
     setProductList([]);
     setScreenLoading(true);
@@ -68,6 +138,7 @@ function Products() {
       console.log(error);
     }
   };
+  //END GET PRODUCTS
 
   const columns = [
     { name: "product", align: "left" },
@@ -151,6 +222,7 @@ function Products() {
 
   return (
     <DashboardLayout>
+      <ToastContainer />
       <DashboardNavbar />
       <ArgonBox py={3}>
         {!showAddProductForm ? (
@@ -203,25 +275,82 @@ function Products() {
                 }}
               >
                 <ArgonBox mb={2} mx={5}>
-                  <ArgonInput type="title" placeholder="Product Title" size="large" />
+                  <ArgonInput
+                    type="title"
+                    name="name"
+                    placeholder="Product Name"
+                    size="large"
+                    onChange={handleChange}
+                  />
                 </ArgonBox>
                 <ArgonBox mb={2} mx={5}>
-                  <ArgonInput type="name" placeholder="Label" size="large" />
+                  <ArgonInput
+                    type="name"
+                    name="sortno"
+                    placeholder="Sort Number"
+                    size="large"
+                    onChange={handleChange}
+                  />
                 </ArgonBox>
                 <ArgonBox mb={2} mx={5}>
-                  <ArgonInput type="tags" placeholder="Tags" size="large" />
+                  <ArgonInput
+                    type="tags"
+                    name="tags"
+                    placeholder="Tags"
+                    size="large"
+                    onChange={handleChange}
+                  />
                 </ArgonBox>
                 <ArgonBox mb={2} mx={5}>
-                  <ArgonInput type="name" placeholder="Price" size="large" />
+                  <ArgonInput
+                    type="name"
+                    name="images"
+                    placeholder="Images"
+                    size="large"
+                    onChange={handleChange}
+                  />
                 </ArgonBox>
                 <ArgonBox mb={2} mx={5}>
-                  <ArgonInput type="name" placeholder="Category" size="large" />
+                  <ArgonInput
+                    type="name"
+                    name="stock"
+                    placeholder="Stock"
+                    size="large"
+                    onChange={handleChange}
+                  />
                 </ArgonBox>
                 <ArgonBox mb={2} mx={5}>
-                  <ArgonInput type="name" placeholder="Images" size="large" />
+                  <Select
+                    name="status"
+                    placeholder="Status"
+                    options={status_options}
+                    onChange={handleChangeStatus}
+                  />
                 </ArgonBox>
                 <ArgonBox mb={2} mx={5}>
-                  <ArgonButton onChange={handleSetRememberMe} color="info" size="large" fullWidth>
+                  <ArgonInput
+                    type="name"
+                    name="label"
+                    placeholder="Label"
+                    size="large"
+                    onChange={handleChange}
+                  />
+                </ArgonBox>
+                <ArgonBox mb={2} mx={5}>
+                  <ArgonInput
+                    type="name"
+                    name="price"
+                    placeholder="Price"
+                    size="large"
+                    onChange={handleChange}
+                  />
+                </ArgonBox>
+
+                
+                
+
+                <ArgonBox mb={2} mx={5}>
+                  <ArgonButton onClick={handleSubmit} color="info" size="large" fullWidth>
                     Add Product
                   </ArgonButton>
                 </ArgonBox>

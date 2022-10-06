@@ -16,9 +16,13 @@ Coded by www.creative-tim.com
 // @mui material components
 import Card from "@mui/material/Card";
 
+import { useState, useEffect } from "react";
+
 // Argon Dashboard 2 MUI components
 import ArgonBox from "components/ArgonBox";
 import ArgonTypography from "components/ArgonTypography";
+import ArgonAvatar from "components/ArgonAvatar";
+import ArgonBadge from "components/ArgonBadge";
 
 // Argon Dashboard 2 MUI examples
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
@@ -26,35 +30,136 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import Table from "examples/Tables/Table";
 
-// Data
-import suupliersTableData from "layouts/deliveries/data/buyersTableData";
-import projectsTableData from "layouts/deliveries/data/projectsTableData";
-
-import { useState } from "react";
 import ArgonInput from "components/ArgonInput";
 import ArgonButton from "components/ArgonButton";
 import { Button } from "@mui/material";
+import logoSpotify from "assets/images/small-logos/logo-spotify.svg";
+import { getSuppliers } from "apiservices/supplierService";
 
 function Deliveries() {
-  const { columns, rows } = suupliersTableData;
-  const { columns: prCols, rows: prRows } = projectsTableData;
+
 
   const [rememberMe, setRememberMe] = useState(false);
-  const [showAddProductForm, setShowAddProductForm] = useState(false);
+  const [showAddForm, setShowAddForm] = useState(false);
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
+  const [screenloading, setScreenLoading] = useState(true);
+  const [deliveryList, setDeliveryList] = useState([]);
+
+  const handleGetDeliveryList = async () => {
+    setDeliveryList([]);
+    setScreenLoading(true);
+
+    try {
+      await getSuppliers()
+        .then((res) => {
+          console.log(res);
+          if (res.data?.status === "true") {
+            console.log("Suppliers List");
+            console.log(res.data.result);
+            setDeliveryList(res.data.result);
+          } else {
+            setDeliveryList([]);
+          }
+        })
+        .catch((err) => console.log("Error in Getting Products", err));
+
+      setScreenLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const columns = [
+    { name: "delivery", align: "left" },
+    { name: "stock", align: "left" },
+    { name: "status", align: "center" },
+    { name: "price", align: "center" },
+    { name: "edit", align: "right" },
+    { name: "delete", align: "center" },
+  ];
+
+  const rows = [];
+
+  deliveryList.map(function (item, i) {
+    rows.push({
+      delivery: (
+        <ArgonBox display="flex" alignItems="center" px={1} py={0.5}>
+          <ArgonBox mr={2}>
+            <ArgonAvatar src={logoSpotify} alt={"name"} size="sm" variant="rounded" />
+          </ArgonBox>
+          <ArgonBox display="flex" flexDirection="column">
+            <ArgonTypography variant="button" fontWeight="medium">
+              {item.name}
+            </ArgonTypography>
+            <ArgonTypography variant="caption" color="secondary">
+              {item.label}
+            </ArgonTypography>
+          </ArgonBox>
+        </ArgonBox>
+      ),
+
+      stock: (
+        <ArgonBox display="flex" flexDirection="column">
+          <ArgonTypography variant="caption" fontWeight="medium" color="text">
+            {item.stock}
+          </ArgonTypography>
+          <ArgonTypography variant="caption" color="secondary"></ArgonTypography>
+        </ArgonBox>
+      ),
+      status: (
+        <ArgonBadge
+          variant="gradient"
+          badgeContent={item.status}
+          color="success"
+          size="xs"
+          container
+        />
+      ),
+      price: (
+        <ArgonTypography variant="caption" color="secondary" fontWeight="medium">
+          {item.price}
+        </ArgonTypography>
+      ),
+      edit: (
+        <ArgonTypography
+          component="a"
+          href="#"
+          variant="caption"
+          color="secondary"
+          fontWeight="medium"
+        >
+          Edit
+        </ArgonTypography>
+      ),
+      delete: (
+        <ArgonTypography
+          component="a"
+          href="#"
+          variant="caption"
+          color="secondary"
+          fontWeight="medium"
+        >
+          Delete
+        </ArgonTypography>
+      ),
+    });
+  });
+
+  useEffect(() => {
+    handleGetDeliveryList();
+  }, []);
 
   return (
-    
     <DashboardLayout>
       <DashboardNavbar />
       <ArgonBox py={3}>
-        {!showAddProductForm ? (
+        {!showAddForm ? (
           <ArgonBox mb={3}>
             <Card>
               <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
                 <ArgonTypography variant="h6">Delivery table</ArgonTypography>
-                <Button onClick={() => setShowAddProductForm(!showAddProductForm)}>
-                  <h4 style={{ paddingRight: 10 }}>Add Delivery </h4>
+                <Button onClick={() => setShowAddForm(!showAddForm)}>
+                  <h4 style={{ paddingRight: 10 }}>Add Deliveries </h4>
                   <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-fat-add" />
                 </Button>
               </ArgonBox>
@@ -76,10 +181,15 @@ function Deliveries() {
           <ArgonBox mb={3}>
             <Card>
               <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
-                <ArgonTypography variant="h6">Delivery table</ArgonTypography>
-                <Button onClick={() => setShowAddProductForm(!showAddProductForm)}>
-                  <h4 style={{ paddingRight: 10 }}>Show Delivery Table </h4>
-                  <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-bold-right" />
+                <ArgonTypography variant="h6">Suppliers table</ArgonTypography>
+                <Button onClick={() => setShowAddForm(!showAddForm)}>
+                  <h4 style={{ paddingRight: 10 }}>Show Supplier Table </h4>
+                  <ArgonBox
+                    component="i"
+                    color="info"
+                    fontSize="14px"
+                    className="ni ni-bold-right"
+                  />
                 </Button>
               </ArgonBox>
               <ArgonBox
@@ -93,26 +203,26 @@ function Deliveries() {
                 }}
               >
                 <ArgonBox mb={2} mx={5}>
-                  <ArgonInput type="title" placeholder="Reference" size="large" />
+                  <ArgonInput type="title" placeholder="Deliveries Title" size="large" />
                 </ArgonBox>
                 <ArgonBox mb={2} mx={5}>
-                  <ArgonInput type="name" placeholder="Order" size="large" />
+                  <ArgonInput type="name" placeholder="Label" size="large" />
                 </ArgonBox>
                 <ArgonBox mb={2} mx={5}>
-                  <ArgonInput type="tags" placeholder="Courrier" size="large" />
+                  <ArgonInput type="tags" placeholder="Tags" size="large" />
                 </ArgonBox>
                 <ArgonBox mb={2} mx={5}>
-                  <ArgonInput type="name" placeholder="Date" size="large" />
+                  <ArgonInput type="name" placeholder="Price" size="large" />
                 </ArgonBox>
                 <ArgonBox mb={2} mx={5}>
-                  <ArgonInput type="name" placeholder="Status" size="large" />
+                  <ArgonInput type="name" placeholder="Category" size="large" />
                 </ArgonBox>
                 <ArgonBox mb={2} mx={5}>
-                  <ArgonInput type="name" placeholder="Reciept" size="large" />
+                  <ArgonInput type="name" placeholder="Images" size="large" />
                 </ArgonBox>
                 <ArgonBox mb={2} mx={5}>
                   <ArgonButton onChange={handleSetRememberMe} color="info" size="large" fullWidth>
-                    Submit Form
+                    Add Delivery
                   </ArgonButton>
                 </ArgonBox>
               </ArgonBox>
