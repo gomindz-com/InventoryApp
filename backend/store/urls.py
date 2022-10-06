@@ -20,7 +20,11 @@ from .views import (
     supplier_list, supplier_details,
     buyer_list, buyer_details,
     order_list, order_details,
-    delivery_list, delivery_details
+    delivery_list, delivery_details,
+    category_list, category_details,
+    buyerCounts, productCounts,
+    deliveryCounts, supplierCounts,
+    orderCounts,
 )
 
 from store import views
@@ -37,6 +41,13 @@ urlpatterns = [
     path('orders/<int:id>', order_details),
     path('deliveries/', delivery_list),
     path('deliveries/<int:id>', delivery_details),
+    path('categories/', category_list),
+    path('categories/<int:id>', category_details),
+    path('ordercount/', orderCounts),
+    path('buyercount/', buyerCounts),
+    path('suppliercount/', supplierCounts),
+    path('productcount/', productCounts),
+    path('deliverycount/', deliveryCounts),
 
     path('create-supplier/', create_supplier, name='create-supplier'),
     path('create-buyer/', create_buyer, name='create-buyer'),
