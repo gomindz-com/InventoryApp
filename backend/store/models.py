@@ -51,12 +51,16 @@ class Drop(models.Model):
 
 
 class Product(models.Model):
+    STATUS_CHOICE = (
+        ('instock', 'instock'),
+        ('notInstock', 'notInstock'),
+    )
     name = models.CharField(max_length=120, unique=True)
     label = models.CharField(max_length=120, default='')
     tags = models.CharField(max_length=120, default='')
     price = models.CharField(max_length=120, default='')
     stock = models.CharField(max_length=120, default='')
-    status = models.CharField(max_length=120, default='')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICE, default='')
     category_id = models.CharField(max_length=120 , default='')
     images = models.ImageField(max_length=120 , default='')
     sortno = models.PositiveIntegerField()
@@ -79,7 +83,7 @@ class Order(models.Model):
     product = models.ForeignKey('Product', on_delete=models.CASCADE, default='')
     color = models.CharField(max_length=50, default='')
     buyer = models.ForeignKey('Buyer', on_delete=models.CASCADE, default='')
-    status = models.CharField(max_length=10, default='')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICE, default='')
     reciept = models.CharField(max_length=50, default='')
     created_date = models.DateField(auto_now_add=True)
     
@@ -92,8 +96,12 @@ class Order(models.Model):
 
 
 class Delivery(models.Model):
+    STATUS_CHOICE = (
+        ('delivered', 'delivered'),
+        ('pending', 'pending'),
+    )
     reference=models.CharField(max_length=120, default='')
-    status=models.CharField(max_length=120, default='')
+    status=models.CharField(max_length=20, choices=STATUS_CHOICE, default='')
     reciept=models.CharField(max_length=120, default='')
     order = models.ForeignKey('Order', on_delete=models.CASCADE, default='')
     courier_name = models.CharField(max_length=120,default='')

@@ -57,22 +57,22 @@ def product_details(request, id):
         product = Product.objects.get(pk=id)
 
     except Product.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+        return JsonResponse(status=status.HTTP_404_NOT_FOUND,  data={'message':'Request not found'})
 
     if request.method == 'GET':
         serializer = ProductSerializer(product)
-        return Response({ "product" : serializer.data})
+        return JsonResponse(status=200, data={'status':'true','message':'success', 'result': serializer.data})
 
     elif request.method == 'PUT':
         serializer = ProductSerializer(product, data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse(status=200, data={'status':'true','message':'success', 'result': serializer.data})
+        return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST, data={'status':'false','message':'Bad Request'})
     
     elif request.method == 'DELETE':
         product.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return JsonResponse(status=status.HTTP_204_NO_CONTENT)
     
 
 @api_view(['GET', 'POST'])
@@ -80,14 +80,16 @@ def delivery_list(request):
     if request.method == 'GET':
         deliveries = Delivery.objects.all()
         serializer = DeliveriesSerializer(deliveries, many=True)
-        return Response(serializer.data)
-
+        return JsonResponse(status=200, data={'status':'true','message':'success', 'result': serializer.data})
+    
     if request.method == 'POST':
         serializer = DeliveriesSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse(status=status.HTTP_201_CREATED, data={'status':'true','message':'success', 'result': serializer.data})
+        else:
+            return JsonResponse(status=status.HTTP_400_BAD_REQUEST, data={'status':'false','message':'Bad Request'})
+
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
@@ -97,22 +99,22 @@ def delivery_details(request, id):
         delivery = Delivery.objects.get(pk=id)
 
     except Delivery.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+        return JsonResponse(status=status.HTTP_404_NOT_FOUND,  data={'message':'Request not found'})
 
     if request.method == 'GET':
         serializer = DeliveriesSerializer(delivery)
-        return Response({ "delivery" : serializer.data})
+        return JsonResponse(status=200, data={'status':'true','message':'success', 'result': serializer.data})
 
     elif request.method == 'PUT':
         serializer = DeliveriesSerializer(delivery, data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse(status=200, data={'status':'true','message':'success', 'result': serializer.data})
+        return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST, data={'status':'false','message':'Bad Request'})
     
     elif request.method == 'DELETE':
         delivery.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return JsonResponse(status=status.HTTP_204_NO_CONTENT)
 
 
 @api_view(['GET', 'POST'])
@@ -120,15 +122,17 @@ def supplier_list(request):
     if request.method == 'GET':
         supplier = Supplier.objects.all()
         serializer = SupplierSerializer(supplier, many=True)
-        return Response(serializer.data)
+        return JsonResponse(status=200, data={'status':'true','message':'success', 'result': serializer.data})
 
     if request.method == 'POST':
         serializer = SupplierSerializer(data=request.data)
         if serializer.is_valid():
             
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse(status=status.HTTP_201_CREATED, data={'status':'true','message':'success', 'result': serializer.data})
+        else:
+            return JsonResponse(status=status.HTTP_400_BAD_REQUEST, data={'status':'false','message':'Bad Request'})
+
         
 
         
@@ -139,22 +143,22 @@ def supplier_details(request, id):
         supplier = Supplier.objects.get(pk=id)
 
     except Supplier.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+        return JsonResponse(status=status.HTTP_404_NOT_FOUND,  data={'message':'Request not found'})
 
     if request.method == 'GET':
         serializer = SupplierSerializer(supplier)
-        return Response({ "supplier" : serializer.data})
+        return JsonResponse(status=200, data={'status':'true','message':'success', 'result': serializer.data})
 
     elif request.method == 'PUT':
         serializer = SupplierSerializer(supplier, data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse(status=200, data={'status':'true','message':'success', 'result': serializer.data})
+        return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST, data={'status':'false','message':'Bad Request'})
     
     elif request.method == 'DELETE':
         supplier.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT) 
+        return JsonResponse(status=status.HTTP_204_NO_CONTENT)
     
   
 @api_view(['GET', 'POST'])
@@ -162,15 +166,17 @@ def buyer_list(request):
     if request.method == 'GET':
         buyer = Buyer.objects.all()
         serializer = BuyerSerializer(buyer, many=True)
-        return Response(serializer.data)
+        return JsonResponse(status=200, data={'status':'true','message':'success', 'result': serializer.data})
 
     if request.method == 'POST':
         serializer = BuyerSerializer(data=request.data)
         if serializer.is_valid():
             
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse(status=status.HTTP_201_CREATED, data={'status':'true','message':'success', 'result': serializer.data})
+        else:
+            return JsonResponse(status=status.HTTP_400_BAD_REQUEST, data={'status':'false','message':'Bad Request'})
+
         
         
 @api_view(['GET', 'PUT', 'DELETE'])
@@ -180,36 +186,40 @@ def buyer_details(request, id):
         buyer = Supplier.objects.get(pk=id)
 
     except Buyer.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+        return JsonResponse(status=status.HTTP_404_NOT_FOUND,  data={'message':'Request not found'})
 
     if request.method == 'GET':
         serializer = BuyerSerializer(buyer)
-        return Response({ "supplier" : serializer.data})
+        return JsonResponse(status=200, data={'status':'true','message':'success', 'result': serializer.data})
 
     elif request.method == 'PUT':
         serializer = BuyerSerializer(buyer, data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse(status=200, data={'status':'true','message':'success', 'result': serializer.data})
+        return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST, data={'status':'false','message':'Bad Request'})
     
     elif request.method == 'DELETE':
         buyer.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)   
+        return JsonResponse(status=status.HTTP_204_NO_CONTENT)
+    
+   
 @api_view(['GET', 'POST'])
 def order_list(request):
     if request.method == 'GET':
         order = Order.objects.all()
         serializer = OrderSerializer(order, many=True)
-        return Response(serializer.data)
+        return JsonResponse(status=200, data={'status':'true','message':'success', 'result': serializer.data})
 
     if request.method == 'POST':
         serializer = OrderSerializer(data=request.data)
         if serializer.is_valid():
             
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse(status=status.HTTP_201_CREATED, data={'status':'true','message':'success', 'result': serializer.data})
+        else:
+            return JsonResponse(status=status.HTTP_400_BAD_REQUEST, data={'status':'false','message':'Bad Request'})
+
         
         
 @api_view(['GET', 'PUT', 'DELETE'])
@@ -219,22 +229,22 @@ def order_details(request, id):
         order = Order.objects.get(pk=id)
 
     except Order.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+        return JsonResponse(status=status.HTTP_404_NOT_FOUND,  data={'message':'Request not found'})
 
     if request.method == 'GET':
         serializer = OrderSerializer(order)
-        return Response({ "order" : serializer.data})
+        return JsonResponse(status=200, data={'status':'true','message':'success', 'result': serializer.data})
 
     elif request.method == 'PUT':
         serializer = OrderSerializer(order, data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse(status=200, data={'status':'true','message':'success', 'result': serializer.data})
+        return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST, data={'status':'false','message':'Bad Request'})
     
     elif request.method == 'DELETE':
         order.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)   
+        return JsonResponse(status=status.HTTP_204_NO_CONTENT)   
 
 # Supplier views
 @login_required(login_url='login')
