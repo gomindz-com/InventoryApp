@@ -82,15 +82,10 @@ class Order(models.Model):
     )
     supplier = models.ForeignKey('Supplier', on_delete=models.CASCADE, default='')
     product = models.ForeignKey('Product', on_delete=models.CASCADE, default='')
-    color = models.CharField(max_length=50, default='')
     buyer = models.ForeignKey('Buyer', on_delete=models.CASCADE, default='')
     status = models.CharField(max_length=20, choices=STATUS_CHOICE, default='')
-    reciept = models.CharField(max_length=50, default='')
+    receipt = models.CharField(max_length=50, default='')
     created_date = models.DateField(auto_now_add=True)
-    
-    design = models.CharField(max_length=50, default='')
-    season = models.CharField(max_length=50, default='')
-    drop = models.CharField(max_length=50, default='')
 
     def __str__(self):
         return self.product.name

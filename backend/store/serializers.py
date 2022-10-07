@@ -23,9 +23,9 @@ class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = ['id', 'supplier', 'product', 'buyer',
-                  'status', 'reciept']
+                  'status', 'receipt']
 class DeliveriesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Delivery
         fields = ['id', 'reference', 'order', 'courier_name',
-                  'status', 'reciept']
+                  'status', 'receipt']
