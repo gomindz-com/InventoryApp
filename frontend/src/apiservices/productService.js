@@ -1,4 +1,3 @@
-import { toast } from "react-toastify";
 import axiosConfig from "./axios-config";
 
 export const getProducts = async () => {
@@ -31,9 +30,28 @@ export const addProduct = async (productData) => {
   return data;
 };
 
+
+export const deleteProduct = async (id) => {
+  const data = await axiosConfig
+    .delete(`/products/${id}`)
+    .then((response) => {
+      console.log("Api Response")
+      console.log(response)
+      return response;
+    })
+    .catch((err) => {
+      console.log("Api Error")
+      console.log(err.response.data.result);
+      return err.response;
+    });
+
+  return data;
+};
+
 const productService = {
   getProducts,
-  addProduct
+  addProduct,
+  deleteProduct
 };
 
 export default productService;

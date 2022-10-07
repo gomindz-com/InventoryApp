@@ -15,8 +15,45 @@ export const getSuppliers = async () => {
   return data;
 };
 
+export const addSupplier = async (supplierData) => {
+  const data = await axiosConfig
+    .post(`/suppliers/`, supplierData)
+    .then((response) => {
+      console.log("Api Response")
+      console.log(response)
+      return response;
+    })
+    .catch((err) => {
+      console.log("Api Error")
+      console.log(err.response.data.result);
+      return err.response;
+    });
+
+  return data;
+};
+
+
+export const deleteSupplier = async (supplierId) => {
+  const data = await axiosConfig
+    .delete(`/suppliers/${supplierId}`)
+    .then((response) => {
+      console.log("Api Response")
+      console.log(response)
+      return response;
+    })
+    .catch((err) => {
+      console.log("Api Error")
+      console.log(err.response.data.result);
+      return err.response;
+    });
+
+  return data;
+};
+
+
 const supplierService = {
   getSuppliers,
+  addSupplier
 };
 
 export default supplierService;

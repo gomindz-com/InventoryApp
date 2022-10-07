@@ -121,7 +121,7 @@ const routes = [
   },
   {
     type: "route",
-    name: "Sign In",
+    name: "Sign Out",
     key: "sign-in",
     route: "/authentication/sign-in",
     icon: (

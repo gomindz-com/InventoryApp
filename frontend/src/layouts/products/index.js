@@ -40,6 +40,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import Select from "react-select";
+import { deleteProduct } from "apiservices/productService";
 
 function Products() {
   const [rememberMe, setRememberMe] = useState(false);
@@ -54,7 +55,7 @@ function Products() {
   const [productData, setProductData] = useState({
     name: "",
     sortno: "",
-    category_id: "",
+    category_id: "1",
     images: "",
     stock: "",
     label: "",
@@ -113,6 +114,21 @@ function Products() {
   };
 
   //END ADDING NEW PRODUCT
+
+
+  
+  //DELETE SUPPLIER
+  const handleDeleteProduct= async (id) => {
+    await deleteProduct(id)
+      .then((res) => {
+        if (res.data?.status === "true") {
+          handleGetProductList()
+        } else {
+        }
+      })
+      .catch((err) => console.log("Error in Deleting Product", err));
+  };
+
 
   //START GET PRODUCTS
   const handleGetProductList = async () => {
@@ -203,15 +219,13 @@ function Products() {
         </ArgonTypography>
       ),
       delete: (
-        <ArgonTypography
-          component="a"
-          href="#"
-          variant="caption"
-          color="secondary"
-          fontWeight="medium"
+        <Button
+          onClick={async () => {
+            handleDeleteProduct(item.id);
+          }}
         >
-          Delete
-        </ArgonTypography>
+          <ArgonBox component="i" color="info" fontSize="34px" className="ni ni-fat-remove" />
+        </Button>
       ),
     });
   });

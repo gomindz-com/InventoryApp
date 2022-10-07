@@ -34,7 +34,14 @@ import ArgonInput from "components/ArgonInput";
 import ArgonButton from "components/ArgonButton";
 import { Button } from "@mui/material";
 import logoSpotify from "assets/images/small-logos/logo-spotify.svg";
-import { getSuppliers } from "apiservices/supplierService";
+import { getBuyers } from "apiservices/buyerService";
+import { AddBuyerSchema } from "formValidation/addForm";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer, toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import Select from "react-select";
+import { addBuyer } from "apiservices/buyerService";
+import { deleteBuyer } from "apiservices/buyerService";
 
 function Buyers() {
 
@@ -45,23 +52,67 @@ function Buyers() {
   const [screenloading, setScreenLoading] = useState(true);
   const [buyerList, setBuyerList] = useState([]);
 
+
+  //START ADDING NEW BUYER
+  const [buyerData, setBuyerData] = useState({
+    name: "",
+    address: "",
+    mobile_number: "",
+    email: "",
+    tax_id: ""
+  });
+  
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const isValid = await AddBuyerSchema.isValid(buyerData);
+    if (!isValid) {
+      toast.error("Please enter all the required fields!!");
+      console.log(buyerData);
+    } else {
+      console.log(buyerData);
+      await addBuyer(buyerData)
+        .then((res) => {
+          if (res.data?.status === "true") {
+            console.log("Buyer Added");
+            toast.success("Buyer Added Successfully");
+            handleGetBuyerList();
+            console.log(res.data.result);
+          } else {
+            console.log("Buyer Could Not Be Added");
+            console.log(res.data.result);
+            toast.error("Buyer Could Not Be Added");
+          }
+        })
+        .catch((err) => {
+          console.log("Error Adding Buyer", err);
+        });
+    }
+  };
+
+  const handleChange = (e) => {
+    setBuyerData({ ...buyerData, [e.target.name]: e.target.value });
+  };
+
+
+  // GET BUYERS
   const handleGetBuyerList = async () => {
     setBuyerList([]);
     setScreenLoading(true);
 
     try {
-      await getSuppliers()
+      await getBuyers()
         .then((res) => {
           console.log(res);
           if (res.data?.status === "true") {
-            console.log("Suppliers List");
+            console.log("Buyers List");
             console.log(res.data.result);
-            setSupplierList(res.data.result);
+            setBuyerList(res.data.result);
           } else {
-            setSupplierList([]);
+            setBuyerList([]);
           }
         })
-        .catch((err) => console.log("Error in Getting Products", err));
+        .catch((err) => console.log("Error in Getting Buyers", err));
 
       setScreenLoading(false);
     } catch (error) {
@@ -69,11 +120,25 @@ function Buyers() {
     }
   };
 
+
+   //DELETE SUPPLIER
+   const handleDeleteBuyer= async (id) => {
+    await deleteBuyer(id)
+      .then((res) => {
+        if (res.data?.status === "true") {
+          handleGetBuyerList()
+        } else {
+        }
+      })
+      .catch((err) => console.log("Error in Deleting Buyer", err));
+  };
+
+
   const columns = [
-    { name: "supplier", align: "left" },
-    { name: "stock", align: "left" },
-    { name: "status", align: "center" },
-    { name: "price", align: "center" },
+    { name: "buyer", align: "left" },
+    { name: "address", align: "left" },
+    { name: "contact", align: "center" },
+    { name: "email", align: "center" },
     { name: "edit", align: "right" },
     { name: "delete", align: "center" },
   ];
@@ -82,7 +147,7 @@ function Buyers() {
 
   buyerList.map(function (item, i) {
     rows.push({
-      supplier: (
+      buyer: (
         <ArgonBox display="flex" alignItems="center" px={1} py={0.5}>
           <ArgonBox mr={2}>
             <ArgonAvatar src={logoSpotify} alt={"name"} size="sm" variant="rounded" />
@@ -92,32 +157,32 @@ function Buyers() {
               {item.name}
             </ArgonTypography>
             <ArgonTypography variant="caption" color="secondary">
-              {item.label}
+              {item.tax_id}
             </ArgonTypography>
           </ArgonBox>
         </ArgonBox>
       ),
 
-      stock: (
+      address: (
         <ArgonBox display="flex" flexDirection="column">
           <ArgonTypography variant="caption" fontWeight="medium" color="text">
-            {item.stock}
+            {item.address}
           </ArgonTypography>
           <ArgonTypography variant="caption" color="secondary"></ArgonTypography>
         </ArgonBox>
       ),
-      status: (
+      contact: (
         <ArgonBadge
           variant="gradient"
-          badgeContent={item.status}
+          badgeContent={item.mobile_number}
           color="success"
           size="xs"
           container
         />
       ),
-      price: (
+      email: (
         <ArgonTypography variant="caption" color="secondary" fontWeight="medium">
-          {item.price}
+          {item.email}
         </ArgonTypography>
       ),
       edit: (
@@ -132,15 +197,13 @@ function Buyers() {
         </ArgonTypography>
       ),
       delete: (
-        <ArgonTypography
-          component="a"
-          href="#"
-          variant="caption"
-          color="secondary"
-          fontWeight="medium"
+        <Button
+          onClick={async () => {
+            handleDeleteBuyer(item.id);
+          }}
         >
-          Delete
-        </ArgonTypography>
+          <ArgonBox component="i" color="info" fontSize="34px" className="ni ni-fat-remove" />
+        </Button>
       ),
     });
   });
@@ -151,6 +214,7 @@ function Buyers() {
 
   return (
     <DashboardLayout>
+      <ToastContainer />
       <DashboardNavbar />
       <ArgonBox py={3}>
         {!showAddForm ? (
@@ -159,7 +223,7 @@ function Buyers() {
               <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
                 <ArgonTypography variant="h6">Buyers table</ArgonTypography>
                 <Button onClick={() => setShowAddForm(!showAddForm)}>
-                  <h4 style={{ paddingRight: 10 }}>Add Buyers </h4>
+                  <h4 style={{ paddingRight: 10 }}>Add Buyer </h4>
                   <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-fat-add" />
                 </Button>
               </ArgonBox>
@@ -181,9 +245,9 @@ function Buyers() {
           <ArgonBox mb={3}>
             <Card>
               <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
-                <ArgonTypography variant="h6">Suppliers table</ArgonTypography>
+                <ArgonTypography variant="h6">Buyers table</ArgonTypography>
                 <Button onClick={() => setShowAddForm(!showAddForm)}>
-                  <h4 style={{ paddingRight: 10 }}>Show Supplier Table </h4>
+                  <h4 style={{ paddingRight: 10 }}>Show Buyers Table </h4>
                   <ArgonBox
                     component="i"
                     color="info"
@@ -203,25 +267,23 @@ function Buyers() {
                 }}
               >
                 <ArgonBox mb={2} mx={5}>
-                  <ArgonInput type="title" placeholder="Buyers Title" size="large" />
+                  <ArgonInput type="title" name="name"  placeholder="Name" size="large" onChange={handleChange}/>
                 </ArgonBox>
                 <ArgonBox mb={2} mx={5}>
-                  <ArgonInput type="name" placeholder="Label" size="large" />
+                  <ArgonInput type="title"  name="address" placeholder="Address" size="large" onChange={handleChange}/>
                 </ArgonBox>
                 <ArgonBox mb={2} mx={5}>
-                  <ArgonInput type="tags" placeholder="Tags" size="large" />
+                  <ArgonInput type="tags" name="mobile_number" placeholder="Phone Number" size="large" onChange={handleChange}/>
                 </ArgonBox>
                 <ArgonBox mb={2} mx={5}>
-                  <ArgonInput type="name" placeholder="Price" size="large" />
+                  <ArgonInput type="email" name="email" placeholder="Email" size="large" onChange={handleChange}/>
                 </ArgonBox>
                 <ArgonBox mb={2} mx={5}>
-                  <ArgonInput type="name" placeholder="Category" size="large" />
+                  <ArgonInput type="name"  name="tax_id" placeholder="Tax Id" size="large" onChange={handleChange} />
                 </ArgonBox>
+                
                 <ArgonBox mb={2} mx={5}>
-                  <ArgonInput type="name" placeholder="Images" size="large" />
-                </ArgonBox>
-                <ArgonBox mb={2} mx={5}>
-                  <ArgonButton onChange={handleSetRememberMe} color="info" size="large" fullWidth>
+                  <ArgonButton onClick={handleSubmit} color="info" size="large" fullWidth>
                     Add Buyer
                   </ArgonButton>
                 </ArgonBox>

@@ -34,16 +34,61 @@ import ArgonInput from "components/ArgonInput";
 import ArgonButton from "components/ArgonButton";
 import { Button } from "@mui/material";
 import logoSpotify from "assets/images/small-logos/logo-spotify.svg";
-import { getSuppliers } from "apiservices/supplierService";
+import { getSuppliers, addSupplier } from "apiservices/supplierService";
+import { AddSupplierSchema } from "formValidation/addForm";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer, toast } from "react-toastify";
+import { deleteSupplier } from "apiservices/supplierService";
 
 function Suppliers() {
-
-
   const [rememberMe, setRememberMe] = useState(false);
   const [showAddForm, setShowAddForm] = useState(false);
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
   const [screenloading, setScreenLoading] = useState(true);
   const [supplierList, setSupplierList] = useState([]);
+
+  //START ADDING NEW SUPPLIER
+  const [supplierData, setSupplierData] = useState({
+    companyName: "",
+    country: "",
+    contactName: "",
+    phone_number: "",
+    address: "",
+  });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const isValid = await AddSupplierSchema.isValid(supplierData);
+    if (!isValid) {
+      toast.error("Please enter all the required fields!!");
+      console.log(supplierData);
+    } else {
+      console.log(supplierData);
+      await addSupplier(supplierData)
+        .then((res) => {
+          if (res.data?.status === "true") {
+            console.log("Supplier Added");
+            toast.success("Supplier Added Successfully");
+            handleGetSupplierList();
+            console.log(res.data.result);
+          } else {
+            console.log("Supplier Could Not Be Added");
+            console.log(res.data.result);
+            toast.error("Supplier Could Not Be Added");
+          }
+        })
+        .catch((err) => {
+          console.log("Error Adding Supplier", err);
+        });
+    }
+  };
+
+  const handleChange = (e) => {
+    setSupplierData({ ...supplierData, [e.target.name]: e.target.value });
+  };
+
+  //END ADDING NEW SUPPLIER
 
   const handleGetSupplierList = async () => {
     setSupplierList([]);
@@ -61,7 +106,7 @@ function Suppliers() {
             setSupplierList([]);
           }
         })
-        .catch((err) => console.log("Error in Getting Products", err));
+        .catch((err) => console.log("Error in Getting Suppliers", err));
 
       setScreenLoading(false);
     } catch (error) {
@@ -69,11 +114,25 @@ function Suppliers() {
     }
   };
 
+  //DELETE SUPPLIER
+  const handleDeleteSupplier = async (id) => {
+    await deleteSupplier(id)
+      .then((res) => {
+        if (res.data?.status === "true") {
+          console.log("Suppliers List");
+          console.log(res.data.result);
+          handleGetSupplierList()
+        } else {
+        }
+      })
+      .catch((err) => console.log("Error in Deleting Supplier", err));
+  };
+
   const columns = [
     { name: "supplier", align: "left" },
-    { name: "stock", align: "left" },
-    { name: "status", align: "center" },
-    { name: "price", align: "center" },
+    { name: "contact", align: "left" },
+    { name: "manager", align: "center" },
+    { name: "address", align: "center" },
     { name: "edit", align: "right" },
     { name: "delete", align: "center" },
   ];
@@ -89,7 +148,7 @@ function Suppliers() {
           </ArgonBox>
           <ArgonBox display="flex" flexDirection="column">
             <ArgonTypography variant="button" fontWeight="medium">
-              {item.name}
+              {item.companyName}
             </ArgonTypography>
             <ArgonTypography variant="caption" color="secondary">
               {item.label}
@@ -98,26 +157,26 @@ function Suppliers() {
         </ArgonBox>
       ),
 
-      stock: (
+      contact: (
         <ArgonBox display="flex" flexDirection="column">
           <ArgonTypography variant="caption" fontWeight="medium" color="text">
-            {item.stock}
+            {item.phone_number}
           </ArgonTypography>
           <ArgonTypography variant="caption" color="secondary"></ArgonTypography>
         </ArgonBox>
       ),
-      status: (
+      manager: (
         <ArgonBadge
           variant="gradient"
-          badgeContent={item.status}
+          badgeContent={item.contactName}
           color="success"
           size="xs"
           container
         />
       ),
-      price: (
+      address: (
         <ArgonTypography variant="caption" color="secondary" fontWeight="medium">
-          {item.price}
+          {item.address}
         </ArgonTypography>
       ),
       edit: (
@@ -132,15 +191,13 @@ function Suppliers() {
         </ArgonTypography>
       ),
       delete: (
-        <ArgonTypography
-          component="a"
-          href="#"
-          variant="caption"
-          color="secondary"
-          fontWeight="medium"
+        <Button
+          onClick={async () => {
+            handleDeleteSupplier(item.id);
+          }}
         >
-          Delete
-        </ArgonTypography>
+          <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-fat-remove" />
+        </Button>
       ),
     });
   });
@@ -151,6 +208,7 @@ function Suppliers() {
 
   return (
     <DashboardLayout>
+      <ToastContainer />
       <DashboardNavbar />
       <ArgonBox py={3}>
         {!showAddForm ? (
@@ -203,25 +261,53 @@ function Suppliers() {
                 }}
               >
                 <ArgonBox mb={2} mx={5}>
-                  <ArgonInput type="title" placeholder="Suppliers Title" size="large" />
+                  <ArgonInput
+                    type="title"
+                    name="companyName"
+                    placeholder="Company Name"
+                    size="large"
+                    onChange={handleChange}
+                  />
                 </ArgonBox>
                 <ArgonBox mb={2} mx={5}>
-                  <ArgonInput type="name" placeholder="Label" size="large" />
+                  <ArgonInput
+                    type="name"
+                    name="country"
+                    placeholder="Country"
+                    size="large"
+                    onChange={handleChange}
+                  />
                 </ArgonBox>
                 <ArgonBox mb={2} mx={5}>
-                  <ArgonInput type="tags" placeholder="Tags" size="large" />
+                  <ArgonInput
+                    type="tags"
+                    name="phone_number"
+                    placeholder="Phone Number"
+                    size="large"
+                    onChange={handleChange}
+                  />
                 </ArgonBox>
                 <ArgonBox mb={2} mx={5}>
-                  <ArgonInput type="name" placeholder="Price" size="large" />
+                  <ArgonInput
+                    type="tags"
+                    name="contactName"
+                    placeholder="Contact Name"
+                    size="large"
+                    onChange={handleChange}
+                  />
                 </ArgonBox>
                 <ArgonBox mb={2} mx={5}>
-                  <ArgonInput type="name" placeholder="Category" size="large" />
+                  <ArgonInput
+                    type="name"
+                    name="address"
+                    placeholder="Address"
+                    size="large"
+                    onChange={handleChange}
+                  />
                 </ArgonBox>
+
                 <ArgonBox mb={2} mx={5}>
-                  <ArgonInput type="name" placeholder="Images" size="large" />
-                </ArgonBox>
-                <ArgonBox mb={2} mx={5}>
-                  <ArgonButton onChange={handleSetRememberMe} color="info" size="large" fullWidth>
+                  <ArgonButton onClick={handleSubmit} color="info" size="large" fullWidth>
                     Add Supplier
                   </ArgonButton>
                 </ArgonBox>

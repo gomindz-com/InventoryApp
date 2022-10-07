@@ -13,6 +13,9 @@ Coded by www.creative-tim.com
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
 
+import { useState } from "react";
+
+
 // @mui material components
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
@@ -53,6 +56,12 @@ const bgImage =
   "https://raw.githubusercontent.com/creativetimofficial/public-assets/master/argon-dashboard-pro/assets/img/profile-layout-header.jpg";
 
 function Overview() {
+
+
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
+  console.log(JSON.parse(localStorage.getItem("user")));
+
+
   return (
     <DashboardLayout
       sx={{
@@ -73,11 +82,11 @@ function Overview() {
           <Grid item xs={12} md={12} xl={12}>
             <ProfileInfoCard
               title="profile information"
-              description="Hi, I'm Alec Thompson, Decisions: If you can't decide, the answer is no. If two equally difficult paths, choose the one more painful in the short term (pain avoidance is creating an illusion of equality)."
+              description="Hi, Decisions: If you can't decide, the answer is no. If two equally difficult paths, choose the one more painful in the short term (pain avoidance is creating an illusion of equality)."
               info={{
-                fullName: "Modou Jallow",
+                fullName: user.name,
                 mobile: "(44) 123 1234 123",
-                email: "alecthompson@mail.com",
+                email: user.email,
                 location: "Gambia",
               }}
               social={[

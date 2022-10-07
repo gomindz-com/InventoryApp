@@ -13,3 +13,37 @@ export const AddProductSchema = Yup.object().shape({
   status: Yup.string().required("Required"),
   //email: Yup.string().email("Email is required").required("Required"),
 });
+
+
+export const AddSupplierSchema = Yup.object().shape({
+    companyName: Yup.string().required("Name is required"),
+    country: Yup.string().required("Required"),
+    phone_number: Yup.string().required("Required"),
+    contactName: Yup.string().required("Required"),
+    address: Yup.string().required("Required"),
+    //email: Yup.string().email("Email is required").required("Required"),
+});
+  
+
+ export const AddBuyerSchema = Yup.object().shape({
+    name: Yup.string().required("Name is required"),
+    address: Yup.string().required("Required"),
+    mobile_number: Yup.string().required("Required"),
+    tax_id: Yup.string().required("Required"),
+    email: Yup.string().email("Email is required").required("Required"),
+});
+
+
+export const AddOrderSchema = Yup.object().shape({
+    supplier: Yup.string().required("Name is required"),
+    product: Yup.string().required("Required"),
+    buyer: Yup.string().required("Required"),
+    status: Yup.string().required("Required"),
+    receipt: Yup.string().required("Required"),
+});
+
+
+export const UserSchema = Yup.object().shape({
+    password: Yup.string().required("Required"),
+    email: Yup.string().email("Email is required").required("Required"),
+});
