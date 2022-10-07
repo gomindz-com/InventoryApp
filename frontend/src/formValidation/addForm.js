@@ -1,5 +1,12 @@
 import * as Yup from "yup";
 
+
+export const AddCategorySchema = Yup.object().shape({
+    name: Yup.string().required("Name is required"),
+    description: Yup.string().required("Required"),
+  });
+
+
 export const AddProductSchema = Yup.object().shape({
   name: Yup.string().required("Name is required"),
   sortno: Yup.number().required("Required"),
@@ -40,6 +47,9 @@ export const AddOrderSchema = Yup.object().shape({
     buyer: Yup.string().required("Required"),
     status: Yup.string().required("Required"),
     receipt: Yup.string().required("Required"),
+    amount: Yup.number().required("Required"),
+    total_price: Yup.number().required("Required"),
+
 });
 
 

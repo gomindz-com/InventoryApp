@@ -15,6 +15,22 @@ export const getBuyers = async () => {
 };
 
 
+
+export const getBuyerCount = async () => {
+  const data = await axiosConfig
+    .get(`/buyercount/`)
+    .then((response) => {
+      return response;
+    })
+    .catch((err) => {
+      console.log(err);
+      toast.error(err);
+    });
+
+  return data;
+};
+
+
 export const addBuyer = async (buyerData) => {
   const data = await axiosConfig
     .post(`/buyers/`, buyerData)

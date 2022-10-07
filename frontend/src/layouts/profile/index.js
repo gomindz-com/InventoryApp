@@ -85,9 +85,9 @@ function Overview() {
               description="Hi, Decisions: If you can't decide, the answer is no. If two equally difficult paths, choose the one more painful in the short term (pain avoidance is creating an illusion of equality)."
               info={{
                 fullName: user.name,
-                mobile: "(44) 123 1234 123",
+                mobile: user.mobile,
                 email: user.email,
-                location: "Gambia",
+                location: user.location,
               }}
               social={[
                 {

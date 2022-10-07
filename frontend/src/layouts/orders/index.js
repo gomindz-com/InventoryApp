@@ -56,6 +56,8 @@ function Orders() {
   const [productOptions, setProductOptions] = useState(null);
   const [supplierOptions, setSupplierOptions] = useState(null);
   const [buyerOptions, setBuyerOptions] = useState(null);
+  const [productPrice, setProductPrice] = useState(0);
+  const [totalPrice, setTotalPrice] = useState(0);
 
   const handleGetOrderList = async () => {
     setOrderList([]);
@@ -93,9 +95,12 @@ function Orders() {
             console.log(res.data.result);
 
             res.data.result.map((item) => {
+              console.log("Single Product");
+              console.log(item.price);
               product_options.push({
                 value: item.name,
                 label: item.name,
+                price: item.price,
                 id: item.id,
               });
             });
@@ -147,7 +152,6 @@ function Orders() {
 
   // GET BUYERS
   const handleGetBuyerList = async () => {
-
     setBuyerList([]);
     try {
       await getBuyers()
@@ -166,7 +170,6 @@ function Orders() {
             });
 
             setBuyerOptions(buyer_options);
-          
           } else {
             setBuyerList([]);
           }
@@ -186,6 +189,7 @@ function Orders() {
     buyer: "",
     status: "",
     receipt: "",
+    amount: "",
   });
 
   const status_options = [
@@ -253,6 +257,9 @@ function Orders() {
 
   const handleChangeProduct = async (selectedOption) => {
     setOrderData({ ...orderData, ["product"]: selectedOption.id });
+    console.log("selectedOption.price");
+    console.log(selectedOption.price);
+    setProductPrice(selectedOption.price);
   };
 
   const handleChangeSupplier = async (selectedOption) => {
@@ -261,6 +268,15 @@ function Orders() {
 
   const handleChangeBuyer = async (selectedOption) => {
     setOrderData({ ...orderData, ["buyer"]: selectedOption.id });
+  };
+
+  const handleChangeAmount = async (e) => {
+    setOrderData({
+      ...orderData,
+      ["amount"]: e.target.value,
+      ["total_price"]: productPrice * e.target.value,
+    });
+    setTotalPrice(productPrice * e.target.value);
   };
 
   const handleChangeStatus = async (selectedOption) => {
@@ -281,11 +297,13 @@ function Orders() {
   };
 
   const columns = [
-    { name: "order", align: "left" },
+    { name: "amount", align: "left" },
     { name: "product", align: "left" },
+    { name: "total price", align: "left" },
     { name: "buyer", align: "center" },
     { name: "supplier", align: "center" },
     { name: "status", align: "center" },
+    { name: "print receipt", align: "center" },
     { name: "edit", align: "right" },
     { name: "delete", align: "center" },
   ];
@@ -294,14 +312,11 @@ function Orders() {
 
   orderList.map(function (item, i) {
     rows.push({
-      order: (
-        <ArgonBox display="flex" alignItems="center" px={1} py={0.5}>
-          <ArgonBox mr={2}>
-            <ArgonAvatar src={logoSpotify} alt={"name"} size="sm" variant="rounded" />
-          </ArgonBox>
+      amount: (
+        <ArgonBox display="flex" alignItems="center" px={3} py={0.5}>
           <ArgonBox display="flex" flexDirection="column">
             <ArgonTypography variant="button" fontWeight="medium">
-              {item.id}
+              {item.amount}
             </ArgonTypography>
             <ArgonTypography variant="caption" color="secondary">
               {item.label}
@@ -314,6 +329,14 @@ function Orders() {
         <ArgonBox display="flex" flexDirection="column">
           <ArgonTypography variant="caption" fontWeight="medium" color="text">
             {item.product.name}
+          </ArgonTypography>
+          <ArgonTypography variant="caption" color="secondary"></ArgonTypography>
+        </ArgonBox>
+      ),
+      "total price": (
+        <ArgonBox display="flex" flexDirection="column">
+          <ArgonTypography variant="caption" fontWeight="medium" color="text">
+            D {item.total_price}
           </ArgonTypography>
           <ArgonTypography variant="caption" color="secondary"></ArgonTypography>
         </ArgonBox>
@@ -336,6 +359,15 @@ function Orders() {
         <ArgonTypography variant="caption" color="secondary" fontWeight="medium">
           {item.status}
         </ArgonTypography>
+      ),
+      "print receipt": (
+        <Button
+          onClick={async () => {
+            handleDeleteOrder(item.id);
+          }}
+        >
+          <ArgonBox component="i" color="info" fontSize="25px" className="ni ni-folder-17" />
+        </Button>
       ),
       edit: (
         <ArgonTypography
@@ -445,6 +477,26 @@ function Orders() {
                     onChange={handleChangeBuyer}
                   />
                 </ArgonBox>
+                <ArgonBox mb={2} mx={5}>
+                  <ArgonInput
+                    type="name"
+                    name="amount"
+                    placeholder="Amount"
+                    size="large"
+                    onChange={handleChangeAmount}
+                  />
+                </ArgonBox>
+
+                <ArgonBox mb={2} mx={5}>
+                  <ArgonInput
+                    type="name"
+                    name="total_price"
+                    value={totalPrice}
+                    placeholder="Total Price"
+                    size="large"
+                    onChange={handleChange}
+                  />
+                </ArgonBox>
 
                 <ArgonBox mb={2} mx={5}>
                   <Select
@@ -465,7 +517,7 @@ function Orders() {
                   />
                 </ArgonBox>
 
-                <ArgonBox mb={'20%'} mx={5}>
+                <ArgonBox mb={"20%"} mx={5}>
                   <ArgonButton onClick={handleSubmit} color="info" size="large" fullWidth>
                     Add Order
                   </ArgonButton>

@@ -15,6 +15,24 @@ export const getSuppliers = async () => {
   return data;
 };
 
+
+export const getSupplierCount = async () => {
+  const data = await axiosConfig
+    .get(`/suppliercount/`)
+    .then((response) => {
+      return response;
+    })
+    .catch((err) => {
+      console.log(err);
+      toast.error(err);
+    });
+
+  return data;
+};
+
+
+
+
 export const addSupplier = async (supplierData) => {
   const data = await axiosConfig
     .post(`/suppliers/`, supplierData)
@@ -53,7 +71,9 @@ export const deleteSupplier = async (supplierId) => {
 
 const supplierService = {
   getSuppliers,
-  addSupplier
+  addSupplier,
+  getSupplierCount,
+  deleteSupplier
 };
 
 export default supplierService;

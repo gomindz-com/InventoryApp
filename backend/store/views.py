@@ -1,4 +1,5 @@
 from math import prod
+from unittest import result
 from django.shortcuts import render, redirect
 from django.views.generic import ListView
 from django.contrib.auth.decorators import login_required
@@ -39,8 +40,30 @@ logger = logging.getLogger('app_api')
 def product_list(request):
     if request.method == 'GET':
         products = Product.objects.all()
+
+        productList = []
+        for item in products.iterator():
+            logger.error(item.category.id)
+            aCategory = Category.objects.get(id=item.category.id)
+            serializerCategory = CategorySerializer(aCategory)
+            
+            productList.append({
+                "id": item.id,
+                "name": item.name,
+                "label": item.label,
+                "tags": item.tags,
+                "price": item.price,
+                "stock": item.stock,
+                "status": item.status,
+                "sortno": item.sortno,
+                "images": item.images,
+                "category": serializerCategory.data,
+                
+            })
+
+
         serializer = ProductSerializer(products, many=True)
-        return JsonResponse(status=200, data={'status': 'true', 'message': 'success', 'result': serializer.data})
+        return JsonResponse(status=200, data={'status': 'true', 'message': 'success', 'result': productList})
 
     if request.method == 'POST':
         serializer = ProductSerializer(data=request.data)
@@ -79,9 +102,31 @@ def product_details(request, id):
 @api_view(['GET', 'POST'])
 def delivery_list(request):
     if request.method == 'GET':
-        deliveries = Delivery.objects.all()
-        serializer = DeliveriesSerializer(deliveries, many=True)
-        return JsonResponse(status=200, data={'status': 'true', 'message': 'success', 'result': serializer.data})
+        order = Order.objects.all().filter(status='approved')
+        orderList = []
+        for item in order.iterator():
+            logger.error(item.supplier.id)
+            aSupplier = Supplier.objects.get(id=item.supplier.id)
+            aProduct = Product.objects.get(id=item.product.id)
+            aBuyer = Buyer.objects.get(id=item.buyer.id)
+            serializerSupplier = SupplierSerializer(aSupplier)
+            serializerProduct = ProductSerializer(aProduct)
+            serializerBuyer = BuyerSerializer(aBuyer)
+            orderList.append({
+                "id": item.id,
+                "supplier": serializerSupplier.data,
+                "product": serializerProduct.data,
+                "buyer": serializerBuyer.data,
+                "status": item.status,
+                "amount": item.amount,
+                "total_price": item.total_price,
+                "receipt": item.receipt
+            })
+
+        logger.info("orderList")
+        logger.info(orderList)
+        serializer = OrderSerializer(order, many=True)
+        return JsonResponse(status=200, data={'status': 'true', 'message': 'success', 'result': orderList})
 
     if request.method == 'POST':
         serializer = DeliveriesSerializer(data=request.data)
@@ -219,6 +264,8 @@ def order_list(request):
                 "product": serializerProduct.data,
                 "buyer": serializerBuyer.data,
                 "status": item.status,
+                "amount": item.amount,
+                "total_price": item.total_price,
                 "receipt": item.receipt
             })
 
@@ -258,8 +305,7 @@ def order_details(request, id):
 
     elif request.method == 'DELETE':
         order.delete()
-
-        return JsonResponse(status=status.HTTP_204_NO_CONTENT)   
+        return JsonResponse(status=status.HTTP_200_OK, data={'status': 'true', 'message': 'success'})
     
 
 @api_view(['GET', 'POST'])
@@ -302,7 +348,7 @@ def category_details(request, id):
     
     elif request.method == 'DELETE':
         category.delete()
-        return JsonResponse(status=status.HTTP_204_NO_CONTENT)   
+        return JsonResponse(status=status.HTTP_200_OK, data={'status': 'true', 'message': 'success'})  
     
 
 
@@ -312,36 +358,34 @@ def category_details(request, id):
 @api_view(['GET'])
 def buyerCounts(request):
   buyer_count = Buyer.objects.all().count()
-  buyers= {'buyercount': buyer_count}
-  return JsonResponse(buyers)
+  result= {'buyercount': buyer_count}
+  return JsonResponse(status=200, data={'status':'true','message':'success', 'result': result})
+
 
 @api_view(['GET'])
 def supplierCounts(request):
   supplier_count = Supplier.objects.all().count()
-  suppliers= {'suppliercount': supplier_count}
-  return JsonResponse(suppliers)
+  result= {'suppliercount': supplier_count}
+  return JsonResponse(status=200, data={'status':'true','message':'success', 'result': result})
+
 
 @api_view(['GET'])
 def productCounts(request):
   product_count = Product.objects.all().count()
-  products= {'productcount': product_count}
-  return JsonResponse(products)
+  result= {'productcount': product_count}
+  return JsonResponse(status=200, data={'status':'true','message':'success', 'result': result})
 
 @api_view(['GET'])
 def orderCounts(request):
   order_count = Order.objects.all().count()
-  context= {'ordercount': order_count}
-  return JsonResponse(context)
+  result= {'ordercount': order_count}
+  return JsonResponse(status=200, data={'status':'true','message':'success', 'result': result})
 
 @api_view(['GET'])
 def deliveryCounts(request):
   delivery_count = Delivery.objects.all().count()
   deliveries= {'deliverycount': delivery_count}
   return JsonResponse(deliveries)
-
-
-
-        return JsonResponse(status=status.HTTP_200_OK, data={'status': 'true', 'message': 'success'})
 
 
 # Supplier views

@@ -41,6 +41,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import Select from "react-select";
 import { deleteProduct } from "apiservices/productService";
+import { getCategories } from "apiservices/categoryService";
 
 function Products() {
   const [rememberMe, setRememberMe] = useState(false);
@@ -48,6 +49,10 @@ function Products() {
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
   const [screenloading, setScreenLoading] = useState(true);
   const [productList, setProductList] = useState([]);
+  const [categoryList, setCategoryList] = useState([]);
+  const [categoryOptions, setCategoryOptions] = useState(null);
+  const category_options = [];
+
 
   const navigate = useNavigate();
 
@@ -113,6 +118,11 @@ function Products() {
     setProductData({ ...productData, ["status"]: selectedOption.value });
   };
 
+  
+  const handleChangeCategory = async (selectedOption) => {
+    setProductData({ ...productData, ["category"]: selectedOption.id });
+  };
+
   //END ADDING NEW PRODUCT
 
 
@@ -156,8 +166,44 @@ function Products() {
   };
   //END GET PRODUCTS
 
+
+    //START GET CATEGORY
+    const handleGetCategoryList = async () => {
+      setCategoryList([]);
+      setScreenLoading(true);
+  
+      try {
+        await getCategories()
+          .then((res) => {
+            console.log(res);
+            if (res.data?.status === "true") {
+              
+            console.log("Category List");
+            console.log(res.data.result);
+
+            res.data.result.map((item) => {
+              category_options.push({
+                value: item.name,
+                label: item.name,
+                id: item.id,
+              });
+            });
+
+            setCategoryOptions(category_options);
+            } else {
+              setCategoryList([]);
+            }
+          })
+          .catch((err) => console.log("Error in Getting setCategoryList", err));
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    //END GET CATEGORY
+
   const columns = [
     { name: "product", align: "left" },
+    { name: "category", align: "left" },
     { name: "stock", align: "left" },
     { name: "status", align: "center" },
     { name: "price", align: "center" },
@@ -189,6 +235,14 @@ function Products() {
         <ArgonBox display="flex" flexDirection="column">
           <ArgonTypography variant="caption" fontWeight="medium" color="text">
             {item.stock}
+          </ArgonTypography>
+          <ArgonTypography variant="caption" color="secondary"></ArgonTypography>
+        </ArgonBox>
+      ),
+      category: (
+        <ArgonBox display="flex" flexDirection="column">
+          <ArgonTypography variant="caption" fontWeight="medium" color="text">
+            {item.category.name}
           </ArgonTypography>
           <ArgonTypography variant="caption" color="secondary"></ArgonTypography>
         </ArgonBox>
@@ -232,6 +286,7 @@ function Products() {
 
   useEffect(() => {
     handleGetProductList();
+    handleGetCategoryList()
   }, []);
 
   return (
@@ -322,6 +377,14 @@ function Products() {
                     placeholder="Images"
                     size="large"
                     onChange={handleChange}
+                  />
+                </ArgonBox>
+                <ArgonBox mb={2} mx={5}>
+                  <Select
+                    name="category"
+                    placeholder="Category"
+                    options={categoryOptions}
+                    onChange={handleChangeCategory}
                   />
                 </ArgonBox>
                 <ArgonBox mb={2} mx={5}>

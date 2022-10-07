@@ -47,6 +47,8 @@ class Login(APIView):
         userObject = {
             'name': user.name,
             'email': user.email,
+            'location': user.location,
+            'mobile': user.phone_number,
         }
 
         token = jwt.encode(payload, 'secret', algorithm='HS256')

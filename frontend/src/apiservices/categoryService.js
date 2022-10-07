@@ -1,8 +1,8 @@
 import axiosConfig from "./axios-config";
 
-export const getProducts = async () => {
+export const getCategories = async () => {
   const data = await axiosConfig
-    .get(`/products/`)
+    .get(`/categories/`)
     .then((response) => {
       return response;
     })
@@ -13,23 +13,9 @@ export const getProducts = async () => {
   return data;
 };
 
-export const getProductCount = async () => {
+export const addCategory = async (productData) => {
   const data = await axiosConfig
-    .get(`/productcount/`)
-    .then((response) => {
-      return response;
-    })
-    .catch((err) => {
-      console.log(err);
-      toast.error(err);
-    });
-
-  return data;
-};
-
-export const addProduct = async (productData) => {
-  const data = await axiosConfig
-    .post(`/products/`, productData)
+    .post(`/categories/`, productData)
     .then((response) => {
       console.log("Api Response")
       console.log(response)
@@ -45,9 +31,9 @@ export const addProduct = async (productData) => {
 };
 
 
-export const deleteProduct = async (id) => {
+export const deleteCategory= async (id) => {
   const data = await axiosConfig
-    .delete(`/products/${id}`)
+    .delete(`/categories/${id}`)
     .then((response) => {
       console.log("Api Response")
       console.log(response)
@@ -62,11 +48,10 @@ export const deleteProduct = async (id) => {
   return data;
 };
 
-const productService = {
-  getProducts,
-  getProductCount,
-  addProduct,
-  deleteProduct
+const categoryService = {
+  getCategories,
+  addCategory,
+  deleteCategory
 };
 
-export default productService;
+export default categoryService;

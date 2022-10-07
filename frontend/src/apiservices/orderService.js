@@ -16,6 +16,21 @@ export const getOrders = async () => {
 };
 
 
+export const getOrderCount = async () => {
+  const data = await axiosConfig
+    .get(`/ordercount/`)
+    .then((response) => {
+      return response;
+    })
+    .catch((err) => {
+      console.log(err);
+      toast.error(err);
+    });
+
+  return data;
+};
+
+
 export const addOrder = async (productData) => {
   const data = await axiosConfig
     .post(`/orders/`, productData)

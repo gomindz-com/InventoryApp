@@ -50,6 +50,7 @@ import Buyers from "layouts/buyers";
 import Products from "layouts/products";
 import Orders from "layouts/orders";
 import Deliveries from "layouts/deliveries";
+import Categories from "layouts/categories";
 
 const routes = [
   {
@@ -89,6 +90,16 @@ const routes = [
       <ArgonBox component="i" color="success" fontSize="14px" className="ni ni-bag-17" />
     ),
     component: <Products />,
+  },
+  {
+    type: "route",
+    name: "Categories",
+    key: "categories",
+    route: "/categories",
+    icon: (
+      <ArgonBox component="i" color="success" fontSize="14px" className="ni ni-bag-17" />
+    ),
+    component: <Categories />,
   },
   {
     type: "route",

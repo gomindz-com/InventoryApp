@@ -14,6 +14,9 @@ Coded by www.creative-tim.com
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
 
+import { useState, useEffect } from "react";
+
+
 // @mui material components
 import Grid from "@mui/material/Grid";
 import Icon from "@mui/material/Icon";
@@ -41,11 +44,116 @@ import Slider from "layouts/dashboard/components/Slider";
 import gradientLineChartData from "layouts/dashboard/data/gradientLineChartData";
 import salesTableData from "layouts/dashboard/data/salesTableData";
 import categoriesListData from "layouts/dashboard/data/categoriesListData";
+import { getOrderCount } from "apiservices/orderService";
+import { getProductCount } from "apiservices/productService";
+import { getSupplierCount } from "apiservices/supplierService";
+import { getBuyerCount } from "apiservices/buyerService";
 
 
 // pro
 function Default() {
   const { size } = typography;
+  const [orderCount, setOrderCount] = useState({});
+  const [productCount, setProductCount] = useState({});
+  const [supplierCount, setSupplierCount] = useState({});
+  const [buyerCount, setBuyerCount] = useState({});
+
+
+  const handleGetOrderCount = async () => {
+    setOrderCount({});
+
+    try {
+      await getOrderCount()
+        .then((res) => {
+          console.log(res);
+          if (res.data?.status === "true") {
+            console.log("Order Count");
+            console.log(res.data.result);
+            setOrderCount(res.data.result);
+          } else {
+            setOrderCount({});
+          }
+        })
+        .catch((err) => console.log("Error", err));
+
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  
+  const handleGetProductCount = async () => {
+    setProductCount({});
+
+    try {
+      await getProductCount()
+        .then((res) => {
+          console.log(res);
+          if (res.data?.status === "true") {
+            console.log("Product Count");
+            console.log(res.data.result);
+            setProductCount(res.data.result);
+          } else {
+            setProductCount({});
+          }
+        })
+        .catch((err) => console.log("Error", err));
+
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleGetSupplierCount = async () => {
+    setSupplierCount({});
+
+    try {
+      await getSupplierCount()
+        .then((res) => {
+          console.log(res);
+          if (res.data?.status === "true") {
+            console.log("Supplier Count");
+            console.log(res.data.result);
+            setSupplierCount(res.data.result);
+          } else {
+            setSupplierCount({});
+          }
+        })
+        .catch((err) => console.log("Error", err));
+
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleGetBuyerCount = async () => {
+    setBuyerCount({});
+
+    try {
+      await getBuyerCount()
+        .then((res) => {
+          console.log(res);
+          if (res.data?.status === "true") {
+            console.log("Buyer Count");
+            console.log(res.data.result);
+            setBuyerCount(res.data.result);
+          } else {
+            setBuyerCount({});
+          }
+        })
+        .catch((err) => console.log("Error", err));
+
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
+  useEffect(() => {
+    handleGetOrderCount();
+    handleGetProductCount();
+    handleGetSupplierCount();
+    handleGetBuyerCount();
+  }, []);
 
   return (
     <DashboardLayout>
@@ -54,8 +162,9 @@ function Default() {
         <Grid container spacing={3} mb={3}>
           <Grid item xs={12} md={6} lg={3}>
             <DetailedStatisticsCard
-              title="Oder"
+              title="Orders"
               count="D53,000"
+              amount={orderCount?.ordercount == undefined ? 0 + ' Orders' : orderCount?.ordercount + ' Order(s)'}
               icon={{ color: "info", component: <i className="ni ni-money-coins" /> }}
               percentage={{ color: "success", count: "+55%", text: "since yesterday" }}
             />
@@ -64,6 +173,7 @@ function Default() {
             <DetailedStatisticsCard
               title="Product"
               count="D2,300"
+              amount={productCount?.productcount == undefined ? 0 + ' Product' : productCount?.productcount + ' Product(s)'}
               icon={{ color: "error", component: <i className="ni ni-world" /> }}
               percentage={{ color: "success", count: "+3%", text: "since last week" }}
             />
@@ -72,6 +182,7 @@ function Default() {
             <DetailedStatisticsCard
               title="Supllier"
               count="D3,462"
+              amount={supplierCount?.suppliercount == undefined ? 0 + ' Supplier' : supplierCount?.suppliercount + ' Supplier(s)'}
               icon={{ color: "success", component: <i className="ni ni-paper-diploma" /> }}
               percentage={{ color: "error", count: "-2%", text: "since last quarter" }}
             />
@@ -80,6 +191,7 @@ function Default() {
             <DetailedStatisticsCard
               title="Buyer"
               count="D103,430"
+              amount={buyerCount?.buyercount == undefined ? 0 + ' Buyer' : buyerCount?.buyercount + ' Buyer(s)'}
               icon={{ color: "warning", component: <i className="ni ni-cart" /> }}
               percentage={{ color: "success", count: "+5%", text: "than last month" }}
             />
