@@ -62,7 +62,7 @@ class Product(models.Model):
     stock = models.PositiveIntegerField(default='')
     status = models.CharField(max_length=120, choices=STATUS_CHOICE, default='')
 
-    category_id = models.CharField(max_length=120 , default='')
+    category = models.ForeignKey('Category', on_delete=models.CASCADE, default='')
     images = models.CharField(max_length=120 , default='')
     sortno = models.PositiveIntegerField()
     created_date = models.DateField(auto_now_add=True)
@@ -105,3 +105,12 @@ class Delivery(models.Model):
 
     def __str__(self):
         return self.courier_name
+
+
+class Category(models.Model):
+    name = models.CharField(max_length=120, unique=True)
+    description = models.CharField(max_length=220)
+    created_date = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name

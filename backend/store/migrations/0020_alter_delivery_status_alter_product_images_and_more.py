@@ -6,7 +6,9 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('store', '0019_merge_20221006_1232'),
+
+        ('store', '0019_merge_20221006_1315'),
+
     ]
 
     operations = [
@@ -35,6 +37,7 @@ class Migration(migrations.Migration):
             name='stock',
             field=models.PositiveIntegerField(default='', max_length=120),
         ),
+
         migrations.AlterField(
             model_name='supplier',
             name='additional_files',
@@ -45,4 +48,5 @@ class Migration(migrations.Migration):
             name='additional_information',
             field=models.CharField(blank=True, default='', max_length=200),
         ),
+
     ]

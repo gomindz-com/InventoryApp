@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.views.generic import ListView
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from .serializers import ProductSerializer, SupplierSerializer, BuyerSerializer, OrderSerializer, DeliveriesSerializer
+from .serializers import ProductSerializer, SupplierSerializer, CategorySerializer, BuyerSerializer, OrderSerializer, DeliveriesSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.http import JsonResponse
@@ -18,7 +18,8 @@ from .models import (
     Drop,
     Product,
     Order,
-    Delivery
+    Delivery,
+    Category
 )
 from .forms import (
     SupplierForm,
@@ -257,7 +258,91 @@ def order_details(request, id):
 
     elif request.method == 'DELETE':
         order.delete()
+
+        return JsonResponse(status=status.HTTP_204_NO_CONTENT)   
+    
+
+@api_view(['GET', 'POST'])
+def category_list(request):
+    if request.method == 'GET':
+        category = Category.objects.all()
+        serializer = CategorySerializer(category, many=True)
+        return JsonResponse(status=200, data={'status':'true','message':'success', 'result': serializer.data})
+
+    if request.method == 'POST':
+        serializer = CategorySerializer(data=request.data)
+        if serializer.is_valid():
+            
+            serializer.save()
+            return JsonResponse(status=status.HTTP_201_CREATED, data={'status':'true','message':'success', 'result': serializer.data})
+        else:
+            return JsonResponse(status=status.HTTP_400_BAD_REQUEST, data={'status':'false','message':'Bad Request'})
+
+        
+        
+@api_view(['GET', 'PUT', 'DELETE'])
+def category_details(request, id):
+
+    try:
+        category = Category.objects.get(pk=id)
+
+    except Category.DoesNotExist:
+        return JsonResponse(status=status.HTTP_404_NOT_FOUND,  data={'message':'Request not found'})
+
+    if request.method == 'GET':
+        serializer = CategorySerializer(category)
+        return JsonResponse(status=200, data={'status':'true','message':'success', 'result': serializer.data})
+
+    elif request.method == 'PUT':
+        serializer = CategorySerializer(category, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(status=200, data={'status':'true','message':'success', 'result': serializer.data})
+        return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST, data={'status':'false','message':'Bad Request'})
+    
+    elif request.method == 'DELETE':
+        category.delete()
+        return JsonResponse(status=status.HTTP_204_NO_CONTENT)   
+    
+
+
+  
+# create api for the count of the models
+
+@api_view(['GET'])
+def buyerCounts(request):
+  buyer_count = Buyer.objects.all().count()
+  buyers= {'buyercount': buyer_count}
+  return JsonResponse(buyers)
+
+@api_view(['GET'])
+def supplierCounts(request):
+  supplier_count = Supplier.objects.all().count()
+  suppliers= {'suppliercount': supplier_count}
+  return JsonResponse(suppliers)
+
+@api_view(['GET'])
+def productCounts(request):
+  product_count = Product.objects.all().count()
+  products= {'productcount': product_count}
+  return JsonResponse(products)
+
+@api_view(['GET'])
+def orderCounts(request):
+  order_count = Order.objects.all().count()
+  context= {'ordercount': order_count}
+  return JsonResponse(context)
+
+@api_view(['GET'])
+def deliveryCounts(request):
+  delivery_count = Delivery.objects.all().count()
+  deliveries= {'deliverycount': delivery_count}
+  return JsonResponse(deliveries)
+
+
+
         return JsonResponse(status=status.HTTP_200_OK, data={'status': 'true', 'message': 'success'})
+
 
 # Supplier views
 
