@@ -86,7 +86,7 @@ class Order(models.Model):
     status = models.CharField(max_length=20, choices=STATUS_CHOICE, default='')
     receipt = models.CharField(max_length=50, default='')
     amount = models.PositiveIntegerField(default=0)
-    total_price = models.PositiveIntegerField(default=0)
+    total_price = models.PositiveIntegerField(default=0) 
     created_date = models.DateField(auto_now_add=True)
 
     def __str__(self):
