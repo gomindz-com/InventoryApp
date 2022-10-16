@@ -255,7 +255,7 @@ function Categories() {
                   <ArgonInput
                     type="title"
                     name="name"
-                    placeholder="Product Name"
+                    placeholder="Category Name"
                     size="large"
                     onChange={handleChange}
                   />

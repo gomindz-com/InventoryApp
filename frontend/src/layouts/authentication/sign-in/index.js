@@ -138,7 +138,8 @@ function Illustration() {
             Sign In
           </ArgonButton>
         </ArgonBox>
-        <ArgonBox mt={3} textAlign="center">
+
+        {/* <ArgonBox mt={3} textAlign="center">
           <ArgonTypography variant="button" color="text" fontWeight="regular">
             Don&apos;t have an account?{" "}
             <ArgonTypography
@@ -151,7 +152,8 @@ function Illustration() {
               Sign up
             </ArgonTypography>
           </ArgonTypography>
-        </ArgonBox>
+        </ArgonBox> */}
+
       </ArgonBox>
     </IllustrationLayout>
   );

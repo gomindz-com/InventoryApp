@@ -39,6 +39,7 @@ import { AddSupplierSchema } from "formValidation/addForm";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
 import { deleteSupplier } from "apiservices/supplierService";
+import { editSupplier } from "apiservices/supplierService";
 
 function Suppliers() {
   const [rememberMe, setRememberMe] = useState(false);
@@ -46,6 +47,8 @@ function Suppliers() {
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
   const [screenloading, setScreenLoading] = useState(true);
   const [supplierList, setSupplierList] = useState([]);
+  const [editFormActive, setEditFormActive] = useState(false);
+
 
   //START ADDING NEW SUPPLIER
   const [supplierData, setSupplierData] = useState({
@@ -83,6 +86,36 @@ function Suppliers() {
         });
     }
   };
+
+
+  const handleEdit = async (e) => {
+    e.preventDefault();
+
+    const isValid = await AddSupplierSchema.isValid(supplierData);
+    if (!isValid) {
+      toast.error("Please enter all the required fields!!");
+      console.log(supplierData);
+    } else {
+      console.log(supplierData);
+      await editSupplier(supplierData.id, supplierData)
+        .then((res) => {
+          if (res.data?.status === "true") {
+            console.log("Supplier Updated");
+            toast.success("Supplier Updated Successfully");
+            handleGetSupplierList();
+            console.log(res.data.result);
+          } else {
+            console.log("Supplier Could Not Be Updated");
+            console.log(res.data.result);
+            toast.error("Supplier Could Not Be Updated");
+          }
+        })
+        .catch((err) => {
+          console.log("Error Updating Supplier", err);
+        });
+    }
+  };
+
 
   const handleChange = (e) => {
     setSupplierData({ ...supplierData, [e.target.name]: e.target.value });
@@ -133,7 +166,7 @@ function Suppliers() {
     { name: "contact", align: "left" },
     { name: "manager", align: "center" },
     { name: "address", align: "center" },
-    { name: "edit", align: "right" },
+    { name: "edit", align: "center" },
     { name: "delete", align: "center" },
   ];
 
@@ -180,15 +213,16 @@ function Suppliers() {
         </ArgonTypography>
       ),
       edit: (
-        <ArgonTypography
-          component="a"
-          href="#"
-          variant="caption"
-          color="secondary"
-          fontWeight="medium"
+        <Button
+          onClick={async () => {
+            setEditFormActive(true)
+            setShowAddForm(true);
+            setSupplierData(item);
+            
+          }}
         >
-          Edit
-        </ArgonTypography>
+          <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-ruler-pencil" />
+        </Button>
       ),
       delete: (
         <Button
@@ -216,7 +250,16 @@ function Suppliers() {
             <Card>
               <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
                 <ArgonTypography variant="h6">Suppliers table</ArgonTypography>
-                <Button onClick={() => setShowAddForm(!showAddForm)}>
+                <Button onClick={() =>{
+                   setSupplierData({
+                    companyName: "",
+                    country: "",
+                    contactName: "",
+                    phone_number: "",
+                    address: "",
+                   })
+                   setShowAddForm(!showAddForm)
+                   }}>
                   <h4 style={{ paddingRight: 10 }}>Add Supplier </h4>
                   <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-fat-add" />
                 </Button>
@@ -264,6 +307,7 @@ function Suppliers() {
                   <ArgonInput
                     type="title"
                     name="companyName"
+                    value={supplierData.companyName}
                     placeholder="Company Name"
                     size="large"
                     onChange={handleChange}
@@ -273,6 +317,7 @@ function Suppliers() {
                   <ArgonInput
                     type="name"
                     name="country"
+                    value={supplierData.country}
                     placeholder="Country"
                     size="large"
                     onChange={handleChange}
@@ -282,6 +327,7 @@ function Suppliers() {
                   <ArgonInput
                     type="tags"
                     name="phone_number"
+                    value={supplierData.phone_number}
                     placeholder="Phone Number"
                     size="large"
                     onChange={handleChange}
@@ -291,6 +337,7 @@ function Suppliers() {
                   <ArgonInput
                     type="tags"
                     name="contactName"
+                    value={supplierData.contactName}
                     placeholder="Contact Name"
                     size="large"
                     onChange={handleChange}
@@ -300,6 +347,7 @@ function Suppliers() {
                   <ArgonInput
                     type="name"
                     name="address"
+                    value={supplierData.address}
                     placeholder="Address"
                     size="large"
                     onChange={handleChange}
@@ -307,8 +355,8 @@ function Suppliers() {
                 </ArgonBox>
 
                 <ArgonBox mb={2} mx={5}>
-                  <ArgonButton onClick={handleSubmit} color="info" size="large" fullWidth>
-                    Add Supplier
+                  <ArgonButton onClick={editFormActive ?  handleEdit : handleSubmit} color="info" size="large" fullWidth>
+                    { editFormActive ?  "Edit Supplier" : 'Add Supplier' }
                   </ArgonButton>
                 </ArgonBox>
               </ArgonBox>
