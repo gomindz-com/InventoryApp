@@ -9,6 +9,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.http import JsonResponse
 from rest_framework import status
+from django.db.models import Sum
 
 
 from users.models import User
@@ -388,8 +389,26 @@ def deliveryCounts(request):
   return JsonResponse(deliveries)
 
 
-# Supplier views
+# create api for the TOTAL amount for orders, product prices and product stock
 
+@api_view(['GET'])
+def total_orders(request):
+    total = Order.objects.all().aggregate(TOTAL = Sum('total_price'))['TOTAL']
+    return JsonResponse(status=200, data={'status':'true','message':'success', 'result': total})
+
+@api_view(['GET'])
+def total_stock(request):
+    total = Product.objects.all().aggregate(TOTAL = Sum('stock'))['TOTAL']
+    return JsonResponse(status=200, data={'status':'true','message':'success', 'result': total})
+
+@api_view(['GET'])
+def total_price(request):
+    total = Product.objects.all().aggregate(TOTAL = Sum('price'))['TOTAL']
+    return JsonResponse(status=200, data={'status':'true','message':'success', 'result': total})
+    
+    
+
+# Supplier views
 
 @login_required(login_url='login')
 def create_supplier(request):
