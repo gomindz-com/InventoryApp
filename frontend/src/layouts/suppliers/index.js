@@ -39,6 +39,7 @@ import { AddSupplierSchema } from "formValidation/addForm";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
 import { deleteSupplier } from "apiservices/supplierService";
+import { editSupplierComponent } from "apiservices/supplierService";
 
 function Suppliers() {
   const [rememberMe, setRememberMe] = useState(false);
@@ -55,6 +56,15 @@ function Suppliers() {
     phone_number: "",
     address: "",
   });
+
+
+   //edit supllier SUPPLIER
+
+
+
+
+  
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -128,6 +138,31 @@ function Suppliers() {
       .catch((err) => console.log("Error in Deleting Supplier", err));
   };
 
+
+   //Edite SUPPLIER
+
+   const editSupplie = async (id) => {
+  
+    showAddForm(true)
+
+    await editSupplierComponent(id)
+    .then((res) => {if(res.data.status == "true") {
+      console.log("edite the supplier")
+    console.log(res.data.result)
+    handleGetSupplierList()
+    }else{
+    
+    }
+ })
+ .catch( (err) => console.log("erro in the edit supplier ",err )    )
+
+
+   }
+
+
+
+  
+
   const columns = [
     { name: "supplier", align: "left" },
     { name: "contact", align: "left" },
@@ -180,15 +215,13 @@ function Suppliers() {
         </ArgonTypography>
       ),
       edit: (
-        <ArgonTypography
-          component="a"
-          href="#"
-          variant="caption"
-          color="secondary"
-          fontWeight="medium"
+        <Button
+          onClick={async () => {
+            setShowAddForm(true)
+          }}
         >
-          Edit
-        </ArgonTypography>
+          <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-fat-remove" />
+        </Button>
       ),
       delete: (
         <Button

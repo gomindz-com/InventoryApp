@@ -31,6 +31,24 @@ export const getSupplierCount = async () => {
 };
 
 
+export const editSupplierComponent = async (supplierId) => {
+  const data =  await axiosConfig
+  .put(`/suppliers/${supplierId}`)
+  .then((response) => {
+    return response
+  })
+  .catch((err) => {
+    console.log("Edit  api erro")
+    console.log(err.response.data.result)
+    return response
+  })
+  return data
+}
+
+
+
+
+
 
 
 export const addSupplier = async (supplierData) => {

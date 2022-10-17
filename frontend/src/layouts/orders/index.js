@@ -59,6 +59,21 @@ function Orders() {
   const [productPrice, setProductPrice] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
 
+  const [val, setVal] = useState([])
+
+
+  // addInputHandle
+  const handleAdd = () => {
+    const eachInput = [...val, []]
+    setVal(eachInput)
+  }
+
+  const handAddInputChange = (onChangeValue)=> {
+    const eachInputData = [...val]
+    eachInputData = onChangeValue.target.value
+    setVal(eachInputData)
+  } 
+
   const handleGetOrderList = async () => {
     setOrderList([]);
     setScreenLoading(true);
@@ -515,6 +530,25 @@ function Orders() {
                     size="large"
                     onChange={handleChange}
                   />
+                </ArgonBox>
+
+                {val.map((data) =>{ 
+                  return(
+                    <ArgonBox mb={2} mx={5}  key={data.id} person = {data} >
+                      <ArgonInput
+                       placeholder="Add products"
+                       size = "medium"
+                        value={data} onChange={e=>handAddInputChange(e)} />
+                    </ArgonBox>
+                  )
+                }  )}
+
+
+                <ArgonBox mb={"5%"} mx={5}>
+                <ArgonButton onClick={handleAdd} color="info" size="large" fullWidth>
+                    AddInputs
+                  </ArgonButton>
+
                 </ArgonBox>
 
                 <ArgonBox mb={"20%"} mx={5}>
