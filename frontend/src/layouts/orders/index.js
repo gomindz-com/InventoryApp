@@ -58,6 +58,7 @@ function Orders() {
   const [buyerOptions, setBuyerOptions] = useState(null);
   const [productPrice, setProductPrice] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [quantity, setQuantity] = useState(0);
 
   const handleGetOrderList = async () => {
     setOrderList([]);
@@ -297,11 +298,10 @@ function Orders() {
   };
 
   const columns = [
-    { name: "amount", align: "left" },
+    { name: "id", align: "left" },
     { name: "product", align: "left" },
     { name: "total price", align: "left" },
     { name: "buyer", align: "center" },
-    { name: "supplier", align: "center" },
     { name: "status", align: "center" },
     { name: "print receipt", align: "center" },
     { name: "edit", align: "right" },
@@ -312,14 +312,11 @@ function Orders() {
 
   orderList.map(function (item, i) {
     rows.push({
-      amount: (
+      id: (
         <ArgonBox display="flex" alignItems="center" px={3} py={0.5}>
           <ArgonBox display="flex" flexDirection="column">
             <ArgonTypography variant="button" fontWeight="medium">
-              {item.amount}
-            </ArgonTypography>
-            <ArgonTypography variant="caption" color="secondary">
-              {item.label}
+              {item.id}
             </ArgonTypography>
           </ArgonBox>
         </ArgonBox>
@@ -328,7 +325,11 @@ function Orders() {
       product: (
         <ArgonBox display="flex" flexDirection="column">
           <ArgonTypography variant="caption" fontWeight="medium" color="text">
-            {item.product.name}
+            <div>
+              {item.products.map(function (i, index) {
+                return <span key={`demo_snap_${index}`}>{(index ? ", " : "") + i.name}</span>;
+              })}
+            </div>
           </ArgonTypography>
           <ArgonTypography variant="caption" color="secondary"></ArgonTypography>
         </ArgonBox>
@@ -344,17 +345,13 @@ function Orders() {
       buyer: (
         <ArgonBadge
           variant="gradient"
-          badgeContent={item.buyer.name}
+          badgeContent={item.buyer}
           color="success"
           size="xs"
           container
         />
       ),
-      supplier: (
-        <ArgonTypography variant="caption" color="secondary" fontWeight="medium">
-          {item.supplier.companyName}
-        </ArgonTypography>
-      ),
+
       status: (
         <ArgonTypography variant="caption" color="secondary" fontWeight="medium">
           {item.status}
@@ -453,22 +450,84 @@ function Orders() {
                   },
                 }}
               >
-                <ArgonBox mb={2} mx={5}>
-                  <Select
-                    name="product"
-                    placeholder="Products"
-                    options={productOptions}
-                    onChange={handleChangeProduct}
-                  />
-                </ArgonBox>
-                <ArgonBox mb={2} mx={5}>
-                  <Select
-                    name="supplier"
-                    placeholder="Suppliers"
-                    options={supplierOptions}
-                    onChange={handleChangeSupplier}
-                  />
-                </ArgonBox>
+                { //PRODUCT ORDER INPUT
+                  <ArgonBox mb={2} mx={5} display="flex">
+                    <div style={{ flex: 5, paddingRight: 10 }}>
+                      <Select
+                        name="product"
+                        placeholder="Products"
+                        options={productOptions}
+                        onChange={handleChangeProduct}
+                      />
+                    </div>
+                    <div style={{ flex: 3, paddingRight: 10 }}>
+                      <div style={{ display: "flex" }}>
+                        <Button
+                          style={{ flex: 1, alignSelf: "center" }}
+                          onClick={async () => {
+                            setQuantity(quantity - 1);
+                          }}
+                        >
+                          <ArgonBox
+                            component="i"
+                            color="info"
+                            fontSize="15px"
+                            className="ni ni-fat-delete"
+                          />
+                        </Button>
+                        <ArgonInput
+                          style={{ flex: 5 }}
+                          type="name"
+                          name="quantity"
+                          value={quantity}
+                          placeholder="Amount"
+                          size="large"
+                          onChange={handleChangeAmount}
+                        />
+                        <Button
+                          style={{ flex: 1, alignSelf: "center" }}
+                          onClick={async () => {
+                            setQuantity(quantity + 1);
+                          }}
+                        >
+                          <ArgonBox
+                            component="i"
+                            color="info"
+                            fontSize="15px"
+                            className="ni ni-fat-add"
+                          />
+                        </Button>
+                      </div>
+                    </div>
+                    <div style={{ flex: 3 }}>
+                      <ArgonInput
+                        type="name"
+                        name="price"
+                        placeholder="Price"
+                        size="large"
+                        onChange={handleChangeAmount}
+                      />
+                    </div>
+                    
+                    
+                    
+                    <div style={{ flex: 1 }}>
+                      <Button
+                        style={{ flex: 1, alignSelf: "center" }}
+                        onClick={async () => {
+                          productsInput.push();
+                        }}
+                      >
+                        Add Another
+                      </Button>
+                    </div>
+
+
+                  </ArgonBox>
+                }
+
+                
+
                 <ArgonBox mb={2} mx={5}>
                   <Select
                     name="buyer"
@@ -481,20 +540,9 @@ function Orders() {
                   <ArgonInput
                     type="name"
                     name="amount"
-                    placeholder="Amount"
-                    size="large"
-                    onChange={handleChangeAmount}
-                  />
-                </ArgonBox>
-
-                <ArgonBox mb={2} mx={5}>
-                  <ArgonInput
-                    type="name"
-                    name="total_price"
-                    value={totalPrice}
                     placeholder="Total Price"
                     size="large"
-                    onChange={handleChange}
+                    onChange={handleChangeAmount}
                   />
                 </ArgonBox>
 

@@ -48,7 +48,6 @@ urlpatterns = [
     path('suppliercount/', supplierCounts),
     path('productcount/', productCounts),
     path('deliverycount/', deliveryCounts),
-    path('ordertotal/', total_orders),
     path('totalstock/', total_stock),
     path('totalprice/', total_price),
 

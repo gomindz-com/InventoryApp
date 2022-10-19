@@ -1,7 +1,7 @@
 from dataclasses import field
 import imp
 from rest_framework import serializers
-from .models import Category, Delivery, Product, Supplier, Buyer, Order, Delivery
+from .models import Category, Delivery, Product, ProductQuantity, Supplier, Buyer, Order, Delivery
 
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
@@ -19,11 +19,23 @@ class BuyerSerializer(serializers.ModelSerializer):
         model = Buyer
         fields = ['id', 'name', 'email', 'address',
                   'mobile_number', 'tax_id' ]
+
+class ProductOrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductQuantity
+        fields = ['id', 'product', 'order',
+                  'product_quantity']
+
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
-        fields = ['id', 'supplier', 'product', 'buyer',
-                  'status', 'receipt', 'amount', 'total_price']
+        fields = ['id', 'products', 'buyer',
+                  'status', 'receipt', 'total_price']
+        depth = 1
+
+
+        
+
 class DeliveriesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Delivery

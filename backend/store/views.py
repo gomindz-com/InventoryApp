@@ -1,3 +1,4 @@
+from ast import Or
 from math import prod
 from unittest import result
 from django.shortcuts import render, redirect
@@ -14,6 +15,7 @@ from django.db.models import Sum
 
 from users.models import User
 from .models import (
+    ProductQuantity,
     Supplier,
     Buyer,
     Season,
@@ -249,36 +251,61 @@ def buyer_details(request, id):
 @api_view(['GET', 'POST'])
 def order_list(request):
     if request.method == 'GET':
+        #GET THE NUMBER OF ORDERS
         order = Order.objects.all()
         orderList = []
         for item in order.iterator():
-            logger.error(item.supplier.id)
-            aSupplier = Supplier.objects.get(id=item.supplier.id)
-            aProduct = Product.objects.get(id=item.product.id)
-            aBuyer = Buyer.objects.get(id=item.buyer.id)
-            serializerSupplier = SupplierSerializer(aSupplier)
-            serializerProduct = ProductSerializer(aProduct)
-            serializerBuyer = BuyerSerializer(aBuyer)
-            orderList.append({
-                "id": item.id,
-                "supplier": serializerSupplier.data,
-                "product": serializerProduct.data,
-                "buyer": serializerBuyer.data,
-                "status": item.status,
-                "amount": item.amount,
-                "total_price": item.total_price,
-                "receipt": item.receipt
-            })
+            productList = []
+            #FOR EACH ORDER, GO TO THE PRODUCTS ORDER TABLE TO GET THE FOREIGN KEY ID 
+            logger.info(item.id)
+            price = 0
+            productsOrders = ProductQuantity.objects.filter(order_id=item.id)
+            for productsOrdersItem in productsOrders.iterator():
+                #FROM THE ORDERS, GET THE PRODUCT ID FOR EACH ORDER 
+                logger.info(productsOrdersItem.product_id)
+                aProduct = Product.objects.get(id=productsOrdersItem.product_id)
+                productList.append( {
+                        "id": aProduct.id,
+                        "name": aProduct.name,
+                        "label": aProduct.label,
+                        "price": aProduct.price,
+                        "quantity": productsOrdersItem.product_quantity,
+                        "amount": aProduct.price * productsOrdersItem.product_quantity
+                    })
+                price = price + (aProduct.price * productsOrdersItem.product_quantity)
+            #logger.info("productList")
+            #logger.info(productList)
+            orderList.append(
+                    {
+                        "id": item.id,
+                        "buyer": item.buyer,
+                        "products": productList,
+                        "status": item.status,
+                        "receipt":  item.receipt,
+                        "total_price":  price,
+                    },
+                )
+            logger.info("orderList")
+            logger.info(orderList)
 
-        logger.info("orderList")
-        logger.info(orderList)
+        
+
         serializer = OrderSerializer(order, many=True)
         return JsonResponse(status=200, data={'status': 'true', 'message': 'success', 'result': orderList})
 
     if request.method == 'POST':
         serializer = OrderSerializer(data=request.data)
+        data = request.data
+        new_order = Order.objects.create(buyer = data["buyer"], status = data["status"])
+        new_order.save()
+
+        for product in data['products']:    
+            new_product_order = ProductQuantity.objects.create(product_id = product['id'],  order_id = new_order.id, product_quantity = product['amount'])
+            new_product_order.save()
+
+
         if serializer.is_valid():
-            serializer.save()
+            #serializer.save()
             return JsonResponse(status=status.HTTP_201_CREATED, data={'status': 'true', 'message': 'success', 'result': serializer.data})
         else:
             return JsonResponse(status=status.HTTP_400_BAD_REQUEST, data={'status': 'false', 'message': 'Bad Request', 'result': serializer.errors})
@@ -313,8 +340,26 @@ def order_details(request, id):
 def category_list(request):
     if request.method == 'GET':
         category = Category.objects.all()
+        categoryList = []
+        
+        for item in category.iterator():
+            stock = 0
+            aproduct = Product.objects.filter(category_id=item.id)
+            for productItem in aproduct.iterator():
+                logger.info(productItem.stock)
+                stock = stock + productItem.stock 
+                logger.info(stock)
+
+            categoryList.append({
+                        "id": item.id,
+                        "name": item.name,
+                        "description": item.description,
+                        "stock": stock,
+                    })
+            
+
         serializer = CategorySerializer(category, many=True)
-        return JsonResponse(status=200, data={'status':'true','message':'success', 'result': serializer.data})
+        return JsonResponse(status=200, data={'status':'true','message':'success', 'result': categoryList})
 
     if request.method == 'POST':
         serializer = CategorySerializer(data=request.data)
@@ -352,9 +397,16 @@ def category_details(request, id):
         return JsonResponse(status=status.HTTP_200_OK, data={'status': 'true', 'message': 'success'})  
     
 
+# API FOR COUNTS
 
-  
-# create api for the count of the models
+@api_view(['GET'])
+def orderCounts(request):
+  order_count = Order.objects.all().count()
+  total = Order.objects.all().aggregate(TOTAL = Sum('total_price'))['TOTAL']
+  result= {'ordercount': order_count, "total": total}
+  return JsonResponse(status=200, data={'status':'true','message':'success', 'result': result})
+
+
 
 @api_view(['GET'])
 def buyerCounts(request):
@@ -376,11 +428,6 @@ def productCounts(request):
   result= {'productcount': product_count}
   return JsonResponse(status=200, data={'status':'true','message':'success', 'result': result})
 
-@api_view(['GET'])
-def orderCounts(request):
-  order_count = Order.objects.all().count()
-  result= {'ordercount': order_count}
-  return JsonResponse(status=200, data={'status':'true','message':'success', 'result': result})
 
 @api_view(['GET'])
 def deliveryCounts(request):

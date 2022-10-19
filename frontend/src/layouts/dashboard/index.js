@@ -43,11 +43,11 @@ import Slider from "layouts/dashboard/components/Slider";
 // Data
 import gradientLineChartData from "layouts/dashboard/data/gradientLineChartData";
 import salesTableData from "layouts/dashboard/data/salesTableData";
-import categoriesListData from "layouts/dashboard/data/categoriesListData";
 import { getOrderCount } from "apiservices/orderService";
 import { getProductCount } from "apiservices/productService";
 import { getSupplierCount } from "apiservices/supplierService";
 import { getBuyerCount } from "apiservices/buyerService";
+import { getCategories } from "apiservices/categoryService";
 
 
 // pro
@@ -57,6 +57,59 @@ function Default() {
   const [productCount, setProductCount] = useState({});
   const [supplierCount, setSupplierCount] = useState({});
   const [buyerCount, setBuyerCount] = useState({});
+  const [categoryList, setCategoryList] = useState([]);
+
+  const categoriesListData = [
+
+
+    
+    
+  ];
+
+
+    //START GET CATEGORY
+    const handleGetCategoryList = async () => {
+      setCategoryList([]);
+  
+      try {
+        await getCategories()
+          .then((res) => {
+            console.log(res);
+            if (res.data?.status === "true") {
+              console.log("Category List");
+              console.log(res.data.result);
+              setCategoryList(res.data.result);
+            } else {
+              setCategoryList([]);
+            }
+          })
+          .catch((err) => console.log("Error in Getting setCategoryList", err));
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    //END GET CATEGORY
+
+  categoryList.map(function (item, i) {
+    categoriesListData.push(
+      
+    {
+      color: "dark",
+      icon: <i className="ni ni-mobile-button" style={{ fontSize: "12px" }} />,
+      name: item.name,
+      description: (
+        <>
+          {item.stock} in stock,{" "}
+          <ArgonTypography variant="caption" color="text" fontWeight="medium">
+            346+ sold
+          </ArgonTypography>
+        </>
+      ),
+      route: "/",
+    },
+    
+    );
+  });
 
 
   const handleGetOrderCount = async () => {
@@ -152,7 +205,9 @@ function Default() {
     handleGetOrderCount();
     handleGetProductCount();
     handleGetSupplierCount();
-    handleGetBuyerCount();
+    handleGetBuyerCount();    
+    handleGetCategoryList();
+
   }, []);
 
   return (
@@ -163,7 +218,7 @@ function Default() {
           <Grid item xs={12} md={6} lg={3}>
             <DetailedStatisticsCard
               title="Orders"
-              count="D53,000"
+              count={orderCount?.total == undefined ? "D"+0 : "D"+orderCount?.total }
               amount={orderCount?.ordercount == undefined ? 0 + ' Orders' : orderCount?.ordercount + ' Order(s)'}
               icon={{ color: "info", component: <i className="ni ni-money-coins" /> }}
               percentage={{ color: "success", count: "+55%", text: "since yesterday" }}
@@ -172,7 +227,7 @@ function Default() {
           <Grid item xs={12} md={6} lg={3}>
             <DetailedStatisticsCard
               title="Product"
-              count="D2,300"
+              count={productCount?.productcount == undefined ? 0 + ' Product' : productCount?.productcount + ' Product(s)'}
               amount={productCount?.productcount == undefined ? 0 + ' Product' : productCount?.productcount + ' Product(s)'}
               icon={{ color: "error", component: <i className="ni ni-world" /> }}
               percentage={{ color: "success", count: "+3%", text: "since last week" }}
@@ -180,8 +235,8 @@ function Default() {
           </Grid>
           <Grid item xs={12} md={6} lg={3}>
             <DetailedStatisticsCard
-              title="Supllier"
-              count="D3,462"
+              title="Supplier"
+              count={supplierCount?.suppliercount == undefined ? 0 + ' Supplier' : supplierCount?.suppliercount + ' Supplier(s)'}
               amount={supplierCount?.suppliercount == undefined ? 0 + ' Supplier' : supplierCount?.suppliercount + ' Supplier(s)'}
               icon={{ color: "success", component: <i className="ni ni-paper-diploma" /> }}
               percentage={{ color: "error", count: "-2%", text: "since last quarter" }}
@@ -190,7 +245,7 @@ function Default() {
           <Grid item xs={12} md={6} lg={3}>
             <DetailedStatisticsCard
               title="Buyer"
-              count="D103,430"
+              count={buyerCount?.buyercount == undefined ? 0 + ' Buyer' : buyerCount?.buyercount + ' Buyer(s)'}
               amount={buyerCount?.buyercount == undefined ? 0 + ' Buyer' : buyerCount?.buyercount + ' Buyer(s)'}
               icon={{ color: "warning", component: <i className="ni ni-cart" /> }}
               percentage={{ color: "success", count: "+5%", text: "than last month" }}

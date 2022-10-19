@@ -1,3 +1,4 @@
+from itertools import product
 from django.db import models
 
 from users.models import User
@@ -61,7 +62,7 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=6, decimal_places=2)
     stock = models.PositiveIntegerField(default='')
     status = models.CharField(max_length=120, choices=STATUS_CHOICE, default='')
-
+    supplier = models.CharField(max_length=50, default='')
     category = models.ForeignKey('Category', on_delete=models.CASCADE, default='')
     images = models.CharField(max_length=120 , default='')
     sortno = models.PositiveIntegerField()
@@ -80,18 +81,23 @@ class Order(models.Model):
         ('complete', 'Complete'),
         ('bulk', 'Bulk'),
     )
-    supplier = models.ForeignKey('Supplier', on_delete=models.CASCADE, default='')
-    product = models.ForeignKey('Product', on_delete=models.CASCADE, default='')
-    buyer = models.ForeignKey('Buyer', on_delete=models.CASCADE, default='')
+    buyer = models.CharField(max_length=50, default='')
     status = models.CharField(max_length=20, choices=STATUS_CHOICE, default='')
     receipt = models.CharField(max_length=50, default='')
-    amount = models.PositiveIntegerField(default=0)
     total_price = models.PositiveIntegerField(default=0) 
+    products = models.ManyToManyField(Product, through='ProductQuantity')
     created_date = models.DateField(auto_now_add=True)
 
     def __str__(self):
-        return self.product.name
+        return self.buyer
 
+class ProductQuantity(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    product_quantity = models.PositiveIntegerField(default=1) 
+
+    def __str__(self):
+        return "{}_{}".format(self.order.__str__(), self.product.__str__())
 
 class Delivery(models.Model):
     STATUS_CHOICE = (
