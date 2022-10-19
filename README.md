@@ -44,24 +44,30 @@ $ git push origin {Branch Name}
 
 
 
+
 # Backend Djnago - Windows Setup
 
 Getting Started
 
 - cd backend
+- python --version
+
+Python 3 or Greater is recommended
+- Python 3.8.10
 
 Create Virtual Environment
 
-- pipenv install django 
+- python -m venv inventoryapp_env
+If this command does not work, you most likely do not have virtualenv installed.
+To install virtualenv : - pip install virtualenv
 
-    This will create a virtual environment and install django within that virtual environment
+This will create a folder called inventoryapp_env 
  
-- Activate the virtual environment
+Activate the virtual environment
+- inventoryapp_env/Scripts/activate
 
-  Activating the virtual environment in our command prompt. This allows us to run the python intepreter inside the
-  virtual environment not the one installed globally.
- 
-  pipenv shell
+To deactivate the virtual environment
+- deactivate
   
 - Configure VSCode to use the python intepreter inside our virtual environment
 
