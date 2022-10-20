@@ -43,6 +43,9 @@ import { getSuppliers } from "apiservices/supplierService";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
 import { getBuyers } from "apiservices/buyerService";
+import typography from "assets/theme/base/typography";
+import borders from "assets/theme/base/borders";
+
 
 function Orders() {
   const [rememberMe, setRememberMe] = useState(false);
@@ -307,7 +310,6 @@ function Orders() {
     { name: "edit", align: "right" },
     { name: "delete", align: "center" },
   ];
-
   const rows = [];
 
   orderList.map(function (item, i) {
@@ -389,6 +391,124 @@ function Orders() {
     });
   });
 
+  
+
+
+  const [idProductRow, setIdProductRow] = useState(0);
+  const [productInputRow, setProductInputRow] = useState([
+    
+  ]);
+ 
+
+  const renderColumns = productInputRow.map(({ name, align, width }, key) => {
+    
+  const { size, fontWeightBold } = typography;
+  const { borderWidth } = borders;
+
+    let pl;
+    let pr;
+
+    if (key === 0) {
+      pl = 3;
+      pr = 3;
+    } else if (key === columns.length - 1) {
+      pl = 3;
+      pr = 3;
+    } else {
+      pl = 1;
+      pr = 1;
+    }
+    
+    return (
+      <ArgonBox key={name} mb={2} mx={5} display="flex">
+                    <div style={{ flex: 5, paddingRight: 10 }}>
+                      <Select
+                        name="product"
+                        placeholder="Products"
+                        options={productOptions}
+                        onChange={handleChangeProduct}
+                      />
+                    </div>
+                    <div style={{ flex: 3, paddingRight: 10 }}>
+                      <div style={{ display: "flex" }}>
+                        <Button
+                          style={{ flex: 1, alignSelf: "center" }}
+                          onClick={async () => {
+                            setQuantity(quantity - 1);
+                          }}
+                        >
+                          <ArgonBox
+                            component="i"
+                            color="info"
+                            fontSize="15px"
+                            className="ni ni-fat-delete"
+                          />
+                        </Button>
+                        <ArgonInput
+                          style={{ flex: 5 }}
+                          type="name"
+                          name="quantity"
+                          value={quantity}
+                          placeholder="Amount"
+                          size="large"
+                          onChange={handleChangeAmount}
+                        />
+                        <Button
+                          style={{ flex: 1, alignSelf: "center" }}
+                          onClick={async () => {
+                            setQuantity(quantity + 1);
+                          }}
+                        >
+                          <ArgonBox
+                            component="i"
+                            color="info"
+                            fontSize="15px"
+                            className="ni ni-fat-add"
+                          />
+                        </Button>
+                      </div>
+                    </div>
+                    <div style={{ flex: 3 }}>
+                      <ArgonInput
+                        type="name"
+                        name="price"
+                        placeholder="Price"
+                        size="large"
+                        onChange={handleChangeAmount}
+                      />
+                    </div>
+                    <div style={{  alignSelf: 'center', flex: 1}}>
+                      <Button
+                        style={{}}
+                        onClick={async () => {
+                          console.log(productInputRow)
+                          setProductInputRow(current => [...current, { name: idProductRow}]);
+                          setIdProductRow(idProductRow+1)
+                        }}
+                      >
+                        Add
+                      </Button>
+                      
+                    </div>
+                    <div style={{  alignSelf: 'center', flex: 1}}>
+                      <Button
+                        style={{}}
+                        onClick={async () => {
+                          setProductInputRow(
+                            productInputRow.filter(a => a.name !== name)
+                          );
+                          
+                        }}
+                      >
+                        Remove
+                      </Button>
+                      
+                    </div>
+      </ArgonBox>
+    );
+  });
+
+  
   useEffect(() => {
     handleGetOrderList();
     handleGetProductList();
@@ -450,7 +570,8 @@ function Orders() {
                   },
                 }}
               >
-                { //PRODUCT ORDER INPUT
+                {
+                  //PRODUCT ORDER INPUT
                   <ArgonBox mb={2} mx={5} display="flex">
                     <div style={{ flex: 5, paddingRight: 10 }}>
                       <Select
@@ -508,33 +629,33 @@ function Orders() {
                         onChange={handleChangeAmount}
                       />
                     </div>
-                    
-                    
-                    
-                    <div style={{ flex: 1 }}>
+                    <div style={{ alignSelf: 'center', flex: 2.3 }}>
                       <Button
                         style={{ flex: 1, alignSelf: "center" }}
                         onClick={async () => {
-                          productsInput.push();
+                          setProductInputRow(current => [...current, { name: idProductRow }]);
+                          setIdProductRow(idProductRow+1)
                         }}
                       >
-                        Add Another
+                        Add
                       </Button>
                     </div>
-
-
+                    
                   </ArgonBox>
                 }
 
+
+                  {renderColumns}
                 
 
                 <ArgonBox mb={2} mx={5}>
-                  <Select
-                    name="buyer"
-                    placeholder="Buyer"
-                    options={buyerOptions}
-                    onChange={handleChangeBuyer}
-                  />
+                  <ArgonInput
+                        type="name"
+                        name="buyer"
+                        placeholder="Buyer"
+                        size="large"
+                        onChange={handleChangeAmount}
+                      />
                 </ArgonBox>
                 <ArgonBox mb={2} mx={5}>
                   <ArgonInput
@@ -565,10 +686,17 @@ function Orders() {
                   />
                 </ArgonBox>
 
-                <ArgonBox mb={"20%"} mx={5}>
+                <ArgonBox mb={"20%"} display='flex' mx={5}>
+                 <div style={{ flex: 1, paddingRight: 10 }}>
                   <ArgonButton onClick={handleSubmit} color="info" size="large" fullWidth>
-                    Add Order
+                    Order
                   </ArgonButton>
+                  </div>
+                  <div style={{ flex: 1,paddingRight: 10 }}>
+                  <ArgonButton onClick={handleSubmit} color="info" size="large" fullWidth>
+                    Invoice
+                  </ArgonButton>
+                  </div>
                 </ArgonBox>
               </ArgonBox>
             </Card>
