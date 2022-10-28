@@ -84,7 +84,7 @@ function Suppliers() {
         .catch((err) => {
           console.log("Error Adding Supplier", err);
         });
-    }
+    }h
   };
 
 

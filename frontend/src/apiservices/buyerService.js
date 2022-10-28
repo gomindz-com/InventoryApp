@@ -15,6 +15,25 @@ export const getBuyers = async () => {
 };
 
 
+export const editBuyer = async (buyerId, buyerData) => {
+  const data = await axiosConfig
+    .put(`/buyers/${buyerId}`, buyerData)
+    .then((response) => {
+      console.log("Api Response")
+      console.log(response)
+      return response;
+    })
+    .catch((err) => {
+      console.log("Api Error")
+      console.log(err.response.data.result);
+      return err.response;
+    });
+
+  return data;
+};
+
+
+
 
 export const getBuyerCount = async () => {
   const data = await axiosConfig

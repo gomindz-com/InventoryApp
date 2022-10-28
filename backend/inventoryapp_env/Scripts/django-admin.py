@@ -1,4 +1,4 @@
-#!c:\users\mcolley\desktop\gomindz\inventory\inventoryapp\backend\inventoryapp_env\scripts\python.exe
+#!C:\Users\zigtech\InventoryApp\backend\inventoryapp_env\Scripts\python.exe
 # When the django-admin.py deprecation ends, remove this script.
 import warnings
 
