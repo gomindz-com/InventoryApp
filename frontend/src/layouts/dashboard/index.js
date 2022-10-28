@@ -41,7 +41,6 @@ import typography from "assets/theme/base/typography";
 import Slider from "layouts/dashboard/components/Slider";
 
 // Data
-import gradientLineChartData from "layouts/dashboard/data/gradientLineChartData";
 import salesTableData from "layouts/dashboard/data/salesTableData";
 import { getOrderCount } from "apiservices/orderService";
 import { getProductCount } from "apiservices/productService";
@@ -59,12 +58,10 @@ function Default() {
   const [buyerCount, setBuyerCount] = useState({});
   const [categoryList, setCategoryList] = useState([]);
 
-  const categoriesListData = [
+  const categoriesListData = [];
 
 
-    
-    
-  ];
+  
 
 
     //START GET CATEGORY
@@ -132,6 +129,18 @@ function Default() {
     } catch (error) {
       console.log(error);
     }
+  };
+
+
+  const gradientLineChartData = {
+    labels: ["Jan","Feb","Mar","Apr","May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+    datasets: [
+      {
+        label: "Order Number",
+        color: "info",
+        data: orderCount.monthlyOrders,
+      },
+    ],
   };
   
   const handleGetProductCount = async () => {

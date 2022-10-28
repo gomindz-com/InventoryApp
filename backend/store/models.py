@@ -81,11 +81,16 @@ class Order(models.Model):
         ('complete', 'Complete'),
         ('bulk', 'Bulk'),
     )
+    TYPE_CHOICE = (
+        ('invoice', 'Invoice'),
+        ('order', 'Order'),
+    )
     buyer = models.CharField(max_length=50, default='')
     status = models.CharField(max_length=20, choices=STATUS_CHOICE, default='')
     receipt = models.CharField(max_length=50, default='')
-    total_price = models.PositiveIntegerField(default=0) 
+    total_price = models.FloatField(default=0.00) 
     products = models.ManyToManyField(Product, through='ProductQuantity')
+    type=models.CharField(max_length=20, choices=TYPE_CHOICE, default='')
     created_date = models.DateField(auto_now_add=True)
 
     def __str__(self):

@@ -42,12 +42,10 @@ export const AddSupplierSchema = Yup.object().shape({
 
 
 export const AddOrderSchema = Yup.object().shape({
-    supplier: Yup.string().required("Name is required"),
-    product: Yup.string().required("Required"),
+    products: Yup.array().required("Required"),
     buyer: Yup.string().required("Required"),
     status: Yup.string().required("Required"),
     receipt: Yup.string().required("Required"),
-    amount: Yup.number().required("Required"),
     total_price: Yup.number().required("Required"),
 
 });

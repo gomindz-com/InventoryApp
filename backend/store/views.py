@@ -303,6 +303,12 @@ def order_list(request):
             new_product_order = ProductQuantity.objects.create(product_id = product['id'],  order_id = new_order.id, product_quantity = product['amount'])
             new_product_order.save()
 
+            try:
+                aproduct = Product.objects.get(pk=product['id'])
+                aproduct.stock = aproduct.stock - product['amount']
+                aproduct.save()
+            except Product.DoesNotExist:
+                return JsonResponse(status=status.HTTP_404_NOT_FOUND,  data={'status': 'true', 'message': 'Product Does Not Exist', 'result': []})
 
         if serializer.is_valid():
             #serializer.save()
@@ -403,7 +409,38 @@ def category_details(request, id):
 def orderCounts(request):
   order_count = Order.objects.all().count()
   total = Order.objects.all().aggregate(TOTAL = Sum('total_price'))['TOTAL']
-  result= {'ordercount': order_count, "total": total}
+  
+  order = Order.objects.all()
+  price = 0
+  for item in order.iterator():    
+    productsOrders = ProductQuantity.objects.filter(order_id=item.id)
+    for productsOrdersItem in productsOrders.iterator():
+        logger.info(productsOrdersItem.product_id)
+        aProduct = Product.objects.get(id=productsOrdersItem.product_id)
+        price = price + (aProduct.price * productsOrdersItem.product_quantity)
+
+    logger.info("Total Price")
+    logger.info(price)
+
+
+ 
+  orderMonthList = []
+  
+
+  logger.info("Order Date") 
+  for x in range(1, 13):
+    count = Order.objects.filter(created_date__month__exact=x).count()
+    logger.info(count)
+    orderMonthList.append(
+                    count
+      )
+
+  logger.info(orderMonthList)
+    
+
+    
+
+  result= {'ordercount': order_count, "total": price, 'monthlyOrders': orderMonthList}
   return JsonResponse(status=200, data={'status':'true','message':'success', 'result': result})
 
 
