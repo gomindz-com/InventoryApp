@@ -121,7 +121,7 @@ function Products() {
     setProductData({ ...productData, ["status"]: selectedOption.value });
   };
 
-  
+
   const handleChangeCategory = async (selectedOption) => {
     setProductData({ ...productData, ["category"]: selectedOption.id });
   };
@@ -140,24 +140,24 @@ function Products() {
       await editProduct(productData)
         .then((res) => {
           if (res.data?.status === "true") {
-            console.log("Prod Updated");
-            toast.success("pro Updated Successfully");
+            console.log("Product Updated");
+            toast.success("product Updated Successfully");
             handleGetSupplierList();
             console.log(res.data.result);
           } else {
-            console.log("po Could Not Be Updated");
+            console.log("product Could Not Be Updated");
             console.log(res.data.result);
             toast.error("product Could Not Be Updated");
           }
         })
         .catch((err) => {
-          console.log("Error Updating PRO", err);
+          console.log("Error Updating product", err);
         });
     }
   };
-  
+
   //DELETE SUPPLIER
-  const handleDeleteProduct= async (id) => {
+  const handleDeleteProduct = async (id) => {
     await deleteProduct(id)
       .then((res) => {
         if (res.data?.status === "true") {
@@ -196,17 +196,17 @@ function Products() {
   //END GET PRODUCTS
 
 
-    //START GET CATEGORY
-    const handleGetCategoryList = async () => {
-      setCategoryList([]);
-      setScreenLoading(true);
-  
-      try {
-        await getCategories()
-          .then((res) => {
-            console.log(res);
-            if (res.data?.status === "true") {
-              
+  //START GET CATEGORY
+  const handleGetCategoryList = async () => {
+    setCategoryList([]);
+    setScreenLoading(true);
+
+    try {
+      await getCategories()
+        .then((res) => {
+          console.log(res);
+          if (res.data?.status === "true") {
+
             console.log("Category List");
             console.log(res.data.result);
 
@@ -219,16 +219,16 @@ function Products() {
             });
 
             setCategoryOptions(category_options);
-            } else {
-              setCategoryList([]);
-            }
-          })
-          .catch((err) => console.log("Error in Getting setCategoryList", err));
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    //END GET CATEGORY
+          } else {
+            setCategoryList([]);
+          }
+        })
+        .catch((err) => console.log("Error in Getting setCategoryList", err));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  //END GET CATEGORY
 
   const columns = [
     { name: "product", align: "left" },
@@ -296,7 +296,7 @@ function Products() {
             setEditFormActive(true)
             setShowAddProductForm(true);
             setProductData(item);
-            
+
           }}
         >
           <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-ruler-pencil" />
@@ -333,17 +333,17 @@ function Products() {
                   setProductData({
                     id: "",
                     name: "",
-    sortno: "",
-    category: {id:""},
-    images: "",
-    stock: "",
-    label: "",
-    price: "",
-    tags: "",
-    status: "",
+                    sortno: "",
+                    category: { id: "" },
+                    images: "",
+                    stock: "",
+                    label: "",
+                    price: "",
+                    tags: "",
+                    status: "",
                   })
                   setShowAddProductForm(!showAddProductForm)
-                  }}>
+                }}>
                   <h4 style={{ paddingRight: 10 }}>Add Product </h4>
                   <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-fat-add" />
                 </Button>
@@ -476,12 +476,12 @@ function Products() {
                   />
                 </ArgonBox>
 
-                
-                
+
+
 
                 <ArgonBox mb={2} mx={5}>
-                <ArgonButton onClick={editFormActive ? handleEdit : handleSubmit} color="info" size="large" fullWidth>
-                    { editFormActive ?  "Edit Product" : 'Add Product' }
+                  <ArgonButton onClick={editFormActive ? handleEdit : handleSubmit} color="info" size="large" fullWidth>
+                    {editFormActive ? "Edit Product" : 'Add Product'}
                   </ArgonButton>
                 </ArgonBox>
               </ArgonBox>

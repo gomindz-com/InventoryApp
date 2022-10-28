@@ -42,6 +42,7 @@ import Select from "react-select";
 import { addCategory } from "apiservices/categoryService";
 import { deleteCategory } from "apiservices/categoryService";
 import { getCategories } from "apiservices/categoryService";
+import { editCategoriee } from "apiservices/categoryService";
 
 function Categories() {
   const [rememberMe, setRememberMe] = useState(false);
@@ -49,6 +50,8 @@ function Categories() {
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
   const [screenloading, setScreenLoading] = useState(true);
   const [categoryList, setCategoryList] = useState([]);
+  const [editFormActive, setEditFormActive] = useState(false);
+
 
   const navigate = useNavigate();
 
@@ -99,6 +102,44 @@ function Categories() {
     }
   };
 
+
+
+//handledit
+
+  const handleEdit = async (e) => {
+    e.preventDefault();
+
+    const isValid = await AddCategorySchema.isValid(categoryData);
+    if (!isValid) {
+      toast.error("Please enter all the required fields!!");
+      console.log(categoryData);
+    } else {
+      console.log(categoryData);
+      await  editCategoriee(categoryData.id, categoryData)
+        .then((res) => {
+          if (res.data?.status === "true") {
+            console.log("category Updated");
+            toast.success("category Updated Successfully");
+            handleGetCategoryList()
+            console.log(res.data.result);
+          } else {
+            console.log("category Could Not Be Updated");
+            console.log(res.data.result);
+            toast.error("category Could Not Be Updated");
+          }
+        })
+        .catch((err) => {
+          console.log("Error Updating Supplier", err);
+        });
+    }
+  };
+
+
+
+
+
+  // 
+
   const handleChange = (e) => {
     setCategoryData({ ...categoryData, [e.target.name]: e.target.value });
   };
@@ -146,7 +187,7 @@ function Categories() {
 
   const columns = [
     { name: "category", align: "left" },
-    { name: "edit", align: "right" },
+    { name: "edit", align: "center" },
     { name: "delete", align: "center" },
   ];
 
@@ -171,15 +212,18 @@ function Categories() {
       ),
 
       edit: (
-        <ArgonTypography
-          component="a"
-          href="#"
-          variant="caption"
-          color="secondary"
-          fontWeight="medium"
-        >
-          Edit
-        </ArgonTypography>
+        <Button
+        onClick={async () => {
+          setEditFormActive(true)
+        
+          setShowAddCategoryForm (true)
+          setCategoryData(item)  
+
+          
+        }}
+      >
+        <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-ruler-pencil" />
+      </Button>
       ),
       delete: (
         <Button
@@ -207,7 +251,12 @@ function Categories() {
             <Card>
               <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
                 <ArgonTypography variant="h6">Categories table</ArgonTypography>
-                <Button onClick={() => setShowAddCategoryForm(!showAddCategoryForm)}>
+                <Button onClick={() =>{ setCategoryData({
+                   name: "",
+                   description: "",
+                   
+                })   
+                setShowAddCategoryForm(!showAddCategoryForm)}}>
                   <h4 style={{ paddingRight: 10 }}>Add Category </h4>
                   <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-fat-add" />
                 </Button>
@@ -258,6 +307,7 @@ function Categories() {
                     placeholder="Category Name"
                     size="large"
                     onChange={handleChange}
+                    value={categoryData.name}
                   />
                 </ArgonBox>
 
@@ -267,13 +317,18 @@ function Categories() {
                     name="description"
                     placeholder="Description"
                     size="large"
+                    value={categoryData.description}
                     onChange={handleChange}
                   />
                 </ArgonBox>
                 <ArgonBox mb={2} mx={5}>
-                  <ArgonButton onClick={handleSubmit} color="info" size="large" fullWidth>
-                    Add Category
+                  <ArgonButton onClick={editFormActive? handleEdit: handleSubmit} color="info" size="large" fullWidth>
+                   {editFormActive ? "Edit Categorie": "Add Categorie" }
                   </ArgonButton>
+
+                  {/* <ArgonButton onClick={editFormActive? handleEdit: handleSubmit} color="info" size="large" fullWidth>
+                    { editFormActive ?  "Edit Buyer" : 'Add Buyer' }
+                  </ArgonButton> */}
                 </ArgonBox>
               </ArgonBox>
             </Card>

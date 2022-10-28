@@ -10,7 +10,6 @@ export const AddCategorySchema = Yup.object().shape({
 export const AddProductSchema = Yup.object().shape({
   name: Yup.string().required("Name is required"),
   sortno: Yup.number().required("Required"),
-  category: Yup.string().required("Required"),
   images: Yup.string().required("Required"),
   stock: Yup.number().required("Required"),
   label: Yup.string().required("Required"),
