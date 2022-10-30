@@ -102,68 +102,6 @@ def product_details(request, id):
         return JsonResponse(status=status.HTTP_200_OK, data={'status': 'true', 'message': 'success'})
 
 
-@api_view(['GET', 'POST'])
-def delivery_list(request):
-    if request.method == 'GET':
-        order = Order.objects.all().filter(status='approved')
-        orderList = []
-        for item in order.iterator():
-            logger.error(item.supplier.id)
-            aSupplier = Supplier.objects.get(id=item.supplier.id)
-            aProduct = Product.objects.get(id=item.product.id)
-            aBuyer = Buyer.objects.get(id=item.buyer.id)
-            serializerSupplier = SupplierSerializer(aSupplier)
-            serializerProduct = ProductSerializer(aProduct)
-            serializerBuyer = BuyerSerializer(aBuyer)
-            orderList.append({
-                "id": item.id,
-                "supplier": serializerSupplier.data,
-                "product": serializerProduct.data,
-                "buyer": serializerBuyer.data,
-                "status": item.status,
-                "amount": item.amount,
-                "total_price": item.total_price,
-                "receipt": item.receipt
-            })
-
-        logger.info("orderList")
-        logger.info(orderList)
-        serializer = OrderSerializer(order, many=True)
-        return JsonResponse(status=200, data={'status': 'true', 'message': 'success', 'result': orderList})
-
-    if request.method == 'POST':
-        serializer = DeliveriesSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return JsonResponse(status=status.HTTP_201_CREATED, data={'status': 'true', 'message': 'success', 'result': serializer.data})
-        else:
-            return JsonResponse(status=status.HTTP_400_BAD_REQUEST, data={'status': 'false', 'message': 'Bad Request'})
-
-
-@api_view(['GET', 'PUT', 'DELETE'])
-def delivery_details(request, id):
-
-    try:
-        delivery = Delivery.objects.get(pk=id)
-
-    except Delivery.DoesNotExist:
-        return JsonResponse(status=status.HTTP_404_NOT_FOUND,  data={'message': 'Request not found'})
-
-    if request.method == 'GET':
-        serializer = DeliveriesSerializer(delivery)
-        return JsonResponse(status=200, data={'status': 'true', 'message': 'success', 'result': serializer.data})
-
-    elif request.method == 'PUT':
-        serializer = DeliveriesSerializer(delivery, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return JsonResponse(status=200, data={'status': 'true', 'message': 'success', 'result': serializer.data})
-        return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST, data={'status': 'false', 'message': 'Bad Request'})
-
-    elif request.method == 'DELETE':
-        delivery.delete()
-        return JsonResponse(status=status.HTTP_200_OK, data={'status': 'true', 'message': 'success'})
-
 
 @api_view(['GET', 'POST'])
 def supplier_list(request):
@@ -252,7 +190,102 @@ def buyer_details(request, id):
 def order_list(request):
     if request.method == 'GET':
         #GET THE NUMBER OF ORDERS
-        order = Order.objects.all()
+        order = Order.objects.filter().exclude(type="invoice")
+        orderList = []
+        for item in order.iterator():
+            productList = []
+            #FOR EACH ORDER, GO TO THE PRODUCTS ORDER TABLE TO GET THE FOREIGN KEY ID 
+            logger.info(item.id)
+            price = 0
+            productsOrders = ProductQuantity.objects.filter(order_id=item.id)
+            for productsOrdersItem in productsOrders.iterator():
+                #FROM THE ORDERS, GET THE PRODUCT ID FOR EACH ORDER 
+                logger.info(productsOrdersItem.product_id)
+                aProduct = Product.objects.get(id=productsOrdersItem.product_id)
+                productList.append( {
+                        "id": aProduct.id,
+                        "name": aProduct.name,
+                        "label": aProduct.label,
+                        "price": aProduct.price,
+                        "quantity": productsOrdersItem.product_quantity,
+                        "amount": aProduct.price * productsOrdersItem.product_quantity
+                    })
+                price = price + (aProduct.price * productsOrdersItem.product_quantity)
+            #logger.info("productList")
+            #logger.info(productList)
+            orderList.append(
+                    {
+                        "id": item.id,
+                        "buyer": item.buyer,
+                        "products": productList,
+                        "status": item.status,
+                        "receipt":  item.receipt,
+                        "type":item.type,
+                        "total_price":  price,
+                    },
+                )
+            logger.info("orderList")
+            logger.info(orderList)
+
+        
+
+        serializer = OrderSerializer(order, many=True)
+        return JsonResponse(status=200, data={'status': 'true', 'message': 'success', 'result': orderList})
+
+    if request.method == 'POST':
+        serializer = OrderSerializer(data=request.data)
+        data = request.data
+        new_order = Order.objects.create(buyer = data["buyer"], status = data["status"], receipt = data["receipt"], type = data["type"], total_price = data["total_price"]  )
+        new_order.save()
+
+        for product in data['products']:    
+            new_product_order = ProductQuantity.objects.create(product_id = product['id'],  order_id = new_order.id, product_quantity = product['amount'])
+            new_product_order.save()
+
+            try:
+                aproduct = Product.objects.get(pk=product['id'])
+                aproduct.stock = aproduct.stock - product['amount']
+                aproduct.save()
+            except Product.DoesNotExist:
+                return JsonResponse(status=status.HTTP_404_NOT_FOUND,  data={'status': 'true', 'message': 'Product Does Not Exist', 'result': []})
+
+        if serializer.is_valid():
+            #serializer.save()
+            return JsonResponse(status=status.HTTP_201_CREATED, data={'status': 'true', 'message': 'success', 'result': serializer.data})
+        else:
+            return JsonResponse(status=status.HTTP_400_BAD_REQUEST, data={'status': 'false', 'message': 'Bad Request', 'result': serializer.errors})
+
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def order_details(request, id):
+
+    try:
+        order = Order.objects.get(pk=id)
+
+    except Order.DoesNotExist:
+        return JsonResponse(status=status.HTTP_404_NOT_FOUND,  data={'message': 'Request not found'})
+
+    if request.method == 'GET':
+        serializer = OrderSerializer(order)
+        return JsonResponse(status=200, data={'status': 'true', 'message': 'success', 'result': serializer.data})
+
+    elif request.method == 'PUT':
+        serializer = OrderSerializer(order, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(status=200, data={'status': 'true', 'message': 'success', 'result': serializer.data})
+        return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST, data={'status': 'false', 'message': 'Bad Request'})
+
+    elif request.method == 'DELETE':
+        order.delete()
+        return JsonResponse(status=status.HTTP_200_OK, data={'status': 'true', 'message': 'success'})
+    
+
+@api_view(['GET', 'POST'])
+def invoice_list(request):
+    if request.method == 'GET':
+        #GET THE NUMBER OF ORDERS
+        order = Order.objects.filter(type='invoice')
         orderList = []
         for item in order.iterator():
             productList = []
@@ -318,7 +351,7 @@ def order_list(request):
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
-def order_details(request, id):
+def invoice_details(request, id):
 
     try:
         order = Order.objects.get(pk=id)
@@ -340,7 +373,7 @@ def order_details(request, id):
     elif request.method == 'DELETE':
         order.delete()
         return JsonResponse(status=status.HTTP_200_OK, data={'status': 'true', 'message': 'success'})
-    
+
 
 @api_view(['GET', 'POST'])
 def category_list(request):
@@ -403,6 +436,8 @@ def category_details(request, id):
         return JsonResponse(status=status.HTTP_200_OK, data={'status': 'true', 'message': 'success'})  
     
 
+
+
 # API FOR COUNTS
 
 @api_view(['GET'])
@@ -425,8 +460,6 @@ def orderCounts(request):
 
  
   orderMonthList = []
-  
-
   logger.info("Order Date") 
   for x in range(1, 13):
     count = Order.objects.filter(created_date__month__exact=x).count()
@@ -434,13 +467,35 @@ def orderCounts(request):
     orderMonthList.append(
                     count
       )
-
   logger.info(orderMonthList)
+
+  from django.utils import timezone
+
+  logger.info(timezone.now().year)
+
+
+  totalpreviousyearPrice = Order.objects.filter(created_date__year__exact=timezone.now().year - 1).aggregate(TOTAL = Sum('total_price'))['TOTAL']
+  logger.info(totalpreviousyearPrice)
+
+  totalcurrentyearPrice = Order.objects.filter(created_date__year__exact=timezone.now().year).aggregate(TOTAL = Sum('total_price'))['TOTAL']
+  logger.info(totalcurrentyearPrice)
+
+  logger.info(type(totalpreviousyearPrice))
+
+  try:
+    percentagePrevious = round(((totalcurrentyearPrice - totalpreviousyearPrice) / 100)*100)
+  except:
+    print("Some variable is None")
+    percentagePrevious = 0
+
+
+
+  
     
 
     
 
-  result= {'ordercount': order_count, "total": price, 'monthlyOrders': orderMonthList}
+  result= {'ordercount': order_count, "total": price, 'monthlyOrders': orderMonthList, 'percentageIncrement': percentagePrevious}
   return JsonResponse(status=200, data={'status':'true','message':'success', 'result': result})
 
 

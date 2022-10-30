@@ -49,8 +49,8 @@ import Suppliers from "layouts/suppliers";
 import Buyers from "layouts/buyers";
 import Products from "layouts/products";
 import Orders from "layouts/orders";
-import Deliveries from "layouts/deliveries";
 import Categories from "layouts/categories";
+import Invoices from "layouts/invoices";
 
 const routes = [
   {
@@ -113,13 +113,13 @@ const routes = [
   },
   {
     type: "route",
-    name: "Deliveries",
-    key: "deliveries",
-    route: "/deliveries",
+    name: "Invoices",
+    key: "invoices",
+    route: "/invoices",
     icon: (
       <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-credit-card" />
     ),
-    component: <Deliveries />,
+    component: <Invoices />,
   },
   { type: "title", title: "Account Pages", key: "account-pages" },
   {

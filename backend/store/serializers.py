@@ -29,12 +29,10 @@ class ProductOrderSerializer(serializers.ModelSerializer):
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
-        fields = ['id', 'products', 'buyer',
+        fields = ['id', 'products', 'buyer', 'type',
                   'status', 'receipt', 'total_price']
         depth = 1
 
-
-        
 
 class DeliveriesSerializer(serializers.ModelSerializer):
     class Meta:

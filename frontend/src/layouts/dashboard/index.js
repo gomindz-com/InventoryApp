@@ -271,7 +271,7 @@ function Default() {
                     <Icon sx={{ fontWeight: "bold" }}>arrow_upward</Icon>
                   </ArgonBox>
                   <ArgonTypography variant="button" color="text" fontWeight="medium">
-                    4% more{" "}
+                    {orderCount?.percentageIncrement}% more{" "}
                     <ArgonTypography variant="button" color="text" fontWeight="regular">
                       in 2022
                     </ArgonTypography>

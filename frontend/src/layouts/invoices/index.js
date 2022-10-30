@@ -52,8 +52,13 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
 import Typography from "@mui/material/Typography";
+import { getInvoices } from "apiservices/invoiceService";
 
-function Orders() {
+import CheckIcon from "@mui/icons-material/Check";
+import ToggleButton from "@mui/material/ToggleButton";
+import { editInvoice } from "apiservices/invoiceService";
+
+function Invoices() {
   const [rememberMe, setRememberMe] = useState(false);
   const [showAddForm, setShowAddForm] = useState(false);
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
@@ -69,6 +74,8 @@ function Orders() {
   const [totalPrice, setTotalPrice] = useState(0);
   const [quantity, setQuantity] = useState(0);
 
+  const [selected, setSelected] = React.useState(false);
+
   const style = {
     position: "absolute",
     top: "50%",
@@ -81,12 +88,12 @@ function Orders() {
     p: 4,
   };
 
-  const handleGetOrderList = async () => {
+  const handleGetInvoiceList = async () => {
     setOrderList([]);
     setScreenLoading(true);
 
     try {
-      await getOrders()
+      await getInvoices()
         .then((res) => {
           console.log(res);
           if (res.data?.status === "true") {
@@ -204,6 +211,29 @@ function Orders() {
     }
   };
 
+
+  const handleEdit = async (id) => {
+
+      console.log(invoiceData);
+      await editInvoice(id, invoiceData)
+        .then((res) => {
+          if (res.data?.status === "true") {
+            console.log("Supplier Updated");
+            toast.success("Supplier Updated Successfully");
+            handleGetInvoiceList();
+            console.log(res.data.result);
+          } else {
+            console.log("Supplier Could Not Be Updated");
+            console.log(res.data.result);
+            toast.error("Supplier Could Not Be Updated");
+          }
+        })
+        .catch((err) => {
+          console.log("Error Updating Supplier", err);
+        });
+    
+  };
+
   //START ADDING NEW PRODUCT
 
   const status_options = [
@@ -211,6 +241,11 @@ function Orders() {
       value: "pending",
       label: "Pending",
       id: "1",
+    },
+    {
+      value: "decline",
+      label: "Decline",
+      id: "2",
     },
     {
       value: "approved",
@@ -234,25 +269,9 @@ function Orders() {
 
   //HANDLING ADD ORDER
 
-  const [orderData, setOrderData] = useState({
-    buyer: "",
-    status: "pending",
-    receipt: "",
-    total_price: "",
-    type: "",
-    products: [],
-  });
-
   const [invoiceData, setInvoiceData] = useState({
-    buyer: "",
-    status: "pending",
-    receipt: "",
-    total_price: "",
-    type: "",
-    products: [],
+        type: "order"
   });
-
-
   const [ordertotalPrice, setOrderTotalPrice] = useState(0.0);
 
   // HANDLING PRODUCT ADDITION AND REMOVAL
@@ -312,9 +331,9 @@ function Orders() {
     { name: "product", align: "left" },
     { name: "total price", align: "left" },
     { name: "buyer", align: "center" },
-    { name: "status", align: "center" },
+
     { name: "print receipt", align: "center" },
-    { name: "edit", align: "right" },
+    { name: "Approve As Order", align: "center" },
     { name: "delete", align: "center" },
   ];
   const rows = [];
@@ -361,11 +380,6 @@ function Orders() {
         />
       ),
 
-      status: (
-        <ArgonTypography variant="caption" color="secondary" fontWeight="medium">
-          {item.status}
-        </ArgonTypography>
-      ),
       "print receipt": (
         <Button
           onClick={async () => {
@@ -375,16 +389,17 @@ function Orders() {
           <ArgonBox component="i" color="info" fontSize="25px" className="ni ni-folder-17" />
         </Button>
       ),
-      edit: (
-        <ArgonTypography
-          component="a"
-          href="#"
-          variant="caption"
-          color="secondary"
-          fontWeight="medium"
+      "Approve As Order": (
+        <ToggleButton
+          value="check"
+          selected={selected}
+          onChange={() => {
+            setSelected(!selected);
+            handleEdit(item.id)
+          }}
         >
-          Edit
-        </ArgonTypography>
+          <CheckIcon />
+        </ToggleButton>
       ),
       delete: (
         <Button
@@ -682,16 +697,6 @@ function Orders() {
       ...orderData,
       ["products"]: resTopics,
       ["total_price"]: ordertotalPrice,
-      ["type"]: "order",
-
-    });
-
-    setInvoiceData({
-      ...orderData,
-      ["products"]: resTopics,
-      ["total_price"]: ordertotalPrice,
-      ["type"]: "invoice",
-
     });
 
     //console.log(otherProducts)
@@ -701,8 +706,6 @@ function Orders() {
   };
 
   const handleComfirm = async () => {
-
-
     const isValid = await AddOrderSchema.isValid(orderData);
     console.log("Order Data");
     console.log(orderData);
@@ -718,80 +721,35 @@ function Orders() {
             toast.success("Order Added Successfully");
             setOrderData({
               buyer: "",
-              status: "pending",
+              status: "",
               receipt: "",
               total_price: "",
-              type: "order",
+              type: "invoice",
               products: [],
             });
-            setOrderTotalPrice(0)
-            setQuantity(0)
-            setOtherProducts([])
-            setProductInputRow([])
-            setOpen(false)
+            setOrderTotalPrice(0);
+            setQuantity(0);
+            setOtherProducts([]);
+            setProductInputRow([]);
+            setOpen(false);
             handleGetOrderList();
             console.log(res.data.result);
           } else {
             console.log("Order Could Not Be Added");
             console.log(res.data.result);
             toast.error("Order Could Not Be Added");
-            setOpen(false)
+            setOpen(false);
           }
         })
         .catch((err) => {
           console.log("Error Adding Order", err);
-          setOpen(false)
-        });
-    }
-  };
-
-  const handleComfirmInvoice = async () => {
-
-
-    const isValid = await AddOrderSchema.isValid(orderData);
-    console.log("invoice Data");
-    console.log(invoiceData);
-    if (!isValid) {
-      toast.error("Please enter all the required fields!!");
-      console.log(invoiceData);
-    } else {
-      console.log(invoiceData);
-      await addOrder(invoiceData)
-        .then((res) => {
-          if (res.data?.status === "true") {
-            console.log("Order Added");
-            toast.success("Order Added Successfully");
-            setOrderData({
-              buyer: "",
-              status: "pending",
-              receipt: "",
-              total_price: "",
-              type: "order",
-              products: [],
-            });
-            setOrderTotalPrice(0)
-            setQuantity(0)
-            setOtherProducts([])
-            setProductInputRow([])
-            setOpen(false)
-            handleGetOrderList();
-            console.log(res.data.result);
-          } else {
-            console.log("Order Could Not Be Added");
-            console.log(res.data.result);
-            toast.error("Order Could Not Be Added");
-            setOpen(false)
-          }
-        })
-        .catch((err) => {
-          console.log("Error Adding Order", err);
-          setOpen(false)
+          setOpen(false);
         });
     }
   };
 
   useEffect(() => {
-    handleGetOrderList();
+    handleGetInvoiceList();
     handleGetProductList();
     handleGetSupplierList();
     handleGetBuyerList();
@@ -822,8 +780,10 @@ function Orders() {
               Add a New Order
             </Typography>
             <Typography id="transition-modal-description" sx={{ mt: 2 }}></Typography>
-            <Button style={{marginLeft: -11}} onClick={()=>handleComfirmInvoice()}>Add As Invoice</Button>
-            <Button onClick={()=>handleComfirm()}>Add As Order</Button>
+            <Button style={{ marginLeft: -11 }} onClick={handleComfirm}>
+              Add As Invoice
+            </Button>
+            <Button onClick={handleComfirm}>Add As Order</Button>
           </Box>
         </Fade>
       </Modal>
@@ -834,29 +794,7 @@ function Orders() {
           <ArgonBox mb={35}>
             <Card>
               <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
-                <ArgonTypography variant="h6">Order table</ArgonTypography>
-
-                <Button
-                  onClick={() => {
-                    setOrderData({
-                      buyer: "",
-                      status: "",
-                      receipt: "",
-                      total_price: "",
-                      type: "",
-                      products: [],
-                    });
-                    setOtherProducts([]);
-                    setQuantity(0);
-                    setTotalPrice(0);
-                    setOrderTotalPrice(0.0);
-                    setFirstProductTotalPrice(null);
-                    setShowAddForm(!showAddForm);
-                  }}
-                >
-                  <h4 style={{ paddingRight: 10 }}>Add Orders </h4>
-                  <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-fat-add" />
-                </Button>
+                <ArgonTypography variant="h6">Invoice table</ArgonTypography>
               </ArgonBox>
               <ArgonBox
                 sx={{
@@ -1026,7 +964,7 @@ function Orders() {
 
                 <ArgonBox mb={"20%"} display="flex" mx={5}>
                   <ArgonButton onClick={handleSubmit} color="info" size="large" fullWidth>
-                    Add
+                    Order
                   </ArgonButton>
 
                   {/*  <Button onClick={handleOpen}>Open modal</Button> */}
@@ -1041,4 +979,4 @@ function Orders() {
   );
 }
 
-export default Orders;
+export default Invoices;
