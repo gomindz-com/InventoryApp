@@ -4,7 +4,7 @@ __pycache__/
 *$py.class
 __pycache__
 
-inventoryapp_app/
+
 
 # C extensions
 *.so
@@ -106,10 +106,14 @@ celerybeat.pid
 # SageMath parsed files
 *.sage.py
 
+
+
 # Environments
 .env
 .venv
-.inventoryapp_app
+.inventoryapp_env
+inventoryapp_env/
+
 env/
 venv/
 ENV/
