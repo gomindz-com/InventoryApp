@@ -42,6 +42,7 @@ import { useNavigate } from "react-router-dom";
 import Select from "react-select";
 import { deleteProduct } from "apiservices/productService";
 import { getCategories } from "apiservices/categoryService";
+import { editProduct } from "apiservices/productService";
 
 function Products() {
   const [rememberMe, setRememberMe] = useState(false);
@@ -52,6 +53,8 @@ function Products() {
   const [categoryList, setCategoryList] = useState([]);
   const [categoryOptions, setCategoryOptions] = useState(null);
   const category_options = [];
+  const [editFormActive, setEditFormActive] = useState(false);
+
 
 
   const navigate = useNavigate();
@@ -118,17 +121,43 @@ function Products() {
     setProductData({ ...productData, ["status"]: selectedOption.value });
   };
 
-  
+
   const handleChangeCategory = async (selectedOption) => {
     setProductData({ ...productData, ["category"]: selectedOption.id });
   };
 
   //END ADDING NEW PRODUCT
 
+  const handleEdit = async (e) => {
+    e.preventDefault();
 
-  
+    const isValid = await AddProductSchema.isValid(productData);
+    if (!isValid) {
+      toast.error("Please enter all the required fields!!");
+      console.log(productData);
+    } else {
+      console.log(productData);
+      await editProduct(productData)
+        .then((res) => {
+          if (res.data?.status === "true") {
+            console.log("Product Updated");
+            toast.success("product Updated Successfully");
+            handleGetSupplierList();
+            console.log(res.data.result);
+          } else {
+            console.log("product Could Not Be Updated");
+            console.log(res.data.result);
+            toast.error("product Could Not Be Updated");
+          }
+        })
+        .catch((err) => {
+          console.log("Error Updating product", err);
+        });
+    }
+  };
+
   //DELETE SUPPLIER
-  const handleDeleteProduct= async (id) => {
+  const handleDeleteProduct = async (id) => {
     await deleteProduct(id)
       .then((res) => {
         if (res.data?.status === "true") {
@@ -167,17 +196,17 @@ function Products() {
   //END GET PRODUCTS
 
 
-    //START GET CATEGORY
-    const handleGetCategoryList = async () => {
-      setCategoryList([]);
-      setScreenLoading(true);
-  
-      try {
-        await getCategories()
-          .then((res) => {
-            console.log(res);
-            if (res.data?.status === "true") {
-              
+  //START GET CATEGORY
+  const handleGetCategoryList = async () => {
+    setCategoryList([]);
+    setScreenLoading(true);
+
+    try {
+      await getCategories()
+        .then((res) => {
+          console.log(res);
+          if (res.data?.status === "true") {
+
             console.log("Category List");
             console.log(res.data.result);
 
@@ -190,16 +219,16 @@ function Products() {
             });
 
             setCategoryOptions(category_options);
-            } else {
-              setCategoryList([]);
-            }
-          })
-          .catch((err) => console.log("Error in Getting setCategoryList", err));
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    //END GET CATEGORY
+          } else {
+            setCategoryList([]);
+          }
+        })
+        .catch((err) => console.log("Error in Getting setCategoryList", err));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  //END GET CATEGORY
 
   const columns = [
     { name: "product", align: "left" },
@@ -207,7 +236,7 @@ function Products() {
     { name: "stock", align: "left" },
     { name: "status", align: "center" },
     { name: "price", align: "center" },
-    { name: "edit", align: "right" },
+    { name: "edit", align: "center" },
     { name: "delete", align: "center" },
   ];
 
@@ -262,15 +291,16 @@ function Products() {
         </ArgonTypography>
       ),
       edit: (
-        <ArgonTypography
-          component="a"
-          href="#"
-          variant="caption"
-          color="secondary"
-          fontWeight="medium"
+        <Button
+          onClick={async () => {
+            setEditFormActive(true)
+            setShowAddProductForm(true);
+            setProductData(item);
+
+          }}
         >
-          Edit
-        </ArgonTypography>
+          <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-ruler-pencil" />
+        </Button>
       ),
       delete: (
         <Button
@@ -299,7 +329,21 @@ function Products() {
             <Card>
               <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
                 <ArgonTypography variant="h6">Products table</ArgonTypography>
-                <Button onClick={() => setShowAddProductForm(!showAddProductForm)}>
+                <Button onClick={() => {
+                  setProductData({
+                    id: "",
+                    name: "",
+                    sortno: "",
+                    category: { id: "" },
+                    images: "",
+                    stock: "",
+                    label: "",
+                    price: "",
+                    tags: "",
+                    status: "",
+                  })
+                  setShowAddProductForm(!showAddProductForm)
+                }}>
                   <h4 style={{ paddingRight: 10 }}>Add Product </h4>
                   <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-fat-add" />
                 </Button>
@@ -347,6 +391,7 @@ function Products() {
                   <ArgonInput
                     type="title"
                     name="name"
+                    value={productData.name}
                     placeholder="Product Name"
                     size="large"
                     onChange={handleChange}
@@ -356,6 +401,7 @@ function Products() {
                   <ArgonInput
                     type="name"
                     name="sortno"
+                    value={productData.sortno}
                     placeholder="Sort Number"
                     size="large"
                     onChange={handleChange}
@@ -365,6 +411,7 @@ function Products() {
                   <ArgonInput
                     type="tags"
                     name="tags"
+                    value={productData.tags}
                     placeholder="Tags"
                     size="large"
                     onChange={handleChange}
@@ -374,6 +421,7 @@ function Products() {
                   <ArgonInput
                     type="name"
                     name="images"
+                    value={productData.images}
                     placeholder="Images"
                     size="large"
                     onChange={handleChange}
@@ -383,6 +431,7 @@ function Products() {
                   <Select
                     name="category"
                     placeholder="Category"
+                    value={productData.category.id}
                     options={categoryOptions}
                     onChange={handleChangeCategory}
                   />
@@ -391,6 +440,7 @@ function Products() {
                   <ArgonInput
                     type="name"
                     name="stock"
+                    value={productData.stock}
                     placeholder="Stock"
                     size="large"
                     onChange={handleChange}
@@ -400,6 +450,7 @@ function Products() {
                   <Select
                     name="status"
                     placeholder="Status"
+                    value={productData.status}
                     options={status_options}
                     onChange={handleChangeStatus}
                   />
@@ -408,6 +459,7 @@ function Products() {
                   <ArgonInput
                     type="name"
                     name="label"
+                    value={productData.label}
                     placeholder="Label"
                     size="large"
                     onChange={handleChange}
@@ -417,18 +469,19 @@ function Products() {
                   <ArgonInput
                     type="name"
                     name="price"
+                    value={productData.price}
                     placeholder="Price"
                     size="large"
                     onChange={handleChange}
                   />
                 </ArgonBox>
 
-                
-                
+
+
 
                 <ArgonBox mb={2} mx={5}>
-                  <ArgonButton onClick={handleSubmit} color="info" size="large" fullWidth>
-                    Add Product
+                  <ArgonButton onClick={editFormActive ? handleEdit : handleSubmit} color="info" size="large" fullWidth>
+                    {editFormActive ? "Edit Product" : 'Add Product'}
                   </ArgonButton>
                 </ArgonBox>
               </ArgonBox>

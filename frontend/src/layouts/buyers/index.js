@@ -42,6 +42,7 @@ import { useNavigate } from "react-router-dom";
 import Select from "react-select";
 import { addBuyer } from "apiservices/buyerService";
 import { deleteBuyer } from "apiservices/buyerService";
+import { editBuyer } from "apiservices/buyerService";
 
 function Buyers() {
 
@@ -51,6 +52,8 @@ function Buyers() {
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
   const [screenloading, setScreenLoading] = useState(true);
   const [buyerList, setBuyerList] = useState([]);
+  const [editFormActive, setEditFormActive] = useState(false);
+
 
 
   //START ADDING NEW BUYER
@@ -89,6 +92,36 @@ function Buyers() {
         });
     }
   };
+
+
+  const handleEdit = async (e) => {
+    e.preventDefault();
+
+    const isValid = await AddBuyerSchema.isValid(buyerData);
+    if (!isValid) {
+      toast.error("Please enter all the required fields!!");
+      console.log(buyerData);
+    } else {
+      console.log(buyerData);
+      await editBuyer(buyerData.id, buyerData)
+        .then((res) => {
+          if (res.data?.status === "true") {
+            console.log("Buyer Updated");
+            toast.success("Buyer Updated Successfully");
+            handleGetBuyerList()
+            console.log(res.data.result);
+          } else {
+            console.log("Buyer Could Not Be Updated");
+            console.log(res.data.result);
+            toast.error("Buyer Could Not Be Updated");
+          }
+        })
+        .catch((err) => {
+          console.log("Error Updating Supplier", err);
+        });
+    }
+  };
+
 
   const handleChange = (e) => {
     setBuyerData({ ...buyerData, [e.target.name]: e.target.value });
@@ -139,7 +172,7 @@ function Buyers() {
     { name: "address", align: "left" },
     { name: "contact", align: "center" },
     { name: "email", align: "center" },
-    { name: "edit", align: "right" },
+    { name: "edit", align: "center" },
     { name: "delete", align: "center" },
   ];
 
@@ -186,15 +219,16 @@ function Buyers() {
         </ArgonTypography>
       ),
       edit: (
-        <ArgonTypography
-          component="a"
-          href="#"
-          variant="caption"
-          color="secondary"
-          fontWeight="medium"
-        >
-          Edit
-        </ArgonTypography>
+        <Button
+        onClick={async () => {
+          setEditFormActive(true)
+          setShowAddForm(true);
+          setBuyerData(item)
+          
+        }}
+      >
+        <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-ruler-pencil" />
+      </Button>
       ),
       delete: (
         <Button
@@ -222,7 +256,18 @@ function Buyers() {
             <Card>
               <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
                 <ArgonTypography variant="h6">Buyers table</ArgonTypography>
-                <Button onClick={() => setShowAddForm(!showAddForm)}>
+                <Button onClick={() =>  {
+                    setBuyerData({
+                      name: "",
+                     address: "",
+                     mobile_number: "",
+                      email: "",
+                      tax_id: ""
+
+
+                    })
+                    setShowAddForm(!showAddForm)}
+                }>
                   <h4 style={{ paddingRight: 10 }}>Add Buyer </h4>
                   <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-fat-add" />
                 </Button>
@@ -267,25 +312,26 @@ function Buyers() {
                 }}
               >
                 <ArgonBox mb={2} mx={5}>
-                  <ArgonInput type="title" name="name"  placeholder="Name" size="large" onChange={handleChange}/>
+                  <ArgonInput type="title" name="name" value={buyerData.name}   placeholder="Name" size="large" onChange={handleChange}/>
                 </ArgonBox>
                 <ArgonBox mb={2} mx={5}>
-                  <ArgonInput type="title"  name="address" placeholder="Address" size="large" onChange={handleChange}/>
+                  <ArgonInput type="title" value={buyerData.address}  name="address" placeholder="Address" size="large" onChange={handleChange}/>
                 </ArgonBox>
                 <ArgonBox mb={2} mx={5}>
-                  <ArgonInput type="tags" name="mobile_number" placeholder="Phone Number" size="large" onChange={handleChange}/>
+                  <ArgonInput type="tags" name="mobile_number" value={buyerData.mobile_number} placeholder="Phone Number" size="large" onChange={handleChange}/>
                 </ArgonBox>
                 <ArgonBox mb={2} mx={5}>
-                  <ArgonInput type="email" name="email" placeholder="Email" size="large" onChange={handleChange}/>
+                  <ArgonInput type="email" name="email" placeholder="Email" value={buyerData.email} size="large" onChange={handleChange}/>
                 </ArgonBox>
                 <ArgonBox mb={2} mx={5}>
-                  <ArgonInput type="name"  name="tax_id" placeholder="Tax Id" size="large" onChange={handleChange} />
+                  <ArgonInput type="name"  name="tax_id" value={buyerData.tax_id} placeholder="Tax Id" size="large" onChange={handleChange} />
                 </ArgonBox>
                 
                 <ArgonBox mb={2} mx={5}>
-                  <ArgonButton onClick={handleSubmit} color="info" size="large" fullWidth>
-                    Add Buyer
+                <ArgonButton onClick={editFormActive? handleEdit: handleSubmit} color="info" size="large" fullWidth>
+                    { editFormActive ?  "Edit Buyer" : 'Add Buyer' }
                   </ArgonButton>
+
                 </ArgonBox>
               </ArgonBox>
             </Card>
