@@ -219,13 +219,13 @@ function Invoices() {
         .then((res) => {
           if (res.data?.status === "true") {
             console.log("Supplier Updated");
-            toast.success("Supplier Updated Successfully");
+            toast.success("Invoice added as an Order Successfully");
             handleGetInvoiceList();
             console.log(res.data.result);
           } else {
             console.log("Supplier Could Not Be Updated");
             console.log(res.data.result);
-            toast.error("Supplier Could Not Be Updated");
+            toast.error("Invoice Could Not Be Updated");
           }
         })
         .catch((err) => {
