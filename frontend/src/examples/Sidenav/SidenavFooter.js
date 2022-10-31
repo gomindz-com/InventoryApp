@@ -47,7 +47,7 @@ function SidenavFooter() {
             Need help?
           </ArgonTypography>
           <ArgonTypography color="inherit" variant="caption">
-            Please call us on 35636633 
+            Please call us on <a href="tel:123-456-7890">123-456-7890</a> 
           </ArgonTypography>
         </ArgonBox>
       </ArgonBox>

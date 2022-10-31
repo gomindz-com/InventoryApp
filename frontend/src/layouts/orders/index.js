@@ -16,7 +16,7 @@ Coded by www.creative-tim.com
 // @mui material components
 import Card from "@mui/material/Card";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect , useRef} from "react";
 
 // Argon Dashboard 2 MUI components
 import ArgonBox from "components/ArgonBox";
@@ -52,10 +52,14 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
 import Typography from "@mui/material/Typography";
+import { useReactToPrint } from 'react-to-print';
+import { SignalCellularNull } from "@mui/icons-material";
+
 
 function Orders() {
   const [rememberMe, setRememberMe] = useState(false);
   const [showAddForm, setShowAddForm] = useState(false);
+  const [viewOrderActive, setViewOrderActive] = useState(true);
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
   const [screenloading, setScreenLoading] = useState(true);
   const [orderList, setOrderList] = useState([]);
@@ -68,6 +72,21 @@ function Orders() {
   const [productPrice, setProductPrice] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
   const [quantity, setQuantity] = useState(0);
+
+
+  const componentRef = useRef();
+
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  });
+
+
+  const ComponentToPrint = React.forwardRef((props, ref) => {
+    return (
+      <div ref={ref}>My cool content here!</div>
+    );
+  });
+
 
   const style = {
     position: "absolute",
@@ -313,8 +332,8 @@ function Orders() {
     { name: "total price", align: "left" },
     { name: "buyer", align: "center" },
     { name: "status", align: "center" },
-    { name: "print receipt", align: "center" },
-    { name: "edit", align: "right" },
+    //{ name: "print receipt", align: "center" },
+    { name: "View & Print", align: "center" },
     { name: "delete", align: "center" },
   ];
   const rows = [];
@@ -366,7 +385,7 @@ function Orders() {
           {item.status}
         </ArgonTypography>
       ),
-      "print receipt": (
+     /*  "print receipt": (
         <Button
           onClick={async () => {
             handleDeleteOrder(item.id);
@@ -374,17 +393,42 @@ function Orders() {
         >
           <ArgonBox component="i" color="info" fontSize="25px" className="ni ni-folder-17" />
         </Button>
-      ),
-      edit: (
-        <ArgonTypography
-          component="a"
-          href="#"
-          variant="caption"
-          color="secondary"
-          fontWeight="medium"
-        >
-          Edit
-        </ArgonTypography>
+      ), */
+      "View & Print": (
+        <Button
+        onClick={async () => {
+          
+          setShowAddForm(true);
+          console.log(item)
+          setOrderData(item)
+          setProductInputRow([])
+          setOrderTotalPrice(0)
+          setViewOrderActive(true)
+          
+
+
+          item.products.map((obj, i) => {
+
+            console.log("productInputRow[row]?.id");
+            console.log(obj.id);
+
+            setProductInputRow((current) => [
+              ...current,
+              { row: i, amount: obj.quantity, price: obj.amount, id: obj.id - 1 },
+            ]);
+          });
+
+          setOrderTotalPrice(item.total_price)
+          
+          
+          //setIdProductRow(0 + 1);
+  
+          
+        }}
+      >
+        <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-bold-down" />
+      </Button>
+
       ),
       delete: (
         <Button
@@ -511,6 +555,7 @@ function Orders() {
           <Select
             name="product"
             placeholder="Products"
+            defaultValue={productOptions[(productInputRow[row]?.id)]}
             options={productOptions}
             onChange={handleChangeOtherProduct}
           />
@@ -683,6 +728,8 @@ function Orders() {
       ["products"]: resTopics,
       ["total_price"]: ordertotalPrice,
       ["type"]: "order",
+      ["status"]: "pending",
+
 
     });
 
@@ -691,6 +738,9 @@ function Orders() {
       ["products"]: resTopics,
       ["total_price"]: ordertotalPrice,
       ["type"]: "invoice",
+      ["status"]: "pending",
+
+
 
     });
 
@@ -713,6 +763,8 @@ function Orders() {
       console.log(orderData);
       await addOrder(orderData)
         .then((res) => {
+          console.log("Response")
+          console.log(res.data)
           if (res.data?.status === "true") {
             console.log("Order Added");
             toast.success("Order Added Successfully");
@@ -724,10 +776,10 @@ function Orders() {
               type: "order",
               products: [],
             });
-            setOrderTotalPrice(0)
+           
             setQuantity(0)
-            setOtherProducts([])
-            setProductInputRow([])
+            
+            setShowAddForm(false)
             setOpen(false)
             handleGetOrderList();
             console.log(res.data.result);
@@ -846,7 +898,9 @@ function Orders() {
                       type: "",
                       products: [],
                     });
+                    setViewOrderActive(false)
                     setOtherProducts([]);
+                    setProductInputRow([])
                     setQuantity(0);
                     setTotalPrice(0);
                     setOrderTotalPrice(0.0);
@@ -873,7 +927,7 @@ function Orders() {
             </Card>
           </ArgonBox>
         ) : (
-          <ArgonBox mb={3} pb={20}>
+          <ArgonBox ref={componentRef} mb={3} pb={20}>
             <Card>
               <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
                 <ArgonTypography variant="h6">Orders table</ArgonTypography>
@@ -897,7 +951,7 @@ function Orders() {
                   },
                 }}
               >
-                {
+                { viewOrderActive == false &&
                   // 1ST PRODUCT ORDER INPUT ROW
                   <ArgonBox mb={2} mx={5} display="flex">
                     <div style={{ flex: 5, paddingRight: 10 }}>
@@ -990,6 +1044,7 @@ function Orders() {
                   <ArgonInput
                     type="name"
                     name="buyer"
+                    value={orderData.buyer}
                     placeholder="Buyer"
                     size="large"
                     onChange={handleChange}
@@ -1018,6 +1073,7 @@ function Orders() {
                   <ArgonInput
                     type="name"
                     name="receipt"
+                    value={orderData.receipt}
                     placeholder="Receipt"
                     size="large"
                     onChange={handleChange}
@@ -1025,12 +1081,17 @@ function Orders() {
                 </ArgonBox>
 
                 <ArgonBox mb={"20%"} display="flex" mx={5}>
-                  <ArgonButton onClick={handleSubmit} color="info" size="large" fullWidth>
-                    Add
+                  <ArgonButton onClick={viewOrderActive ?  handlePrint : handleSubmit} color="info" size="large" fullWidth>
+                   { viewOrderActive ? 'Print' : 'Add'}
                   </ArgonButton>
 
                   {/*  <Button onClick={handleOpen}>Open modal</Button> */}
                 </ArgonBox>
+
+
+               
+              
+
               </ArgonBox>
             </Card>
           </ArgonBox>

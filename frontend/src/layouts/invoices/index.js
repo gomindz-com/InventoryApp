@@ -16,7 +16,7 @@ Coded by www.creative-tim.com
 // @mui material components
 import Card from "@mui/material/Card";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 // Argon Dashboard 2 MUI components
 import ArgonBox from "components/ArgonBox";
@@ -57,6 +57,8 @@ import { getInvoices } from "apiservices/invoiceService";
 import CheckIcon from "@mui/icons-material/Check";
 import ToggleButton from "@mui/material/ToggleButton";
 import { editInvoice } from "apiservices/invoiceService";
+import { useReactToPrint } from 'react-to-print';
+
 
 function Invoices() {
   const [rememberMe, setRememberMe] = useState(false);
@@ -73,6 +75,18 @@ function Invoices() {
   const [productPrice, setProductPrice] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
   const [quantity, setQuantity] = useState(0);
+
+
+  
+  const componentRef = useRef();
+
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  });
+
+
+  const [viewInvoiceActive, setViewInvoiceActive] = useState(true);
+
 
   const [selected, setSelected] = React.useState(false);
 
@@ -334,7 +348,7 @@ function Invoices() {
 
     { name: "print receipt", align: "center" },
     { name: "Approve As Order", align: "center" },
-    { name: "delete", align: "center" },
+    /* { name: "delete", align: "center" }, */
   ];
   const rows = [];
 
@@ -383,7 +397,33 @@ function Invoices() {
       "print receipt": (
         <Button
           onClick={async () => {
-            handleDeleteOrder(item.id);
+           
+
+          setShowAddForm(true);
+          console.log(item)
+          setInvoiceData(item)
+          setProductInputRow([])
+          setOrderTotalPrice(0)
+          setViewInvoiceActive(true)
+
+          
+          
+
+
+          item.products.map((obj, i) => {
+
+            console.log("productInputRow[row]?.id");
+            console.log(obj.id);
+
+            setProductInputRow((current) => [
+              ...current,
+              { row: i, amount: obj.quantity, price: obj.amount, id: obj.id - 1 },
+            ]);
+          });
+
+          setOrderTotalPrice(item.total_price)
+          
+
           }}
         >
           <ArgonBox component="i" color="info" fontSize="25px" className="ni ni-folder-17" />
@@ -401,15 +441,15 @@ function Invoices() {
           <CheckIcon />
         </ToggleButton>
       ),
-      delete: (
+     /*  delete: (
         <Button
           onClick={async () => {
             handleDeleteOrder(item.id);
           }}
         >
           <ArgonBox component="i" color="info" fontSize="34px" className="ni ni-fat-remove" />
-        </Button>
-      ),
+        </Button> 
+      ),*/
     });
   });
 
@@ -791,7 +831,7 @@ function Invoices() {
       <DashboardNavbar />
       <ArgonBox py={3}>
         {!showAddForm ? (
-          <ArgonBox mb={35}>
+          <ArgonBox   mb={35}>
             <Card>
               <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
                 <ArgonTypography variant="h6">Invoice table</ArgonTypography>
@@ -811,12 +851,12 @@ function Invoices() {
             </Card>
           </ArgonBox>
         ) : (
-          <ArgonBox mb={3} pb={20}>
+          <ArgonBox  ref={componentRef} mb={3} pb={20}>
             <Card>
               <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
-                <ArgonTypography variant="h6">Orders table</ArgonTypography>
+                <ArgonTypography variant="h6">Invoice table</ArgonTypography>
                 <Button onClick={() => setShowAddForm(!showAddForm)}>
-                  <h4 style={{ paddingRight: 10 }}>Show Order Table </h4>
+                  <h4 style={{ paddingRight: 10 }}>Show Invoices </h4>
                   <ArgonBox
                     component="i"
                     color="info"
@@ -835,7 +875,7 @@ function Invoices() {
                   },
                 }}
               >
-                {
+                { viewInvoiceActive == false &&
                   // 1ST PRODUCT ORDER INPUT ROW
                   <ArgonBox mb={2} mx={5} display="flex">
                     <div style={{ flex: 5, paddingRight: 10 }}>
@@ -928,6 +968,7 @@ function Invoices() {
                   <ArgonInput
                     type="name"
                     name="buyer"
+                    value={invoiceData.buyer}
                     placeholder="Buyer"
                     size="large"
                     onChange={handleChange}
@@ -956,6 +997,7 @@ function Invoices() {
                   <ArgonInput
                     type="name"
                     name="receipt"
+                    value={invoiceData.receipt}
                     placeholder="Receipt"
                     size="large"
                     onChange={handleChange}
@@ -963,8 +1005,8 @@ function Invoices() {
                 </ArgonBox>
 
                 <ArgonBox mb={"20%"} display="flex" mx={5}>
-                  <ArgonButton onClick={handleSubmit} color="info" size="large" fullWidth>
-                    Order
+                  <ArgonButton onClick={handlePrint} color="info" size="large" fullWidth>
+                     Print
                   </ArgonButton>
 
                   {/*  <Button onClick={handleOpen}>Open modal</Button> */}

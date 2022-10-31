@@ -63,7 +63,7 @@ function Products() {
   const [productData, setProductData] = useState({
     name: "",
     sortno: "",
-    category_id: "1",
+    category: "",
     images: "",
     stock: "",
     label: "",
@@ -76,12 +76,12 @@ function Products() {
     {
       value: "In Stock",
       label: "In Stock",
-      id: "1",
+      id: 0,
     },
     {
       value: "Out of Stock",
       label: "Out of Stock",
-      id: "2",
+      id: 1
     },
   ];
 
@@ -137,12 +137,15 @@ function Products() {
       console.log(productData);
     } else {
       console.log(productData);
+
+   
+
       await editProduct(productData)
         .then((res) => {
           if (res.data?.status === "true") {
             console.log("Product Updated");
             toast.success("product Updated Successfully");
-            handleGetSupplierList();
+            handleGetProductList();
             console.log(res.data.result);
           } else {
             console.log("product Could Not Be Updated");
@@ -297,6 +300,17 @@ function Products() {
             setShowAddProductForm(true);
             setProductData(item);
 
+            console.log(item)
+
+            setProductData({
+              ...item,
+              ["category_id"]: item.category.id,
+              ["category"]: item.category.id,
+             
+             
+            });
+      
+
           }}
         >
           <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-ruler-pencil" />
@@ -342,7 +356,9 @@ function Products() {
                     tags: "",
                     status: "",
                   })
+
                   setShowAddProductForm(!showAddProductForm)
+                  setEditFormActive(false)
                 }}>
                   <h4 style={{ paddingRight: 10 }}>Add Product </h4>
                   <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-fat-add" />
@@ -431,7 +447,7 @@ function Products() {
                   <Select
                     name="category"
                     placeholder="Category"
-                    value={productData.category.id}
+                    value={categoryOptions[productData.category - 1]}
                     options={categoryOptions}
                     onChange={handleChangeCategory}
                   />
@@ -450,7 +466,7 @@ function Products() {
                   <Select
                     name="status"
                     placeholder="Status"
-                    value={productData.status}
+                    value={ productData.stock > 0  ? status_options[0] : status_options[1]}
                     options={status_options}
                     onChange={handleChangeStatus}
                   />

@@ -245,9 +245,15 @@ def order_list(request):
             try:
                 aproduct = Product.objects.get(pk=product['id'])
                 aproduct.stock = aproduct.stock - product['amount']
-                aproduct.save()
+                logger.info("aproduct.stock - product['amount']")
+                logger.info(aproduct.stock - product['amount'])
+                if(aproduct.stock - product['amount'] < 0):
+                    new_order.delete()
+                    return JsonResponse(status=status.HTTP_404_NOT_FOUND,  data={'status': 'false', 'message':  'One of the Product Is Out Of Stock', 'result': []})
+                else:
+                    aproduct.save()
             except Product.DoesNotExist:
-                return JsonResponse(status=status.HTTP_404_NOT_FOUND,  data={'status': 'true', 'message': 'Product Does Not Exist', 'result': []})
+                return JsonResponse(status=status.HTTP_404_NOT_FOUND,  data={'status': 'false', 'message': 'Product Does Not Exist', 'result': []})
 
         if serializer.is_valid():
             #serializer.save()
