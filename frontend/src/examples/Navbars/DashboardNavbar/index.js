@@ -61,8 +61,11 @@ import logoSpotify from "assets/images/small-logos/logo-spotify.svg";
 import { Routes, Route, Navigate } from "react-router-dom";
 
 
-function DashboardNavbar({ absolute, light, isMini }) {
+function DashboardNavbar({ absolute, light, isMini, handleClick, data }) {
   const [navbarType, setNavbarType] = useState();
+
+  console.log("object")
+  console.log(data)
 
   const [controller, dispatch] = useArgonController();
   const { miniSidenav, transparentNavbar, fixedNavbar, openConfigurator } = controller;
@@ -174,6 +177,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
             <ArgonBox pr={1}>
               <ArgonInput
                 placeholder="Type here..."
+                onChange={handleClick}
                 startAdornment={
                   <Icon fontSize="small" style={{ marginRight: "6px" }}>
                     search
