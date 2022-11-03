@@ -100,7 +100,7 @@ function Default() {
         <>
           {item.stock} in stock,{" "}
           <ArgonTypography variant="caption" color="text" fontWeight="medium">
-            346+ sold
+            {item.amount}+ sold
           </ArgonTypography>
         </>
       ),
@@ -257,13 +257,7 @@ function Default() {
         setShowSearch(false);
       }
       
-      //return employee.name === e.target.value.toString();
     });
-
-
-    //console.log("filtered2");
-   // setProductList(filtered2)
-    //console.log(filtered2);
     
   }
 

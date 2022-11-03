@@ -51,8 +51,18 @@ import Products from "layouts/products";
 import Orders from "layouts/orders";
 import Categories from "layouts/categories";
 import Invoices from "layouts/invoices";
+import Home from "layouts/home";
 
 const routes = [
+
+  {
+    type: "route",
+    name: "Home",
+    key: "home",
+    route: "/home",
+    icon: <ArgonBox component="i" color="primary" fontSize="14px" className="ni ni-tv-2" />,
+    component: <Home />,
+  },
   {
     type: "route",
     name: "Dashboard",

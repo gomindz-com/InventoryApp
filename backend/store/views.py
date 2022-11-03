@@ -386,8 +386,49 @@ def category_list(request):
     if request.method == 'GET':
         category = Category.objects.all()
         categoryList = []
+        categoryAmountSoldList = []
         
         for item in category.iterator():
+
+            amountQuantity = 0
+            logger.info("CATEGORY UNIT")
+            logger.info(item.name)
+            categoryname = item.name
+            categoryAmountSoldList.append({
+                    "categoryName" : item.name,
+                    "amount" :  0
+                })
+                
+
+            myorder = Order.objects.all()
+            for orderitems in myorder.iterator():
+                productQuantity = ProductQuantity.objects.filter(order_id=orderitems.id)
+                for oneproductQuantityRow in productQuantity.iterator():
+                        #GET THE CATEGORY ID OF THE CURRENT PRODUCT FROM THE PRODUCT ID IN THE PRODUCT QUANTITY TABLE
+                    category = Product.objects.get(id=oneproductQuantityRow.product_id)
+                    
+                    if(item.id == category.category_id):
+                            amountQuantity = amountQuantity + oneproductQuantityRow.product_quantity
+                        
+                        
+            for itemcategoryAmountSoldList in categoryAmountSoldList:
+                    
+                logger.info("itemcategoryAmountSoldList")
+                logger.info(itemcategoryAmountSoldList["categoryName"])
+                if categoryname == itemcategoryAmountSoldList["categoryName"]:
+                    itemcategoryAmountSoldList["amount"]= amountQuantity
+
+            logger.info(amountQuantity)
+                
+            logger.info(categoryAmountSoldList)
+
+
+
+
+
+
+
+
             stock = 0
             aproduct = Product.objects.filter(category_id=item.id)
             for productItem in aproduct.iterator():
@@ -400,6 +441,7 @@ def category_list(request):
                         "name": item.name,
                         "description": item.description,
                         "stock": stock,
+                        "amount": amountQuantity
                     })
             
 
@@ -453,55 +495,88 @@ def orderCounts(request):
   
   order = Order.objects.all()
   price = 0
+  amountSold = 0
   for item in order.iterator():    
     productsOrders = ProductQuantity.objects.filter(order_id=item.id)
     for productsOrdersItem in productsOrders.iterator():
-        logger.info(productsOrdersItem.product_id)
         aProduct = Product.objects.get(id=productsOrdersItem.product_id)
-        price = price + (aProduct.price * productsOrdersItem.product_quantity)
-
-    logger.info("Total Price")
-    logger.info(price)
-
-
+        price = price + (aProduct.price * productsOrdersItem.product_quantity)               
+       
  
   orderMonthList = []
-  logger.info("Order Date") 
   for x in range(1, 13):
     count = Order.objects.filter(created_date__month__exact=x).count()
-    logger.info(count)
     orderMonthList.append(
                     count
       )
-  logger.info(orderMonthList)
 
   from django.utils import timezone
-
-  logger.info(timezone.now().year)
-
-
   totalpreviousyearPrice = Order.objects.filter(created_date__year__exact=timezone.now().year - 1).aggregate(TOTAL = Sum('total_price'))['TOTAL']
-  logger.info(totalpreviousyearPrice)
-
   totalcurrentyearPrice = Order.objects.filter(created_date__year__exact=timezone.now().year).aggregate(TOTAL = Sum('total_price'))['TOTAL']
-  logger.info(totalcurrentyearPrice)
-
-  logger.info(type(totalpreviousyearPrice))
 
   try:
     percentagePrevious = round(((totalcurrentyearPrice - totalpreviousyearPrice) / 100)*100)
   except:
-    print("Some variable is None")
+    #print("Some variable is None")
     percentagePrevious = 0
 
 
 
-  
+
+
+
+   # CATEGORY STOCK SOLD
+  logger.info("  ")
+  logger.info("ORDER UNIT")
+  categoryAmountSoldList = []
+
+  categories = Category.objects.all()
+  for categoryItem in categories.iterator():
+
+    amountQuantity = 0
+    logger.info("CATEGORY UNIT")
+    logger.info(categoryItem.name)
+    categoryname = categoryItem.name
+    categoryAmountSoldList.append({
+            "categoryName" : categoryItem.name,
+            "amount" :  0
+        })
+        
+
+    myorder = Order.objects.all()
+    for orderitems in myorder.iterator():
+        productQuantity = ProductQuantity.objects.filter(order_id=orderitems.id)
+        for oneproductQuantityRow in productQuantity.iterator():
+                #GET THE CATEGORY ID OF THE CURRENT PRODUCT FROM THE PRODUCT ID IN THE PRODUCT QUANTITY TABLE
+            category = Product.objects.get(id=oneproductQuantityRow.product_id)
+            
+            if(categoryItem.id == category.category_id):
+                    amountQuantity = amountQuantity + oneproductQuantityRow.product_quantity
+                
+                
+        for itemcategoryAmountSoldList in categoryAmountSoldList:
+                
+            logger.info("itemcategoryAmountSoldList")
+            logger.info(itemcategoryAmountSoldList["categoryName"])
+            if categoryname == itemcategoryAmountSoldList["categoryName"]:
+                itemcategoryAmountSoldList["amount"]= amountQuantity
+
+        logger.info(amountQuantity)
+            
+        logger.info(categoryAmountSoldList)
+
+
+        
     
 
     
 
-  result= {'ordercount': order_count, "total": price, 'monthlyOrders': orderMonthList, 'percentageIncrement': percentagePrevious}
+  result= {'ordercount': order_count, 
+            "total": price, 
+            'monthlyOrders': orderMonthList, 
+            'percentageIncrement': percentagePrevious,
+            'categoryStockSold': categoryAmountSoldList
+            }
   return JsonResponse(status=200, data={'status':'true','message':'success', 'result': result})
 
 
