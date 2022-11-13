@@ -26,6 +26,7 @@ from .views import (
     buyerCounts, productCounts,
     deliveryCounts, supplierCounts,
     orderCounts, total_orders, total_stock, total_price,
+    # percGrowth,
 )
 
 from store import views
@@ -51,6 +52,7 @@ urlpatterns = [
     path('deliverycount/', deliveryCounts),
     path('totalstock/', total_stock),
     path('totalprice/', total_price),
+    # path('percgrowth/', percGrowth),
 
     path('create-supplier/', create_supplier, name='create-supplier'),
     path('create-buyer/', create_buyer, name='create-buyer'),

@@ -493,6 +493,7 @@ def orderCounts(request):
   order_count = Order.objects.all().count()
   total = Order.objects.all().aggregate(TOTAL = Sum('total_price'))['TOTAL']
   
+  from django.utils import timezone
   order = Order.objects.all()
   price = 0
   amountSold = 0
@@ -500,7 +501,20 @@ def orderCounts(request):
     productsOrders = ProductQuantity.objects.filter(order_id=item.id)
     for productsOrdersItem in productsOrders.iterator():
         aProduct = Product.objects.get(id=productsOrdersItem.product_id)
-        price = price + (aProduct.price * productsOrdersItem.product_quantity)               
+        price = price + (aProduct.price * productsOrdersItem.product_quantity)  
+        
+    totalOrderPrice = round(price)
+    totalCurrentdayPrice = Order.objects.filter(created_date__day__exact=timezone.now().day).aggregate(TOTAL = Sum('total_price'))['TOTAL']
+    totalPreviousdayPrice = (totalOrderPrice - totalCurrentdayPrice)
+    
+    try:
+        difference = (totalOrderPrice - totalCurrentdayPrice)
+        growth = ((totalCurrentdayPrice / totalPreviousdayPrice)*100)
+        dailyPercentageGrowth = f'{growth} percent'
+    except:
+      
+        dailyPercentageGrowth = '0 percent'
+        difference = 0             
        
  
   orderMonthList = []
@@ -542,7 +556,7 @@ def orderCounts(request):
             "amount" :  0
         })
         
-
+    
     myorder = Order.objects.all()
     for orderitems in myorder.iterator():
         productQuantity = ProductQuantity.objects.filter(order_id=orderitems.id)
@@ -564,6 +578,15 @@ def orderCounts(request):
         logger.info(amountQuantity)
             
         logger.info(categoryAmountSoldList)
+        
+        logger.info("totalOrderPrice")
+        logger.info(totalOrderPrice)
+        logger.info("totalPreviousdayPrice")
+        logger.info(totalPreviousdayPrice)
+        logger.info("totalCurrentdayPrice")
+        logger.info(totalCurrentdayPrice)
+        logger.info("difference")
+        logger.info(difference)
 
 
         
@@ -575,11 +598,60 @@ def orderCounts(request):
             "total": price, 
             'monthlyOrders': orderMonthList, 
             'percentageIncrement': percentagePrevious,
-            'categoryStockSold': categoryAmountSoldList
+            'categoryStockSold': categoryAmountSoldList,
+            # 'difference': difference,
+            'totalOrderPrice': totalOrderPrice,
+            'dailyPercentageGrowth': dailyPercentageGrowth,
+            'totalPreviousdayPrice': totalPreviousdayPrice,
+            'totalCurrentdayPrice': totalCurrentdayPrice,
             }
   return JsonResponse(status=200, data={'status':'true','message':'success', 'result': result})
 
 
+# @api_view(['GET'])
+# def percGrowth(request):
+    
+#     from django.utils import timezone
+#     order = Order.objects.all()
+#     price = 0
+#     amountSold = 0
+#     for item in order.iterator():    
+#         productsOrders = ProductQuantity.objects.filter(order_id=item.id)
+#         for productsOrdersItem in productsOrders.iterator():
+#             aProduct = Product.objects.get(id=productsOrdersItem.product_id)
+#             price = price + (aProduct.price * productsOrdersItem.product_quantity) 
+
+#     # from datetime import datetime, timedelta
+#     totalOrderPrice = round(price)
+#     totalCurrentdayPrice = Order.objects.filter(created_date__day__exact=timezone.now().day).aggregate(TOTAL = Sum('total_price'))['TOTAL']
+#     totalPreviousdayPrice = (totalOrderPrice - totalCurrentdayPrice)
+    
+#     try:
+#         difference = (totalOrderPrice - totalCurrentdayPrice)
+#         growth = ((totalCurrentdayPrice / totalPreviousdayPrice)*100)
+#         percentageGrowth = f'{growth} percent'
+#     except:
+      
+#         percentageGrowth = '0 percent'
+#         difference = 0
+        
+#     logger.info("totalOrderPrice")
+#     logger.info(totalOrderPrice)
+#     logger.info("totalPreviousdayPrice")
+#     logger.info(totalPreviousdayPrice)
+#     logger.info("totalCurrentdayPrice")
+#     logger.info(totalCurrentdayPrice)
+#     logger.info("difference")
+#     logger.info(difference)
+        
+#     result= { 
+#                 'difference': difference,
+#                 'totalOrderPrice': totalOrderPrice,
+#                 'percentageIncrement': percentageGrowth,
+#                 'totalPreviousdayPrice': totalPreviousdayPrice,
+#                 'totalCurrentdayPrice': totalCurrentdayPrice,
+#                 }
+#     return JsonResponse(status=200, data={'status':'true','message':'success', 'result': result})
 
 @api_view(['GET'])
 def buyerCounts(request):
@@ -816,3 +888,12 @@ class DeliveryListView(ListView):
     model = Delivery
     template_name = 'store/delivery_list.html'
     context_object_name = 'delivery'
+
+
+
+#     from datetime import timedelta
+# from django.utils import timezone
+# some_day_last_week = timezone.now().date() - timedelta(days=7)
+# monday_of_last_week = some_day_last_week - timedelta(days=(some_day_last_week.isocalendar()[2] - 1))
+# monday_of_this_week = monday_of_last_week + timedelta(days=7)
+# Entry.objects.filter(created_at__gte=monday_of_last_week, created_at__lt=monday_of_this_week)
