@@ -150,14 +150,14 @@ const routes = [
     ),
     component: <SignIn />,
   },
-  /* {
+   {
     type: "route",
     name: "Sign Up",
     key: "sign-up",
     route: "/authentication/sign-up",
     icon: <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-collection" />,
     component: <SignUp />,
-  }, */
+  }, 
 ];
 
 export default routes;

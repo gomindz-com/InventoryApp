@@ -191,10 +191,10 @@ export default function App() {
       <Routes>
 
         {getRoutes(routes)}
-        { token ? <Route path="/" element={<Navigate to="/dashboard" />} />:
-                <Route path="/" element={<Navigate to="/authentication/sign-in" />} /> }
+        { token ? <Route path="/" element={<Navigate to="/home" />} />:
+                <Route path="/" element={<Navigate to="/authenticate/sign-in" />} /> }
                 
-        <Route path="*" element={<Navigate to="/authentication/sign-in" />} />
+        <Route path="*" element={<Navigate to="/home" />} />
       </Routes>
     </ThemeProvider>
   );

@@ -47,15 +47,15 @@ function Cover() {
       <Card>
         <ArgonBox p={3} mb={1} textAlign="center">
           <ArgonTypography variant="h5" fontWeight="medium">
-            Register with
+            Register 
           </ArgonTypography>
         </ArgonBox>
-        <ArgonBox mb={2}>
+        {/* <ArgonBox mb={2}>
           <Socials />
-        </ArgonBox>
-        <ArgonBox px={12}>
+        </ArgonBox> */}
+        {/* <ArgonBox px={12}>
           <Separator />
-        </ArgonBox>
+        </ArgonBox> */}
         <ArgonBox pt={2} pb={3} px={3}>
           <ArgonBox component="form" role="form">
             <ArgonBox mb={2}>

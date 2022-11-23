@@ -15,6 +15,7 @@ Coded by www.creative-tim.com
 
 import React from "react";
 import { createRoot } from "react-dom/client";
+import ReactDOM  from "react-dom";
 import { BrowserRouter } from "react-router-dom";
 import App from "App";
 
@@ -27,15 +28,16 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 // react-perfect-scrollbar styles
 import "react-perfect-scrollbar/dist/css/styles.css";
 
-const container = document.getElementById("root");
-const root = createRoot(container);
 
-root.render(
+ReactDOM.render(
   <BrowserRouter>
     <ArgonControllerProvider>
       <PerfectScrollbar>
         <App />
       </PerfectScrollbar>
     </ArgonControllerProvider>
-  </BrowserRouter>
+  </BrowserRouter>,
+  document.getElementById("root")
 );
+
+

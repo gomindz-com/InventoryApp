@@ -236,29 +236,23 @@ function Default() {
   }, []);
 
   function handleClick(e) {
-
-   
     setShowSearch(true);
 
-    const filtered2 = productList.filter(employee => {
-          
-      console.log("The Name")
-      console.log(employee.name)
-      console.log("The Target Value")
-      console.log(e.target.value.toString())
+    const filtered2 = productList.filter((employee) => {
+      console.log("The Name");
+      console.log(employee.name);
+      console.log("The Target Value");
+      console.log(e.target.value.toString());
 
-      if(employee.name.toLowerCase()  === e.target.value.toLowerCase() ){
-
-        console.log("We have one equal")
-        setProductListA([employee])
+      if (employee.name.toLowerCase() === e.target.value.toLowerCase()) {
+        console.log("We have one equal");
+        setProductListA([employee]);
       }
 
-      if(e.target.value == ''){
+      if (e.target.value == "") {
         setShowSearch(false);
       }
-      
     });
-    
   }
 
   const columns = [
@@ -353,127 +347,123 @@ function Default() {
     <DashboardLayout>
       <DashboardNavbar handleClick={handleClick} data={showSearch} />
 
-     
-        <ArgonBox py={3}>
-          <Grid container spacing={3} mb={3}>
-            <Grid item xs={12} md={6} lg={3}>
-              <DetailedStatisticsCard
-                title="Orders"
-                count={orderCount?.total == undefined ? "D" + 0 : "D" + orderCount?.total}
-                amount={
-                  orderCount?.ordercount == undefined
-                    ? 0 + " Orders"
-                    : orderCount?.ordercount + " Order(s)"
-                }
-                icon={{ color: "info", component: <i className="ni ni-money-coins" /> }}
-                percentage={{ color: "success", count: "+55%", text: "since yesterday" }}
-              />
-            </Grid>
-            <Grid item xs={12} md={6} lg={3}>
-              <DetailedStatisticsCard
-                title="Product"
-                count={
-                  productCount?.productcount == undefined
-                    ? 0 + " Product"
-                    : productCount?.productcount + " Product(s)"
-                }
-                amount={
-                  productCount?.productcount == undefined
-                    ? 0 + " Product"
-                    : productCount?.productcount + " Product(s)"
-                }
-                icon={{ color: "error", component: <i className="ni ni-world" /> }}
-                percentage={{ color: "success", count: "+3%", text: "since last week" }}
-              />
-            </Grid>
-            <Grid item xs={12} md={6} lg={3}>
-              <DetailedStatisticsCard
-                title="Supplier"
-                count={
-                  supplierCount?.suppliercount == undefined
-                    ? 0 + " Supplier"
-                    : supplierCount?.suppliercount + " Supplier(s)"
-                }
-                amount={
-                  supplierCount?.suppliercount == undefined
-                    ? 0 + " Supplier"
-                    : supplierCount?.suppliercount + " Supplier(s)"
-                }
-                icon={{ color: "success", component: <i className="ni ni-paper-diploma" /> }}
-                percentage={{ color: "error", count: "-2%", text: "since last quarter" }}
-              />
-            </Grid>
-            <Grid item xs={12} md={6} lg={3}>
-              <DetailedStatisticsCard
-                title="Buyer"
-                count={
-                  buyerCount?.buyercount == undefined
-                    ? 0 + " Buyer"
-                    : buyerCount?.buyercount + " Buyer(s)"
-                }
-                amount={
-                  buyerCount?.buyercount == undefined
-                    ? 0 + " Buyer"
-                    : buyerCount?.buyercount + " Buyer(s)"
-                }
-                icon={{ color: "warning", component: <i className="ni ni-cart" /> }}
-                percentage={{ color: "success", count: "+5%", text: "than last month" }}
-              />
-            </Grid>
+      <ArgonBox py={3}>
+        <Grid container spacing={3} mb={3}>
+          <Grid item xs={12} md={6} lg={3}>
+            <DetailedStatisticsCard
+              title="Orders"
+              count={orderCount?.total == undefined ? "D" + 0 : "D" + orderCount?.total}
+              amount={
+                orderCount?.ordercount == undefined
+                  ? 0 + " Orders"
+                  : orderCount?.ordercount + " Order(s)"
+              }
+              icon={{ color: "info", component: <i className="ni ni-money-coins" /> }}
+              percentage={{ color: "success", count: "+55%", text: "since yesterday" }}
+            />
           </Grid>
+          <Grid item xs={12} md={6} lg={3}>
+            <DetailedStatisticsCard
+              title="Product"
+              count={
+                productCount?.productcount == undefined
+                  ? 0 + " Product"
+                  : productCount?.productcount + " Product(s)"
+              }
+              amount={
+                productCount?.productcount == undefined
+                  ? 0 + " Product"
+                  : productCount?.productcount + " Product(s)"
+              }
+              icon={{ color: "error", component: <i className="ni ni-world" /> }}
+              percentage={{ color: "success", count: "+3%", text: "since last week" }}
+            />
+          </Grid>
+          <Grid item xs={12} md={6} lg={3}>
+            <DetailedStatisticsCard
+              title="Supplier"
+              count={
+                supplierCount?.suppliercount == undefined
+                  ? 0 + " Supplier"
+                  : supplierCount?.suppliercount + " Supplier(s)"
+              }
+              amount={
+                supplierCount?.suppliercount == undefined
+                  ? 0 + " Supplier"
+                  : supplierCount?.suppliercount + " Supplier(s)"
+              }
+              icon={{ color: "success", component: <i className="ni ni-paper-diploma" /> }}
+              percentage={{ color: "error", count: "-2%", text: "since last quarter" }}
+            />
+          </Grid>
+          <Grid item xs={12} md={6} lg={3}>
+            <DetailedStatisticsCard
+              title="Buyer"
+              count={
+                buyerCount?.buyercount == undefined
+                  ? 0 + " Buyer"
+                  : buyerCount?.buyercount + " Buyer(s)"
+              }
+              amount={
+                buyerCount?.buyercount == undefined
+                  ? 0 + " Buyer"
+                  : buyerCount?.buyercount + " Buyer(s)"
+              }
+              icon={{ color: "warning", component: <i className="ni ni-cart" /> }}
+              percentage={{ color: "success", count: "+5%", text: "than last month" }}
+            />
+          </Grid>
+        </Grid>
 
-          {showSearch && (
-            
-              <ArgonBox
-              style={{marginTop: 100, marginBottom: 100}}
-                sx={{
-                  "& .MuiTableRow-root:not(:last-child)": {
-                    "& td": {
-                      borderBottom: ({ borders: { borderWidth, borderColor } }) =>
-                        `${borderWidth[1]} solid ${borderColor}`,
-                    },
-                  },
-                }}
-              >
-                <Table columns={columns} rows={rows} />
-              </ArgonBox>
-            
-          )}
+        {showSearch && (
+          <ArgonBox
+            style={{ marginTop: 100, marginBottom: 100 }}
+            sx={{
+              "& .MuiTableRow-root:not(:last-child)": {
+                "& td": {
+                  borderBottom: ({ borders: { borderWidth, borderColor } }) =>
+                    `${borderWidth[1]} solid ${borderColor}`,
+                },
+              },
+            }}
+          >
+            <Table columns={columns} rows={rows} />
+          </ArgonBox>
+        )}
 
-          <Grid container spacing={3} mb={3}>
-            <Grid item xs={12} lg={7}>
-              <GradientLineChart
-                title="Our Sales Overview"
-                description={
-                  <ArgonBox display="flex" alignItems="center">
-                    <ArgonBox fontSize={size.lg} color="success" mb={0.3} mr={0.5} lineHeight={0}>
-                      <Icon sx={{ fontWeight: "bold" }}>arrow_upward</Icon>
-                    </ArgonBox>
-                    <ArgonTypography variant="button" color="text" fontWeight="medium">
-                      {orderCount?.percentageIncrement}% more{" "}
-                      <ArgonTypography variant="button" color="text" fontWeight="regular">
-                        in 2022
-                      </ArgonTypography>
-                    </ArgonTypography>
+        <Grid container spacing={3} mb={3}>
+          <Grid item xs={12} lg={7}>
+            <GradientLineChart
+              title="Our Sales Overview"
+              description={
+                <ArgonBox display="flex" alignItems="center">
+                  <ArgonBox fontSize={size.lg} color="success" mb={0.3} mr={0.5} lineHeight={0}>
+                    <Icon sx={{ fontWeight: "bold" }}>arrow_upward</Icon>
                   </ArgonBox>
-                }
-                chart={gradientLineChartData}
-              />
-            </Grid>
-            <Grid item xs={12} lg={5}>
-              <Slider />
-            </Grid>
+                  <ArgonTypography variant="button" color="text" fontWeight="medium">
+                    {orderCount?.percentageIncrement}% more{" "}
+                    <ArgonTypography variant="button" color="text" fontWeight="regular">
+                      in 2022
+                    </ArgonTypography>
+                  </ArgonTypography>
+                </ArgonBox>
+              }
+              chart={gradientLineChartData}
+            />
           </Grid>
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={8}>
-              <SalesTable title="Sales by Regions" rows={salesTableData} />
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <CategoriesList title="categories of products" categories={categoriesListData} />
-            </Grid>
+          <Grid item xs={12} lg={5}>
+            <Slider />
           </Grid>
-        </ArgonBox>
-      
+        </Grid>
+        <Grid container spacing={3}>
+          <Grid item xs={12} md={8}>
+            <SalesTable title="Sales by Regions" rows={salesTableData} />
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <CategoriesList title="categories of products" categories={categoriesListData} />
+          </Grid>
+        </Grid>
+      </ArgonBox>
 
       <Footer />
     </DashboardLayout>

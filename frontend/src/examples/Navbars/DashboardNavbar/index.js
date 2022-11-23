@@ -154,7 +154,7 @@ function DashboardNavbar({ absolute, light, isMini, handleClick, data }) {
       sx={(theme) => navbar(theme, { transparentNavbar, absolute, light })}
     >
 
-      {token == null && <Navigate to="/authentication/sign-in" replace={true} />}
+      {/* {token == null && <Navigate to="/authentication/sign-in" replace={true} />} */}
 
       <Toolbar sx={(theme) => navbarContainer(theme, { navbarType })}>
         <ArgonBox

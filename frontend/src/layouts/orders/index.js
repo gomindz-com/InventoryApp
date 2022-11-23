@@ -16,7 +16,7 @@ Coded by www.creative-tim.com
 // @mui material components
 import Card from "@mui/material/Card";
 
-import { useState, useEffect , useRef} from "react";
+import { useState, useEffect, useRef } from "react";
 
 // Argon Dashboard 2 MUI components
 import ArgonBox from "components/ArgonBox";
@@ -52,8 +52,9 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
 import Typography from "@mui/material/Typography";
-import { useReactToPrint } from 'react-to-print';
+import { useReactToPrint } from "react-to-print";
 import { SignalCellularNull } from "@mui/icons-material";
+import { v4 as uuidv4 } from 'uuid';
 
 
 function Orders() {
@@ -74,19 +75,22 @@ function Orders() {
   const [quantity, setQuantity] = useState(0);
 
 
+
+  const { v4: uuidv4 } = require('uuid');
+
+   
+   const [uuid, setUuid] = useState(uuidv4().toString());
+
+
   const componentRef = useRef();
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
 
-
   const ComponentToPrint = React.forwardRef((props, ref) => {
-    return (
-      <div ref={ref}>My cool content here!</div>
-    );
+    return <div ref={ref}>My cool content here!</div>;
   });
-
 
   const style = {
     position: "absolute",
@@ -136,8 +140,7 @@ function Orders() {
             console.log(res.data.result);
 
             res.data.result.map((item) => {
-              console.log("Single Product");
-              console.log(item.price);
+              
               product_options.push({
                 value: item.name,
                 label: item.name,
@@ -256,7 +259,7 @@ function Orders() {
   const [orderData, setOrderData] = useState({
     buyer: "",
     status: "pending",
-    receipt: "",
+    receipt: uuid,
     total_price: "",
     type: "",
     products: [],
@@ -265,12 +268,11 @@ function Orders() {
   const [invoiceData, setInvoiceData] = useState({
     buyer: "",
     status: "pending",
-    receipt: "",
+    receipt: uuid,
     total_price: "",
     type: "",
     products: [],
   });
-
 
   const [ordertotalPrice, setOrderTotalPrice] = useState(0.0);
 
@@ -385,7 +387,7 @@ function Orders() {
           {item.status}
         </ArgonTypography>
       ),
-     /*  "print receipt": (
+      /*  "print receipt": (
         <Button
           onClick={async () => {
             handleDeleteOrder(item.id);
@@ -396,39 +398,31 @@ function Orders() {
       ), */
       "View & Print": (
         <Button
-        onClick={async () => {
-          
-          setShowAddForm(true);
-          console.log(item)
-          setOrderData(item)
-          setProductInputRow([])
-          setOrderTotalPrice(0)
-          setViewOrderActive(true)
-          
+          onClick={async () => {
+            setShowAddForm(true);
+            console.log(item);
+            setOrderData(item);
+            setProductInputRow([]);
+            setOrderTotalPrice(0);
+            setViewOrderActive(true);
 
+            item.products.map((obj, i) => {
+              console.log("productInputRow[row]?.id");
+              console.log(obj.id);
 
-          item.products.map((obj, i) => {
+              setProductInputRow((current) => [
+                ...current,
+                { row: i, amount: obj.quantity, price: obj.amount, id: obj.id - 1 },
+              ]);
+            });
 
-            console.log("productInputRow[row]?.id");
-            console.log(obj.id);
+            setOrderTotalPrice(item.total_price);
 
-            setProductInputRow((current) => [
-              ...current,
-              { row: i, amount: obj.quantity, price: obj.amount, id: obj.id - 1 },
-            ]);
-          });
-
-          setOrderTotalPrice(item.total_price)
-          
-          
-          //setIdProductRow(0 + 1);
-  
-          
-        }}
-      >
-        <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-bold-down" />
-      </Button>
-
+            //setIdProductRow(0 + 1);
+          }}
+        >
+          <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-bold-down" />
+        </Button>
       ),
       delete: (
         <Button
@@ -449,6 +443,7 @@ function Orders() {
   const [otherProductsQuantity, setOtherProductsQuantity] = useState([]);
 
   const renderColumns = productInputRow.map(({ row, amount }, key) => {
+
     const handleChangeOtherProduct = async (selectedOption) => {
       console.log("THE CURRENT TOTAL ORDER PRICE");
       console.log(ordertotalPrice);
@@ -473,6 +468,8 @@ function Orders() {
           },
         ]);
 
+       
+
         const newState = productInputRow.map((obj) => {
           // 👇️ if id equals 2, update country property
 
@@ -493,7 +490,17 @@ function Orders() {
 
         setProductInputRow(newState);
         setOrderTotalPrice(parseFloat(ordertotalPrice) + parseFloat(selectedOption.price));
-      } else {
+      } 
+      
+      
+      
+      else {
+
+        console.log("guuu")
+        console.log(productInputRow[row].price )
+        const currentprice = productInputRow[row].price ;
+
+
         const newState1 = productInputRow.map((obj) => {
           // 👇️ if id equals 2, update country property
 
@@ -524,7 +531,13 @@ function Orders() {
 
         setOtherProducts(newState);
 
-        setOrderTotalPrice(parseFloat(ordertotalPrice) + parseFloat(selectedOption.price));
+        console.log("ordertooo")
+        console.log(ordertotalPrice)
+        console.log(currentprice)
+        console.log(selectedOption.price)
+
+
+        setOrderTotalPrice(parseFloat(ordertotalPrice) - currentprice + parseFloat(productInputRow[row].amount * selectedOption.price));
 
         //
       }
@@ -548,6 +561,9 @@ function Orders() {
       //setOtherProducts(productInputRow.filter((a) => a.name !== name));
     };
 
+
+
+
     return (
       // OTHER PRODUCT INPUT ROWS
       <ArgonBox key={row} mb={2} mx={5} display="flex">
@@ -555,14 +571,190 @@ function Orders() {
           <Select
             name="product"
             placeholder="Products"
-            defaultValue={productOptions[(productInputRow[row]?.id)]}
+            defaultValue={productOptions[productInputRow[row]?.id]}
             options={productOptions}
-            onChange={handleChangeOtherProduct}
+            onChange={
+              
+              async (selectedOption) => {
+
+
+              const currentordertotalPrice = isNaN(ordertotalPrice) ? (0 + firstProductTotalPrice) : ordertotalPrice;
+              
+              if (otherProducts[row] == undefined) {
+
+                console.log("Total Order Price")
+                console.log(currentordertotalPrice)
+                console.log("First Row Total Order Price")
+                console.log(firstProductTotalPrice)
+                
+                setOtherProducts((current) => [
+                  ...current,
+                  {
+                    id: selectedOption.id,
+                    row: row,
+                    amount: 1,
+                    productprice: selectedOption.price,
+                    price: selectedOption.price,
+                  },
+                ]);
+        
+                const newState = productInputRow.map((obj) => {        
+                  if (obj.row == row) {
+                    return {
+                      ...obj,
+                      amount: productInputRow[row].amount + 1,
+                      productprice: selectedOption.price,
+                      price: selectedOption.price,
+                    };
+                  } else {
+                    return { ...obj };
+                  }
+                });
+        
+                setProductInputRow(newState);
+                setOrderTotalPrice(parseFloat(currentordertotalPrice) + parseFloat(selectedOption.price));
+              
+              }
+
+              else{
+
+              console.log("Total Order Price")
+              console.log(currentordertotalPrice)
+              console.log("First Row Total Order Price")
+              console.log(firstProductTotalPrice)
+              console.log("Current Row Total Order Price Before Change")
+              console.log(productInputRow[row].price)
+              
+              setOrderTotalPrice(
+                (parseFloat(currentordertotalPrice) - 
+                productInputRow[row].price) + 
+                parseFloat(selectedOption.price)
+                );
+        
+              const newProductRow = productInputRow.map((obj) => {          
+                    if (obj.row == row) {
+                      return { ...obj, 
+                        amount: 1,
+                        price: selectedOption.price,
+                        productPrice: selectedOption.price,
+                      };
+                    } else {
+                      return { ...obj };
+                    }
+                  });
+          
+
+              const newOtherProductRow = otherProducts.map((obj) => {
+                    if (obj.row == row) {
+                      return { ...obj, 
+                        id: selectedOption.id, 
+                        price: selectedOption.price };
+                    } else {
+                      return { ...obj };
+                    }
+                  });
+          
+              setOtherProducts(newOtherProductRow);
+              setProductInputRow(newProductRow);
+            
+              }
+
+              
+        
+            }}
           />
         </div>
         <div style={{ flex: 3, paddingRight: 10 }}>
           <div style={{ display: "flex" }}>
-            <Button style={{ flex: 1, alignSelf: "center" }} onClick={async () => {}}>
+            <Button style={{ flex: 1, alignSelf: "center" }}
+             
+             onClick={async () => {
+
+              if (productInputRow[row].amount > 1) {
+
+
+              console.log("current total price 1");
+              console.log(ordertotalPrice);
+
+              console.log("yyyyyyyyyyyyyyyyyyyyyyy")
+              console.log(otherProducts)
+
+
+              if (otherProducts[row] == undefined) {
+                toast.error("Please Choose a Product!!");
+              } else {
+                console.log("THE CURRENT TOTAL ORDER PRICE");
+                console.log(ordertotalPrice);
+
+                console.log("THE SECOND ROW");
+                console.log(
+                 productInputRow[row].productprice
+                );
+
+                setOrderTotalPrice(
+                  parseFloat(ordertotalPrice) - parseFloat(productInputRow[row].productprice)
+                );
+
+                // setOrderTotalPrice( ((productInputRow[row].amount - 1) * (productInputRow[row].productprice)) + (ordertotalPrice ));
+
+                //setQuantity(quantity + 1);
+
+                console.log("Editing amount for the specific row : ");
+                console.log(row);
+                //setOtherProducts((current) => [...current, { id: selectedOption.id }]);
+
+                //setProductInputRow(productInputRow.filter((a) => a.name !== name));
+
+                console.log("Product Input Row");
+                console.log(productInputRow);
+
+                console.log("otherProducts");
+                console.log(otherProducts);
+
+                const filtered = otherProducts.filter((entry) => entry.row === row);
+
+                console.log("filtered");
+                console.log(filtered);
+
+                const newState = productInputRow.map((obj) => {
+                  // 👇️ if id equals 2, update country property
+
+                  if (obj.row == row) {
+                    return {
+                      ...obj,
+                      amount: productInputRow[row].amount - 1,
+                      price:
+                        (productInputRow[row].amount - 1) * productInputRow[row].productprice,
+                    };
+                  } else {
+                    return { ...obj };
+                  }
+
+                  // 👇️ otherwise return object as is
+                  return obj;
+                });
+
+                setProductInputRow(newState);
+
+                const newState1 = otherProducts.map((obj) => {
+                  // 👇️ if id equals 2, update country property
+
+                  if (obj.row == row) {
+                    return { ...obj, amount: productInputRow[row].amount - 1 };
+                  } else {
+                    return { ...obj };
+                  }
+
+                  // 👇️ otherwise return object as is
+                  return obj;
+                });
+                setOtherProducts(newState1);
+              }
+              
+            }}
+          }
+             
+             >
               <ArgonBox component="i" color="info" fontSize="15px" className="ni ni-fat-delete" />
             </Button>
             <ArgonInput
@@ -668,11 +860,15 @@ function Orders() {
         </div>
         <div style={{ alignSelf: "center", flex: 1 }}>
           <Button
-            style={{}}
+            
             onClick={async () => {
-              console.log(productInputRow);
-              setProductInputRow((current) => [...current, { row: idProductRow, amount: 0 }]);
-              setIdProductRow(idProductRow + 1);
+              if(productInputRow[row].amount > 0 && productInputRow[row+1] == undefined ){
+                setProductInputRow((current) => [...current, { row: idProductRow, amount: 0 }]);
+                setIdProductRow(idProductRow + 1);
+              }
+              else{
+                toast.error("Please Choose a Product!!");
+              }             
             }}
           >
             Add
@@ -680,19 +876,74 @@ function Orders() {
         </div>
         <div style={{ alignSelf: "center", flex: 1 }}>
           <Button
-            style={{}}
-            onClick={async () => {
-              console.log("productInputRow");
-              console.log(productInputRow);
-              console.log("otherproducts");
-              console.log(otherProducts);
-              setProductInputRow(productInputRow.filter((a) => a.row !== row));
-              setOtherProducts(otherProducts.filter((a) => a.row !== row));
+            
 
-              console.log();
+            onClick={async () => {
+
+              console.log(productInputRow)
+              console.log(otherProducts)
+              
+
+              let currentprice = 0 ;
+              console.log(otherProducts);
+
+              const newState = []
+              const newState1 = []
+
+              let row = 0
+
+              productInputRow.map((obj) => {  
+                    
+                if (obj.row == row) {
+
+                  currentprice = productInputRow[row].price ;
+
+                } else {
+                 
+
+                  newState.push({
+                    id: otherProducts[row].id,
+                    row: row,
+                    amount: obj.amount,
+                    productprice: obj.price,
+                    price: obj.price,
+                  });
+                  row = row + 1;
+                }
+                   
+              });
+
+
+              
+              otherProducts.map((obj) => {  
+                    
+                if (obj.row == row) {
+
+
+                } else {
+                 
+
+                  newState1.push({
+                    id: obj.id,
+                    row: row,
+                    amount: obj.amount,
+                    productprice: obj.price,
+                    price: obj.price,
+                  });
+                  row = row + 1;
+                }
+                   
+              });
+
+              console.log("newState");
+              console.log(newState);
+              setProductInputRow(newState)
+              setOtherProducts(newState1);
+              setIdProductRow(idProductRow - 1)
+
               setOrderTotalPrice(
-                parseFloat(ordertotalPrice) - parseFloat(productInputRow[row].productprice)
-              );
+                parseFloat(ordertotalPrice) - currentprice
+              ); 
             }}
           >
             Remove
@@ -703,8 +954,7 @@ function Orders() {
   });
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-
+    //e.preventDefault();
     let resTopics = [
       {
         id: firstProductId,
@@ -729,8 +979,6 @@ function Orders() {
       ["total_price"]: ordertotalPrice,
       ["type"]: "order",
       ["status"]: "pending",
-
-
     });
 
     setInvoiceData({
@@ -739,9 +987,6 @@ function Orders() {
       ["total_price"]: ordertotalPrice,
       ["type"]: "invoice",
       ["status"]: "pending",
-
-
-
     });
 
     //console.log(otherProducts)
@@ -751,8 +996,6 @@ function Orders() {
   };
 
   const handleComfirm = async () => {
-
-
     const isValid = await AddOrderSchema.isValid(orderData);
     console.log("Order Data");
     console.log(orderData);
@@ -761,45 +1004,47 @@ function Orders() {
       console.log(orderData);
     } else {
       console.log(orderData);
+      toast.success("Adding Order!!");
       await addOrder(orderData)
         .then((res) => {
-          console.log("Response")
-          console.log(res.data)
+          console.log("Response");
+          console.log(res.data);
           if (res.data?.status === "true") {
             console.log("Order Added");
             toast.success("Order Added Successfully");
+
+            setFirstProductId("")
+            setIdProductRow(0)
+            setProductInputRow([]);
             setOrderData({
               buyer: "",
               status: "pending",
-              receipt: "",
+              receipt: uuid,
               total_price: "",
               type: "order",
               products: [],
             });
-           
-            setQuantity(0)
-            
-            setShowAddForm(false)
-            setOpen(false)
+
+            setQuantity(0);
+            setShowAddForm(false);
+            setOpen(false);
             handleGetOrderList();
             console.log(res.data.result);
           } else {
             console.log("Order Could Not Be Added");
             console.log(res.data.result);
             toast.error("Order Could Not Be Added");
-            setOpen(false)
+            setOpen(false);
           }
         })
         .catch((err) => {
           console.log("Error Adding Order", err);
-          setOpen(false)
+          setOpen(false);
         });
     }
   };
 
   const handleComfirmInvoice = async () => {
-
-
     const isValid = await AddOrderSchema.isValid(orderData);
     console.log("invoice Data");
     console.log(invoiceData);
@@ -807,6 +1052,8 @@ function Orders() {
       toast.error("Please enter all the required fields!!");
       console.log(invoiceData);
     } else {
+      toast.success("Adding Invoice!!");
+
       console.log(invoiceData);
       await addOrder(invoiceData)
         .then((res) => {
@@ -816,28 +1063,29 @@ function Orders() {
             setOrderData({
               buyer: "",
               status: "pending",
-              receipt: "",
+              receipt: uuid,
               total_price: "",
               type: "order",
               products: [],
             });
-            setOrderTotalPrice(0)
-            setQuantity(0)
-            setOtherProducts([])
-            setProductInputRow([])
-            setOpen(false)
+            setFirstProductId("")
+            setProductInputRow([]);
+            setOrderTotalPrice(0);
+            setQuantity(0);
+            setOtherProducts([]);
+            setOpen(false);
             handleGetOrderList();
             console.log(res.data.result);
           } else {
             console.log("Order Could Not Be Added");
             console.log(res.data.result);
             toast.error("Order Could Not Be Added");
-            setOpen(false)
+            setOpen(false);
           }
         })
         .catch((err) => {
           console.log("Error Adding Order", err);
-          setOpen(false)
+          setOpen(false);
         });
     }
   };
@@ -874,8 +1122,10 @@ function Orders() {
               Add a New Order
             </Typography>
             <Typography id="transition-modal-description" sx={{ mt: 2 }}></Typography>
-            <Button style={{marginLeft: -11}} onClick={()=>handleComfirmInvoice()}>Add As Invoice</Button>
-            <Button onClick={()=>handleComfirm()}>Add As Order</Button>
+            <Button style={{ marginLeft: -11 }} onClick={() => handleComfirmInvoice()}>
+              Add As Invoice
+            </Button>
+            <Button onClick={() => handleComfirm()}>Add As Order</Button>
           </Box>
         </Fade>
       </Modal>
@@ -893,14 +1143,14 @@ function Orders() {
                     setOrderData({
                       buyer: "",
                       status: "",
-                      receipt: "",
+                      receipt: uuid,
                       total_price: "",
                       type: "",
                       products: [],
                     });
-                    setViewOrderActive(false)
+                    setViewOrderActive(false);
                     setOtherProducts([]);
-                    setProductInputRow([])
+                    setProductInputRow([]);
                     setQuantity(0);
                     setTotalPrice(0);
                     setOrderTotalPrice(0.0);
@@ -951,91 +1201,125 @@ function Orders() {
                   },
                 }}
               >
-                { viewOrderActive == false &&
-                  // 1ST PRODUCT ORDER INPUT ROW
-                  <ArgonBox mb={2} mx={5} display="flex">
-                    <div style={{ flex: 5, paddingRight: 10 }}>
-                      <Select
-                        name="product"
-                        placeholder="Products"
-                        options={productOptions}
-                        onChange={handleChangeProduct}
-                      />
-                    </div>
-                    <div style={{ flex: 3, paddingRight: 10 }}>
-                      <div style={{ display: "flex" }}>
-                        <Button
-                          style={{ flex: 1, alignSelf: "center" }}
-                          onClick={async () => {
-                            if (quantity > 1) {
-                              setQuantity(quantity - 1);
-                              setFirstProductTotalPrice((quantity - 1) * firstProductPrice);
-                              setOrderTotalPrice((quantity - 1) * parseFloat(firstProductPrice));
+                {
+                  viewOrderActive == false && (
+                    // 1ST PRODUCT ORDER INPUT ROW
+                    <ArgonBox mb={2} mx={5} display="flex">
+                      <div style={{ flex: 5, paddingRight: 10 }}>
+                        <Select
+                          name="product"
+                          placeholder="Products"
+                          options={productOptions}
+                          onChange={(selectedOption)=>{
+                        
+                            const currentfirstProductTotalPrice = firstProductTotalPrice;
+                            const currentordertotalPrice = isNaN(ordertotalPrice) ? 0 : ordertotalPrice;
+
+                            setFirstProductId(selectedOption.id);
+                            setFirstProductPrice(selectedOption.price);
+                            setQuantity(1);
+                            setFirstProductTotalPrice(selectedOption.price);
+                            
+                            if(ordertotalPrice == 0){
+                              setOrderTotalPrice(selectedOption.price);
                             }
+                            else{
+                              setOrderTotalPrice(
+                                parseFloat(currentordertotalPrice) - 
+                                parseFloat(currentfirstProductTotalPrice) + 
+                                parseFloat(selectedOption.price));
+                            }
+
                           }}
-                        >
-                          <ArgonBox
-                            component="i"
-                            color="info"
-                            fontSize="15px"
-                            className="ni ni-fat-delete"
-                          />
-                        </Button>
-                        <ArgonInput
-                          style={{ flex: 5 }}
-                          type="name"
-                          name="quantity"
-                          value={quantity}
-                          placeholder="Amount"
-                          size="large"
-                          onChange={handleChangeAmount}
                         />
+                      </div>
+                      <div style={{ flex: 3, paddingRight: 10 }}>
+                        <div style={{ display: "flex" }}>
+                          <Button
+                            style={{ flex: 1, alignSelf: "center" }}
+                            onClick={async () => {
+                              if (quantity > 1) {
+                                setQuantity(quantity - 1);
+                                setFirstProductTotalPrice((quantity - 1) * firstProductPrice);
+                                setOrderTotalPrice((quantity - 1) * parseFloat(firstProductPrice));
+                              }
+                            }}
+                          >
+                            <ArgonBox
+                              component="i"
+                              color="info"
+                              fontSize="15px"
+                              className="ni ni-fat-delete"
+                            />
+                          </Button>
+                          <ArgonInput
+                            style={{ flex: 5 }}
+                            type="name"
+                            name="quantity"
+                            value={quantity}
+                            placeholder="Amount"
+                            size="large"
+                            onChange={handleChangeAmount}
+                          />
+                          <Button
+                            style={{ flex: 1, alignSelf: "center" }}
+                            onClick={async () => {
+                              if (firstProductId === "") {
+                                toast.error("Please Choose a Product!!");
+                              } else {
+                                setQuantity(quantity + 1);
+                                setFirstProductTotalPrice((quantity + 1) * firstProductPrice);
+                                setOrderTotalPrice((quantity + 1) * parseFloat(firstProductPrice));
+                              }
+                            }}
+                          >
+                            <ArgonBox
+                              component="i"
+                              color="info"
+                              fontSize="15px"
+                              className="ni ni-fat-add"
+                            />
+                          </Button>
+                        </div>
+                      </div>
+                      <div style={{ flex: 3 }}>
+                        <ArgonInput
+                          type="name"
+                          name="price"
+                          placeholder="Price"
+                          value={firstProductTotalPrice}
+                          size="large"
+                        />
+                      </div>
+                      <div style={{ alignSelf: "center", flex: 2.3 }}>
                         <Button
                           style={{ flex: 1, alignSelf: "center" }}
-                          onClick={async () => {
-                            if (firstProductId === "") {
-                              toast.error("Please Choose a Product!!");
-                            } else {
-                              setQuantity(quantity + 1);
-                              setFirstProductTotalPrice((quantity + 1) * firstProductPrice);
-                              setOrderTotalPrice((quantity + 1) * parseFloat(firstProductPrice));
-                            }
-                          }}
+                          onClick={
+                            firstProductId == "" 
+                              ? async () => {
+                                  toast.error("Please Choose a Product!!");
+                                }
+                              : async () => {
+                                if(productInputRow.length == 0){
+                                  setProductInputRow((current) => [
+                                    ...current,
+                                    { row: idProductRow, amount: 0 },
+                                  ]);
+                                  setIdProductRow(idProductRow + 1)
+                                }
+                                else{
+                                  toast.error("Use The Other Add Button!!");
+                                }
+                                }
+                          }
                         >
-                          <ArgonBox
-                            component="i"
-                            color="info"
-                            fontSize="15px"
-                            className="ni ni-fat-add"
-                          />
+                          Add
                         </Button>
                       </div>
-                    </div>
-                    <div style={{ flex: 3 }}>
-                      <ArgonInput
-                        type="name"
-                        name="price"
-                        placeholder="Price"
-                        value={firstProductTotalPrice}
-                        size="large"
-                      />
-                    </div>
-                    <div style={{ alignSelf: "center", flex: 2.3 }}>
-                      <Button
-                        style={{ flex: 1, alignSelf: "center" }}
-                        onClick={async () => {
-                          setProductInputRow((current) => [
-                            ...current,
-                            { row: idProductRow, amount: 0 },
-                          ]);
-                          setIdProductRow(idProductRow + 1);
-                        }}
-                      >
-                        Add
-                      </Button>
-                    </div>
-                  </ArgonBox>
-                  // 1ST PRODUCT ORDER INPUT ROW
+                    </ArgonBox>
+                    // 1ST PRODUCT ORDER INPUT ROW
+                  )
+                  
                 }
 
                 {renderColumns}
@@ -1059,39 +1343,35 @@ function Orders() {
                     size="large"
                   />
                 </ArgonBox>
-
-                {/* <ArgonBox mb={2} mx={5}>
-                  <Select
-                    name="status"
-                    placeholder="Status"
-                    options={status_options}
-                    onChange={handleChangeStatus}
-                  />
-                </ArgonBox> */}
-
                 <ArgonBox mb={2} mx={5}>
                   <ArgonInput
                     type="name"
                     name="receipt"
-                    value={orderData.receipt}
-                    placeholder="Receipt"
+                    placeholder={`Receipt ID : ${uuid}`}
+                    readOnly={true}
                     size="large"
                     onChange={handleChange}
                   />
                 </ArgonBox>
 
                 <ArgonBox mb={"20%"} display="flex" mx={5}>
-                  <ArgonButton onClick={viewOrderActive ?  handlePrint : handleSubmit} color="info" size="large" fullWidth>
-                   { viewOrderActive ? 'Print' : 'Add'}
+                  <ArgonButton
+                    onClick={
+                      firstProductId == "" || orderData.buyer == "" 
+                        ? async () => {
+                            toast.error("Please Fill All Required Fields!!");
+                          }
+                        : async () => {
+                            viewOrderActive ? handlePrint() : handleSubmit();
+                          }
+                    }
+                    color="info"
+                    size="large"
+                    fullWidth
+                  >
+                    {viewOrderActive ? "Print" : "Add"}
                   </ArgonButton>
-
-                  {/*  <Button onClick={handleOpen}>Open modal</Button> */}
                 </ArgonBox>
-
-
-               
-              
-
               </ArgonBox>
             </Card>
           </ArgonBox>
