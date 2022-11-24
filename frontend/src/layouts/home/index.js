@@ -41,6 +41,9 @@ import mySvgWhite from '../../assets/images/down-arrow-white.svg'
 import mySvgWDark from '../../assets/images/down-arrow-dark.svg'
 import mySvgDownArrow from '../../assets/images/down-arrow.svg'
 
+
+import { useNavigate } from 'react-router-dom';
+
 // Image
 const bgImage =
   "https://us.123rf.com/450wm/kostsov/kostsov1906/kostsov190600026/126080344-modern-showcase-with-empty-space-on-pedestal-on-blue-background-3d-rendering-.jpg?ver=6";
@@ -54,11 +57,16 @@ function Home() {
 
   const [controller, dispatch] = useArgonController();
 
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
+  console.log(JSON.parse(localStorage.getItem("user")));
+
+  console.log(user)
+
+
+  const navigate = useNavigate();
+  
 
   const { pathname } = useLocation();
-
-
-  const [user, setUser] = useState(null);
 
   
   useEffect(() => {
@@ -83,21 +91,18 @@ function Home() {
         </button>
         <div className="collapse navbar-collapse w-100 pt-3 pb-2 py-lg-0 ms-lg-12 ps-lg-5" id="navigation">
           <ul className="navbar-nav navbar-nav-hover ms-auto">
-           {/*  <li className="nav-item dropdown dropdown-hover mx-2 ms-lg-6">
-              <a className="nav-link ps-2 d-flex justify-content-between cursor-pointer align-items-center" id="dropdownMenuPages8" data-bs-toggle="dropdown" aria-expanded="false">
+          <li className="nav-item dropdown dropdown-hover mx-2 ms-lg-6">
+              <a onClick={()=>{
+                  localStorage.removeItem("user")
+                  localStorage.removeItem("token");
+                  navigate('/dashboard');
+                }} className="nav-link ps-2 d-flex justify-content-between cursor-pointer align-items-center" id="dropdownMenuPages8" data-bs-toggle="dropdown" aria-expanded="false">
                 <i className="material-icons opacity-6 me-2 text-md">dashboard</i>
-                Pages
-                <img 
-                src={mySvgWhite}
+                Dashboard
                 
-                alt="down-arrow" className="arrow ms-2 d-lg-block d-none"/>
-                <img 
-                
-              
-                src={mySvgWDark}
-                
-                alt="down-arrow" className="arrow ms-2 d-lg-none d-block"/>
-              </a>
+              </a></li>
+
+               {/*  
               <div className="dropdown-menu dropdown-menu-animation ms-n3 dropdown-md p-3 border-radius-lg mt-0 mt-lg-3" aria-labelledby="dropdownMenuPages8">
                 <div className="d-none d-lg-block">
                   <h6 className="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-1">
@@ -456,15 +461,33 @@ src={mySvgWhite}
             </li> */}
 
 
+
             <li className="nav-item ms-lg-auto">
               <a className="nav-link nav-link-icon me-2" href="/authentication/sign-in" >
                 <i className="fa fa-sign-in"></i>
-                <p className="d-inline text-sm z-index-1 font-weight-bold" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Star us on Github"> Login</p>
+                <a onClick={()=>{
+                  localStorage.removeItem("user")
+                  localStorage.removeItem("token");
+                  navigate('/authentication/sign-in');
+                }} style={{color: 'white'}} className="d-inline text-sm z-index-1 font-weight-bold" 
+                data-bs-toggle="tooltip" data-bs-placement="bottom" title="Star us on Github"> 
+                {user == null ? " Login" : " Logout"}
+                
+                </a>
               </a>
             </li>
             <li className="nav-item my-auto ms-3 ms-lg-0">
               <a href="/authentication/sign-up" className="btn btn-sm  bg-white  mb-0 me-1 mt-2 mt-md-0">Register With Us</a>
             </li>
+
+            {user != null && 
+            <li className="nav-item my-auto ms-3 ms-lg-0">
+              <p style={{backgroundColor: '#030305'}} className="btn btn-sm  mb-0 me-1 mt-2 mt-md-0">
+                {" Welcome " + user?.name}
+                </p>
+            </li>
+                }
+            
             
           </ul>
         </div>

@@ -45,10 +45,10 @@ class Login(APIView):
         }
 
         userObject = {
-            'name': user.name,
+            'name': user.firstname + ' ' + user.lastname,
             'email': user.email,
             'location': user.location,
-            'mobile': user.phone_number,
+            'mobile': user.contact,
         }
 
         token = jwt.encode(payload, 'secret', algorithm='HS256')

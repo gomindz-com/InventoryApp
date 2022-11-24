@@ -59,11 +59,18 @@ import {
 import team2 from "assets/images/team-2.jpg";
 import logoSpotify from "assets/images/small-logos/logo-spotify.svg";
 import { Routes, Route, Navigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
+
 
 
 function DashboardNavbar({ absolute, light, isMini, handleClick, data }) {
   const [navbarType, setNavbarType] = useState();
 
+
+  const navigate = useNavigate();
+
+
+  
   console.log("object")
   console.log(data)
 
@@ -202,6 +209,13 @@ function DashboardNavbar({ absolute, light, isMini, handleClick, data }) {
                   account_circle
                 </Icon>
                 <ArgonTypography
+                
+                onClick={()=>{
+                  localStorage.removeItem("user")
+                  localStorage.removeItem("token");
+                  navigate('/authentication/sign-in');
+                }}
+
                   variant="button"
                   fontWeight="medium"
                   color={light && transparentNavbar ? "white" : "dark"}

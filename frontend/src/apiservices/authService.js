@@ -17,12 +17,12 @@ export const loginUser = async (userData) => {
 
 export const registerUser = async (userData) => {
   const data = await axiosConfig
-    .post(`/user/register`, userData)
+    .post(`/user/register/`, userData)
     .then((response) => {
       return response;
     })
     .catch((error) => {
-      return error.response.data.message;
+      return error.response;
     });
 
   return data;

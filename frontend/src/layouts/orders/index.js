@@ -56,9 +56,19 @@ import { useReactToPrint } from "react-to-print";
 import { SignalCellularNull } from "@mui/icons-material";
 import { v4 as uuidv4 } from "uuid";
 
+import "./index.css";
+
+
+
 function Orders() {
   const [rememberMe, setRememberMe] = useState(false);
   const [showAddForm, setShowAddForm] = useState(false);
+  const [showOrderTable, setShowOrderTable] = useState(true);
+
+
+  const [showPrintView, setShowPrintView] = useState(false);
+
+
   const [viewOrderActive, setViewOrderActive] = useState(true);
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
   const [screenloading, setScreenLoading] = useState(true);
@@ -393,14 +403,21 @@ function Orders() {
       "View & Print": (
         <Button
           onClick={async () => {
-            setShowAddForm(true);
+            setShowPrintView(true);
+            setShowAddForm(false)
+            setShowOrderTable(false)
+            
             console.log(item);
             setOrderData(item);
-            setProductInputRow([]);
+            setProductInputRow(item.products);
             setOrderTotalPrice(0);
             setViewOrderActive(true);
 
-            item.products.map((obj, i) => {
+            console.log("view ")
+            console.log(item.products)
+
+
+            /* item.products.map((obj, i) => {
               console.log("productInputRow[row]?.id");
               console.log(obj.id);
 
@@ -408,7 +425,7 @@ function Orders() {
                 ...current,
                 { row: i, amount: obj.quantity, price: obj.amount, id: obj.id - 1 },
               ]);
-            });
+            }); */
 
             setOrderTotalPrice(item.total_price);
 
@@ -1026,6 +1043,7 @@ function Orders() {
 
             setQuantity(0);
             setShowAddForm(false);
+            setShowOrderTable(true)
             setOpen(false);
             handleGetOrderList();
             console.log(res.data.result);
@@ -1071,6 +1089,8 @@ function Orders() {
             setProductInputRow([]);
             setOrderTotalPrice(0);
             setQuantity(0);
+            setShowAddForm(false);
+            setShowOrderTable(true)
             setOtherProducts([]);
             setOpen(false);
             handleGetOrderList();
@@ -1131,7 +1151,7 @@ function Orders() {
 
       <DashboardNavbar />
       <ArgonBox py={3}>
-        {!showAddForm ? (
+        {showOrderTable && (
           <ArgonBox mb={35}>
             <Card>
               <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
@@ -1154,7 +1174,8 @@ function Orders() {
                     setTotalPrice(0);
                     setOrderTotalPrice(0.0);
                     setFirstProductTotalPrice(null);
-                    setShowAddForm(!showAddForm);
+                    setShowAddForm(true);
+                    setShowOrderTable(false)
                   }}
                 >
                   <h4 style={{ paddingRight: 10 }}>Add Orders </h4>
@@ -1175,153 +1196,26 @@ function Orders() {
               </ArgonBox>
             </Card>
           </ArgonBox>
-        ) : (
+        )
 
-          <>
+              }
 
-<ArgonBox  mb={3} pb={20}>
+              {
 
-<section ref={componentRef} className="h-100 gradient-custom">
-  <div className="container py-5 h-100">
-    <div className="row d-flex justify-content-center align-items-center h-100">
-      <div className="col-lg-10 col-xl-8">
-        <div className="card" style={{borderRadius: 10}}  /* style="border-radius: 10px;" */>
-          <div className="card-header px-4 py-5">
-            <h5 className="text-muted mb-0">Thanks for your Order, <span  style={{color: '#a8729a'}}/* style="color: #a8729a;" */>Anna</span>!</h5>
+                  showAddForm && 
+                  (
 
-          </div>
-          <hr className="mb-4"  style={{backgroundColor: '#e0e0e0',opacity: 1}}/* style="background-color: #e0e0e0; opacity: 1;" *//>
 
-          <div className="card-body p-4">
-            <div className="d-flex justify-content-between align-items-center mb-4">
-              <p className="lead fw-normal mb-0"  style={{color: '#a8729a'}} /* style="color: #a8729a;" */>Receipt</p>
-              <p className="small text-muted mb-0">Receipt Voucher : 1KAU9-84UIL</p>
-            </div>
-            <div className="card shadow-0 border mb-4">
-              <div className="card-body">
-                <div className="row">
-                  <div className="col-md-2" style={{textAlign: "center"}}>
-                    <img src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/E-commerce/Products/13.webp" 
-                      width={200} height={100} 
-                      className="img-fluid" alt="Phone"/>
-                  </div>
-                  <div className="col-md-2 text-center d-flex justify-content-center align-items-center">
-                    <p className="text-muted mb-0">Samsung Galaxy</p>
-                  </div>
-                  <div className="col-md-2 text-center d-flex justify-content-center align-items-center">
-                    <p className="text-muted mb-0 small">White</p>
-                  </div>
-                  <div className="col-md-2 text-center d-flex justify-content-center align-items-center">
-                    <p className="text-muted mb-0 small">Capacity: 64GB</p>
-                  </div>
-                  <div className="col-md-2 text-center d-flex justify-content-center align-items-center">
-                    <p className="text-muted mb-0 small">Qty: 1</p>
-                  </div>
-                  <div className="col-md-2 text-center d-flex justify-content-center align-items-center">
-                    <p className="text-muted mb-0 small">$499</p>
-                  </div>
-                </div>
-                <hr className="mb-4"  style={{backgroundColor: '#e0e0e0',opacity: 1}}/* style="background-color: #e0e0e0; opacity: 1;" *//>
-                <div className="row d-flex align-items-center">
-                  <div className="col-md-2">
-                    <p className="text-muted mb-0 small">Track Order</p>
-                  </div>
-                  <div className="col-md-10">
-                    <div className="progress" style={{height: 6, borderRadius: 16}} /* style="height: 6px; border-radius: 16px;" */>
-                      <div className="progress-bar" role="progressbar" style={{width: '65%', borderRadius: 16, backgroundColor: '#a8729a'}}
-                        /* style="width: 65%; border-radius: 16px; background-color: #a8729a;"  */aria-valuenow="65"
-                        aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                    <div className="d-flex justify-content-around mb-1">
-                      <p className="text-muted mt-1 mb-0 small ms-xl-5">Out for delivary</p>
-                      <p className="text-muted mt-1 mb-0 small ms-xl-5">Delivered</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="card shadow-0 border mb-4">
-              <div className="card-body">
-                <div className="row">
-                  <div className="col-md-2" style={{textAlign: "center"}}>
-                    <img src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/E-commerce/Products/1.webp"
-                     width={200} height={100}  className="img-fluid" alt="Phone"/>
-                  </div>
-                  <div className="col-md-2 text-center d-flex justify-content-center align-items-center">
-                    <p className="text-muted mb-0">iPad</p>
-                  </div>
-                  <div className="col-md-2 text-center d-flex justify-content-center align-items-center">
-                    <p className="text-muted mb-0 small">Pink rose</p>
-                  </div>
-                  <div className="col-md-2 text-center d-flex justify-content-center align-items-center">
-                    <p className="text-muted mb-0 small">Capacity: 32GB</p>
-                  </div>
-                  <div className="col-md-2 text-center d-flex justify-content-center align-items-center">
-                    <p className="text-muted mb-0 small">Qty: 1</p>
-                  </div>
-                  <div className="col-md-2 text-center d-flex justify-content-center align-items-center">
-                    <p className="text-muted mb-0 small">$399</p>
-                  </div>
-                </div>
-                <hr className="mb-4" style={{backgroundColor: '#e0e0e0', opacity: 1}}/* style="background-color: #e0e0e0; opacity: 1;" *//>
-                <div className="row d-flex align-items-center">
-                  <div className="col-md-2">
-                    <p className="text-muted mb-0 small">Track Order</p>
-                  </div>
-                  <div className="col-md-10">
-                    <div className="progress" style={{height: 6, borderRadius: 16}} /* style="height: 6px; border-radius: 16px;" */>
-                      <div className="progress-bar" role="progressbar" style={{width: '65%', borderRadius: 16, backgroundColor: '#a8729a'}}
-                        /* style="width: 20%; border-radius: 16px; background-color: #a8729a;" */ aria-valuenow="20"
-                        aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                    <div className="d-flex justify-content-around mb-1">
-                      <p className="text-muted mt-1 mb-0 small ms-xl-5">Out for delivary</p>
-                      <p className="text-muted mt-1 mb-0 small ms-xl-5">Delivered</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="d-flex justify-content-between pt-2">
-              <p className="fw-bold mb-0">Order Details</p>
-              <p className="text-muted mb-0"><span className="fw-bold me-4">Total</span> $898.00</p>
-            </div>
-
-            <div className="d-flex justify-content-between pt-2">
-              <p className="text-muted mb-0">Invoice Number : 788152</p>
-              <p className="text-muted mb-0"><span className="fw-bold me-4">Discount</span> $19.00</p>
-            </div>
-
-            <div className="d-flex justify-content-between">
-              <p className="text-muted mb-0">Invoice Date : 22 Dec,2019</p>
-              <p className="text-muted mb-0"><span className="fw-bold me-4">GST 18%</span> 123</p>
-            </div>
-
-            <div className="d-flex justify-content-between mb-5">
-              <p className="text-muted mb-0">Recepits Voucher : 18KU-62IIK</p>
-              <p className="text-muted mb-0"><span className="fw-bold me-4">Delivery Charges</span> Free</p>
-            </div>
-          </div>
-          <div className="card-footer border-0 px-4 py-5" style={{backgroundColor: '#a8729a', borderBottomRightRadius: 10, 
-                borderBottomLeftRadius: 10,
-        }}
-           /*  style="background-color: #a8729a; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;" */>
-            <h5 className="d-flex align-items-center justify-content-end text-white text-uppercase mb-0">Total
-              paid: <span className="h2 mb-0 ms-2">$1040</span></h5>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-</ArgonBox>
+                    <>
           
           <ArgonBox  mb={3} pb={20}>
             <Card>
               <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
                 <ArgonTypography variant="h6">Orders table</ArgonTypography>
-                <Button onClick={() => setShowAddForm(!showAddForm)}>
+                <Button onClick={() =>{
+                   setShowOrderTable(true)
+                   setShowAddForm(false)
+                   }}>
                   <h4 style={{ paddingRight: 10 }}>Show Order Table </h4>
                   <ArgonBox
                     component="i"
@@ -1526,8 +1420,166 @@ function Orders() {
 
           </>
 
-        )}
+
+                  )
+
+
+              }
+
+          
+
+        
       </ArgonBox>
+
+      {
+
+        showPrintView && (
+
+          
+          <div ref={componentRef} className="container">
+            <Button onClick={() =>{
+                   setShowOrderTable(true)
+                   setShowAddForm(false)
+                   setShowPrintView(false)
+                   }}>
+                  <h4 style={{ paddingRight: 10 }}>Show Order Table </h4>
+                  <ArgonBox
+                    component="i"
+                    color="info"
+                    fontSize="14px"
+                    className="ni ni-bold-right"
+                  />
+                </Button>
+<div className="row gutters">
+		<div className="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+			<div className="card">
+				<div className="card-body p-0">
+					<div className="invoice-container">
+						<div className="invoice-header">
+							<div className="row gutters">
+								<div className="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+									<div className="custom-actions-btns mb-5">
+										<a  onClick={()=>{handlePrint()}}  className="btn btn-primary">
+											<i className="icon-download"></i> Download
+										</a>
+										<a onClick={()=>{
+                      toast.success("Loading Printer!!");
+                      
+                      handlePrint()}} className="btn btn-secondary">
+											<i className="icon-printer"></i> Print
+										</a>
+									</div>
+								</div>
+							</div>
+							<div className="row gutters">
+								<div className="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+									<a href="index.html" className="invoice-logo">
+										GoMindz Inventory
+									</a>
+								</div>
+								<div className="col-lg-6 col-md-6 col-sm-6">
+								 <address className="text-right">
+										Maxwell admin Inc, 45 NorthWest Street.<br/>
+										Sunrise Blvd, San Francisco.<br/>
+										00000 00000
+									</address> 
+								</div>
+							</div>
+							<div className="row gutters">
+								<div className="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
+									<div className="invoice-details">
+										<address>
+											Alex Maxwell<br/>
+											150-600 Church Street, Florida, USA
+										</address>
+									</div>
+								</div>
+								<div className="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
+									<div className="invoice-details">
+										<div className="invoice-num">
+											<div>Invoice - #009</div>
+											<div>{new Date().toLocaleString() + ''}</div>
+										</div>
+									</div>													
+								</div>
+							</div>
+						</div>
+						<div className="invoice-body">
+							<div className="row gutters">
+								<div className="col-lg-12 col-md-12 col-sm-12">
+									<div className="table-responsive">
+										<table className="table custom-table m-0">
+											<thead>
+												<tr>
+													<th>Items</th>
+													<th>Product ID</th>
+													<th>Quantity</th>
+													<th>Sub Total</th>
+												</tr>
+											</thead>
+											<tbody>
+
+
+                        {
+
+                          
+                        productInputRow?.map((row, i) => {
+                          console.log("eeeeeeeeeeee")
+                          console.log(row)
+                          return (
+                            <tr key={row}>
+                            <td>
+                            {row.name}
+                              <p className="m-0 text-muted">
+                              {row.label}
+                              </p>
+                            </td>
+                            <td>{row.id}</td>
+                            <td>{row.quantity}</td>
+                            <td>${row.price}</td>
+                            </tr>
+                          );
+                        })
+                           }
+
+
+												
+												<tr>
+													<td>&nbsp;</td>
+													<td  colSpan={2} /* colspan="2" */>
+														{/* <p>
+															Subtotal<br/>
+															Shipping &amp; Handling<br/>
+															Tax<br/>
+														</p> */}
+														<h5 className="text-success"><strong>Grand Total</strong></h5>
+													</td>			
+													<td>
+														{/* <p>
+															$5000.00<br/>
+															$100.00<br/>
+															$49.00<br/>
+														</p> */}
+														<h5 className="text-success"><strong>${ordertotalPrice}</strong></h5>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div className="invoice-footer">
+							Thank you for your Business.
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+        )
+      }
       <Footer />
     </DashboardLayout>
   );

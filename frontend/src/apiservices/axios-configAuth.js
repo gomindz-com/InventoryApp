@@ -5,6 +5,7 @@ const axiosConfig = axios.create({
   headers: {
     "Content-Type": "application/json",
     'Access-Control-Allow-Origin': 'http://localhost:3000',
+    'Access-Control-Allow-Origin': 'http://192.168.1.72:3000',
     'Access-Control-Allow-Credentials': 'true'
   },
 });

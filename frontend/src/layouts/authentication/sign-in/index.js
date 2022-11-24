@@ -34,7 +34,7 @@ import { UserSchema } from "../../../formValidation/addForm";
 import { loginUser } from "apiservices/authService";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
-import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation, } from "react-router-dom";
 
 // Image
 const bgImage =
@@ -101,7 +101,7 @@ function Illustration() {
         description: "The more difficult management looks, the more easy we make it for you.",
       }}
     >
-      {user && <Navigate to="/dashboard" replace={true} />}
+      {user && <Navigate to="/home" replace={true} />}
       <ToastContainer />
       <ArgonBox component="form" role="form">
         <ArgonBox mb={2}>
