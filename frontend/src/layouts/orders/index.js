@@ -54,8 +54,7 @@ import Fade from "@mui/material/Fade";
 import Typography from "@mui/material/Typography";
 import { useReactToPrint } from "react-to-print";
 import { SignalCellularNull } from "@mui/icons-material";
-import { v4 as uuidv4 } from 'uuid';
-
+import { v4 as uuidv4 } from "uuid";
 
 function Orders() {
   const [rememberMe, setRememberMe] = useState(false);
@@ -74,13 +73,9 @@ function Orders() {
   const [totalPrice, setTotalPrice] = useState(0);
   const [quantity, setQuantity] = useState(0);
 
+  const { v4: uuidv4 } = require("uuid");
 
-
-  const { v4: uuidv4 } = require('uuid');
-
-   
-   const [uuid, setUuid] = useState(uuidv4().toString());
-
+  const [uuid, setUuid] = useState(uuidv4().toString());
 
   const componentRef = useRef();
 
@@ -140,7 +135,6 @@ function Orders() {
             console.log(res.data.result);
 
             res.data.result.map((item) => {
-              
               product_options.push({
                 value: item.name,
                 label: item.name,
@@ -443,7 +437,6 @@ function Orders() {
   const [otherProductsQuantity, setOtherProductsQuantity] = useState([]);
 
   const renderColumns = productInputRow.map(({ row, amount }, key) => {
-
     const handleChangeOtherProduct = async (selectedOption) => {
       console.log("THE CURRENT TOTAL ORDER PRICE");
       console.log(ordertotalPrice);
@@ -468,8 +461,6 @@ function Orders() {
           },
         ]);
 
-       
-
         const newState = productInputRow.map((obj) => {
           // 👇️ if id equals 2, update country property
 
@@ -490,16 +481,10 @@ function Orders() {
 
         setProductInputRow(newState);
         setOrderTotalPrice(parseFloat(ordertotalPrice) + parseFloat(selectedOption.price));
-      } 
-      
-      
-      
-      else {
-
-        console.log("guuu")
-        console.log(productInputRow[row].price )
-        const currentprice = productInputRow[row].price ;
-
+      } else {
+        console.log("guuu");
+        console.log(productInputRow[row].price);
+        const currentprice = productInputRow[row].price;
 
         const newState1 = productInputRow.map((obj) => {
           // 👇️ if id equals 2, update country property
@@ -531,13 +516,16 @@ function Orders() {
 
         setOtherProducts(newState);
 
-        console.log("ordertooo")
-        console.log(ordertotalPrice)
-        console.log(currentprice)
-        console.log(selectedOption.price)
+        console.log("ordertooo");
+        console.log(ordertotalPrice);
+        console.log(currentprice);
+        console.log(selectedOption.price);
 
-
-        setOrderTotalPrice(parseFloat(ordertotalPrice) - currentprice + parseFloat(productInputRow[row].amount * selectedOption.price));
+        setOrderTotalPrice(
+          parseFloat(ordertotalPrice) -
+            currentprice +
+            parseFloat(productInputRow[row].amount * selectedOption.price)
+        );
 
         //
       }
@@ -561,9 +549,6 @@ function Orders() {
       //setOtherProducts(productInputRow.filter((a) => a.name !== name));
     };
 
-
-
-
     return (
       // OTHER PRODUCT INPUT ROWS
       <ArgonBox key={row} mb={2} mx={5} display="flex">
@@ -573,20 +558,24 @@ function Orders() {
             placeholder="Products"
             defaultValue={productOptions[productInputRow[row]?.id]}
             options={productOptions}
-            onChange={
-              
-              async (selectedOption) => {
+            onChange={async (selectedOption) => {
 
 
-              const currentordertotalPrice = isNaN(ordertotalPrice) ? (0 + firstProductTotalPrice) : ordertotalPrice;
-              
-              if (otherProducts[row] == undefined) {
+              console.log("product input rows")
+              console.log(productInputRow)
+              console.log(otherProducts)
 
-                console.log("Total Order Price")
-                console.log(currentordertotalPrice)
-                console.log("First Row Total Order Price")
-                console.log(firstProductTotalPrice)
-                
+
+              const currentordertotalPrice = isNaN(ordertotalPrice)
+                ? 0 + firstProductTotalPrice
+                : ordertotalPrice;
+
+              if (otherProducts[row] == undefined || productInputRow[row].amount == undefined) {
+                console.log("Total Order Price");
+                console.log(currentordertotalPrice);
+                console.log("First Row Total Order Price");
+                console.log(firstProductTotalPrice);
+
                 setOtherProducts((current) => [
                   ...current,
                   {
@@ -597,8 +586,8 @@ function Orders() {
                     price: selectedOption.price,
                   },
                 ]);
-        
-                const newState = productInputRow.map((obj) => {        
+
+                const newState = productInputRow.map((obj) => {
                   if (obj.row == row) {
                     return {
                       ...obj,
@@ -610,151 +599,139 @@ function Orders() {
                     return { ...obj };
                   }
                 });
-        
+
                 setProductInputRow(newState);
-                setOrderTotalPrice(parseFloat(currentordertotalPrice) + parseFloat(selectedOption.price));
-              
-              }
-
-              else{
-
-              console.log("Total Order Price")
-              console.log(currentordertotalPrice)
-              console.log("First Row Total Order Price")
-              console.log(firstProductTotalPrice)
-              console.log("Current Row Total Order Price Before Change")
-              console.log(productInputRow[row].price)
-              
-              setOrderTotalPrice(
-                (parseFloat(currentordertotalPrice) - 
-                productInputRow[row].price) + 
-                parseFloat(selectedOption.price)
+                setOrderTotalPrice(
+                  parseFloat(currentordertotalPrice) + parseFloat(selectedOption.price)
                 );
-        
-              const newProductRow = productInputRow.map((obj) => {          
-                    if (obj.row == row) {
-                      return { ...obj, 
-                        amount: 1,
-                        price: selectedOption.price,
-                        productPrice: selectedOption.price,
-                      };
-                    } else {
-                      return { ...obj };
-                    }
-                  });
-          
-
-              const newOtherProductRow = otherProducts.map((obj) => {
-                    if (obj.row == row) {
-                      return { ...obj, 
-                        id: selectedOption.id, 
-                        price: selectedOption.price };
-                    } else {
-                      return { ...obj };
-                    }
-                  });
-          
-              setOtherProducts(newOtherProductRow);
-              setProductInputRow(newProductRow);
-            
-              }
-
+              } 
               
-        
+              
+              
+              else {
+                console.log("Total Order Price");
+                console.log(currentordertotalPrice);
+                console.log("First Row Total Order Price");
+                console.log(firstProductTotalPrice);
+                console.log("Current Row Total Order Price Before Change");
+                console.log(productInputRow[row].price);
+
+                setOrderTotalPrice(
+                  parseFloat(currentordertotalPrice) -
+                    productInputRow[row].price +
+                    parseFloat(selectedOption.price)
+                );
+
+                const newProductRow = productInputRow.map((obj) => {
+                  if (obj.row == row) {
+                    return {
+                      ...obj,
+                      amount: 1,
+                      price: selectedOption.price,
+                      productPrice: selectedOption.price,
+                    };
+                  } else {
+                    return { ...obj };
+                  }
+                });
+
+                const newOtherProductRow = otherProducts.map((obj) => {
+                  if (obj.row == row) {
+                    return { ...obj, id: selectedOption.id, price: selectedOption.price };
+                  } else {
+                    return { ...obj };
+                  }
+                });
+
+                setOtherProducts(newOtherProductRow);
+                setProductInputRow(newProductRow);
+              }
             }}
           />
         </div>
         <div style={{ flex: 3, paddingRight: 10 }}>
           <div style={{ display: "flex" }}>
-            <Button style={{ flex: 1, alignSelf: "center" }}
-             
-             onClick={async () => {
+            <Button
+              style={{ flex: 1, alignSelf: "center" }}
+              onClick={async () => {
+                if (productInputRow[row].amount > 1) {
+                  console.log("current total price 1");
+                  console.log(ordertotalPrice);
 
-              if (productInputRow[row].amount > 1) {
+                  console.log("yyyyyyyyyyyyyyyyyyyyyyy");
+                  console.log(otherProducts);
 
-
-              console.log("current total price 1");
-              console.log(ordertotalPrice);
-
-              console.log("yyyyyyyyyyyyyyyyyyyyyyy")
-              console.log(otherProducts)
-
-
-              if (otherProducts[row] == undefined) {
-                toast.error("Please Choose a Product!!");
-              } else {
-                console.log("THE CURRENT TOTAL ORDER PRICE");
-                console.log(ordertotalPrice);
-
-                console.log("THE SECOND ROW");
-                console.log(
-                 productInputRow[row].productprice
-                );
-
-                setOrderTotalPrice(
-                  parseFloat(ordertotalPrice) - parseFloat(productInputRow[row].productprice)
-                );
-
-                // setOrderTotalPrice( ((productInputRow[row].amount - 1) * (productInputRow[row].productprice)) + (ordertotalPrice ));
-
-                //setQuantity(quantity + 1);
-
-                console.log("Editing amount for the specific row : ");
-                console.log(row);
-                //setOtherProducts((current) => [...current, { id: selectedOption.id }]);
-
-                //setProductInputRow(productInputRow.filter((a) => a.name !== name));
-
-                console.log("Product Input Row");
-                console.log(productInputRow);
-
-                console.log("otherProducts");
-                console.log(otherProducts);
-
-                const filtered = otherProducts.filter((entry) => entry.row === row);
-
-                console.log("filtered");
-                console.log(filtered);
-
-                const newState = productInputRow.map((obj) => {
-                  // 👇️ if id equals 2, update country property
-
-                  if (obj.row == row) {
-                    return {
-                      ...obj,
-                      amount: productInputRow[row].amount - 1,
-                      price:
-                        (productInputRow[row].amount - 1) * productInputRow[row].productprice,
-                    };
+                  if (otherProducts[row] == undefined) {
+                    toast.error("Please Choose a Product!!");
                   } else {
-                    return { ...obj };
+                    console.log("THE CURRENT TOTAL ORDER PRICE");
+                    console.log(ordertotalPrice);
+
+                    console.log("THE SECOND ROW");
+                    console.log(productInputRow[row].productprice);
+
+                    setOrderTotalPrice(
+                      parseFloat(ordertotalPrice) - parseFloat(productInputRow[row].productprice)
+                    );
+
+                    // setOrderTotalPrice( ((productInputRow[row].amount - 1) * (productInputRow[row].productprice)) + (ordertotalPrice ));
+
+                    //setQuantity(quantity + 1);
+
+                    console.log("Editing amount for the specific row : ");
+                    console.log(row);
+                    //setOtherProducts((current) => [...current, { id: selectedOption.id }]);
+
+                    //setProductInputRow(productInputRow.filter((a) => a.name !== name));
+
+                    console.log("Product Input Row");
+                    console.log(productInputRow);
+
+                    console.log("otherProducts");
+                    console.log(otherProducts);
+
+                    const filtered = otherProducts.filter((entry) => entry.row === row);
+
+                    console.log("filtered");
+                    console.log(filtered);
+
+                    const newState = productInputRow.map((obj) => {
+                      // 👇️ if id equals 2, update country property
+
+                      if (obj.row == row) {
+                        return {
+                          ...obj,
+                          amount: productInputRow[row].amount - 1,
+                          price:
+                            (productInputRow[row].amount - 1) * productInputRow[row].productprice,
+                        };
+                      } else {
+                        return { ...obj };
+                      }
+
+                      // 👇️ otherwise return object as is
+                      return obj;
+                    });
+
+                    setProductInputRow(newState);
+
+                    const newState1 = otherProducts.map((obj) => {
+                      // 👇️ if id equals 2, update country property
+
+                      if (obj.row == row) {
+                        return { ...obj, amount: productInputRow[row].amount - 1 };
+                      } else {
+                        return { ...obj };
+                      }
+
+                      // 👇️ otherwise return object as is
+                      return obj;
+                    });
+                    setOtherProducts(newState1);
                   }
-
-                  // 👇️ otherwise return object as is
-                  return obj;
-                });
-
-                setProductInputRow(newState);
-
-                const newState1 = otherProducts.map((obj) => {
-                  // 👇️ if id equals 2, update country property
-
-                  if (obj.row == row) {
-                    return { ...obj, amount: productInputRow[row].amount - 1 };
-                  } else {
-                    return { ...obj };
-                  }
-
-                  // 👇️ otherwise return object as is
-                  return obj;
-                });
-                setOtherProducts(newState1);
-              }
-              
-            }}
-          }
-             
-             >
+                }
+              }}
+            >
               <ArgonBox component="i" color="info" fontSize="15px" className="ni ni-fat-delete" />
             </Button>
             <ArgonInput
@@ -860,15 +837,18 @@ function Orders() {
         </div>
         <div style={{ alignSelf: "center", flex: 1 }}>
           <Button
-            
             onClick={async () => {
-              if(productInputRow[row].amount > 0 && productInputRow[row+1] == undefined ){
-                setProductInputRow((current) => [...current, { row: idProductRow, amount: 0 }]);
-                setIdProductRow(idProductRow + 1);
-              }
-              else{
+              if (productInputRow[row].amount > 0 && productInputRow[row + 1] == undefined) {
+
+                let idp = productInputRow.length;
+
+                
+
+                setProductInputRow((current) => [...current, { row: idp, amount: 0 }]);
+                setIdProductRow(idp + 1);
+              } else {
                 toast.error("Please Choose a Product!!");
-              }             
+              }
             }}
           >
             Add
@@ -876,74 +856,93 @@ function Orders() {
         </div>
         <div style={{ alignSelf: "center", flex: 1 }}>
           <Button
-            
-
             onClick={async () => {
-
-              console.log(productInputRow)
-              console.log(otherProducts)
-              
-
-              let currentprice = 0 ;
+              console.log(productInputRow);
               console.log(otherProducts);
-
-              const newState = []
-              const newState1 = []
-
-              let row = 0
-
-              productInputRow.map((obj) => {  
-                    
-                if (obj.row == row) {
-
-                  currentprice = productInputRow[row].price ;
-
-                } else {
-                 
-
-                  newState.push({
-                    id: otherProducts[row].id,
-                    row: row,
-                    amount: obj.amount,
-                    productprice: obj.price,
-                    price: obj.price,
-                  });
-                  row = row + 1;
-                }
-                   
-              });
-
-
+              console.log("The Current Active Row");
+              console.log(row);
+              console.log("The Price To Be Removed from Total Price");
+              console.log(productInputRow[row].price);
+              if(productInputRow[row]?.price != undefined){
+                setOrderTotalPrice(parseFloat(ordertotalPrice) - productInputRow[row]?.price); 
+              }
               
-              otherProducts.map((obj) => {  
-                    
-                if (obj.row == row) {
 
+              const newProductInputRow = [];
+              const newProductInputRowUpdated = [];
 
-                } else {
-                 
-
-                  newState1.push({
-                    id: obj.id,
-                    row: row,
+              let i = 0;
+              let j = 0;
+              productInputRow.map((obj) => {
+                if(obj.row == i && obj.row != row){
+                  newProductInputRow.push({
+                    row: i,
                     amount: obj.amount,
                     productprice: obj.price,
                     price: obj.price,
                   });
-                  row = row + 1;
                 }
-                   
+                i = i + 1;
+                
+              });
+              console.log("New Product Input Row")
+              console.log(newProductInputRow)
+
+              newProductInputRow.map((obj) => {
+                  newProductInputRowUpdated.push({
+                    row: j,
+                    amount: obj.amount,
+                    productprice: obj.price,
+                    price: obj.price,
+                  });
+                j = j + 1;
               });
 
-              console.log("newState");
-              console.log(newState);
-              setProductInputRow(newState)
-              setOtherProducts(newState1);
-              setIdProductRow(idProductRow - 1)
+              console.log("New Product Input Row Updated")
+              console.log(newProductInputRowUpdated)
+              setProductInputRow(newProductInputRowUpdated)
 
-              setOrderTotalPrice(
-                parseFloat(ordertotalPrice) - currentprice
-              ); 
+
+              const newotherProducts = [];
+              const newotherProductsUpdated = [];
+
+              let x = 0;
+              let y = 0;
+              otherProducts.map((obj) => {
+                if(obj.row == x && obj.row != row){
+                  newotherProducts.push({
+                    id: obj.id,
+                    row: x,
+                    amount: obj.amount,
+                    productprice: obj.price,
+                    price: obj.price,
+                  });
+                }
+                x = x + 1;
+                
+              });
+              console.log("New Other Products Input Row")
+              console.log(newotherProducts)
+
+              newotherProducts.map((obj) => {
+                newotherProductsUpdated.push({
+                    row: y,
+                    id: obj.id,
+                    amount: obj.amount,
+                    productprice: obj.price,
+                    price: obj.price,
+                  });
+                j = j + 1;
+              });
+
+              console.log("New Other Products Input Row Updated")
+              console.log(newotherProductsUpdated)
+              setOtherProducts(newotherProductsUpdated)
+
+
+
+
+
             }}
           >
             Remove
@@ -1013,8 +1012,8 @@ function Orders() {
             console.log("Order Added");
             toast.success("Order Added Successfully");
 
-            setFirstProductId("")
-            setIdProductRow(0)
+            setFirstProductId("");
+            setIdProductRow(0);
             setProductInputRow([]);
             setOrderData({
               buyer: "",
@@ -1068,7 +1067,7 @@ function Orders() {
               type: "order",
               products: [],
             });
-            setFirstProductId("")
+            setFirstProductId("");
             setProductInputRow([]);
             setOrderTotalPrice(0);
             setQuantity(0);
@@ -1177,7 +1176,148 @@ function Orders() {
             </Card>
           </ArgonBox>
         ) : (
-          <ArgonBox ref={componentRef} mb={3} pb={20}>
+
+          <>
+
+<ArgonBox  mb={3} pb={20}>
+
+<section ref={componentRef} className="h-100 gradient-custom">
+  <div className="container py-5 h-100">
+    <div className="row d-flex justify-content-center align-items-center h-100">
+      <div className="col-lg-10 col-xl-8">
+        <div className="card" style={{borderRadius: 10}}  /* style="border-radius: 10px;" */>
+          <div className="card-header px-4 py-5">
+            <h5 className="text-muted mb-0">Thanks for your Order, <span  style={{color: '#a8729a'}}/* style="color: #a8729a;" */>Anna</span>!</h5>
+
+          </div>
+          <hr className="mb-4"  style={{backgroundColor: '#e0e0e0',opacity: 1}}/* style="background-color: #e0e0e0; opacity: 1;" *//>
+
+          <div className="card-body p-4">
+            <div className="d-flex justify-content-between align-items-center mb-4">
+              <p className="lead fw-normal mb-0"  style={{color: '#a8729a'}} /* style="color: #a8729a;" */>Receipt</p>
+              <p className="small text-muted mb-0">Receipt Voucher : 1KAU9-84UIL</p>
+            </div>
+            <div className="card shadow-0 border mb-4">
+              <div className="card-body">
+                <div className="row">
+                  <div className="col-md-2" style={{textAlign: "center"}}>
+                    <img src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/E-commerce/Products/13.webp" 
+                      width={200} height={100} 
+                      className="img-fluid" alt="Phone"/>
+                  </div>
+                  <div className="col-md-2 text-center d-flex justify-content-center align-items-center">
+                    <p className="text-muted mb-0">Samsung Galaxy</p>
+                  </div>
+                  <div className="col-md-2 text-center d-flex justify-content-center align-items-center">
+                    <p className="text-muted mb-0 small">White</p>
+                  </div>
+                  <div className="col-md-2 text-center d-flex justify-content-center align-items-center">
+                    <p className="text-muted mb-0 small">Capacity: 64GB</p>
+                  </div>
+                  <div className="col-md-2 text-center d-flex justify-content-center align-items-center">
+                    <p className="text-muted mb-0 small">Qty: 1</p>
+                  </div>
+                  <div className="col-md-2 text-center d-flex justify-content-center align-items-center">
+                    <p className="text-muted mb-0 small">$499</p>
+                  </div>
+                </div>
+                <hr className="mb-4"  style={{backgroundColor: '#e0e0e0',opacity: 1}}/* style="background-color: #e0e0e0; opacity: 1;" *//>
+                <div className="row d-flex align-items-center">
+                  <div className="col-md-2">
+                    <p className="text-muted mb-0 small">Track Order</p>
+                  </div>
+                  <div className="col-md-10">
+                    <div className="progress" style={{height: 6, borderRadius: 16}} /* style="height: 6px; border-radius: 16px;" */>
+                      <div className="progress-bar" role="progressbar" style={{width: '65%', borderRadius: 16, backgroundColor: '#a8729a'}}
+                        /* style="width: 65%; border-radius: 16px; background-color: #a8729a;"  */aria-valuenow="65"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <div className="d-flex justify-content-around mb-1">
+                      <p className="text-muted mt-1 mb-0 small ms-xl-5">Out for delivary</p>
+                      <p className="text-muted mt-1 mb-0 small ms-xl-5">Delivered</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="card shadow-0 border mb-4">
+              <div className="card-body">
+                <div className="row">
+                  <div className="col-md-2" style={{textAlign: "center"}}>
+                    <img src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/E-commerce/Products/1.webp"
+                     width={200} height={100}  className="img-fluid" alt="Phone"/>
+                  </div>
+                  <div className="col-md-2 text-center d-flex justify-content-center align-items-center">
+                    <p className="text-muted mb-0">iPad</p>
+                  </div>
+                  <div className="col-md-2 text-center d-flex justify-content-center align-items-center">
+                    <p className="text-muted mb-0 small">Pink rose</p>
+                  </div>
+                  <div className="col-md-2 text-center d-flex justify-content-center align-items-center">
+                    <p className="text-muted mb-0 small">Capacity: 32GB</p>
+                  </div>
+                  <div className="col-md-2 text-center d-flex justify-content-center align-items-center">
+                    <p className="text-muted mb-0 small">Qty: 1</p>
+                  </div>
+                  <div className="col-md-2 text-center d-flex justify-content-center align-items-center">
+                    <p className="text-muted mb-0 small">$399</p>
+                  </div>
+                </div>
+                <hr className="mb-4" style={{backgroundColor: '#e0e0e0', opacity: 1}}/* style="background-color: #e0e0e0; opacity: 1;" *//>
+                <div className="row d-flex align-items-center">
+                  <div className="col-md-2">
+                    <p className="text-muted mb-0 small">Track Order</p>
+                  </div>
+                  <div className="col-md-10">
+                    <div className="progress" style={{height: 6, borderRadius: 16}} /* style="height: 6px; border-radius: 16px;" */>
+                      <div className="progress-bar" role="progressbar" style={{width: '65%', borderRadius: 16, backgroundColor: '#a8729a'}}
+                        /* style="width: 20%; border-radius: 16px; background-color: #a8729a;" */ aria-valuenow="20"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <div className="d-flex justify-content-around mb-1">
+                      <p className="text-muted mt-1 mb-0 small ms-xl-5">Out for delivary</p>
+                      <p className="text-muted mt-1 mb-0 small ms-xl-5">Delivered</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="d-flex justify-content-between pt-2">
+              <p className="fw-bold mb-0">Order Details</p>
+              <p className="text-muted mb-0"><span className="fw-bold me-4">Total</span> $898.00</p>
+            </div>
+
+            <div className="d-flex justify-content-between pt-2">
+              <p className="text-muted mb-0">Invoice Number : 788152</p>
+              <p className="text-muted mb-0"><span className="fw-bold me-4">Discount</span> $19.00</p>
+            </div>
+
+            <div className="d-flex justify-content-between">
+              <p className="text-muted mb-0">Invoice Date : 22 Dec,2019</p>
+              <p className="text-muted mb-0"><span className="fw-bold me-4">GST 18%</span> 123</p>
+            </div>
+
+            <div className="d-flex justify-content-between mb-5">
+              <p className="text-muted mb-0">Recepits Voucher : 18KU-62IIK</p>
+              <p className="text-muted mb-0"><span className="fw-bold me-4">Delivery Charges</span> Free</p>
+            </div>
+          </div>
+          <div className="card-footer border-0 px-4 py-5" style={{backgroundColor: '#a8729a', borderBottomRightRadius: 10, 
+                borderBottomLeftRadius: 10,
+        }}
+           /*  style="background-color: #a8729a; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;" */>
+            <h5 className="d-flex align-items-center justify-content-end text-white text-uppercase mb-0">Total
+              paid: <span className="h2 mb-0 ms-2">$1040</span></h5>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</ArgonBox>
+          
+          <ArgonBox  mb={3} pb={20}>
             <Card>
               <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
                 <ArgonTypography variant="h6">Orders table</ArgonTypography>
@@ -1201,126 +1341,130 @@ function Orders() {
                   },
                 }}
               >
-                {
-                  viewOrderActive == false && (
-                    // 1ST PRODUCT ORDER INPUT ROW
-                    <ArgonBox mb={2} mx={5} display="flex">
-                      <div style={{ flex: 5, paddingRight: 10 }}>
-                        <Select
-                          name="product"
-                          placeholder="Products"
-                          options={productOptions}
-                          onChange={(selectedOption)=>{
-                        
-                            const currentfirstProductTotalPrice = firstProductTotalPrice;
-                            const currentordertotalPrice = isNaN(ordertotalPrice) ? 0 : ordertotalPrice;
+                {viewOrderActive == false && (
+                  // 1ST PRODUCT ORDER INPUT ROW
+                  <ArgonBox mb={2} mx={5} display="flex">
+                    <div style={{ flex: 5, paddingRight: 10 }}>
+                      <Select
+                        name="product"
+                        placeholder="Products"
+                        options={productOptions}
+                        onChange={(selectedOption) => {
+                          const currentfirstProductTotalPrice = firstProductTotalPrice;
+                          const currentordertotalPrice = isNaN(ordertotalPrice)
+                            ? 0
+                            : ordertotalPrice;
 
-                            setFirstProductId(selectedOption.id);
-                            setFirstProductPrice(selectedOption.price);
-                            setQuantity(1);
-                            setFirstProductTotalPrice(selectedOption.price);
-                            
-                            if(ordertotalPrice == 0){
-                              setOrderTotalPrice(selectedOption.price);
-                            }
-                            else{
-                              setOrderTotalPrice(
-                                parseFloat(currentordertotalPrice) - 
-                                parseFloat(currentfirstProductTotalPrice) + 
-                                parseFloat(selectedOption.price));
-                            }
+                          setFirstProductId(selectedOption.id);
+                          setFirstProductPrice(selectedOption.price);
+                          setQuantity(1);
+                          setFirstProductTotalPrice(selectedOption.price);
 
-                          }}
-                        />
-                      </div>
-                      <div style={{ flex: 3, paddingRight: 10 }}>
-                        <div style={{ display: "flex" }}>
-                          <Button
-                            style={{ flex: 1, alignSelf: "center" }}
-                            onClick={async () => {
-                              if (quantity > 1) {
-                                setQuantity(quantity - 1);
-                                setFirstProductTotalPrice((quantity - 1) * firstProductPrice);
-                                setOrderTotalPrice((quantity - 1) * parseFloat(firstProductPrice));
-                              }
-                            }}
-                          >
-                            <ArgonBox
-                              component="i"
-                              color="info"
-                              fontSize="15px"
-                              className="ni ni-fat-delete"
-                            />
-                          </Button>
-                          <ArgonInput
-                            style={{ flex: 5 }}
-                            type="name"
-                            name="quantity"
-                            value={quantity}
-                            placeholder="Amount"
-                            size="large"
-                            onChange={handleChangeAmount}
-                          />
-                          <Button
-                            style={{ flex: 1, alignSelf: "center" }}
-                            onClick={async () => {
-                              if (firstProductId === "") {
-                                toast.error("Please Choose a Product!!");
-                              } else {
-                                setQuantity(quantity + 1);
-                                setFirstProductTotalPrice((quantity + 1) * firstProductPrice);
-                                setOrderTotalPrice((quantity + 1) * parseFloat(firstProductPrice));
-                              }
-                            }}
-                          >
-                            <ArgonBox
-                              component="i"
-                              color="info"
-                              fontSize="15px"
-                              className="ni ni-fat-add"
-                            />
-                          </Button>
-                        </div>
-                      </div>
-                      <div style={{ flex: 3 }}>
-                        <ArgonInput
-                          type="name"
-                          name="price"
-                          placeholder="Price"
-                          value={firstProductTotalPrice}
-                          size="large"
-                        />
-                      </div>
-                      <div style={{ alignSelf: "center", flex: 2.3 }}>
+                          if (ordertotalPrice == 0) {
+                            setOrderTotalPrice(selectedOption.price);
+                          } else {
+                            setOrderTotalPrice(
+                              parseFloat(currentordertotalPrice) -
+                                parseFloat(currentfirstProductTotalPrice) +
+                                parseFloat(selectedOption.price)
+                            );
+                          }
+                        }}
+                      />
+                    </div>
+                    <div style={{ flex: 3, paddingRight: 10 }}>
+                      <div style={{ display: "flex" }}>
                         <Button
                           style={{ flex: 1, alignSelf: "center" }}
-                          onClick={
-                            firstProductId == "" 
-                              ? async () => {
-                                  toast.error("Please Choose a Product!!");
-                                }
-                              : async () => {
-                                if(productInputRow.length == 0){
-                                  setProductInputRow((current) => [
-                                    ...current,
-                                    { row: idProductRow, amount: 0 },
-                                  ]);
-                                  setIdProductRow(idProductRow + 1)
-                                }
-                                else{
-                                  toast.error("Use The Other Add Button!!");
-                                }
-                                }
-                          }
+                          onClick={async () => {
+                            if (quantity > 1) {
+                              setQuantity(quantity - 1);
+                              setFirstProductTotalPrice((quantity - 1) * firstProductPrice);
+                              setOrderTotalPrice((quantity - 1) * parseFloat(firstProductPrice));
+                            }
+                          }}
                         >
-                          Add
+                          <ArgonBox
+                            component="i"
+                            color="info"
+                            fontSize="15px"
+                            className="ni ni-fat-delete"
+                          />
+                        </Button>
+                        <ArgonInput
+                          style={{ flex: 5 }}
+                          type="name"
+                          name="quantity"
+                          value={quantity}
+                          placeholder="Amount"
+                          size="large"
+                          onChange={handleChangeAmount}
+                        />
+                        <Button
+                          style={{ flex: 1, alignSelf: "center" }}
+                          onClick={async () => {
+                            if (firstProductId === "") {
+                              toast.error("Please Choose a Product!!");
+                            } else {
+                              setQuantity(quantity + 1);
+                              setFirstProductTotalPrice((quantity + 1) * firstProductPrice);
+                              if(productInputRow.length == 0  ){
+                                setOrderTotalPrice((quantity + 1) * parseFloat(firstProductPrice));
+                                
+                              }
+                              else{
+                                setOrderTotalPrice(( parseFloat(firstProductPrice)) + 
+                                parseFloat(ordertotalPrice));
+                              }
+                            }
+                          }}
+                        >
+                          <ArgonBox
+                            component="i"
+                            color="info"
+                            fontSize="15px"
+                            className="ni ni-fat-add"
+                          />
                         </Button>
                       </div>
-                    </ArgonBox>
-                    // 1ST PRODUCT ORDER INPUT ROW
-                  )
-                  
-                }
+                    </div>
+                    <div style={{ flex: 3 }}>
+                      <ArgonInput
+                        type="name"
+                        name="price"
+                        placeholder="Price"
+                        value={firstProductTotalPrice}
+                        size="large"
+                      />
+                    </div>
+                    <div style={{ alignSelf: "center", flex: 2.3 }}>
+                      <Button
+                        style={{ flex: 1, alignSelf: "center" }}
+                        onClick={
+                          firstProductId == ""
+                            ? async () => {
+                                toast.error("Please Choose a Product!!");
+                              }
+                            : async () => {
+                              
+                                if (productInputRow.length == 0) {
+                                  setProductInputRow((current) => [
+                                    ...current,
+                                    { row: 0, amount: 0 },
+                                  ]);
+                                  setIdProductRow(1);
+                                } else {
+                                  toast.error("Use The Other Add Button!!");
+                                }
+                              }
+                        }
+                      >
+                        Add
+                      </Button>
+                    </div>
+                  </ArgonBox>
+                  // 1ST PRODUCT ORDER INPUT ROW
+                )}
 
                 {renderColumns}
 
@@ -1357,11 +1501,15 @@ function Orders() {
                 <ArgonBox mb={"20%"} display="flex" mx={5}>
                   <ArgonButton
                     onClick={
-                      firstProductId == "" || orderData.buyer == "" 
+                     /*  firstProductId == "" || orderData.buyer == ""
                         ? async () => {
                             toast.error("Please Fill All Required Fields!!");
                           }
                         : async () => {
+                            viewOrderActive ? handlePrint() : handleSubmit();
+                          } */
+
+                          async () => {
                             viewOrderActive ? handlePrint() : handleSubmit();
                           }
                     }
@@ -1375,6 +1523,9 @@ function Orders() {
               </ArgonBox>
             </Card>
           </ArgonBox>
+
+          </>
+
         )}
       </ArgonBox>
       <Footer />
