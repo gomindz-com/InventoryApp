@@ -16,7 +16,7 @@ import CoverLayout from "layouts/authentication/components/CoverLayout";
 import Socials from "layouts/authentication/components/Socials";
 import Separator from "layouts/authentication/components/Separator";
 import { registerUser } from "apiservices/authService";
-import { RegisterUserSchema } from "../../../formValidation/addForm";
+import { RegisterUserSchema } from "formValidation/addForm";
 
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from 'react-router-dom';
@@ -30,7 +30,7 @@ const bgImage =
 
 
 
-function Cover() {
+function Contact() {
 
 
   
@@ -106,8 +106,8 @@ function Cover() {
 
   return (
     <CoverLayout
-      title="Welcome!"
-      description="Our Inventory Application is The Best Out There. Register With Us To Find Out!"
+      title="Contact Us!"
+      description="We will Reply as soon as possible!"
       image={bgImage}
       imgPosition="top"
       button={{ color: "dark", variant: "gradient" }}
@@ -115,11 +115,7 @@ function Cover() {
       <ToastContainer />
 
       <Card>
-        <ArgonBox p={3} mb={1} textAlign="center">
-          <ArgonTypography variant="h5" fontWeight="medium">
-            Register 
-          </ArgonTypography>
-        </ArgonBox>
+        
         {/* <ArgonBox mb={2}>
           <Socials />
         </ArgonBox> */}
@@ -138,33 +134,23 @@ function Cover() {
 
 
           <Grid container spacing={3}>
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} md={12}>
           <ArgonBox mb={2}>
             <ArgonInput
             name="firstname"
             type="text"
-            placeholder="First Name"
+            placeholder="Full Name"
             size="large"
             onChange={handleChange}
           />
             </ArgonBox>
           </Grid>
-          <Grid item xs={12} md={6}>
-          <ArgonBox mb={2}>
-            <ArgonInput
-            name="lastname"
-            type="text"
-            placeholder="Last Name"
-            size="large"
-            onChange={handleChange}
-          />
-            </ArgonBox>
-          </Grid>
+          
         </Grid>
 
 
         <Grid container spacing={3}>
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} md={12}>
           <ArgonBox mb={2}>
             <ArgonInput
             name="email"
@@ -177,83 +163,12 @@ function Cover() {
               
             </ArgonBox>
         </Grid>
-          <Grid item xs={12} md={6}>
-          <ArgonBox mb={2}>
-            <ArgonInput
-            name="password"
-            
-            type="password"
-            placeholder="Password"
-            size="large"
-            autocomplete="off" 
-            onChange={handleChange}
-          />
-            </ArgonBox>
-            
-          </Grid>
+          
         </Grid>
 
            
 
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={6}>
-          <ArgonBox mb={2}>
-            <ArgonInput
-            name="contact"
-            type="text"
-            placeholder="Contact Number"
-            size="large"
-            autocomplete="off" 
-            onChange={handleChange}
-          />
-            </ArgonBox>
-        </Grid>
-          <Grid item xs={12} md={6}>
-          
-          <ArgonBox mb={2}>
-            <ArgonInput
-            name="streetAddress"
-            type="text"
-            placeholder="Street Address"
-            size="large"
-            autocomplete="off" 
-            onChange={handleChange}
-          />
-            </ArgonBox>
-
-          </Grid>
-        </Grid>
-            
-            
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={6}>
-          <ArgonBox mb={2}>
-            <ArgonInput
-            name="postcode"
-            type="text"
-            placeholder="Postcode"
-            size="large"
-            autocomplete="off" 
-            onChange={handleChange}
-          />
-            </ArgonBox>
-
-        </Grid>
-          <Grid item xs={12} md={6}>
-          
-          <ArgonBox mb={2}>
-            <ArgonInput
-            name="city"
-            type="text"
-            placeholder="City"
-            size="large"
-            autocomplete="off" 
-            onChange={handleChange}
-          />
-            </ArgonBox>
-          </Grid>
-        </Grid>
-            
+        
 
            
         
@@ -261,8 +176,8 @@ function Cover() {
             <ArgonBox mb={2}>
             <ArgonInput
             name="region"
-            type="text"
-            placeholder="Region"
+            type="textarea"
+            placeholder="How can we help you?"
             size="large"
             autocomplete="off" 
             onChange={handleChange}
@@ -270,45 +185,13 @@ function Cover() {
             </ArgonBox>
 
 
-            <ArgonBox display="flex" alignItems="center">
-              <Checkbox defaultChecked />
-              <ArgonTypography
-                variant="button"
-                fontWeight="regular"
-                sx={{ cursor: "pointer", userSelect: "none" }}
-              >
-                &nbsp;&nbsp;I agree the&nbsp;
-              </ArgonTypography>
-              <ArgonTypography
-                component="a"
-                href="#"
-                variant="button"
-                fontWeight="bold"
-                textGradient
-              >
-                Terms and Conditions
-              </ArgonTypography>
-            </ArgonBox>
+            
             <ArgonBox mt={4} mb={1}>
               <ArgonButton onClick={handleSubmit} variant="gradient" color="dark" fullWidth>
-                sign up
+                Send Message
               </ArgonButton>
             </ArgonBox>
-            <ArgonBox mt={2}>
-              <ArgonTypography variant="button" color="text" fontWeight="regular">
-                Already have an account?&nbsp;
-                <ArgonTypography
-                  component={Link}
-                  to="/authentication/sign-in"
-                  variant="button"
-                  color="dark"
-                  fontWeight="bold"
-                  textGradient
-                >
-                  Sign in
-                </ArgonTypography>
-              </ArgonTypography>
-            </ArgonBox>
+           
           </ArgonBox>
         </ArgonBox>
       </Card>
@@ -316,4 +199,4 @@ function Cover() {
   );
 }
 
-export default Cover;
+export default Contact;

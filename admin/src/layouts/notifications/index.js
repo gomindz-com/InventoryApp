@@ -167,12 +167,11 @@ function Notifications() {
   const matches = useMediaQuery("(max-width: 1199.98px)");
 
   useEffect(() => {
-    handleGetBuyerList();
+    //handleGetBuyerList();
   }, []);
 
   return (
-    <body className="g-sidenav-show  bg-gray-200">
-      
+    <> 
 
       <Aside showAside={showAside} setShowAside={setShowAside} matches={matches} />
 
@@ -743,14 +742,7 @@ function Notifications() {
           </div>
         </div>
       </div>
-      <script src="../assets/js/core/popper.min.js"></script>
-      <script src="../assets/js/core/bootstrap.min.js"></script>
-      <script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
-      <script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
-
-      <script async defer src="https://buttons.github.io/buttons.js"></script>
-      <script src="../assets/js/material-dashboard.min.js?v=3.0.4"></script>
-    </body>
+      </>
   );
 }
 

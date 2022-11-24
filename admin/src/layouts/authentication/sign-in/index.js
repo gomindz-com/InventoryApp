@@ -1,18 +1,3 @@
-/**
-=========================================================
-* Argon Dashboard 2 MUI - v3.0.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-material-ui
-* Copyright 2022 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
 import { useState, useEffect, useMemo } from "react";
 
 // react-router-dom components
@@ -45,7 +30,7 @@ function Illustration() {
     console.log("you click me");
   };
 
-  const [user, setUser] = useState(null);
+  const [admin, setAdmin] = useState(null);
 
   //START LOGGING IN USER
   const [userData, setUserData] = useState({
@@ -68,10 +53,10 @@ function Illustration() {
             console.log("User Logged In Success");
             console.log(res.data.status);
             toast.success("User Login Successfully");
-            setUser(res.data.result);
+            setAdmin(res.data.result);
             console.log(res.data.result);
-            localStorage.setItem("token", res.data.result.jwt);
-            localStorage.setItem("user", JSON.stringify(res.data.result.user));
+            localStorage.setItem("admintoken", res.data.result.jwt);
+            localStorage.setItem("admin", JSON.stringify(res.data.result.user));
           } else {
             console.log("User Could Not Be Logged In");
             console.log(res.data);
@@ -94,7 +79,7 @@ function Illustration() {
 
   useEffect(() => {
     
-    setLayout(dispatch, {layout: "authentication"});
+    //setLayout(dispatch, {layout: "authentication"});
 
 
   }, []);
@@ -102,6 +87,10 @@ function Illustration() {
   return (
     
 <body className="bg-gray-200">
+
+{admin && <Navigate to="/dashboard" replace={true} />}
+
+<ToastContainer />
   <div className="container position-sticky z-index-sticky top-0">
     <div className="row">
       <div className="col-12">
@@ -199,11 +188,11 @@ function Illustration() {
                 <form role="form" className="text-start">
                   <div className="input-group input-group-outline my-3">
                     <label className="form-label">Email</label>
-                    <input type="email" className="form-control"/>
+                    <input type="email" name="email" className="form-control" onChange={handleChange}/>
                   </div>
                   <div className="input-group input-group-outline mb-3">
                     <label className="form-label">Password</label>
-                    <input type="password" className="form-control"/>
+                    <input type="password" name="password" className="form-control" onChange={handleChange}/>
                   </div>
                   <div className="form-check form-switch d-flex align-items-center mb-3">
                     <input className="form-check-input" type="checkbox" id="rememberMe" />
@@ -212,7 +201,7 @@ function Illustration() {
                   <div className="text-center">
                  
                   <a href="/dashboard">
-                  <button type="button" className="btn bg-gradient-primary w-100 my-4 mb-2">Sign in</button>
+                  <button type="button" onClick={handleSubmit} className="btn bg-gradient-primary w-100 my-4 mb-2">Sign in</button>
 
               </a>
 
@@ -232,7 +221,7 @@ function Illustration() {
           <div className="row align-items-center justify-content-lg-between">
             <div className="col-12 col-md-6 my-auto">
               <div className="copyright text-center text-sm text-white text-lg-start">
-                © 
+                Copyright © 
                 {(new Date().getFullYear())}
                 ,
                 GoMindz

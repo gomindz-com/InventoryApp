@@ -40,6 +40,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
 import { deleteSupplier } from "apiservices/supplierService";
 import { editSupplier } from "apiservices/supplierService";
+import { Routes, Route, Navigate, useLocation, } from "react-router-dom";
+
 
 function Suppliers() {
   const [rememberMe, setRememberMe] = useState(false);
@@ -236,12 +238,26 @@ function Suppliers() {
     });
   });
 
+
+
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
+  console.log(JSON.parse(localStorage.getItem("user")));
+
+  console.log("user")
+  console.log(user)
+
+
   useEffect(() => {
     handleGetSupplierList();
   }, []);
 
+  
   return (
     <DashboardLayout>
+
+{user == null && <Navigate to="/authentication/sign-in" replace={true} />}
+
+
       <ToastContainer />
       <DashboardNavbar />
       <ArgonBox py={3}>

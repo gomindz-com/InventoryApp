@@ -27,22 +27,24 @@ export default function Footer({}) {
                 <div className="col-lg-6">
                   <ul className="nav nav-footer justify-content-center justify-content-lg-end">
                     <li className="nav-item">
-                      <a href="https://www.creative-tim.com" className="nav-link text-muted">
+                      <Link 
+                      to="/dashboard" 
+                       className="nav-link text-muted">
                         GoMindz
-                      </a>
+                      </Link>
                     </li>
                     <li className="nav-item">
-                      <a
-                        href="https://www.creative-tim.com/presentation"
+                      <Link
+                        to="/dashboard" 
                         className="nav-link text-muted"
                       >
                         About Us
-                      </a>
+                      </Link>
                     </li>
                     <li className="nav-item">
-                      <a href="https://www.creative-tim.com/blog" className="nav-link text-muted">
-                        Contact Us
-                      </a>
+                      <Link to="/dashboard"  className="nav-link text-muted">
+                        Contact Usdd
+                      </Link>
                     </li>
                     
                   </ul>

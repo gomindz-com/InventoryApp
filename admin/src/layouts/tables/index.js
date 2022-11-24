@@ -31,6 +31,8 @@ function Tables() {
   return (
    <>
 
+<Aside showAside={showAside} setShowAside={setShowAside} matches={matches} />
+
       <main className="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
         <nav
           className="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl"

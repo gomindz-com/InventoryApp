@@ -197,8 +197,8 @@ function DashboardNavbar({ absolute, light, isMini, handleClick, data }) {
                 sx={navbarIconButton}
                 size="small"
                 onClick={() => {
-                  localStorage.removeItem("token");
-                  setToken(null)
+                  localStorage.removeItem("user");
+                  
                 }}
               >
                 <Icon

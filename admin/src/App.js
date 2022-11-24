@@ -129,11 +129,11 @@ export default function App() {
       <CssBaseline />
 
       {layout === "dashboard" && (
-          <>
+        
 
-      <body className="g-sidenav-show  bg-gray-200">
       
-      <Aside showAside={showAside} setShowAside={setShowAside} matches={matches} />
+      
+     
 
     
       <Routes>
@@ -143,18 +143,14 @@ export default function App() {
       </Routes>
 
 
-      </body>
+      
             
-          </>
+          
         )}
         <>
           
        
-        <Routes>
-
-{getRoutes(routes)}
-<Route path="*" element={<Navigate to="/dashboard" />} />
-</Routes>
+        
           {configsButton}
         </>
      

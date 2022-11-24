@@ -15,7 +15,7 @@ export default function Aside({showAside, setShowAside, matches, activePage}) {
         
         <>
 
-        {!matches || !showAside ? (
+       
             <aside
               className="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3   bg-gradient-dark"
               id="sidenav-main"
@@ -64,11 +64,11 @@ export default function Aside({showAside, setShowAside, matches, activePage}) {
                     
                   </li>
                   <li className="nav-item">
-                    <Link  className={`nav-link text-white ${location.pathname.includes("tables") ? "active bg-gradient-primary" : ""}`} to="/tables">
+                    <Link  className={`nav-link text-white ${location.pathname.includes("customers") ? "active bg-gradient-primary" : ""}`} to="/customers">
                       <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                         <i className="material-icons opacity-10">table_view</i>
                       </div>
-                      <span className="nav-link-text ms-1">Tables</span>
+                      <span className="nav-link-text ms-1">Customers</span>
                     </Link>
                   </li>
                   <li className="nav-item">
@@ -81,7 +81,7 @@ export default function Aside({showAside, setShowAside, matches, activePage}) {
                   </li>
     
                   <li className="nav-item">
-                    <Link className={`nav-link text-white ${location.pathname.includes("notifications") ? "active bg-gradient-primary" : ""}`} to="notifications">
+                    <Link className={`nav-link text-white ${location.pathname.includes("notifications") ? "active bg-gradient-primary" : ""}`} to="/notifications">
                       <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                         <i className="material-icons opacity-10">notifications</i>
                       </div>
@@ -102,7 +102,11 @@ export default function Aside({showAside, setShowAside, matches, activePage}) {
                     </Link>
                   </li>
                   <li className="nav-item">
-                    <a className="nav-link text-white " href="/authentication/sign-in">
+                    <a onClick={()=>{
+                         localStorage.removeItem("admin")
+                        localStorage.removeItem("admintoken");
+                        navigate('/authentication/sign-in');
+                    }} className="nav-link text-white " href="/authentication/sign-in">
                       <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                         <i className="material-icons opacity-10">login</i>
                       </div>
@@ -120,7 +124,7 @@ export default function Aside({showAside, setShowAside, matches, activePage}) {
                 </ul>
               </div>
             </aside>
-          ) : null}
+         
 
             </>
     

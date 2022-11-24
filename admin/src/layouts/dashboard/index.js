@@ -60,7 +60,8 @@ function Default() {
 
   return (
     <>
-      
+      <body className="g-sidenav-show  bg-gray-200">
+      <Aside showAside={showAside} setShowAside={setShowAside} matches={matches} />
 
       <main className="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
         <nav
@@ -1033,6 +1034,7 @@ function Default() {
       <script src="../../assets/js/plugins/perfect-scrollbar.min.js"></script>
       <script src="../../assets/js/plugins/smooth-scrollbar.min.js"></script>
       <script src="../../assets/js/plugins/chartjs.min.js"></script>
+      </body>
     </>
   );
 }

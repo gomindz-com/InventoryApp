@@ -77,6 +77,8 @@ function Home() {
   return (
 
     <body className="about-us bg-gray-200">
+            <ToastContainer />
+
     <nav className="navbar navbar-expand-lg position-absolute top-0 z-index-3 w-100 shadow-none my-3  navbar-transparent ">
       <div className="container">
         <a className="navbar-brand  text-white " href="https://demos.creative-tim.com/material-kit/presentation" rel="tooltip" title="Designed and Coded by Creative Tim" data-placement="bottom" >
@@ -93,14 +95,14 @@ function Home() {
           <ul className="navbar-nav navbar-nav-hover ms-auto">
           <li className="nav-item dropdown dropdown-hover mx-2 ms-lg-6">
               <a onClick={()=>{
-                  localStorage.removeItem("user")
-                  localStorage.removeItem("token");
+                  
                   navigate('/dashboard');
                 }} className="nav-link ps-2 d-flex justify-content-between cursor-pointer align-items-center" id="dropdownMenuPages8" data-bs-toggle="dropdown" aria-expanded="false">
                 <i className="material-icons opacity-6 me-2 text-md">dashboard</i>
                 Dashboard
                 
               </a></li>
+
 
                {/*  
               <div className="dropdown-menu dropdown-menu-animation ms-n3 dropdown-md p-3 border-radius-lg mt-0 mt-lg-3" aria-labelledby="dropdownMenuPages8">
@@ -480,6 +482,8 @@ src={mySvgWhite}
               <a href="/authentication/sign-up" className="btn btn-sm  bg-white  mb-0 me-1 mt-2 mt-md-0">Register With Us</a>
             </li>
 
+            
+
             {user != null && 
             <li className="nav-item my-auto ms-3 ms-lg-0">
               <p style={{backgroundColor: '#030305'}} className="btn btn-sm  mb-0 me-1 mt-2 mt-md-0">
@@ -506,11 +510,11 @@ src={mySvgWhite}
           <div className="row justify-content-center">
             <div className="col-lg-8 text-center mx-auto my-auto">
               <h1 className="text-white">Work with an amazing Inventory System</h1>
-              <p className="lead mb-4 text-white opacity-8">We’re constantly trying to express ourselves and actualize our dreams. If you have the opportunity to play this game</p>
+              <p className="lead mb-4 text-white opacity-8">We’re constantly trying to express ourselves and actualize our dreams. </p>
               
               
-              <h6 className="mb-2 mt-5" style={{paddingTop: 70}} >Find us on</h6>
-              <div className="d-flex justify-content-center">
+              {/* <h6 className="mb-2 mt-5" style={{paddingTop: 70}} >Find us on</h6> */}
+              <div style={{backgroundColor: 'white', borderRadius: 10}} className="d-flex justify-content-center">
                 <a href="javascript:;"><i style={{color: 'black' }} className="fab fa-facebook text-lg me-4"></i></a>
                 <a href="javascript:;"><i style={{color: 'black'}} className="fab fa-instagram text-lg  me-4"></i></a>
                 <a href="javascript:;"><i  style={{color: 'black'}} className="fab fa-twitter text-lg  me-4"></i></a>
@@ -521,6 +525,7 @@ src={mySvgWhite}
         </div>
       </div>
     </header>
+
     <div className="card card-body shadow-xl mx-3 mx-md-4 mt-n6">
       <section className="py-7">
         <div className="container">
@@ -734,14 +739,19 @@ src={mySvgWhite}
                   </div>
                 </div>
                 <div className="col-4 ps-0">
-                  <button type="button" className="btn bg-gradient-info mb-0 h-100 position-relative z-index-2">Subscribe</button>
+                  <button 
+                  onClick={()=>{
+                    toast.success("Subscribed Successfully!!");
+
+                  }}
+                  type="button" className="btn bg-gradient-info mb-0 h-100 position-relative z-index-2">Subscribe</button>
                 </div>
               </div>
             </div>
             <div className="col-md-5 ms-auto">
               <div className="position-relative">
                 <img className="max-width-50 w-100 position-relative z-index-2" 
-                src={require('../../assets/images/macbook.png')}
+                 src={require('../../assets/images/macbook.png')}
                  alt="image"/>
               </div>
             </div>
@@ -749,13 +759,17 @@ src={mySvgWhite}
         </div>
       </section>
     </div>
+
+    
     <footer className="footer pt-5 mt-5">
       <div className="container">
         <div className=" row">
           <div className="col-md-3 mb-4 ms-auto">
             <div>
               <a href="https://www.creative-tim.com/product/material-kit">
-                <img src="../assets/img/logo-ct-dark.png" className="mb-3 footer-logo" alt="main_logo"/>
+                <img 
+                src={require('../../assets/images/apple-icon.png')}
+                className="mb-3 footer-logo" alt="main_logo"/>
               </a>
               <h6 className="font-weight-bolder mb-4">Go Inventory</h6>
             </div>
@@ -843,25 +857,16 @@ src={mySvgWhite}
               <h6 className="text-sm">Help & Support</h6>
               <ul className="flex-column ms-n3 nav">
                 <li className="nav-item">
-                  <a className="nav-link" href="https://www.creative-tim.com/contact-us" >
+                  <Link className="nav-link" to="/contact-us" >
                     Contact Us
-                  </a>
+                  </Link>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="https://www.creative-tim.com/knowledge-center" >
+                  <Link className="nav-link" to="/dashboard"  >
                     Knowledge Center
-                  </a>
+                  </Link>
                 </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="https://services.creative-tim.com/?ref=ct-mk2-footer" >
-                    Custom Development
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="https://www.creative-tim.com/sponsorships" >
-                    Sponsorships
-                  </a>
-                </li>
+                
               </ul>
             </div>
           </div>
@@ -891,8 +896,8 @@ src={mySvgWhite}
             <div className="text-center">
               <p className="text-dark my-4 text-sm font-weight-normal">
                 All rights reserved. Copyright © <script>
-                  document.write(new Date().getFullYear())
-                </script> Material Kit by <a href="https://www.creative-tim.com" >Creative Tim</a>.
+                {(new Date().getFullYear())}
+                </script> GoMindz Inventory App <a href="https://www.gomindz.com" >Gomindz Inc</a>.
               </p>
             </div>
           </div>

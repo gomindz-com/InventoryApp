@@ -32,7 +32,7 @@ const routes = [
     type: "route",
     name: "Suppliers",
     key: "suppliers",
-    route: "/tables",
+    route: "/customers",
     
     component: <Tables />,
   },
@@ -46,26 +46,25 @@ const routes = [
   },
   {
     type: "route",
-    name: "Products",
-    key: "products",
+    name: "Notifications",
+    key: "notifications",
     route: "/notifications",
     
     component: <Notifications />,
   },
   {
     type: "route",
-    name: "Categories",
-    key: "categories",
+    name: "Profile",
+    key: "profile",
     route: "/profile",
     
     component: <Profile />,
   },
   {
     type: "route",
-    name: "Orders",
-    key: "orders",
+    name: "Sign Out",
+    key: "sign-out",
     route: "/authentication/sign-in",
-    
     component: <SignIn />,
   },
   { type: "title", title: "Account Pages", key: "account-pages" },

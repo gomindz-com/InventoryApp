@@ -1,19 +1,3 @@
-/* eslint-disable no-unused-vars */
-/**
-=========================================================
-* Argon Dashboard 2 MUI - v3.0.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-material-ui
-* Copyright 2022 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
 import { useState, useEffect } from "react";
 
 // @mui material components
@@ -51,6 +35,10 @@ import ArgonAvatar from "components/ArgonAvatar";
 import ArgonBadge from "components/ArgonBadge";
 import { Button } from "@mui/material";
 import Table from "examples/Tables/Table";
+
+
+import { Routes, Route, Navigate, useLocation, } from "react-router-dom";
+
 
 // pro
 function Default() {
@@ -343,8 +331,19 @@ function Default() {
     });
   });
 
+
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
+  console.log(JSON.parse(localStorage.getItem("user")));
+
+  console.log(user)
+
+
   return (
     <DashboardLayout>
+
+      {user == null && <Navigate to="/authentication/sign-in" replace={true} />}
+
+
       <DashboardNavbar handleClick={handleClick} data={showSearch} />
 
       <ArgonBox py={3}>

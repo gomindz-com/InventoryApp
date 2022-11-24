@@ -50,6 +50,14 @@ function DefaultNavbar({ brand, transparent, light, action }) {
   const openMobileNavbar = ({ currentTarget }) => setMobileNavbar(currentTarget.parentNode);
   const closeMobileNavbar = () => setMobileNavbar(false);
 
+
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
+  console.log(JSON.parse(localStorage.getItem("user")));
+
+  console.log(user)
+
+
+
   useEffect(() => {
     // A function that sets the display state for the DefaultNavbarMobile.
     function displayMobileNavbar() {
@@ -107,25 +115,30 @@ function DefaultNavbar({ brand, transparent, light, action }) {
             </ArgonTypography>
           </ArgonBox>
           <ArgonBox color="inherit" display={{ xs: "none", lg: "flex" }} m={0} p={0}>
-            {/* <DefaultNavbarLink
+            <DefaultNavbarLink
               icon="donut_large"
               name="dashboard"
               route="/dashboard"
               light={light}
             />
-            <DefaultNavbarLink icon="person" name="profile" route="/profile" light={light} /> */}
+            {/* <DefaultNavbarLink icon="person" name="profile" route="/profile" light={light} />  */}
             {/* <DefaultNavbarLink
               icon="account_circle"
               name="sign up"
               route="/authentication/sign-up"
               light={light}
             /> */}
-            <DefaultNavbarLink
+            {
+              user == null &&
+
+              
+              
+              <DefaultNavbarLink
               icon="key"
               name="sign in"
               route="/authentication/sign-in"
               light={light}
-            />
+            />}
           </ArgonBox>
           
           <ArgonBox

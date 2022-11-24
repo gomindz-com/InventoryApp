@@ -52,6 +52,7 @@ import Orders from "layouts/orders";
 import Categories from "layouts/categories";
 import Invoices from "layouts/invoices";
 import Home from "layouts/home";
+import ContactUs from "layouts/contact-us";
 
 const routes = [
 
@@ -139,6 +140,23 @@ const routes = [
     route: "/profile",
     icon: <ArgonBox component="i" color="dark" fontSize="14px" className="ni ni-single-02" />,
     component: <Profile />,
+  },
+  {
+    type: "route",
+    name: "Billing",
+    key: "billing",
+    route: "/billing",
+    icon: <ArgonBox component="i" color="success" fontSize="14px" className="ni ni-credit-card" />,
+    component: <Billing />,
+  },
+
+  {
+    type: "route",
+    name: "Contact Us",
+    key: "contact",
+    route: "/contact-us",
+    icon: <ArgonBox component="i" color="primary" fontSize="14px" className="ni ni-tv-2" />,
+    component: <ContactUs />,
   },
   {
     type: "route",
