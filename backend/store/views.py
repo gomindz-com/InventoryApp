@@ -14,6 +14,7 @@ from django.db.models import Sum
 
 
 from users.models import User
+from users.serializers import UserSerializer
 from .models import (
     ProductQuantity,
     Supplier,
@@ -627,6 +628,34 @@ def total_price(request):
     return JsonResponse(status=200, data={'status':'true','message':'success', 'result': total})
     
     
+
+
+
+
+
+
+
+
+
+
+
+
+@api_view(['GET', 'POST'])
+def customer_list(request):
+    if request.method == 'GET':
+        customers = User.objects.filter(is_customer=True)
+        serializer = UserSerializer(customers, many=True)
+        return JsonResponse(status=200, data={'status': 'true', 'message': 'success', 'result': serializer.data})
+
+
+
+
+
+
+
+
+
+
 
 # Supplier views
 
