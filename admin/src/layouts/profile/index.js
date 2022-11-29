@@ -38,6 +38,8 @@ import team4 from "assets/images/team-4.jpg";
 import profilePicture from "../../assets/images/bruce-mars.jpg" 
 import Aside from "examples/Aside";
 import Footer from "examples/Footer";
+import { useNavigate } from 'react-router-dom';
+
 const bgImage =
 
 
@@ -48,6 +50,7 @@ function Overview() {
 
   const [showAside, setShowAside] = useState(true)  
   const matches = useMediaQuery('(max-width: 1199.98px)');
+  const navigate = useNavigate();
 
 
 
@@ -85,10 +88,17 @@ function Overview() {
               <a className="btn btn-outline-primary btn-sm mb-0 me-3" href="https://www.creative-tim.com/builder/material?ref=navbar-dashboard">Online Builder</a>
             </li> */}
             <li className="nav-item d-flex align-items-center">
-              <a href="/authentication/sign-in" className="nav-link text-body font-weight-bold px-0">
+              <button 
+              style={{border: 0}}
+              onClick={()=>{
+                localStorage.removeItem("admin")
+                localStorage.removeItem("admintoken");
+                navigate('/authentication/sign-in');
+              }}
+               className="nav-link text-body font-weight-bold px-0">
                 <i className="fa fa-user me-sm-1"></i>
                 <span className="d-sm-inline d-none">Sign Out</span>
-              </a>
+              </button>
             </li>
             <li className="nav-item d-xl-none ps-3 d-flex align-items-center">
               <a   onClick={() => {

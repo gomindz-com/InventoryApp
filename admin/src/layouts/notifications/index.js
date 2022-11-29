@@ -46,6 +46,9 @@ function Notifications() {
   const [buyerList, setBuyerList] = useState([]);
   const [editFormActive, setEditFormActive] = useState(false);
 
+  const navigate = useNavigate();
+
+
   //START ADDING NEW BUYER
   const [buyerData, setBuyerData] = useState({
     name: "",
@@ -173,6 +176,7 @@ function Notifications() {
   return (
     <> 
 
+<body className="g-sidenav-show bg-gray-200"> 
       <Aside showAside={showAside} setShowAside={setShowAside} matches={matches} />
 
       <main className="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
@@ -212,13 +216,18 @@ function Notifications() {
                   </a>
                 </li>
                 <li className="nav-item d-flex align-items-center">
-                  <a
-                    href="/authentication/sign-in"
+                  <button
+                   style={{border: 0}}
+                    onClick={()=>{
+                      localStorage.removeItem("admin")
+                      localStorage.removeItem("admintoken");
+                      navigate('/authentication/sign-in');
+                    }}
                     className="nav-link text-body font-weight-bold px-0"
                   >
                     <i className="fa fa-user me-sm-1"></i>
                     <span className="d-sm-inline d-none">Sign Out</span>
-                  </a>
+                  </button>
                 </li>
                 <li className="nav-item d-xl-none ps-3 d-flex align-items-center">
                   <a
@@ -742,6 +751,7 @@ function Notifications() {
           </div>
         </div>
       </div>
+      </body>
       </>
   );
 }

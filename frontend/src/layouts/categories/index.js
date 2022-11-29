@@ -146,9 +146,7 @@ function Categories() {
 
   //END ADDING NEW PRODUCT
 
-
-
-
+  
   //DELETE SUPPLIER
   const handleDeleteCategory = async (id) => {
     await deleteCategory(id)
@@ -323,7 +321,7 @@ function Categories() {
                 </ArgonBox>
                 <ArgonBox mb={2} mx={5}>
                   <ArgonButton onClick={editFormActive? handleEdit: handleSubmit} color="info" size="large" fullWidth>
-                   {editFormActive ? "Edit Categorie": "Add Categorie" }
+                   {editFormActive ? "Edit Category": "Add Category" }
                   </ArgonButton>
 
                   {/* <ArgonButton onClick={editFormActive? handleEdit: handleSubmit} color="info" size="large" fullWidth>

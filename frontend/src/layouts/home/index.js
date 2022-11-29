@@ -465,18 +465,20 @@ src={mySvgWhite}
 
 
             <li className="nav-item ms-lg-auto">
-              <a className="nav-link nav-link-icon me-2" href="/authentication/sign-in" >
-                <i className="fa fa-sign-in"></i>
-                <a onClick={()=>{
+                <i className="fa fa-sign-in" style={{color: 'white'}}></i>
+                <button onClick={()=>{
+                  
                   localStorage.removeItem("user")
                   localStorage.removeItem("token");
                   navigate('/authentication/sign-in');
-                }} style={{color: 'white'}} className="d-inline text-sm z-index-1 font-weight-bold" 
+                }} style={{color: 'white', 
+                border: 0, backgroundColor: 'transparent', marginRight: 10,
+                marginLeft: 10
+              }} className="d-inline text-sm z-index-1 font-weight-bold" 
                 data-bs-toggle="tooltip" data-bs-placement="bottom" title="Star us on Github"> 
                 {user == null ? " Login" : " Logout"}
                 
-                </a>
-              </a>
+                </button>
             </li>
             <li className="nav-item my-auto ms-3 ms-lg-0">
               <a href="/authentication/sign-up" className="btn btn-sm  bg-white  mb-0 me-1 mt-2 mt-md-0">Register With Us</a>
@@ -514,8 +516,8 @@ src={mySvgWhite}
               
               
               {/* <h6 className="mb-2 mt-5" style={{paddingTop: 70}} >Find us on</h6> */}
-              <div style={{backgroundColor: 'white', borderRadius: 10}} className="d-flex justify-content-center">
-                <a href="javascript:;"><i style={{color: 'black' }} className="fab fa-facebook text-lg me-4"></i></a>
+              <div style={{}} className="d-flex justify-content-center">
+                <a href="javascript:;"><i style={{color: 'white' }} className="fab fa-facebook text-lg me-4"></i></a>
                 <a href="javascript:;"><i style={{color: 'black'}} className="fab fa-instagram text-lg  me-4"></i></a>
                 <a href="javascript:;"><i  style={{color: 'black'}} className="fab fa-twitter text-lg  me-4"></i></a>
                 <a href="javascript:;"><i  style={{color: 'black'}} className="fab fa-google-plus text-lg "></i></a>

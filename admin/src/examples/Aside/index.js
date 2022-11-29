@@ -40,7 +40,7 @@ export default function Aside({showAside, setShowAside, matches, activePage}) {
                     className="navbar-brand-img h-100"
                     alt="main_logo"
                   />
-                  <span className="ms-1 font-weight-bold text-white">Admin Dashboard Gomindz</span>
+                  <span className="ms-1 font-weight-bold text-white">Inventory Admin Dashboard</span>
                 </a>
               </div>
               <hr className="horizontal light mt-0 mb-2" />

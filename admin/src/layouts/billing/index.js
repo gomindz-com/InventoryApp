@@ -6,15 +6,18 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import Aside from "examples/Aside";
 import Footer from "examples/Footer";
 import { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import patternTree from "../../assets/images/illustrations/pattern-tree.svg";
 
 function Billing() {
   const [showAside, setShowAside] = useState(true);
   const matches = useMediaQuery("(max-width: 1199.98px)");
+  const navigate = useNavigate();
 
   return (
     
 <>
+<body className="g-sidenav-show bg-gray-200">
 
       <Aside showAside={showAside} setShowAside={setShowAside} matches={matches} />
 
@@ -55,13 +58,19 @@ function Billing() {
                   </a>
                 </li>
                 <li className="nav-item d-flex align-items-center">
-                  <a
-                    href="/authentication/sign-in"
+                  <button
+                   style={{border: 0}}
+                   onClick={()=>{
+                    localStorage.removeItem("admin")
+                    localStorage.removeItem("admintoken");
+                    navigate('/authentication/sign-in');
+                  }}
+                    
                     className="nav-link text-body font-weight-bold px-0"
                   >
                     <i className="fa fa-user me-sm-1"></i>
                     <span className="d-sm-inline d-none">Sign Out</span>
-                  </a>
+                  </button>
                 </li>
                 <li className="nav-item d-xl-none ps-3 d-flex align-items-center">
                   <a
@@ -742,7 +751,7 @@ function Billing() {
           </div>
         </div>
       </div>
-
+      </body>
       </>
   );
 }

@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useMemo } from "react";
 
 // react-router components
@@ -8,13 +7,6 @@ import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import Icon from "@mui/material/Icon";
-
-// Argon Dashboard 2 MUI components
-
-// Argon Dashboard 2 MUI example components
-
-// Argon Dashboard 2 MUI themes
-
 
 // RTL plugins
 import rtlPlugin from "stylis-plugin-rtl";
@@ -35,7 +27,6 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 
 // Icon Fonts
 
-
 export default function App() {
   const [controller, dispatch] = useArgonController();
   const { miniSidenav, direction, layout, openConfigurator, sidenavColor, darkSidenav, darkMode } =
@@ -45,10 +36,12 @@ export default function App() {
   const { pathname } = useLocation();
 
   const token = localStorage.getItem("token");
-
-
   const [showAside, setShowAside] = useState(true);
   const matches = useMediaQuery("(max-width: 1199.98px)");
+
+  const [admin, setAdmin] = useState(JSON.parse(localStorage.getItem("admin")));
+  console.log(admin)
+
 
 
   // Cache for the rtl
@@ -104,59 +97,30 @@ export default function App() {
       return null;
     });
 
-  const configsButton = (
-    <>
-    </>
-  );
+  const configsButton = <></>;
 
   return direction === "rtl" ? (
     <CacheProvider value={rtlCache}>
-      
-        <CssBaseline />
-        {layout === "dashboard" && (
-          <>
-            {configsButton}
-          </>
-        )}
-        <Routes>
-          {getRoutes(routes)}
-          <Route path="*" element={<Navigate to="/home" />} />
-        </Routes>
-      
+      <CssBaseline />
+      {layout === "dashboard" && <>{configsButton}</>}
+      <Routes>
+        {getRoutes(routes)}
+        <Route path="*" element={<Navigate to="/home" />} />
+      </Routes>
     </CacheProvider>
   ) : (
     <>
       <CssBaseline />
 
+      
+
       {layout === "dashboard" && (
-        
-
-      
-      
-     
-
-    
-      <Routes>
-
-      {getRoutes(routes)}
-      <Route path="*" element={<Navigate to="/authenticate/sign-in" />} />
-      </Routes>
-
-
-      
-            
-          
-        )}
-        <>
-          
-       
-        
-          {configsButton}
-        </>
-     
-
-
-      
+        <Routes>
+          {getRoutes(routes)}
+          <Route path="*" element={<Navigate to="/authenticate/sign-in" />} />
+        </Routes>
+      )}
+      <>{configsButton}</>
     </>
   );
 }

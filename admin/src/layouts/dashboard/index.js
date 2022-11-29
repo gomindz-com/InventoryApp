@@ -38,6 +38,10 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import Aside from "examples/Aside/index.js";
 import Footer from "examples/Footer/index.js";
 
+import { useNavigate } from 'react-router-dom';
+
+
+
 // pro
 function Default() {
   const [orderCount, setOrderCount] = useState({});
@@ -50,6 +54,8 @@ function Default() {
   const [productListA, setProductListA] = useState([]);
 
   const categoriesListData = [];
+
+  const navigate = useNavigate();
 
   const [showSearch, setShowSearch] = useState(false);
 
@@ -78,10 +84,10 @@ function Default() {
                   </a>
                 </li>
                 <li className="breadcrumb-item text-sm text-dark active" aria-current="page">
-                  Tables
+                  Dashboard
                 </li>
               </ol>
-              <h6 className="font-weight-bolder mb-0">Tables</h6>
+              <h6 className="font-weight-bolder mb-0">Dashboard</h6>
             </nav>
             <div className="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
               <div className="ms-md-auto pe-md-3 d-flex align-items-center">
@@ -95,13 +101,18 @@ function Default() {
               <a className="btn btn-outline-primary btn-sm mb-0 me-3" href="https://www.creative-tim.com/builder/material?ref=navbar-dashboard">Online Builder</a>
             </li> */}
                 <li className="nav-item d-flex align-items-center">
-                  <a
-                    href="/authentication/sign-in"
+                  <button
+                    style={{border: 0}}
+                    onClick={()=>{
+                      localStorage.removeItem("admin")
+                      localStorage.removeItem("admintoken");
+                      navigate('/authentication/sign-in');
+                    }}
                     className="nav-link text-body font-weight-bold px-0"
                   >
                     <i className="fa fa-user me-sm-1"></i>
                     <span className="d-sm-inline d-none">Sign Out</span>
-                  </a>
+                  </button>
                 </li>
                 <li className="nav-item d-xl-none ps-3 d-flex align-items-center">
                   <a
@@ -304,6 +315,7 @@ function Default() {
                   <div className="bg-gradient-primary shadow-primary border-radius-lg py-3 pe-1">
                     <div className="chart">
                       <canvas id="chart-bars" className="chart-canvas" height="170"></canvas>
+                      
                     </div>
                   </div>
                 </div>
@@ -1029,6 +1041,7 @@ function Default() {
         </div>
       </div>
 
+     
       <script src="../../assets/js/core/popper.min.js"></script>
       <script src="../../assets/js/core/bootstrap.min.js"></script>
       <script src="../../assets/js/plugins/perfect-scrollbar.min.js"></script>
