@@ -78,6 +78,8 @@ To deactivate the virtual environment
 
 - Install Requirements File
 
+  Comment Out The MysqlcLIENT before installing.
+
   pip install -r requirements.txt
 
 - Migrate Database
