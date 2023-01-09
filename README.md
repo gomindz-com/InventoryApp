@@ -108,6 +108,12 @@ Active Virtual Environment
 
 - source venv/bin/activate
 
+- Configure VSCode to use the python intepreter inside our virtual environment
+
+  In VSCode, View -> Command Palette -> Search for python intepreter
+  Get The Path to our virtual environment : $ pipenv --venv
+  Copy the path and paste in the vscode python intepreter path and append \bin\python
+
 Install Requirements File
 
 comment Out The Mysqlclient & psycopg2 before installing.
