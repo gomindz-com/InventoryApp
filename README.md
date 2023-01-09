@@ -110,7 +110,7 @@ Active Virtual Environment
 
 Install Requirements File
 
-comment Out The MysqlcLIENT before installing.
+comment Out The Mysqlclient & psycopg2 before installing.
 
 pip install -r requirements.txt
 
