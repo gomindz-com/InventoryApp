@@ -10,12 +10,10 @@ export const AddCategorySchema = Yup.object().shape({
 export const AddProductSchema = Yup.object().shape({
   name: Yup.string().required("Name is required"),
   sortno: Yup.number().required("Required"),
-  images: Yup.string().required("Required"),
   stock: Yup.number().required("Required"),
-  label: Yup.string().required("Required"),
+  description_color: Yup.string().required("Required"),
   price: Yup.number().required("Required"),
-  tags: Yup.string().required("Required"),
-  label: Yup.string().required("Required"),
+  label_size: Yup.string().required("Required"),
   status: Yup.string().required("Required"),
   //email: Yup.string().email("Email is required").required("Required"),
 });
@@ -58,8 +56,9 @@ export const UserSchema = Yup.object().shape({
 
 export const RegisterUserSchema = Yup.object().shape({
   password: Yup.string().required("Required"),
-  firstname: Yup.string().required("Required"),
-  lastname: Yup.string().required("Required"),
+  first_name: Yup.string().required("Required"),
+  last_name: Yup.string().required("Required"),
+  username: Yup.string().required("Required"),
   contact: Yup.string().required("Required"),
   email: Yup.string().email("Email is required").required("Required"),
 });

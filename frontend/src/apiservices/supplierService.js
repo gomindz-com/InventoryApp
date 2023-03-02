@@ -3,12 +3,11 @@ import axiosConfig from "./axios-config";
 
 export const getSuppliers = async () => {
   const data = await axiosConfig
-    .get(`/suppliers/`)
+    .get(`/api/suppliers/`)
     .then((response) => {
       return response;
     })
     .catch((err) => {
-      console.log(err);
       toast.error(err);
     });
 
@@ -18,12 +17,11 @@ export const getSuppliers = async () => {
 
 export const getSupplierCount = async () => {
   const data = await axiosConfig
-    .get(`/suppliercount/`)
+    .get(`/store/suppliercount/`)
     .then((response) => {
       return response;
     })
     .catch((err) => {
-      console.log(err);
       toast.error(err);
     });
 
@@ -35,15 +33,13 @@ export const getSupplierCount = async () => {
 
 export const addSupplier = async (supplierData) => {
   const data = await axiosConfig
-    .post(`/suppliers/`, supplierData)
+    .post(`/api/suppliers/`, supplierData)
     .then((response) => {
-      console.log("Api Response")
-      console.log(response)
+      
       return response;
     })
     .catch((err) => {
-      console.log("Api Error")
-      console.log(err.response.data.result);
+      
       return err.response;
     });
 
@@ -53,15 +49,11 @@ export const addSupplier = async (supplierData) => {
 
 export const editSupplier = async (supplierId, supplierData) => {
   const data = await axiosConfig
-    .put(`/suppliers/${supplierId}`, supplierData)
+    .put(`/api/suppliers/${supplierId}`, supplierData)
     .then((response) => {
-      console.log("Api Response")
-      console.log(response)
       return response;
     })
     .catch((err) => {
-      console.log("Api Error")
-      console.log(err.response.data.result);
       return err.response;
     });
 
@@ -71,15 +63,13 @@ export const editSupplier = async (supplierId, supplierData) => {
 
 export const deleteSupplier = async (supplierId) => {
   const data = await axiosConfig
-    .delete(`/suppliers/${supplierId}`)
+    .delete(`/api/suppliers/${supplierId}`)
     .then((response) => {
-      console.log("Api Response")
-      console.log(response)
+      
       return response;
     })
     .catch((err) => {
-      console.log("Api Error")
-      console.log(err.response.data.result);
+      
       return err.response;
     });
 

@@ -55,10 +55,14 @@ function Categories() {
 
   const navigate = useNavigate();
 
+  const user = JSON.parse(localStorage.getItem("user"));
+
+
   //START ADDING NEW PRODUCT
   const [categoryData, setCategoryData] = useState({
     name: "",
     description: "",
+    userid: user.id
   });
 
   const status_options = [
@@ -75,24 +79,22 @@ function Categories() {
   ];
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    //e.preventDefault();
+
+
+
 
     const isValid = await AddCategorySchema.isValid(categoryData);
     if (!isValid) {
       toast.error("Please enter all the required fields!!");
-      console.log(categoryData);
     } else {
-      console.log(categoryData);
       await addCategory(categoryData)
         .then((res) => {
-          if (res.data?.status === "true") {
-            console.log("Category Added");
-            toast.success("Category Added Successfully");
+          if (res.status == 201 ) {
+            toast.success(" Successfully Added ");
             handleGetCategoryList();
-            console.log(res.data.result);
+            setShowAddCategoryForm(false)
           } else {
-            console.log("Category Could Not Be Added");
-            console.log(res.data.result);
             toast.error("Category Could Not Be Added");
           }
         })
@@ -104,27 +106,24 @@ function Categories() {
 
 
 
-//handledit
+  //handledit
 
   const handleEdit = async (e) => {
-    e.preventDefault();
+    //e.preventDefault();
+
+
+    setCategoryData({ ...categoryData, userid: user.id});
 
     const isValid = await AddCategorySchema.isValid(categoryData);
     if (!isValid) {
       toast.error("Please enter all the required fields!!");
-      console.log(categoryData);
     } else {
-      console.log(categoryData);
-      await  editCategoriee(categoryData.id, categoryData)
+      await editCategoriee(categoryData.id, categoryData)
         .then((res) => {
-          if (res.data?.status === "true") {
-            console.log("category Updated");
+          if (res.status == 200 ) {
             toast.success("category Updated Successfully");
             handleGetCategoryList()
-            console.log(res.data.result);
           } else {
-            console.log("category Could Not Be Updated");
-            console.log(res.data.result);
             toast.error("category Could Not Be Updated");
           }
         })
@@ -146,12 +145,12 @@ function Categories() {
 
   //END ADDING NEW PRODUCT
 
-  
+
   //DELETE SUPPLIER
   const handleDeleteCategory = async (id) => {
     await deleteCategory(id)
       .then((res) => {
-        if (res.data?.status === "true") {
+        if (res.status == 204 ) {
           handleGetCategoryList();
         } else {
         }
@@ -161,16 +160,22 @@ function Categories() {
 
   //START GET CATEGORY
   const handleGetCategoryList = async () => {
+
+    toast.success("Fetching Categories!!", { autoClose: 2000 });
+
+
+    const user = JSON.parse(localStorage.getItem("user"));
+ 
     setCategoryList([]);
     setScreenLoading(true);
 
     try {
       await getCategories()
         .then((res) => {
-          console.log(res);
-          if (res.data?.status === "true") {
-            console.log("Category List");
-            console.log(res.data.result);
+          
+
+           if (res.data.status === 'true') {
+           
             setCategoryList(res.data.result);
           } else {
             setCategoryList([]);
@@ -209,19 +214,19 @@ function Categories() {
         </ArgonBox>
       ),
 
-      edit: (
+      edit: ( 
         <Button
-        onClick={async () => {
-          setEditFormActive(true)
-        
-          setShowAddCategoryForm (true)
-          setCategoryData(item)  
+          onClick={async () => {
+            setEditFormActive(true)
 
-          
-        }}
-      >
-        <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-ruler-pencil" />
-      </Button>
+            setShowAddCategoryForm(true)
+            setCategoryData(item)
+
+
+          }}
+        >
+          <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-ruler-pencil" />
+        </Button>
       ),
       delete: (
         <Button
@@ -229,7 +234,7 @@ function Categories() {
             handleDeleteCategory(item.id);
           }}
         >
-          <ArgonBox component="i" color="info" fontSize="34px" className="ni ni-fat-remove" />
+          <ArgonBox component="i" color="red" fontSize="34px" className="ni ni-fat-remove" />
         </Button>
       ),
     });
@@ -249,12 +254,17 @@ function Categories() {
             <Card>
               <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
                 <ArgonTypography variant="h6">Categories table</ArgonTypography>
-                <Button onClick={() =>{ setCategoryData({
-                   name: "",
-                   description: "",
-                   
-                })   
-                setShowAddCategoryForm(!showAddCategoryForm)}}>
+                <Button onClick={() => {
+
+                  const user = JSON.parse(localStorage.getItem("user"));
+                  setCategoryData({
+                    name: "",
+                    description: "",
+                    userid: user.id
+
+                  })
+                  setShowAddCategoryForm(!showAddCategoryForm)
+                }}>
                   <h4 style={{ paddingRight: 10 }}>Add Category </h4>
                   <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-fat-add" />
                 </Button>
@@ -320,8 +330,8 @@ function Categories() {
                   />
                 </ArgonBox>
                 <ArgonBox mb={2} mx={5}>
-                  <ArgonButton onClick={editFormActive? handleEdit: handleSubmit} color="info" size="large" fullWidth>
-                   {editFormActive ? "Edit Category": "Add Category" }
+                  <ArgonButton onClick={editFormActive ? handleEdit : handleSubmit} color="info" size="large" fullWidth>
+                    {editFormActive ? "Edit Category" : "Add Category"}
                   </ArgonButton>
 
                   {/* <ArgonButton onClick={editFormActive? handleEdit: handleSubmit} color="info" size="large" fullWidth>

@@ -18,7 +18,6 @@ import { useState } from "react";
 
 // @mui material components
 import Grid from "@mui/material/Grid";
-import Card from "@mui/material/Card";
 
 // @mui icons
 import FacebookIcon from "@mui/icons-material/Facebook";
@@ -27,31 +26,14 @@ import InstagramIcon from "@mui/icons-material/Instagram";
 
 // Argon Dashboard 2 MUI components
 import ArgonBox from "components/ArgonBox";
-import ArgonTypography from "components/ArgonTypography";
 
 // Argon Dashboard 2 MUI example components
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import Footer from "examples/Footer";
 import ProfileInfoCard from "examples/Cards/InfoCards/ProfileInfoCard";
-import ProfilesList from "examples/Lists/ProfilesList";
-import DefaultProjectCard from "examples/Cards/ProjectCards/DefaultProjectCard";
-import PlaceholderCard from "examples/Cards/PlaceholderCard";
-
 // Overview page components
 import Header from "layouts/profile/components/Header";
-import PlatformSettings from "layouts/profile/components/PlatformSettings";
 
-// Data
-import profilesListData from "layouts/profile/data/profilesListData";
-
-// Images
-import homeDecor1 from "assets/images/home-decor-1.jpg";
-import homeDecor2 from "assets/images/home-decor-2.jpg";
-import homeDecor3 from "assets/images/home-decor-3.jpg";
-import team1 from "assets/images/team-1.jpg";
-import team2 from "assets/images/team-2.jpg";
-import team3 from "assets/images/team-3.jpg";
-import team4 from "assets/images/team-4.jpg";
 const bgImage =
   "https://raw.githubusercontent.com/creativetimofficial/public-assets/master/argon-dashboard-pro/assets/img/profile-layout-header.jpg";
 
@@ -59,7 +41,6 @@ function Overview() {
 
 
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
-  console.log(JSON.parse(localStorage.getItem("user")));
 
 
   return (
@@ -84,24 +65,24 @@ function Overview() {
               title="profile information"
               description="Hi, Decisions: If you can't decide, the answer is no. If two equally difficult paths, choose the one more painful in the short term (pain avoidance is creating an illusion of equality)."
               info={{
-                fullName: user.name,
+                fullName: user.first_name + ' ' + user.last_name,
                 mobile: user.contact,
                 email: user.email,
-                location: user.streetAddress,
+                location: user.city,
               }}
               social={[
                 {
-                  link: "https://www.facebook.com/CreativeTim/",
+                  link: "https://www.facebook.com/gomindz/",
                   icon: <FacebookIcon />,
                   color: "facebook",
                 },
                 {
-                  link: "https://twitter.com/creativetim",
+                  link: "https://twitter.com/gomindz",
                   icon: <TwitterIcon />,
                   color: "twitter",
                 },
                 {
-                  link: "https://www.instagram.com/creativetimofficial/",
+                  link: "https://www.instagram.com/gomindz/",
                   icon: <InstagramIcon />,
                   color: "instagram",
                 },
@@ -109,9 +90,6 @@ function Overview() {
               action={{ route: "", tooltip: "Edit Profile" }}
             />
           </Grid>
-          {/* <Grid item xs={12} xl={4}>
-            <ProfilesList title="conversations" profiles={profilesListData} />
-          </Grid> */}
         </Grid>
       </ArgonBox>
       

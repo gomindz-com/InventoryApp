@@ -15,12 +15,12 @@ Coded by www.creative-tim.com
 
 import React from "react";
 import { createRoot } from "react-dom/client";
-import ReactDOM  from "react-dom";
+//import ReactDOM  from "react-dom";
+import ReactDOM from "react-dom/client";
+
 import { BrowserRouter } from "react-router-dom";
-import App from "App";
-
 import { HashRouter } from 'react-router-dom'
-
+import App from "App";
 
 // Soft UI Context Provider
 import { ArgonControllerProvider } from "context";
@@ -32,15 +32,27 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 import "react-perfect-scrollbar/dist/css/styles.css";
 
 
-ReactDOM.render(
-  <BrowserRouter>
+// ReactDOM.render(
+//   <HashRouter>
+//     <ArgonControllerProvider>
+//       <PerfectScrollbar>
+//         <App />
+//       </PerfectScrollbar>
+//     </ArgonControllerProvider>
+//   </HashRouter>,
+//   document.getElementById("root")
+// );
+
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
+  <HashRouter>
     <ArgonControllerProvider>
       <PerfectScrollbar>
         <App />
       </PerfectScrollbar>
     </ArgonControllerProvider>
-  </BrowserRouter>,
-  document.getElementById("root")
+  </HashRouter>
 );
 
 

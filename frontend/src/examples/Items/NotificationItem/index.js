@@ -88,9 +88,9 @@ NotificationItem.propTypes = {
     "light",
     "dark",
   ]),
-  image: PropTypes.node.isRequired,
-  title: PropTypes.arrayOf(PropTypes.string).isRequired,
-  date: PropTypes.string.isRequired,
+  image: PropTypes?.node.isRequired,
+  title: PropTypes?.arrayOf(PropTypes.string).isRequired,
+  date: PropTypes?.string.isRequired,
 };
 
 export default NotificationItem;

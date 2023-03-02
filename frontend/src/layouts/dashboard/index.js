@@ -63,10 +63,9 @@ function Default() {
     try {
       await getCategories()
         .then((res) => {
-          console.log(res);
-          if (res.data?.status === "true") {
-            console.log("Category List");
-            console.log(res.data.result);
+
+          console.log(res.data)
+          if (res.data.status === 'true') {
             setCategoryList(res.data.result);
           } else {
             setCategoryList([]);
@@ -102,10 +101,8 @@ function Default() {
     try {
       await getOrderCount()
         .then((res) => {
-          console.log(res);
           if (res.data?.status === "true") {
-            console.log("Order Count");
-            console.log(res.data.result);
+            
             setOrderCount(res.data.result);
           } else {
             setOrderCount({});
@@ -134,10 +131,7 @@ function Default() {
     try {
       await getProductCount()
         .then((res) => {
-          console.log(res);
           if (res.data?.status === "true") {
-            console.log("Product Count");
-            console.log(res.data.result);
             setProductCount(res.data.result);
           } else {
             setProductCount({});
@@ -155,10 +149,8 @@ function Default() {
     try {
       await getSupplierCount()
         .then((res) => {
-          console.log(res);
+          
           if (res.data?.status === "true") {
-            console.log("Supplier Count");
-            console.log(res.data.result);
             setSupplierCount(res.data.result);
           } else {
             setSupplierCount({});
@@ -176,10 +168,9 @@ function Default() {
     try {
       await getBuyerCount()
         .then((res) => {
-          console.log(res);
+          
           if (res.data?.status === "true") {
-            console.log("Buyer Count");
-            console.log(res.data.result);
+  
             setBuyerCount(res.data.result);
           } else {
             setBuyerCount({});
@@ -198,10 +189,8 @@ function Default() {
     try {
       await getProducts()
         .then((res) => {
-          console.log(res);
+          
           if (res.data?.status === "true") {
-            console.log("Product List");
-            console.log(res.data.result);
             setProductList(res.data.result);
           } else {
             setProductList([]);
@@ -215,25 +204,22 @@ function Default() {
   //END GET PRODUCTS
 
   useEffect(() => {
-    handleGetOrderCount();
-    handleGetProductCount();
-    handleGetSupplierCount();
-    handleGetBuyerCount();
-    handleGetCategoryList();
-    handleGetProductList();
+
+    user != null && handleGetOrderCount();
+    user != null && handleGetProductCount();
+    user != null && handleGetSupplierCount();
+    user != null && handleGetBuyerCount();
+    user != null && handleGetCategoryList();
+    user != null && handleGetProductList();
   }, []);
 
   function handleClick(e) {
     setShowSearch(true);
 
     const filtered2 = productList.filter((employee) => {
-      console.log("The Name");
-      console.log(employee.name);
-      console.log("The Target Value");
-      console.log(e.target.value.toString());
+     
 
       if (employee.name.toLowerCase() === e.target.value.toLowerCase()) {
-        console.log("We have one equal");
         setProductListA([employee]);
       }
 
@@ -306,9 +292,6 @@ function Default() {
             setEditFormActive(true);
             setShowAddProductForm(true);
             setProductData(item);
-
-            console.log(item);
-
             setProductData({
               ...item,
               ["category_id"]: item.category.id,
@@ -333,10 +316,6 @@ function Default() {
 
 
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
-  console.log(JSON.parse(localStorage.getItem("user")));
-
-  console.log(user)
-
 
   return (
     <DashboardLayout>
@@ -367,12 +346,10 @@ function Default() {
               count={
                 productCount?.productcount == undefined
                   ? 0 + " Product"
-                  : productCount?.productcount + " Product(s)"
+                  : productCount?.productcount
               }
               amount={
-                productCount?.productcount == undefined
-                  ? 0 + " Product"
-                  : productCount?.productcount + " Product(s)"
+                ''
               }
               icon={{ color: "error", component: <i className="ni ni-world" /> }}
               percentage={{ color: "success", count: "+3%", text: "since last week" }}
@@ -384,12 +361,10 @@ function Default() {
               count={
                 supplierCount?.suppliercount == undefined
                   ? 0 + " Supplier"
-                  : supplierCount?.suppliercount + " Supplier(s)"
+                  : supplierCount?.suppliercount 
               }
               amount={
-                supplierCount?.suppliercount == undefined
-                  ? 0 + " Supplier"
-                  : supplierCount?.suppliercount + " Supplier(s)"
+                ''
               }
               icon={{ color: "success", component: <i className="ni ni-paper-diploma" /> }}
               percentage={{ color: "error", count: "-2%", text: "since last quarter" }}
@@ -401,13 +376,10 @@ function Default() {
               count={
                 buyerCount?.buyercount == undefined
                   ? 0 + " Buyer"
-                  : buyerCount?.buyercount + " Buyer(s)"
+                  : buyerCount?.buyercount 
               }
-              amount={
-                buyerCount?.buyercount == undefined
-                  ? 0 + " Buyer"
-                  : buyerCount?.buyercount + " Buyer(s)"
-              }
+              amount={''
+                }
               icon={{ color: "warning", component: <i className="ni ni-cart" /> }}
               percentage={{ color: "success", count: "+5%", text: "than last month" }}
             />
@@ -442,7 +414,7 @@ function Default() {
                   <ArgonTypography variant="button" color="text" fontWeight="medium">
                     {orderCount?.percentageIncrement}% more{" "}
                     <ArgonTypography variant="button" color="text" fontWeight="regular">
-                      in 2022
+                      in {new Date().getFullYear()}
                     </ArgonTypography>
                   </ArgonTypography>
                 </ArgonBox>

@@ -1,12 +1,17 @@
 import axiosConfig from "./axios-config";
 
+
+const user = JSON.parse(localStorage.getItem("user"));
+
+
+
 export const getProducts = async () => {
   const data = await axiosConfig
-    .get(`/products/`)
+    .get(`/store/products/`)
     .then((response) => {
       return response;
     })
-    .catch((err) => {
+    .catch((err) => { 
       console.log(err);
     });
 
@@ -15,12 +20,11 @@ export const getProducts = async () => {
 
 export const getProductCount = async () => {
   const data = await axiosConfig
-    .get(`/productcount/`)
+    .get(`/store/productcount/`)
     .then((response) => {
       return response;
     })
     .catch((err) => {
-      console.log(err);
       toast.error(err);
     });
 
@@ -29,15 +33,11 @@ export const getProductCount = async () => {
 
 export const addProduct = async (productData) => {
   const data = await axiosConfig
-    .post(`/products/`, productData)
+    .post(`/store/products/`, productData)
     .then((response) => {
-      console.log("Api Response")
-      console.log(response)
       return response;
     })
     .catch((err) => {
-      console.log("Api Error")
-      console.log(err.response.data.result);
       return err.response;
     });
 
@@ -47,16 +47,14 @@ export const addProduct = async (productData) => {
 
 export const deleteProduct = async (id) => {
   const data = await axiosConfig
-    .delete(`/products/${id}`)
+    .delete(`/store/products/${id}/`)
     .then((response) => {
-      console.log("Api Response")
-      console.log(response)
+      
       return response;
     })
     .catch((err) => {
-      console.log("Api Error")
-      console.log(err.response.data.result);
-      return err.response;
+      
+      return err;
     });
 
   return data;
@@ -64,15 +62,13 @@ export const deleteProduct = async (id) => {
 
 export const editProduct = async (productData) => {
   const data = await axiosConfig
-    .put(`/products/${productData.id}`, productData)
+    .put(`/store/products/${productData.id}/`, productData)
     .then((response) => {
-      console.log("Api Response")
-      console.log(response)
+      
       return response;
     })
     .catch((err) => {
-      console.log("Api Error")
-      console.log(err.response.data.result);
+      
       return err.response;
     });
 

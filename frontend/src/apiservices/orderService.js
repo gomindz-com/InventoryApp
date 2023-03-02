@@ -1,14 +1,13 @@
 import { toast } from "react-toastify";
 import axiosConfig from "./axios-config";
 
-export const getOrders = async () => {
+export const getOrders = async (customerId) => {
   const data = await axiosConfig
-    .get(`/orders/`)
+    .get(`/store/orders/`) 
     .then((response) => {
       return response;
     })
     .catch((err) => {
-      console.log(err);
       toast.error(err);
     });
 
@@ -18,12 +17,11 @@ export const getOrders = async () => {
 
 export const getOrderCount = async () => {
   const data = await axiosConfig
-    .get(`/ordercount/`)
+    .get(`/store/ordercount/`)
     .then((response) => {
       return response;
     })
     .catch((err) => {
-      console.log(err);
       toast.error(err);
     });
 
@@ -33,15 +31,11 @@ export const getOrderCount = async () => {
 
 export const addOrder = async (productData) => {
   const data = await axiosConfig
-    .post(`/orders/`, productData)
+    .post(`/store/orders/`, productData)
     .then((response) => {
-      console.log("Api Response")
-      console.log(response)
       return response;
     })
     .catch((err) => {
-      console.log("Api Error")
-      console.log(err.response.data.result);
       return err.response;
     });
 
@@ -51,15 +45,11 @@ export const addOrder = async (productData) => {
 
 export const deleteOrder = async (id) => {
   const data = await axiosConfig
-    .delete(`/orders/${id}`)
+    .delete(`/store/orders/${id}`)
     .then((response) => {
-      console.log("Api Response")
-      console.log(response)
       return response;
     })
     .catch((err) => {
-      console.log("Api Error")
-      console.log(err.response.data.result);
       return err.response;
     });
 

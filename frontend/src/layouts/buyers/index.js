@@ -66,25 +66,21 @@ function Buyers() {
   });
   
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    //e.preventDefault();
 
     const isValid = await AddBuyerSchema.isValid(buyerData);
     if (!isValid) {
       toast.error("Please enter all the required fields!!");
-      console.log(buyerData);
+      
     } else {
-      console.log(buyerData);
       await addBuyer(buyerData)
         .then((res) => {
           if (res.data?.status === "true") {
-            console.log("Buyer Added");
-            toast.success("Buyer Added Successfully");
+            toast.success("Successfully Added ");
             handleGetBuyerList();
-            console.log(res.data.result);
+            setShowAddForm(false)
           } else {
-            console.log("Buyer Could Not Be Added");
-            console.log(res.data.result);
-            toast.error("Buyer Could Not Be Added");
+                        toast.error((res.data.result[Object.keys(res.data.result)[0]])[0]);
           }
         })
         .catch((err) => {
@@ -95,24 +91,18 @@ function Buyers() {
 
 
   const handleEdit = async (e) => {
-    e.preventDefault();
+    //e.preventDefault();
 
     const isValid = await AddBuyerSchema.isValid(buyerData);
     if (!isValid) {
       toast.error("Please enter all the required fields!!");
-      console.log(buyerData);
     } else {
-      console.log(buyerData);
       await editBuyer(buyerData.id, buyerData)
         .then((res) => {
           if (res.data?.status === "true") {
-            console.log("Buyer Updated");
             toast.success("Buyer Updated Successfully");
             handleGetBuyerList()
-            console.log(res.data.result);
           } else {
-            console.log("Buyer Could Not Be Updated");
-            console.log(res.data.result);
             toast.error("Buyer Could Not Be Updated");
           }
         })
@@ -136,10 +126,8 @@ function Buyers() {
     try {
       await getBuyers()
         .then((res) => {
-          console.log(res);
           if (res.data?.status === "true") {
-            console.log("Buyers List");
-            console.log(res.data.result);
+            
             setBuyerList(res.data.result);
           } else {
             setBuyerList([]);

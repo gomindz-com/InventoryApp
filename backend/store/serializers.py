@@ -1,12 +1,50 @@
-from dataclasses import field
-import imp
 from rest_framework import serializers
-from .models import Category, Delivery, Product, ProductQuantity, Supplier, Buyer, Order, Delivery
+from .models import Category, Delivery, Product, OrderProducts, Supplier, Buyer, Order, Delivery
+
+
+class CategorySerializer(serializers.ModelSerializer):
+
+    owner = serializers.PrimaryKeyRelatedField(
+        read_only=True,
+    )
+
+    class Meta:
+        model = Category
+        fields = ('id', 'name', 'description', 'owner')
+
+
 
 class ProductSerializer(serializers.ModelSerializer):
+    category = serializers.SlugRelatedField(
+                read_only=False,
+                slug_field="name",
+                queryset=Category.objects.all()
+                )
+    owner = serializers.PrimaryKeyRelatedField(
+        read_only=True,
+    )
+
     class Meta:
         model = Product
-        fields = ['id', 'name', 'label', 'tags', 'price', 'stock', 'status', 'sortno', 'category', 'images']
+        fields = ('id', 'name', 'description_color', 'label_size', 'price', 'sku', 'stock', 'status', 'sortno', 'owner', 'category', 'image')
+
+
+
+class OrderSerializer(serializers.ModelSerializer):    
+    owner = serializers.PrimaryKeyRelatedField(
+        read_only=True,
+    )
+    class Meta:
+        model = Order
+        fields = ('id', 'products', 'buyer', 'type', 'status', 'receipt', 'total_price', 'owner')
+        depth = 1
+
+class OrderProductsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderProducts
+        fields = ['id', 'product', 'order', 'quantity']
+
+
 class SupplierSerializer(serializers.ModelSerializer):
     class Meta:
         model = Supplier
@@ -14,32 +52,23 @@ class SupplierSerializer(serializers.ModelSerializer):
                   'phone_number', 'industry', 'contactName',
                   'email', 'additional_information', 'additional_files',
                   'created_date', 'name']
+
+
 class BuyerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Buyer
         fields = ['id', 'name', 'email', 'address',
                   'mobile_number', 'tax_id' ]
 
+
 class ProductOrderSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ProductQuantity
+        #model = ProductQuantity
         fields = ['id', 'product', 'order',
                   'product_quantity']
-
-class OrderSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Order
-        fields = ['id', 'products', 'buyer', 'type',
-                  'status', 'receipt', 'total_price']
-        depth = 1
 
 
 class DeliveriesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Delivery
         fields = ['id', 'reference', 'order', 'courier_name','status', 'reciept']
-class CategorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Category
-        fields = ['id', 'name', 'description']
-

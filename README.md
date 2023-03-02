@@ -1,166 +1,91 @@
-# InventoryApp
+# Gomindz Inventory App Backend
 
+## Get Started On Windows
 
-Clone The Entire Project
+```
+git clone {the url to the GitHub repo}
+```
 
-- git clone {the url to the GitHub repo}
+```
+cd ..
+pip install virtualenv ...In case you do not have Virtual Env not installed
+python -m venv inventoryapp_env
+```
 
-# Frontend React JS
+```
+inventoryapp_env/Scripts/activate
+deactivate  ... To deactivate the Virtual Env
+```
 
-Getting Started
+```diff
+- Add the virtual environment path to VSCode in case you are using VSCode
++ This can be found in View, Command Palette, Search for python Interpreter.
+! Then add the Path here.
+@@  @@
+```
 
-- cd frontend
-- npm install
-- npm start
-
-In case of error with $ npm install, use the commands 
-$ npm install --legacy-peer-deps
-$ npm fund
-
-
-- Do a pull to keep your local files up to date with the git repo
-  Make sure you are in the master branch
-
-$ git checkout master
-
-$ git branch
-
-$ git pull origin {main/master}
-
-- Create a new branch To work on
-
-$ git checkout -b {New Branch Name}
-
-  Work on your feature and edit or updates or add files or deletes files etc
-
-- Once done
-
-$ git add .
-$ git commit  -m "Added index.html" 
-
-- Then push the branch to the remote repo
-
-$ git push origin {Branch Name}
-
-
-
-
-# Backend Djnago - Windows Setup
-
-Getting Started
-
-- cd backend
-- python --version
-
-Python 3 or Greater is recommended
-- Python 3.8.10
-
-Create Virtual Environment
-
-- python -m venv inventoryapp_env
-If this command does not work, you most likely do not have virtualenv installed.
-To install virtualenv : - pip install virtualenv
-
-This will create a folder called inventoryapp_env 
- 
-Activate the virtual environment
-- inventoryapp_env/Scripts/activate
-
-To deactivate the virtual environment
-- deactivate
-  
-- Configure VSCode to use the python intepreter inside our virtual environment
-
-  In VSCode, View -> Command Palette -> Search for python intepreter
-  Get The Path to our virtual environment : $ pipenv --venv
-  Copy the path and paste in the vscode python intepreter path and append \bin\python
-
-
-- Install Requirements File
-
-  pip install -r requirements.txt
-
-- Migrate Database
-
-  python manage.py migrate
-
-- Create Super User
-
-  python manage.py createsuperuser
-
-- Run Project
-
-  python manage.py runserver
-  
-  
-
-# Backend Djnago - IOS Setup
-
-Go To Project Directory
-
-- cd backend
-
-Create Virtual Environment
-
-- python3 -m venv venv
-
-Active Virtual Environment
-
-- source venv/bin/activate
-
-- Configure VSCode to use the python intepreter inside our virtual environment
-
-  In VSCode, View -> Command Palette -> Search for python intepreter
-  Get The Path to our virtual environment : $ pipenv --venv
-  Copy the path and paste in the vscode python intepreter path and append \bin\python
-
-Install Requirements File
-
-comment Out The Mysqlclient & psycopg2 before installing.
-
+```
 pip install -r requirements.txt
-
-Migrate Database
-
-- python manage.py migrate
-
+python manage.py migrate
 Create Super User
-
-- python manage.py createsuperuser
-
-Run Project
-
-- python manage.py runserver
+python manage.py createsuperuser
+python manage.py runserver
+```
 
 
+## Get Started On IOS
+
+```
+git clone {the url to the GitHub repo}
+```
+
+```
+cd ..
+python3 -m venv venv
+source venv/bin/activate
+```
+
+```diff
+- Add the virtual environment path to VSCode in case you are using VSCode
++ This can be found in View, Command Palette, Search for python Interpreter.
+! Then add the Path here.
+@@  @@
+```
+
+```diff
+- Comment Out The Mysqlclient & psycopg2 before installing.
+```
+
+```
+pip install -r requirements.txt
+python manage.py migrate
+Create Super User
+python manage.py createsuperuser
+python manage.py runserver
+```
 
 
 
+# Gomindz Inventory App
 
-# Git Collaboration
+## Get Started
 
+```diff
++ git clone {the url to the GitHub repo}
+```
 
+```
+cd inv-frontend
+```
 
-- Do a pull to keep your local files up to date with the git repo
-  Make sure you are in the master branch
+```diff
+npm install --legacy-peer-deps
+```
 
-$ git checkout master
+```diff
+npm fund
+```
 
-$ git branch
-
-$ git pull origin {main/master}
-
-- Create a new branch To work on
-
-$ git checkout -b {New Branch Name}
-
-  Work on your feature and edit or updates or add files or deletes files etc
-
-- Once done
-
-$ git add .
-$ git commit  -m "Added index.html" 
-
-- Then push the branch to the remote repo
-
-$ git push origin {Branch Name}
+```diff
+npm start
+```

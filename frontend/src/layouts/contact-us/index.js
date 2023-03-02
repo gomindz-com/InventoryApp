@@ -53,24 +53,19 @@ function Contact() {
 
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    //e.preventDefault();
 
     const isValid = await RegisterUserSchema.isValid(userData);
     if (!isValid) {
       toast.error("Please enter all the required fields!!");
-      console.log("userDataddddddddddd");
-      console.log(userData);
     } else {
-      console.log(userData);
       await registerUser(userData)
         .then((res) => {
           if (res.data) {
 
-            console.log(res)
-            console.log(res)
+           
             if(res.data.message == 'success'){
-              console.log("User Registered In Success");
-              console.log(res.data.status);
+             
               toast.success("User Registered Successfully");
               localStorage.removeItem("user")
               localStorage.removeItem("token");
@@ -78,21 +73,17 @@ function Contact() {
             }
 
             else{
-              console.log("User Could Not Be Registered");
-            console.log(res);
+             
             toast.error("User Could Not Be Registered");
             }
             
             
           } else {
-            console.log("User Could Not Be Registered In");
-            console.log(res);
             toast.error("User Could Not Be Registered");
           }
         })
         .catch((err) => {
           console.log("Error");
-          console.log(err);
         });
     }
   };

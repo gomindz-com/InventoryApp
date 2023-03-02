@@ -34,7 +34,7 @@ ArgonAvatar.defaultProps = {
 
 // Typechecking props for the ArgonAvatar
 ArgonAvatar.propTypes = {
-  bgColor: PropTypes.oneOf([
+  bgColor: PropTypes?.oneOf([
     "transparent",
     "primary",
     "secondary",
@@ -45,8 +45,8 @@ ArgonAvatar.propTypes = {
     "light",
     "dark",
   ]),
-  size: PropTypes.oneOf(["xs", "sm", "md", "lg", "xl", "xxl"]),
-  shadow: PropTypes.oneOf(["none", "xs", "sm", "md", "lg", "xl", "xxl", "inset"]),
+  size: PropTypes?.oneOf(["xs", "sm", "md", "lg", "xl", "xxl"]),
+  shadow: PropTypes?.oneOf(["none", "xs", "sm", "md", "lg", "xl", "xxl", "inset"]),
 };
 
 export default ArgonAvatar;

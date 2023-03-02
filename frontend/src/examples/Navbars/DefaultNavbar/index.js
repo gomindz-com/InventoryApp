@@ -1,18 +1,3 @@
-/* eslint-disable no-param-reassign */
-/**
-=========================================================
-* Argon Dashboard 2 MUI - v3.0.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-material-ui
-* Copyright 2022 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
 
 import { useState, useEffect } from "react";
 
@@ -52,11 +37,6 @@ function DefaultNavbar({ brand, transparent, light, action }) {
 
 
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
-  console.log(JSON.parse(localStorage.getItem("user")));
-
-  console.log(user)
-
-
 
   useEffect(() => {
     // A function that sets the display state for the DefaultNavbarMobile.
@@ -154,7 +134,7 @@ function DefaultNavbar({ brand, transparent, light, action }) {
           </ArgonBox>
         </ArgonBox>
       </ArgonBox>
-      {mobileView && <DefaultNavbarMobile open={mobileNavbar} close={closeMobileNavbar} />}
+      {mobileView && <DefaultNavbarMobile  open={mobileNavbar} close={closeMobileNavbar} />}
     </Container>
   );
 }

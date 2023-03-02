@@ -1,11 +1,12 @@
 import { baseUrl } from "./baseURL";
-import axiosConfig from "./axios-configAuth";
+import axiosConfig from "./axios-config";
+
 
 export const loginUser = async (userData) => {
-  console.log("Calling Login API Service");
   const data = await axiosConfig
     .post(`/user/login/`, userData)
     .then(async (response) => {
+
       return response;
     })
     .catch((error) => {
@@ -14,6 +15,8 @@ export const loginUser = async (userData) => {
 
   return data;
 };
+
+
 
 export const registerUser = async (userData) => {
   const data = await axiosConfig

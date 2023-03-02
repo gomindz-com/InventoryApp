@@ -3,7 +3,7 @@ import axiosConfig from "./axios-config";
 
 export const getInvoices = async () => {
   const data = await axiosConfig
-    .get(`/invoices/`)
+    .get(`/store/invoices/`)
     .then((response) => {
       return response;
     })
@@ -18,7 +18,7 @@ export const getInvoices = async () => {
 
 export const getInvoiceCount = async () => {
   const data = await axiosConfig
-    .get(`/ordercount/`)
+    .get(`/store/invoicecount/`)
     .then((response) => {
       return response;
     })
@@ -33,14 +33,12 @@ export const getInvoiceCount = async () => {
 
 export const addInvoice = async (productData) => {
   const data = await axiosConfig
-    .post(`/orders/`, productData)
+    .post(`/store/invoices/`, productData)
     .then((response) => {
-      console.log("Api Response")
-      console.log(response)
+      
       return response;
     })
     .catch((err) => {
-      console.log("Api Error")
       console.log(err.response.data.result);
       return err.response;
     });
@@ -51,15 +49,12 @@ export const addInvoice = async (productData) => {
 
 export const deleteInvoice = async (id) => {
   const data = await axiosConfig
-    .delete(`/orders/${id}`)
+    .delete(`/store/invoices/${id}`)
     .then((response) => {
-      console.log("Api Response")
-      console.log(response)
+      
       return response;
     })
     .catch((err) => {
-      console.log("Api Error")
-      console.log(err.response.data.result);
       return err.response;
     });
 
@@ -69,16 +64,15 @@ export const deleteInvoice = async (id) => {
 
 
 export const editInvoice = async (id, data) => {
+
+  console.log(data)
   const data1 = await axiosConfig
-    .put(`/invoices/${id}`, data)
+    .put(`/store/invoices/${id}`, data)
     .then((response) => {
-      console.log("Api Response")
-      console.log(response)
       return response;
     })
     .catch((err) => {
-      console.log("Api Error")
-      console.log(err.response.data.result);
+      console.log(err)
       return err.response;
     });
 

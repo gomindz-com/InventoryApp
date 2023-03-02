@@ -1,7 +1,8 @@
+from django.http import HttpResponse
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-
 from store.models import Product, Supplier, Buyer, Order
+import datetime
 
 
 @login_required(login_url='login')
@@ -19,3 +20,9 @@ def dashboard(request):
         'orders': orders
     }
     return render(request, 'dashboard.html', context)
+
+
+def Welcome(request):
+    now = datetime.datetime.now() 
+    msg = f'Welcome to Gomindz Inv Backend. Today is {now}'
+    return HttpResponse(msg, content_type='text/plain')

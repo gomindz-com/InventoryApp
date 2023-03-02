@@ -91,7 +91,7 @@ ArgonTypography.propTypes = {
     "bottom",
   ]),
   textGradient: PropTypes.bool,
-  children: PropTypes.node.isRequired,
+  //children: PropTypes.node.,
   opacity: PropTypes.number,
 };
 

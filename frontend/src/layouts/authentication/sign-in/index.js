@@ -1,18 +1,3 @@
-/**
-=========================================================
-* Argon Dashboard 2 MUI - v3.0.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-material-ui
-* Copyright 2022 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
 import { useState } from "react";
 
 // react-router-dom components
@@ -35,6 +20,7 @@ import { loginUser } from "apiservices/authService";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
 import { Routes, Route, Navigate, useLocation, } from "react-router-dom";
+import { getUserDetails } from "apiservices/userService";
 
 // Image
 const bgImage =
@@ -56,32 +42,45 @@ function Illustration() {
   });
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    //e.preventDefault();
 
     const isValid = await UserSchema.isValid(userData);
     if (!isValid) {
       toast.error("Please enter all the required fields!!");
-      console.log(userData);
     } else {
-      console.log(userData);
       await loginUser(userData)
-        .then((res) => {
-          if (res.data) {
-            console.log("User Logged In Success");
-            console.log(res.data.status);
+        .then(async (res) => {
+
+        
+          
+          if (res.status == 200) {
+            localStorage.setItem("token", res.data.token);
+
+            try {
+              await getUserDetails(userData.email)
+                .then((res) => {
+                  if (res?.status == 200) {
+                   
+                    localStorage.setItem("user", JSON.stringify(res.data));
+
+                  } else {
+                  }
+                })
+                .catch((err) => console.log("Error in Getting User Detail", err));
+                } catch (error) {
+              console.log(error);
+            }
+
+            
+            setUser(JSON.parse(localStorage.getItem("user")))
             toast.success("User Login Successfully");
-            setUser(res.data.result);
-            console.log(res.data.result);
-            localStorage.setItem("token", res.data.result.jwt);
-            localStorage.setItem("user", JSON.stringify(res.data.result.user));
+
+            
           } else {
-            console.log("User Could Not Be Logged In");
-            console.log(res.data);
             toast.error("User Could Not Be Logged In");
           }
         })
         .catch((err) => {
-          console.log("Error");
           console.log(err);
         });
     }

@@ -1,7 +1,83 @@
-from itertools import product
 from django.db import models
+from users.models import CustomUser
+from django.utils.translation import gettext_lazy as _
 
-from users.models import User
+
+def upload_to(instance, filename):
+    return 'products/{filename}'.format(filename=filename) 
+
+
+class Product(models.Model):
+    STATUS_CHOICE = (
+        ('in_stock', 'In Stock'),
+        ('out_of_stock', 'Out of Stock'),
+    )
+    name = models.CharField(max_length=120, unique=True)
+    description_color = models.CharField(max_length=120, default='')
+    label_size = models.CharField(max_length=120, default='')
+    price = models.DecimalField(max_digits=6, decimal_places=2)
+    stock = models.PositiveIntegerField(default='')
+    sku = models.CharField(max_length=120, default='')
+    status = models.CharField(max_length=120, choices=STATUS_CHOICE, default='')
+    supplier = models.CharField(max_length=50, default='')
+    sortno = models.PositiveIntegerField()
+    image = models.ImageField(_('Image'), upload_to= upload_to, default='products/default.png')
+    owner = models.ForeignKey('users.CustomUser', related_name='products', on_delete=models.CASCADE,  default=1)
+    category = models.ForeignKey('Category', on_delete=models.CASCADE, default='')
+    created_date = models.DateField(auto_now_add=True)
+  
+    def __str__(self):
+        return self.name
+
+
+
+class Category(models.Model):
+    name = models.CharField(max_length=120, unique=True)
+    description = models.CharField(max_length=220)
+    created_date = models.DateField(auto_now_add=True)
+    owner = models.ForeignKey('users.CustomUser', related_name='categories', on_delete=models.CASCADE, default='')
+    
+    def __str__(self):
+        return self.name
+
+
+
+class Order(models.Model):
+    STATUS_CHOICE = (
+        ('pending', 'Pending'),
+        ('decline', 'Decline'),
+        ('approved', 'Approved'),
+        ('processing', 'Processing'),
+        ('complete', 'Complete'),
+        ('bulk', 'Bulk'),
+    )
+    TYPE_CHOICE = (
+        ('invoice', 'Invoice'),
+        ('receipt', 'Receipt'),
+        ('order', 'Order'),
+    )
+    buyer = models.CharField(max_length=50, default='')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICE, default='')
+    receipt = models.CharField(max_length=50, default='')
+    total_price = models.FloatField(default=0.00) 
+    products = models.ManyToManyField(Product, through='OrderProducts')
+    type=models.CharField(max_length=20, choices=TYPE_CHOICE, default='')
+    created_date = models.DateField(auto_now_add=True)
+    owner = models.ForeignKey('users.CustomUser', related_name='orders', on_delete=models.CASCADE, default='')
+
+
+class OrderProducts(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1) 
+
+    def __str__(self):
+        return "{}_{}".format(self.order.__str__(), self.product.__str__())
+
+
+
+
+
 
 
 class Supplier(models.Model):
@@ -29,80 +105,9 @@ class Buyer(models.Model):
     tax_id = models.CharField(max_length=220, default='')
     created_date = models.DateField(auto_now_add=True)
 
-    # user = models.OneToOneField(User, on_delete=models.CASCADE)
     def __str__(self):
         return self.name
 
-
-class Season(models.Model):
-    name = models.CharField(max_length=120, unique=True)
-    description = models.CharField(max_length=220)
-    created_date = models.DateField(auto_now_add=True)
-
-    def __str__(self):
-        return self.name
-
-
-class Drop(models.Model):
-    name = models.CharField(max_length=120, unique=True)
-    created_date = models.DateField(auto_now_add=True)
-
-    def __str__(self):
-        return self.name
-
-
-class Product(models.Model):
-    STATUS_CHOICE = (
-        ('In Stock', 'In Stock'),
-        ('Out of Stock', 'Out of Stock'),
-    )
-    name = models.CharField(max_length=120, unique=True)
-    label = models.CharField(max_length=120, default='')
-    tags = models.CharField(max_length=120, default='')
-    price = models.DecimalField(max_digits=6, decimal_places=2)
-    stock = models.PositiveIntegerField(default='')
-    status = models.CharField(max_length=120, choices=STATUS_CHOICE, default='')
-    supplier = models.CharField(max_length=50, default='')
-    category = models.ForeignKey('Category', on_delete=models.CASCADE, default='')
-    images = models.CharField(max_length=120 , default='')
-    sortno = models.PositiveIntegerField()
-    created_date = models.DateField(auto_now_add=True)
-
-    def __str__(self):
-        return self.name
-
-
-class Order(models.Model):
-    STATUS_CHOICE = (
-        ('pending', 'Pending'),
-        ('decline', 'Decline'),
-        ('approved', 'Approved'),
-        ('processing', 'Processing'),
-        ('complete', 'Complete'),
-        ('bulk', 'Bulk'),
-    )
-    TYPE_CHOICE = (
-        ('invoice', 'Invoice'),
-        ('order', 'Order'),
-    )
-    buyer = models.CharField(max_length=50, default='')
-    status = models.CharField(max_length=20, choices=STATUS_CHOICE, default='')
-    receipt = models.CharField(max_length=50, default='')
-    total_price = models.FloatField(default=0.00) 
-    products = models.ManyToManyField(Product, through='ProductQuantity')
-    type=models.CharField(max_length=20, choices=TYPE_CHOICE, default='')
-    created_date = models.DateField(auto_now_add=True)
-
-    def __str__(self):
-        return self.buyer
-
-class ProductQuantity(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    product_quantity = models.PositiveIntegerField(default=1) 
-
-    def __str__(self):
-        return "{}_{}".format(self.order.__str__(), self.product.__str__())
 
 class Delivery(models.Model):
     STATUS_CHOICE = (
@@ -120,10 +125,3 @@ class Delivery(models.Model):
         return self.courier_name
 
 
-class Category(models.Model):
-    name = models.CharField(max_length=120, unique=True)
-    description = models.CharField(max_length=220)
-    created_date = models.DateField(auto_now_add=True)
-
-    def __str__(self):
-        return self.name

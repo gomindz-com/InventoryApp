@@ -66,13 +66,10 @@ import { useNavigate } from 'react-router-dom';
 function DashboardNavbar({ absolute, light, isMini, handleClick, data }) {
   const [navbarType, setNavbarType] = useState();
 
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
+
 
   const navigate = useNavigate();
-
-
-  
-  console.log("object")
-  console.log(data)
 
   const [controller, dispatch] = useArgonController();
   const { miniSidenav, transparentNavbar, fixedNavbar, openConfigurator } = controller;
@@ -80,8 +77,7 @@ function DashboardNavbar({ absolute, light, isMini, handleClick, data }) {
   const route = useLocation().pathname.split("/").slice(1);
 
   const [token, setToken] = useState(localStorage.getItem("token"));
-  console.log("Token")
-  console.log(token)
+
 
   useEffect(() => {
     // Setting the navbar type
@@ -196,9 +192,9 @@ function DashboardNavbar({ absolute, light, isMini, handleClick, data }) {
               <IconButton
                 sx={navbarIconButton}
                 size="small"
-                onClick={() => {
-                  localStorage.removeItem("user");
+                onClick={()=>{
                   
+                  navigate('/profile');
                 }}
               >
                 <Icon
@@ -209,13 +205,32 @@ function DashboardNavbar({ absolute, light, isMini, handleClick, data }) {
                   account_circle
                 </Icon>
                 <ArgonTypography
-                
+                  variant="button"
+                  fontWeight="medium"
+                  color={light && transparentNavbar ? "white" : "dark"}
+                >
+                  {user?.first_name}
+                </ArgonTypography>
+              </IconButton>
+
+              <IconButton
+                sx={navbarIconButton}
+                size="small"
                 onClick={()=>{
                   localStorage.removeItem("user")
                   localStorage.removeItem("token");
                   navigate('/authentication/sign-in');
                 }}
 
+              >
+                <Icon
+                  sx={({ palette: { dark, white } }) => ({
+                    color: light && transparentNavbar ? white.main : dark.main,
+                  })}
+                >
+                  logout
+                </Icon>
+                <ArgonTypography
                   variant="button"
                   fontWeight="medium"
                   color={light && transparentNavbar ? "white" : "dark"}
@@ -224,22 +239,7 @@ function DashboardNavbar({ absolute, light, isMini, handleClick, data }) {
                 </ArgonTypography>
               </IconButton>
 
-              {/*  <IconButton
-                size="small"
-                color={light && transparentNavbar ? "white" : "dark"}
-                sx={navbarMobileMenu}
-                onClick={handleMiniSidenav}
-              >
-                <Icon>{miniSidenav ? "menu_open" : "menu"}</Icon>
-              </IconButton> */}
-              {/* <IconButton
-                size="small"
-                color={light && transparentNavbar ? "white" : "dark"}
-                sx={navbarIconButton}
-                onClick={handleConfiguratorOpen}
-              >
-                <Icon>settings</Icon>
-              </IconButton> */}
+              
               <IconButton
                 size="small"
                 color={light && transparentNavbar ? "white" : "dark"}
@@ -260,7 +260,6 @@ function DashboardNavbar({ absolute, light, isMini, handleClick, data }) {
   );
 }
 
-// Setting default values for the props of DashboardNavbar
 DashboardNavbar.defaultProps = {
   absolute: false,
   light: true,

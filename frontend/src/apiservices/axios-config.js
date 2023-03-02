@@ -5,14 +5,14 @@ const axiosConfig = axios.create({
   baseURL: baseUrl,
   headers: {
     "Content-Type": "application/json",
-    'Access-Control-Allow-Origin': 'http://localhost:3000',
-    'Access-Control-Allow-Credentials': 'true'
   },
 });
 
 axiosConfig.interceptors.request.use(async function (config) {
   let token = localStorage.getItem("token");
-  config.headers.Authorization = token ? `Bearer ${token}` : "";
+  console.log(token)
+  token ? config.headers.Authorization = `Token ${token}` : "";
+  //config.headers.Authorization = token ? `Token ${token}` : "";
   return config;
 });
 

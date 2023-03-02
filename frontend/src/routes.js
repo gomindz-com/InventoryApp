@@ -1,38 +1,3 @@
-/**
-=========================================================
-* Argon Dashboard 2 MUI - v3.0.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-material-ui
-* Copyright 2022 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
-/** 
-  All of the routes for the Soft UI Dashboard React are added here,
-  You can add a new route, customize the routes and delete the routes here.
-  Once you add a new route on this file it will be visible automatically on
-  the Sidenav.
-  For adding a new route you can follow the existing routes in the routes array.
-  1. The `type` key with the `collapse` value is used for a route.
-  2. The `type` key with the `title` value is used for a title inside the Sidenav. 
-  3. The `type` key with the `divider` value is used for a divider between Sidenav items.
-  4. The `name` key is used for the name of the route on the Sidenav.
-  5. The `key` key is used for the key of the route (It will help you with the key prop inside a loop).
-  6. The `icon` key is used for the icon of the route on the Sidenav, you have to add a node.
-  7. The `collapse` key is used for making a collapsible item on the Sidenav that has other routes
-  inside (nested routes), you need to pass the nested routes inside an array as a value for the `collapse` key.
-  8. The `route` key is used to store the route location which is used for the react router.
-  9. The `href` key is used to store the external links location.
-  10. The `title` key is only for the item with the type of `title` and its used for the title text on the Sidenav.
-  10. The `component` key is used to store the component of its route.
-*/
-
 // Argon Dashboard 2 MUI layouts
 import Dashboard from "layouts/dashboard";
 import Tables from "layouts/tables";
@@ -48,11 +13,11 @@ import ArgonBox from "components/ArgonBox";
 import Suppliers from "layouts/suppliers";
 import Buyers from "layouts/buyers";
 import Products from "layouts/products";
-import Orders from "layouts/orders";
 import Categories from "layouts/categories";
 import Invoices from "layouts/invoices";
 import Home from "layouts/home";
 import ContactUs from "layouts/contact-us";
+import Receipts from "layouts/receipts";
 
 const routes = [
 
@@ -72,26 +37,31 @@ const routes = [
     icon: <ArgonBox component="i" color="primary" fontSize="14px" className="ni ni-tv-2" />,
     component: <Dashboard />,
   },
+
   {
     type: "route",
-    name: "Suppliers",
-    key: "suppliers",
-    route: "/suppliers",
+    name: "Invoices",
+    key: "invoices",
+    route: "/invoices",
     icon: (
-      <ArgonBox component="i" color="warning" fontSize="14px" className="ni ni-bus-front-12" />
+      <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-credit-card" />
     ),
-    component: <Suppliers />,
+    component: <Invoices />,
   },
+
+
   {
     type: "route",
-    name: "Buyers",
-    key: "buyers",
-    route: "/buyers",
+    name: "Receipts",
+    key: "receipts",
+    route: "/receipts",
     icon: (
-      <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-cart" />
+      <ArgonBox component="i" color="dark" fontSize="14px" className="ni ni-delivery-fast" />
     ),
-    component: <Buyers />,
+    component: <Receipts />,
   },
+  
+  
   {
     type: "route",
     name: "Products",
@@ -114,24 +84,26 @@ const routes = [
   },
   {
     type: "route",
-    name: "Orders",
-    key: "orders",
-    route: "/orders",
+    name: "Buyers",
+    key: "buyers",
+    route: "/buyers",
     icon: (
-      <ArgonBox component="i" color="dark" fontSize="14px" className="ni ni-delivery-fast" />
+      <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-cart" />
     ),
-    component: <Orders />,
+    component: <Buyers />,
   },
   {
     type: "route",
-    name: "Invoices",
-    key: "invoices",
-    route: "/invoices",
+    name: "Suppliers",
+    key: "suppliers",
+    route: "/suppliers",
     icon: (
-      <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-credit-card" />
+      <ArgonBox component="i" color="warning" fontSize="14px" className="ni ni-bus-front-12" />
     ),
-    component: <Invoices />,
+    component: <Suppliers />,
   },
+ 
+
   { type: "title", title: "Account Pages", key: "account-pages" },
   {
     type: "route",
@@ -141,14 +113,14 @@ const routes = [
     icon: <ArgonBox component="i" color="dark" fontSize="14px" className="ni ni-single-02" />,
     component: <Profile />,
   },
-  {
-    type: "route",
-    name: "Billing",
-    key: "billing",
-    route: "/billing",
-    icon: <ArgonBox component="i" color="success" fontSize="14px" className="ni ni-credit-card" />,
-    component: <Billing />,
-  },
+  // {
+  //   type: "route",
+  //   name: "Billing",
+  //   key: "billing",
+  //   route: "/billing",
+  //   icon: <ArgonBox component="i" color="success" fontSize="14px" className="ni ni-credit-card" />,
+  //   component: <Billing />,
+  // },
 
   {
     type: "route",

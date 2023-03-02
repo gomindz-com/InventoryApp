@@ -1,8 +1,9 @@
 import axiosConfig from "./axios-config";
 
-export const getCategories = async () => {
+export const getCategories = async (customerId) => {
+
   const data = await axiosConfig
-    .get(`/categories/`)
+    .get(`/store/categories/`)
     .then((response) => {
       return response;
     })
@@ -15,15 +16,13 @@ export const getCategories = async () => {
 
 export const addCategory = async (productData) => {
   const data = await axiosConfig
-    .post(`/categories/`, productData)
+    .post(`/store/categories/`, productData)
     .then((response) => {
-      console.log("Api Response")
-      console.log(response)
+      
       return response;
     })
     .catch((err) => {
-      console.log("Api Error")
-      console.log(err.response.data.result);
+      
       return err.response;
     });
 
@@ -33,15 +32,13 @@ export const addCategory = async (productData) => {
 
 export const editCategoriee = async (categorieId, categorieData) => {
   const data = await axiosConfig
-    .put(`/categories/${categorieId}`, categorieData)
+    .put(`/store/categories/${categorieId}/`, categorieData)
     .then((response) => {
-      console.log("Api Response")
-      console.log(response)
+     
       return response;
     })
     .catch((err) => {
-      console.log("Api Error")
-      console.log(err.response.data.result);
+      
       return err.response;
     });
 
@@ -52,16 +49,16 @@ export const editCategoriee = async (categorieId, categorieData) => {
 
 export const deleteCategory= async (id) => {
   const data = await axiosConfig
-    .delete(`/categories/${id}`)
+    .delete(`/store/categories/${id}/`)
     .then((response) => {
-      console.log("Api Response")
-      console.log(response)
+      
+      
       return response;
     })
     .catch((err) => {
-      console.log("Api Error")
-      console.log(err.response.data.result);
-      return err.response;
+      
+      console.log(err);
+      return err;
     });
 
   return data;

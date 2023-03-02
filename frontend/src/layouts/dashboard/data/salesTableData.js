@@ -24,22 +24,22 @@ const salesTableData = [
   {
     Region: [Bj, "Kanifing"],
     sales: 2500,
-    value: "D230,900",
-    bounce: "29.9%",
+    'stocks-inhand': "230 Items",
+    delivery: "190 Items",
   },
   {
     Region: [Bj, "Brikama"],
     sales: "3.900",
-    value: "D440,000",
-    bounce: "40.22%",
+    'stocks-inhand': "440 Items",
+    delivery: "190 Items",
   },
   {
     Region: [Bj, "Banjul"],
     sales: "1.400",
-    value: "D190,700",
-    bounce: "23.44%",
+    'stocks-inhand': "190 Items",
+    delivery: "190 Items",
   },
-  { Region: [Bj, "Basse"], sales: 562, value: "D143,960", bounce: "32.14%" },
+  { Region: [Bj, "Basse"], sales: 562, 'stocks-inhand': "43 Items", delivery: "190 Items", },
 ];
 
 export default salesTableData;

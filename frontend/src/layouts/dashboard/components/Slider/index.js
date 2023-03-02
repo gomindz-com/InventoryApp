@@ -121,10 +121,10 @@ function Slider() {
                 </ArgonTypography>
               </ArgonBox>
               <ArgonTypography variant="h5" color="white" mb={0.5}>
-                Our products are avaible at all time
+                Our products are available at all times
               </ArgonTypography>
               <ArgonTypography variant="body2" color="white">
-                Coffie avaible at a very chip price
+                Coffie available at a very cheap price
               </ArgonTypography>
             </ArgonBox>
           </ArgonBox>
@@ -155,10 +155,10 @@ function Slider() {
                 </ArgonTypography>
               </ArgonBox>
               <ArgonTypography variant="h5" color="white" mb={0.5}>
-                Our products are avaible at all time
+                Our products are available at all times
               </ArgonTypography>
               <ArgonTypography variant="body2" color="white">
-                Armanty avaible at a chip price
+                Armanty available at a cheap price
               </ArgonTypography>
             </ArgonBox>
           </ArgonBox>
@@ -189,10 +189,10 @@ function Slider() {
                 </ArgonTypography>
               </ArgonBox>
               <ArgonTypography variant="h5" color="white" mb={0.5}>
-                Our products are avaible at all time
+                Our products are available at all times
               </ArgonTypography>
               <ArgonTypography variant="body2" color="white">
-                Tomato avaible at a chip price
+                Tomato available at a cheap price
               </ArgonTypography>
             </ArgonBox>
           </ArgonBox>

@@ -38,7 +38,7 @@ function Footer() {
                 Company
               </ArgonTypography>
             </ArgonBox>
-            <ArgonBox mr={{ xs: 2, lg: 3, xl: 6 }}>
+            {/* <ArgonBox mr={{ xs: 2, lg: 3, xl: 6 }}>
               <ArgonTypography component="a" href="#" variant="body2" color="secondary">
                 About Us
               </ArgonTypography>
@@ -62,7 +62,7 @@ function Footer() {
               <ArgonTypography component="a" href="#" variant="body2" color="secondary">
                 Pricing
               </ArgonTypography>
-            </ArgonBox>
+            </ArgonBox> */}
           </ArgonBox>
         </Grid>
         <Grid item xs={12} lg={8}>

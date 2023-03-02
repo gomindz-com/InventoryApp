@@ -62,24 +62,20 @@ function Suppliers() {
   });
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    //e.preventDefault();
 
     const isValid = await AddSupplierSchema.isValid(supplierData);
     if (!isValid) {
       toast.error("Please enter all the required fields!!");
-      console.log(supplierData);
+      
     } else {
-      console.log(supplierData);
       await addSupplier(supplierData)
         .then((res) => {
           if (res.data?.status === "true") {
-            console.log("Supplier Added");
             toast.success("Supplier Added Successfully");
             handleGetSupplierList();
-            console.log(res.data.result);
           } else {
-            console.log("Supplier Could Not Be Added");
-            console.log(res.data.result);
+            
             toast.error("Supplier Could Not Be Added");
           }
         })
@@ -91,24 +87,19 @@ function Suppliers() {
 
 
   const handleEdit = async (e) => {
-    e.preventDefault();
+    //e.preventDefault();
 
     const isValid = await AddSupplierSchema.isValid(supplierData);
     if (!isValid) {
       toast.error("Please enter all the required fields!!");
-      console.log(supplierData);
     } else {
-      console.log(supplierData);
       await editSupplier(supplierData.id, supplierData)
         .then((res) => {
           if (res.data?.status === "true") {
-            console.log("Supplier Updated");
             toast.success("Supplier Updated Successfully");
             handleGetSupplierList();
-            console.log(res.data.result);
           } else {
-            console.log("Supplier Could Not Be Updated");
-            console.log(res.data.result);
+            
             toast.error("Supplier Could Not Be Updated");
           }
         })
@@ -132,10 +123,8 @@ function Suppliers() {
     try {
       await getSuppliers()
         .then((res) => {
-          console.log(res);
           if (res.data?.status === "true") {
-            console.log("Suppliers List");
-            console.log(res.data.result);
+            
             setSupplierList(res.data.result);
           } else {
             setSupplierList([]);
@@ -154,8 +143,7 @@ function Suppliers() {
     await deleteSupplier(id)
       .then((res) => {
         if (res.data?.status === "true") {
-          console.log("Suppliers List");
-          console.log(res.data.result);
+          
           handleGetSupplierList()
         } else {
         }
@@ -241,11 +229,8 @@ function Suppliers() {
 
 
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
-  console.log(JSON.parse(localStorage.getItem("user")));
 
-  console.log("user")
-  console.log(user)
-
+  
 
   useEffect(() => {
     handleGetSupplierList();

@@ -22,6 +22,8 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import PinterestIcon from "@mui/icons-material/Pinterest";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import { Link } from "react-router-dom";
+
 
 // Argon Dashboard 2 MUI components
 import ArgonBox from "components/ArgonBox";
@@ -34,35 +36,42 @@ function Footer() {
         <Grid item xs={10} lg={8}>
           <ArgonBox display="flex" justifyContent="center" flexWrap="wrap" mb={3}>
             <ArgonBox mr={{ xs: 2, lg: 3, xl: 6 }}>
+            <Link to={{}}>
               <ArgonTypography component="a" href="#" variant="body2" color="secondary">
                 Company
               </ArgonTypography>
+              </Link>
             </ArgonBox>
             <ArgonBox mr={{ xs: 2, lg: 3, xl: 6 }}>
-              <ArgonTypography component="a" href="#" variant="body2" color="secondary">
-                About Us
-              </ArgonTypography>
+              <Link to='/home'>
+                <ArgonTypography component="a" variant="body2" color="secondary">
+                  About Us
+                </ArgonTypography>
+              </Link>
             </ArgonBox>
-            <ArgonBox mr={{ xs: 0, lg: 3, xl: 6 }}>
-              <ArgonTypography component="a" href="#" variant="body2" color="secondary">
+            {/* <ArgonBox mr={{ xs: 0, lg: 3, xl: 6 }}>
+            <Link to={{}}>
+              <ArgonTypography component="a" variant="body2" color="secondary">
                 Team
               </ArgonTypography>
+              </Link>
             </ArgonBox>
             <ArgonBox mr={{ xs: 2, lg: 3, xl: 6 }}>
-              <ArgonTypography component="a" href="#" variant="body2" color="secondary">
+            <Link to={{}}>
+              <ArgonTypography component="a"  variant="body2" color="secondary">
                 Product
               </ArgonTypography>
+              </Link>
             </ArgonBox>
-            <ArgonBox mr={{ xs: 2, lg: 3, xl: 6 }}>
-              <ArgonTypography component="a" href="#" variant="body2" color="secondary">
-                Blog
-              </ArgonTypography>
-            </ArgonBox>
+            
             <ArgonBox>
-              <ArgonTypography component="a" href="#" variant="body2" color="secondary">
+            <Link to={{}}>
+              <ArgonTypography component="a" variant="body2" color="secondary">
                 Pricing
               </ArgonTypography>
-            </ArgonBox>
+              </Link>
+              
+            </ArgonBox> */}
           </ArgonBox>
         </Grid>
         <Grid item xs={12} lg={8}>
@@ -86,7 +95,7 @@ function Footer() {
         </Grid>
         <Grid item xs={12} lg={8} sx={{ textAlign: "center" }}>
           <ArgonTypography variant="body2" color="secondary">
-            Copyright &copy; 2022 Argon by Creative Tim.
+            Copyright &copy; 2022 Gomindz.
           </ArgonTypography>
         </Grid>
       </Grid>
