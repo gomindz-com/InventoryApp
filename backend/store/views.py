@@ -29,8 +29,8 @@ parser_classes = [MultiPartParser, FormParser]
 # TWILIO
 
 
-account_sid = ''
-authToken = ''
+account_sid = 'TEST'
+authToken = 'TEST'
 client = Client(account_sid, authToken)
 
 
