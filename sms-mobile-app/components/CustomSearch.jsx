@@ -3,11 +3,12 @@ import React, { useState } from "react";
 import CustomInput from "./CustomInput";
 import { Ionicons, AntDesign } from "@expo/vector-icons";
 
-const Search = ({
+const CustomSearch = ({
   br = 10,
   bc = "#ccc",
   bw = 2,
   mx = 0,
+  mt = 0,
   bg = "transparent",
   ...rest
 }) => {
@@ -23,11 +24,17 @@ const Search = ({
       bw={bw}
       mx={mx}
       bg={bg}
+      mt = {mt}
       {...rest}
     />
   );
 };
 
-export default Search;
+export default CustomSearch;
 
 const styles = StyleSheet.create({});
+
+
+
+
+

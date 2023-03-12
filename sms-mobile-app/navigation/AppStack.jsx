@@ -11,16 +11,14 @@ const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
 const AppStack = () => {
-  const [isLoginIn, setIsLogin] = useState(false);
 
-  const handleLoing = () => {
-    setIsLogin(true);
-  };
+ 
   return (
     <>
-      {isLoginIn ? (
+      
         <Tab.Navigator
           screenOptions={{
+            headerShown: false,
             tabBarStyle: {
               elevation: 20,
               alignItems: "center",
@@ -72,16 +70,7 @@ const AppStack = () => {
             }}
           />
         </Tab.Navigator>
-      ) : (
-        <Stack.Navigator>
-          <Stack.Screen
-            name="Login"
-            component={LoginScreen}
-            options={{ headerShown: false }}
-            initialParams={{ handleLoing: handleLoing.toString() }}
-          />
-        </Stack.Navigator>
-      )}
+     
     </>
   );
 };
