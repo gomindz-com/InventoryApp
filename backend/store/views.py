@@ -29,8 +29,8 @@ parser_classes = [MultiPartParser, FormParser]
 # TWILIO
 
 
-account_sid = ''
-authToken = ''
+account_sid = '12334'
+authToken = '14456'
 client = Client(account_sid, authToken)
 
 
@@ -621,3 +621,12 @@ def categoryProducts(request, id):
         })
 
     return JsonResponse(status=200, data={'status': 'true', 'message': 'success', 'result': categoryList})
+
+# @api_view(['GET'])
+# def low_stock_product(request):
+#     low_stock_products = []
+#     for product in Products():
+#         if product['stock'] <= 0:  
+#             low_stock_products.append(product)
+#     return JsonResponse(low_stock_product)        
+

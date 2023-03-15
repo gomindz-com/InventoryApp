@@ -22,6 +22,7 @@ from .views import (
     total_price,
 
     categoryProducts,
+    low_stock_product,
 )
 
 
@@ -55,5 +56,7 @@ urlpatterns = [
     path('totalprice/', total_price),
 
     path('categoryproducts/<int:id>', categoryProducts),
+    
+    path('lowstockproduct/', low_stock_product),
 
 ]
