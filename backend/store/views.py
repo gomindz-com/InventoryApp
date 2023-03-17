@@ -622,11 +622,18 @@ def categoryProducts(request, id):
 
     return JsonResponse(status=200, data={'status': 'true', 'message': 'success', 'result': categoryList})
 
-# @api_view(['GET'])
-# def low_stock_product(request):
-#     low_stock_products = []
-#     for product in Products():
-#         if product['stock'] <= 0:  
-#             low_stock_products.append(product)
-#     return JsonResponse(low_stock_product)        
+#API to get products on low stock
+@api_view(['GET'])
+def lowstockproduct(request):
+    product = Product.objects.filter()
+    low_stock_products = []
+    for item in product.iterator():
+        if item.stock <= 5:  
+            low_stock_products.append({
+            "id": item.id,
+            "name": item.name,
+            # "description": item.description,
+            # "products": productList
+            })
+    return JsonResponse(status=200, data={'status': 'true', 'message': 'success', 'result': low_stock_products})       
 
