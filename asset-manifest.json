@@ -1,0 +1,40 @@
+{
+  "files": {
+    "main.css": "/InventoryApp/frontend/static/css/main.93024387.css",
+    "main.js": "/InventoryApp/frontend/static/js/main.76015093.js",
+    "static/media/GomindzInventory.png": "/InventoryApp/frontend/static/media/GomindzInventory.3b409552c07e7aea9b0e.png",
+    "static/media/vr-bg.jpg": "/InventoryApp/frontend/static/media/vr-bg.09e3bc1cff3711b57a2c.jpg",
+    "static/media/img-2.jpg": "/InventoryApp/frontend/static/media/img-2.d97bd8ee71e6afc19404.jpg",
+    "static/media/img-1.jpg": "/InventoryApp/frontend/static/media/img-1.18c5ecb11935c7e58781.jpg",
+    "static/media/img-3.jpg": "/InventoryApp/frontend/static/media/img-3.6a692091d1aec33aca3c.jpg",
+    "static/media/bg9.jpg": "/InventoryApp/frontend/static/media/bg9.cf9a123e2a3d371d53da.jpg",
+    "static/media/armanty.jpeg": "/InventoryApp/frontend/static/media/armanty.f0892aaa8eac110ec95f.jpeg",
+    "static/media/ware.jpg": "/InventoryApp/frontend/static/media/ware.4d3e81900c5c50fa8dee.jpg",
+    "static/media/icon-sun-cloud.png": "/InventoryApp/frontend/static/media/icon-sun-cloud.3399b234b40032f90d9b.png",
+    "static/media/Tomato.jpeg": "/InventoryApp/frontend/static/media/Tomato.862ec22d095c799b941a.jpeg",
+    "static/media/visa.png": "/InventoryApp/frontend/static/media/visa.71c0d5e9e2aaee42e4c3.png",
+    "static/media/staic1.png": "/InventoryApp/frontend/static/media/staic1.0fa73aa7fe23372b83b1.png",
+    "static/media/coffie.jpeg": "/InventoryApp/frontend/static/media/coffie.afd96a987f03b5881a19.jpeg",
+    "static/media/mastercard.png": "/InventoryApp/frontend/static/media/mastercard.27fca3e7637a9458fb64.png",
+    "static/media/icon-documentation.svg": "/InventoryApp/frontend/static/media/icon-documentation.4b8b177e5b6c3daf83758a0b392550cf.svg",
+    "static/media/staic2.png": "/InventoryApp/frontend/static/media/staic2.cf6e8c60d13dc2910538.png",
+    "static/media/staic3.png": "/InventoryApp/frontend/static/media/staic3.7f0a8855aab8388e4d77.png",
+    "static/media/team-1.jpg": "/InventoryApp/frontend/static/media/team-1.0fd36e0ee93dcfacdef8.jpg",
+    "static/media/bruce-mars.jpg": "/InventoryApp/frontend/static/media/bruce-mars.8a606c4a6dab54c9ceff.jpg",
+    "static/media/team-2.jpg": "/InventoryApp/frontend/static/media/team-2.13ae2ce3e12f4cfed420.jpg",
+    "static/media/team-3.jpg": "/InventoryApp/frontend/static/media/team-3.0ef0be95e6850814c79e.jpg",
+    "static/media/team-4.jpg": "/InventoryApp/frontend/static/media/team-4.85c82b6e60178804017f.jpg",
+    "static/media/gambia.jpeg": "/InventoryApp/frontend/static/media/gambia.d66130c74106032712c7.jpeg",
+    "static/media/logo-slack.svg": "/InventoryApp/frontend/static/media/logo-slack.7c47c5aa474b5c4fb39fcf05ffb8e4e7.svg",
+    "static/media/logo-xd.svg": "/InventoryApp/frontend/static/media/logo-xd.6e37886f94dba0c2967ece68a152e30c.svg",
+    "index.html": "/InventoryApp/frontend/index.html",
+    "static/media/logo-invision.svg": "/InventoryApp/frontend/static/media/logo-invision.a1062115730dcd10e1c4f4abe7b9ab33.svg",
+    "static/media/logo-spotify.svg": "/InventoryApp/frontend/static/media/logo-spotify.e83cf56c9d99a1fdf59e8deb58bbe470.svg",
+    "static/media/logo-jira.svg": "/InventoryApp/frontend/static/media/logo-jira.c19fd4e416babfbd0fdb0a794188c601.svg",
+    "static/media/logo-webdev.svg": "/InventoryApp/frontend/static/media/logo-webdev.25d88bfc768c8439fdb33efc0d8e6015.svg"
+  },
+  "entrypoints": [
+    "static/css/main.93024387.css",
+    "static/js/main.76015093.js"
+  ]
+}
