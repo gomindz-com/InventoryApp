@@ -1,19 +1,20 @@
+import { useTheme } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StatusBar } from "expo-status-bar";
-import HomeScreen from "../screens/dashboard/HomeScreen";
+import ProductScreen from "../screens/products";
 import { COLORS } from "../constants/Theme";
 
 const Stack = createNativeStackNavigator();
 
-const HomeStack = () => {
+const ProductStack = () => {
   return (
     <>
       <StatusBar backgroundColor={COLORS.green} style="light" />
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Product" component={ProductScreen} />
       </Stack.Navigator>
     </>
   );
 };
 
-export default HomeStack;
+export default ProductStack;
