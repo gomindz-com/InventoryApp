@@ -19,23 +19,23 @@ const prductData = [
   },
   {
     id: 2,
-    title: "Mango",
+    title: "Orange",
   },
   {
     id: 3,
-    title: "Konteh",
+    title: "Orange",
   },
   {
     id: 4,
-    title: "Muisai",
+    title: "Orange",
   },
   {
     id: 5,
-    title: "Muha",
+    title: "Orange",
   },
   {
     id: 6,
-    title: "Ml kit",
+    title: "Orange",
   },
 ];
 
