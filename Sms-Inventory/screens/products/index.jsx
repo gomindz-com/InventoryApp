@@ -12,6 +12,7 @@ import { AntDesign, Ionicons } from "@expo/vector-icons";
 import CustomSearch from "../../components/CustomSearch";
 import CustomCard from "../../components/CustomCard";
 
+
 const prductData = [
   {
     id: 1,
@@ -72,8 +73,9 @@ const ProductScreen = () => {
         <CustomText style={{ marginTop: 5 }}>Total Product:</CustomText>
       </CustomCard>
 
-      {prductData.map((item) => (
+      {prductData.map((item , key ) => (
         <TouchableOpacity
+        key={key}
           style={{
             flexDirection: "row",
             justifyContent: "space-between",
