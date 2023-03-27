@@ -15,7 +15,7 @@ class Product(models.Model):
     name = models.CharField(max_length=120, unique=True)
     description_color = models.CharField(max_length=120, default='')
     label_size = models.CharField(max_length=120, default='')
-    price = models.DecimalField(max_digits=6, decimal_places=2)
+    price = models.DecimalField(max_digits=120, decimal_places=2)
     stock = models.PositiveIntegerField(default='')
     sku = models.CharField(max_length=120, default='')
     status = models.CharField(max_length=120, choices=STATUS_CHOICE, default='')
