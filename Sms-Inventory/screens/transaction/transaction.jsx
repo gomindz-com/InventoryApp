@@ -25,9 +25,6 @@ import {
             </TouchableOpacity>
   
             <View style={styles.right}>
-              {/* <TouchableOpacity style={{ right: 10 }}>
-              <AntDesign name="filter" size={24} color="#fff" />
-              </TouchableOpacity> */}
               <TouchableOpacity style={{ left: 2 }}>
               <AntDesign name="filter" size={24} color="#fff" />
               </TouchableOpacity>
