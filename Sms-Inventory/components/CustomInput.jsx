@@ -122,7 +122,6 @@ const makeStyles = (colors) =>
     },
     rightIcon: {
       marginLeft: 10,
-      // backgroundColor:"red"
     },
   });
 
