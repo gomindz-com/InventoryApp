@@ -5,6 +5,8 @@ import React, { useState } from "react";
 import HomeScreen from "../screens/dashboard/HomeScreen";
 import ProductScreen from "../screens/products";
 import TransactionScreen from "../screens/transaction/transaction";
+import Lowstock from "../screens/lowStock/Lowstock";
+
 
 const Tab = createBottomTabNavigator();
 
@@ -46,7 +48,7 @@ const AppStack = () => {
         />
         <Tab.Screen
           name="Low Stock"
-          component={HomeScreen}
+          component={Lowstock}
           options={{
             tabBarLabel: "Low Stock",
             tabBarIcon: ({ size, color }) => (
