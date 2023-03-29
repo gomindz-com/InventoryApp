@@ -12,6 +12,7 @@ import { AntDesign, Ionicons } from "@expo/vector-icons";
 import CustomSearch from "../../components/CustomSearch";
 import CustomCard from "../../components/CustomCard";
 
+
 const prductData = [
   {
     id: 1,
@@ -19,23 +20,23 @@ const prductData = [
   },
   {
     id: 2,
-    title: "Mango",
+    title: "Orange",
   },
   {
     id: 3,
-    title: "Konteh",
+    title: "Orange",
   },
   {
     id: 4,
-    title: "Muisai",
+    title: "Orange",
   },
   {
     id: 5,
-    title: "Muha",
+    title: "Orange",
   },
   {
     id: 6,
-    title: "Ml kit",
+    title: "Orange",
   },
 ];
 
@@ -72,8 +73,9 @@ const ProductScreen = () => {
         <CustomText style={{ marginTop: 5 }}>Total Product:</CustomText>
       </CustomCard>
 
-      {prductData.map((item) => (
+      {prductData.map((item , key ) => (
         <TouchableOpacity
+        key={key}
           style={{
             flexDirection: "row",
             justifyContent: "space-between",

@@ -4,6 +4,7 @@ import React, { useState } from "react";
 
 import HomeScreen from "../screens/dashboard/HomeScreen";
 import ProductScreen from "../screens/products";
+import TransactionScreen from "../screens/transaction/transaction";
 
 const Tab = createBottomTabNavigator();
 
@@ -55,7 +56,7 @@ const AppStack = () => {
         />
         <Tab.Screen
           name="All transaction"
-          component={HomeScreen}
+          component={TransactionScreen}
           options={{
             tabBarLabel: "All transaction",
             tabBarIcon: ({ size, color }) => (
