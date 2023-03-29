@@ -25,9 +25,6 @@ import {
             </TouchableOpacity>
   
             <View style={styles.right}>
-              {/* <TouchableOpacity style={{ right: 10 }}>
-              <AntDesign name="filter" size={24} color="#fff" />
-              </TouchableOpacity> */}
               <TouchableOpacity style={{ left: 2 }}>
               <AntDesign name="filter" size={24} color="#fff" />
               </TouchableOpacity>
@@ -38,13 +35,46 @@ import {
           </View>
       
         </View>
-  
+        
+       
         <CustomCard bc="black" mt={-30} mx={10}>
+
+          <View style={{flexDirection:'row'}}>
+          <View style={{
+            height:20,
+            width:20,
+            backgroundColor:'red',
+            }}>
+        </View>
+
+        <CustomText style={{top:2, left:4}}>630 In:</CustomText>
+
+          </View>
+          <View style={{flexDirection:'row'}}>
+          <View style={{
+            height:20,
+            width:20,
+            backgroundColor:'green',
+            marginTop:5,
+        }}>
+            
+        </View>
+        <CustomText style={{ marginTop:2, left:4 }}>630 Out:</CustomText>
+          </View>
+        
+        <View style={{flexDirection:'row'}}>
+        <View style={{
+            height:20,
+            width:20,
+            backgroundColor:'yellow',
+            marginTop:5,
+        }}>
+           
+        </View> 
+        <CustomText style={{  marginTop:2, left:4 }}>630 In-hand:</CustomText>
+        </View>
+         
           
-          
-          <CustomText style={{ marginTop: 5 }}>630 In:</CustomText>
-          <CustomText style={{ marginTop: 5 }}>630 Out:</CustomText>
-          <CustomText style={{ marginTop: 5 }}>630 In-hand:</CustomText>
         </CustomCard>
         
        
