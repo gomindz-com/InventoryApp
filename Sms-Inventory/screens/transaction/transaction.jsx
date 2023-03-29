@@ -36,13 +36,11 @@ import {
               </TouchableOpacity>
             </View>
           </View>
-          {/* <View style={{ marginTop: 35 }}>
-            <CustomSearch mx={10} />
-          </View> */}
+      
         </View>
   
         <CustomCard bc="black" mt={-30} mx={10}>
-          {/* <CustomText>Total Product:</CustomText> */}
+          
           
           <CustomText style={{ marginTop: 5 }}>630 In:</CustomText>
           <CustomText style={{ marginTop: 5 }}>630 Out:</CustomText>
