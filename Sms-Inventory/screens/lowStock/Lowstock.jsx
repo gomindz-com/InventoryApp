@@ -42,13 +42,15 @@ import {
             <CustomText style={{ marginTop: 5 }}>chocolate =1kg</CustomText>
             <CustomText style={{ marginTop: 5 }}>IN 200 OUT 190 = 4</CustomText>
             </View>
-         
-          <View style={{
+         <TouchableOpacity>
+         <View style={{
             marginLeft:200,
             marginTop:20
             }}>
           <AntDesign name="pluscircleo" size={24} color="black" />
           </View>
+         </TouchableOpacity>
+          
         </CustomCard>
   
       </View>
