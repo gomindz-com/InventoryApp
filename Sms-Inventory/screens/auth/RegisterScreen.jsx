@@ -1,9 +1,8 @@
 import { StyleSheet, Text, View, TouchableOpacity} from "react-native";
 import React from "react";
-// import React, { useContext } from "react";
-// import { IMAGES, COLORS } from "../../constants/Theme";
+
 import { useNavigation } from "@react-navigation/native";
-// import { AuthContext } from "../../context/AuthContext";
+
 import CustomInput from "../../components/CustomInput";
 import CustomButton from "../../components/CustomButton";
 import CustomSearch from "../../components/CustomSearch";
@@ -15,7 +14,7 @@ const RegisterScreen = () => {
   const navigation = useNavigation();
 
   const LoginScreen = () => {
-    navigation.navigate("Home");
+    navigation.navigate("Login");
   }
 
   return (
