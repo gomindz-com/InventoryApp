@@ -34,7 +34,7 @@ const LoginScreen = () => {
         <CustomText
           style={styles.GoText}
         >
-          GoInventory
+          SONEYA
         </CustomText>
         <CustomText
           style={styles.GoLogin}
