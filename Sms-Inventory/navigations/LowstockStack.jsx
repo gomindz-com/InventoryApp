@@ -1,19 +1,21 @@
+import { useTheme } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StatusBar } from "expo-status-bar";
-import HomeScreen from "../screens/dashboard/HomeScreen";
+import Lowstock from "../screens/lowStock/Lowstock";
 import { COLORS } from "../constants/Theme";
+
 
 const Stack = createNativeStackNavigator();
 
-const HomeStack = () => {
+const LowstockStack = () => {
   return (
     <>
       <StatusBar backgroundColor={COLORS.green} style="light" />
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Low Stock" component={Lowstock} />
       </Stack.Navigator>
     </>
   );
 };
 
-export default HomeStack;
+export default LowstockStack;

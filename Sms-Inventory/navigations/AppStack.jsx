@@ -3,6 +3,10 @@ import { Ionicons, AntDesign, FontAwesome } from "@expo/vector-icons";
 import React, { useState } from "react";
 
 import HomeScreen from "../screens/dashboard/HomeScreen";
+import ProductScreen from "../screens/products";
+import TransactionScreen from "../screens/transaction/transaction";
+import Lowstock from "../screens/lowStock/Lowstock";
+
 
 const Tab = createBottomTabNavigator();
 
@@ -34,7 +38,7 @@ const AppStack = () => {
         />
         <Tab.Screen
           name="Products"
-          component={HomeScreen}
+          component={ProductScreen}
           options={{
             tabBarLabel: "Products",
             tabBarIcon: ({ size, color }) => (
@@ -44,7 +48,7 @@ const AppStack = () => {
         />
         <Tab.Screen
           name="Low Stock"
-          component={HomeScreen}
+          component={Lowstock}
           options={{
             tabBarLabel: "Low Stock",
             tabBarIcon: ({ size, color }) => (
@@ -54,7 +58,7 @@ const AppStack = () => {
         />
         <Tab.Screen
           name="All transaction"
-          component={HomeScreen}
+          component={TransactionScreen}
           options={{
             tabBarLabel: "All transaction",
             tabBarIcon: ({ size, color }) => (
