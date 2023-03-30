@@ -79,6 +79,6 @@ import {
       justifyContent: "space-between",
     },
     red:{
-      
+
     }
   });
