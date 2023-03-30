@@ -15,7 +15,7 @@ const RegisterScreen = () => {
   const navigation = useNavigation();
 
   const LoginScreen = () => {
-    navigation.navigate("Login");
+    navigation.navigate("Home");
   }
 
   return (
