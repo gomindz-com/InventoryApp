@@ -19,7 +19,7 @@ const CustomButton = ({
   mt,
   mx = 0,
   my = 0,
-  height = 60,
+  height = 0,
   p = 10,
 
   onPress = () => {},
@@ -77,5 +77,6 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     textAlign: "center",
+    fontWeight: "bold"
   },
 });
