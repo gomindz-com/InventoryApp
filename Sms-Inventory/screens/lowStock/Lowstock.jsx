@@ -78,4 +78,7 @@ import {
       marginTop: 50,
       justifyContent: "space-between",
     },
+    red:{
+      
+    }
   });
