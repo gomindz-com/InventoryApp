@@ -79,7 +79,7 @@ const LoginScreen = () => {
           <View style={{ flexDirection: "row" }}>
             <CustomCheckbox/>
             <CustomText fontSize={13} fw={"normal"} color={"#000000"}>
-              Remember
+              Remember me
             </CustomText>
           </View>
 
