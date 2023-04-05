@@ -21,7 +21,7 @@ import {
           <View style={styles.flexContainer}>
             <TouchableOpacity style={styles.left}>
               <AntDesign name="left" size={24} color="#fff" />
-              <CustomText color="#fff">Low Stock</CustomText>
+              <CustomText color="#fff">LOW STOCK</CustomText>
             </TouchableOpacity>
   
             <View style={styles.right}>
