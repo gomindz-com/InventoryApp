@@ -95,6 +95,7 @@ function Products() {
   const handleSubmit = async (e) => {
     //e.preventDefault();
 
+
     const user = JSON.parse(localStorage.getItem("user"));
 
     const isValid = await AddProductSchema.isValid(productData);
@@ -130,6 +131,10 @@ function Products() {
       axios
         .post(url, formData, config)
         .then((res) => {
+
+          console.log('Response From Add Product API')
+          console.log(res)
+
           if (res.status == 201) {
             toast.success("Successfully Added ");
             handleGetProductList();
@@ -139,7 +144,14 @@ function Products() {
           }
         })
         .catch((err) => {
-          toast.error("Product Could Not Be Added");
+
+          console.log('Response From Add Product API')
+
+          console.log(Object.values(err.response?.data)[0][0])
+          console.log(err.response?.data )
+          
+          //toast.error("Product Could Not Be Added");
+          toast.error(Object.values(err.response?.data)[0][0]);
         });
     }
   };
@@ -169,18 +181,38 @@ function Products() {
   const handleEdit = async (e) => {
     //e.preventDefault();
 
+    console.log(productData)
+
+    delete productData.image;
+    console.log(productData)
+
     const isValid = await AddProductSchema.isValid(productData);
     if (!isValid) {
       toast.error("Please enter all the required fields!!");
     } else {
       await editProduct(productData)
         .then((res) => {
-          if (res.data?.status === "true") {
-            toast.success("Successfully Updated ");
+
+          console.log(res.status)
+
+          if (res.status == 400){
+            console.log("Response from Edit Product")
+            console.log(res.data)
+            toast.error(Object.keys(res.data)[0], {autoClose : 300})
+            toast.error(Object.values(res.data)[0][0], {autoClose : 300})
+              
+            }
+
+          else if (res.status == 200) {
+            toast.success("Successfully Updated", {autoClose : 80});
             handleGetProductList();
-          } else {
-            toast.error("product Could Not Be Updated");
+          } 
+          
+          else {
+            toast.error("Error Updating", {autoClose : 80});
+
           }
+
         })
         .catch((err) => {
           console.log("Error Updating product", err);
@@ -204,7 +236,7 @@ function Products() {
   const handleGetProductList = async () => {
     const user = JSON.parse(localStorage.getItem("user"));
 
-    toast.success("Fetching Products!!", { autoClose: 2000 });
+    toast.success("Fetching Products!!", { autoClose: 1000 });
 
     setProductList([]);
     setScreenLoading(true);
@@ -514,7 +546,13 @@ function Products() {
                   />
                 </ArgonBox>
 
+                {
+                !editFormActive   && 
+
+
                 <ArgonBox mb={2} mx={5}>
+
+                  
                   <ArgonInput
                     type="file"
                     name="image"
@@ -524,6 +562,10 @@ function Products() {
                     onChange={handleChange}
                   />
                 </ArgonBox>
+                
+                }
+
+                
 
                 <ArgonBox mb={2} mx={5}>
                   <Select

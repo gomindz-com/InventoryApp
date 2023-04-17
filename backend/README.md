@@ -64,4 +64,10 @@ python manage.py createsuperuser
 python manage.py runserver
 ```
 
-
+```dif
+<!-- To run a test -->
+pip install coverage
+coverage run manage.py test
+coverage run --omit = '*/venv/*' manage.py test <!-- This will run a test that avoids testing the virtual environment-->
+coverage html <!-- To create HTML template for test -->
+```

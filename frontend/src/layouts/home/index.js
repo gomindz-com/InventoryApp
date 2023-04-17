@@ -14,7 +14,7 @@ Coded by www.creative-tim.com
 */
 
 import { useState, useEffect } from "react";
-
+import backgroudImage from "../../assets/images/ware.jpg";
 // react-router-dom components
 import { Link } from "react-router-dom";
 
@@ -27,12 +27,17 @@ import avatar from "../../assets/images/bg9.jpg";
 
 import { useNavigate } from "react-router-dom";
 
+import static1 from "../../assets/images/staic1.png";
+import static2 from "../../assets/images/staic2.png";
+
+import static3 from "../../assets/images/staic3.png";
+import { height } from "@mui/system";
+
 // Image
 const bgImage =
   "https://us.123rf.com/450wm/kostsov/kostsov1906/kostsov190600026/126080344-modern-showcase-with-empty-space-on-pedestal-on-blue-background-3d-rendering-.jpg?ver=6";
 
 function Home() {
-
   const [rememberMe, setRememberMe] = useState(false);
   const handleSetRememberMe = () => {
     console.log("you click me");
@@ -57,7 +62,7 @@ function Home() {
       <nav className="navbar navbar-expand-lg position-absolute top-0 z-index-3 w-100 shadow-none my-3  navbar-transparent ">
         <div className="container">
           <a
-            className="navbar-brand  text-white "
+            className="navbar-brand  text-white  "
             href="#"
             rel="tooltip"
             title="Designed and Coded by Creative Tim"
@@ -85,19 +90,19 @@ function Home() {
             id="navigation"
           >
             <ul className="navbar-nav navbar-nav-hover ms-auto">
-                <Link
-                  onClick={() => {
-                    navigate("/dashboard");
-                  }}
-                  to="/dashboard"
-                  className="nav-link ps-2 d-flex justify-content-between cursor-pointer align-items-center"
-                  id="dropdownMenuPages8"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  <i className="material-icons opacity-6 me-2 text-md">dashboard</i>
-                  Dashboard
-                </Link>
+              <Link
+                onClick={() => {
+                  navigate("/dashboard");
+                }}
+                to="/dashboard"
+                className="nav-link ps-2 d-flex justify-content-between cursor-pointer align-items-center"
+                id="dropdownMenuPages8"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <i className="material-icons opacity-6 me-2 text-md">dashboard</i>
+                Dashboard
+              </Link>
 
               <li className="nav-item dropdown dropdown-hover mx-2 ms-lg-6">
                 <Link
@@ -113,11 +118,10 @@ function Home() {
                   aria-expanded="false"
                 >
                   <i className="material-icons opacity-6 me-2 text-md">logout</i>
-                  Logout
+                  SignIn
                 </Link>
               </li>
 
-            
               {/* <li  className="nav-item my-auto ms-3 ms-lg-0">
                 <Link
                 style={{fontSize: 10, paddingLeft: 10, paddingRight: 10}}
@@ -131,7 +135,12 @@ function Home() {
               {user != null && (
                 <li className="nav-item my-auto ms-3 ms-lg-0">
                   <p
-                    style={{backgroundColor: "#030305", fontSize: 10, paddingLeft: 10, paddingRight: 10}}
+                    style={{
+                      backgroundColor: "#030305",
+                      fontSize: 10,
+                      paddingLeft: 10,
+                      paddingRight: 10,
+                    }}
                     className="btn btn-sm  mb-0 me-1 mt-2 mt-md-0"
                   >
                     {" Welcome " + user?.first_name}
@@ -147,7 +156,7 @@ function Home() {
         <div
           className="page-header min-vh-75"
           style={{
-            backgroundImage: `url(${avatar})`,
+            backgroundImage: `url(${backgroudImage})`,
           }}
           /*        style="background-image: url('../assets/img/bg9.jpg');"
            */
@@ -185,44 +194,85 @@ function Home() {
       <div className="card card-body shadow-xl mx-3 mx-md-4 mt-n6">
         <section className="py-7">
           <div className="container">
-            <div className="row align-items-center">
-              <div className="col-lg-6">
-                <div className="row justify-content-start">
-                  <div className="col-md-6">
-                    <div className="info">
-                      <i className="material-icons text-3xl text-gradient text-info mb-3">public</i>
-                      <h5>Fully integrated</h5>
-                      <p>We get insulted by others, lose trust for those We get back freezes</p>
-                    </div>
+            <div className="row">
+              <div className="  col-lg-4 mt-lg-0 mt-4">
+                <div className="card">
+                  <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                    <a className="d-block blur-shadow-image">
+                      <img
+                        style={{ height: 250 }}
+                        src={static1}
+                        alt="img-colored-shadow"
+                        className="img-fluid border-radius-lg"
+                      />
+                    </a>
                   </div>
-                  <div className="col-md-6">
-                    <div className="info">
-                      <i className="material-icons text-3xl text-gradient text-info mb-3">
-                        payments
-                      </i>
-                      <h5>Payments functionality</h5>
-                      <p>We get insulted by others, lose trust for those We get back freezes</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="row justify-content-start mt-4">
-                  <div className="col-md-6">
-                    <div className="info">
-                      <i className="material-icons text-3xl text-gradient text-info mb-3">apps</i>
-                      <h5>Prebuilt components</h5>
-                      <p>We get insulted by others, lose trust for those We get back freezes</p>
-                    </div>
-                  </div>
-                  <div className="col-md-6">
-                    <div className="info">
-                      <i className="material-icons text-3xl text-gradient text-info mb-3">3p</i>
-                      <h5>Improved platform</h5>
-                      <p>We get insulted by others, lose trust for those We get back freezes</p>
-                    </div>
+                  <div className="card-body text-center">
+                    <h5 className="font-weight-normal">
+                      <a href="javascript:;">Accurate Stock Recordes</a>
+                    </h5>
+                    <p className="mb-0">
+                      Get accurate stock records with stright forword figures . You need not to
+                      worry about counting everything in the store
+                    </p>
                   </div>
                 </div>
               </div>
-              <div className="col-lg-4 ms-auto mt-lg-0 mt-4">
+              {/* second card */}
+
+              <div className="  col-lg-4 mt-lg-0 mt-4">
+                <div className="card">
+                  <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                    <a className="d-block blur-shadow-image">
+                      <img
+                        src={static2}
+                        alt="img-colored-shadow"
+                        className="img-fluid border-radius-lg"
+                        style={{ height: 275 }}
+                      />
+                    </a>
+                  </div>
+                  <div className="card-body text-center">
+                    <h5 className="font-weight-normal">
+                      <a href="javascript:;">Statistical Data </a>
+                    </h5>
+                    <p className="mb-0">
+                      With clear figures and graphs , you can read all statistics of your store and
+                      stay in the loop.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* third cord */}
+
+              <div className="  col-lg-4 mt-lg-0 mt-4">
+                <div className="card">
+                  <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                    <a className="d-block blur-shadow-image">
+                      <img
+                        src={static3}
+                        alt="img-colored-shadow"
+                        className="img-fluid border-radius-lg"
+                        style={{ height: 275 }}
+                      />
+                    </a>
+                  </div>
+                  <div className="card-body text-center">
+                    <h5 className="font-weight-normal">
+                      <a href="javascript:;"> Make Decisions</a>
+                    </h5>
+                    <p className="mb-0">
+                      With ccurate statistics, you can make the best decisions and and improve your
+                      business
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* furth card */}
+
+              {/* <div className="  col-lg-4 mt-lg-0 mt-4">
                 <div className="card">
                   <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                     <a className="d-block blur-shadow-image">
@@ -246,11 +296,19 @@ function Home() {
                     </button>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </section>
-        <section className="pb-5 position-relative bg-gradient-dark mx-n3">
+
+        {/* Testimoney */}
+
+        {/* Testtimoney end */}
+
+        <section
+          style={{ backgroundco: "#11cdef" }}
+          className="pb-5 position-relative bg-info p-3 mb-5 mx-n5"
+        >
           <div className="container">
             <div className="row">
               <div className="col-md-8 text-start mb-5 mt-5">
@@ -261,121 +319,176 @@ function Home() {
                 </p>
               </div>
             </div>
-            <div className="row">
-              <div className="col-lg-6 col-12">
-                <div className="card card-profile mt-4">
-                  <div className="row">
-                    <div className="col-lg-4 col-md-6 col-12 mt-n5">
-                      <a href="javascript:;">
-                        <div className="p-3 pe-md-0">
-                          <img
-                            className="w-100 border-radius-md shadow-lg"
-                            src={require("../../assets/images/team-5.jpg")}
-                            alt="image"
-                          />
-                        </div>
-                      </a>
-                    </div>
-                    <div className="col-lg-8 col-md-6 col-12 my-auto">
-                      <div className="card-body ps-lg-0">
-                        <h5 className="mb-0">Emma Roberts</h5>
-                        <h6 className="text-info">UI Designer</h6>
-                        <p className="mb-0">
-                          Artist is a term applied to a person who engages in an activity deemed to
-                          be an art.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="col-lg-6 col-12">
-                <div className="card card-profile mt-lg-4 mt-5">
-                  <div className="row">
-                    <div className="col-lg-4 col-md-6 col-12 mt-n5">
-                      <a href="javascript:;">
-                        <div className="p-3 pe-md-0">
-                          <img
-                            className="w-100 border-radius-md shadow-lg"
-                            src={require("../../assets/images/team-5.jpg")}
-                            alt="image"
-                          />
-                        </div>
-                      </a>
-                    </div>
-                    <div className="col-lg-8 col-md-6 col-12 my-auto">
-                      <div className="card-body ps-lg-0">
-                        <h5 className="mb-0">William Pearce</h5>
-                        <h6 className="text-info">Boss</h6>
-                        <p className="mb-0">
-                          Artist is a term applied to a person who engages in an activity deemed to
-                          be an art.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+
             <div className="row mt-4">
-              <div className="col-lg-6 col-12">
-                <div className="card card-profile mt-4 z-index-2">
-                  <div className="row">
-                    <div className="col-lg-4 col-md-6 col-12 mt-n5">
-                      <a href="javascript:;">
-                        <div className="p-3 pe-md-0">
-                          <img
-                            className="w-100 border-radius-md shadow-lg"
-                            src={require("../../assets/images/team-5.jpg")}
-                            alt="image"
-                          />
-                        </div>
-                      </a>
-                    </div>
-                    <div className="col-lg-8 col-md-6 col-12 my-auto">
-                      <div className="card-body ps-lg-0">
-                        <h5 className="mb-0">Ivana Flow</h5>
-                        <h6 className="text-info">Athlete</h6>
-                        <p className="mb-0">
-                          Artist is a term applied to a person who engages in an activity deemed to
-                          be an art.
-                        </p>
-                      </div>
-                    </div>
+              {/* first card */}
+
+              <div className="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.6s">
+                <div className="position-relative shadow rounded border-top border-5 border-primary bg-white ">
+                  <div
+                    className="d-flex align-items-center justify-content-center position-absolute top-0 start-50 translate-middle bg-primary rounded-circle"
+                    style={{ width: "45px", height: "45px", marginTop: "-3px" }}
+                  >
+                    <i className="fa fa-cog text-white"></i>
+                  </div>
+                  <div className="text-center border-bottom p-4 pt-5">
+                    <h4 className="fw-bold">Dedi Hosting</h4>
+                    <p className="mb-0">
+                      Eirmod erat dolor amet est clita lorem erat justo rebum elitr eos
+                    </p>
+                  </div>
+                  <div className="text-center border-bottom p-4">
+                    <p className="text-primary mb-1">
+                      Latest Offer - <strong>Save 30%</strong>
+                    </p>
+                    <h1 className="mb-3">
+                      <small className="align-top" style={{ fontSize: "22px", lineHeight: "45px" }}>
+                        $
+                      </small>
+                      11.49
+                      <small
+                        className="align-bottom"
+                        style={{ fontSize: "16px", lineHeight: "40px" }}
+                      >
+                        / Month
+                      </small>
+                    </h1>
+                    <a className="btn btn-primary px-4 py-2" href="">
+                      Buy Now
+                    </a>
+                  </div>
+                  <div className="p-4">
+                    <p className="border-bottom pb-3">
+                      <i className="fa fa-check text-primary me-3"></i>100 GB Disk Space
+                    </p>
+                    <p className="border-bottom pb-3">
+                      <i className="fa fa-check text-primary me-3"></i>Unlimited Bandwith
+                    </p>
+                    <p className="border-bottom pb-3">
+                      <i className="fa fa-check text-primary me-3"></i>Upgrade to Positive SSL
+                    </p>
+                    <p className="border-bottom pb-3">
+                      <i className="fa fa-check text-primary me-3"></i>Automatic Malware Removal
+                    </p>
+                    <p className="mb-0">
+                      <i className="fa fa-check text-primary me-3"></i>30 Days Money Back Guarantee
+                    </p>
                   </div>
                 </div>
               </div>
-              <div className="col-lg-6 col-12">
-                <div className="card card-profile mt-lg-4 mt-5 z-index-2">
-                  <div className="row">
-                    <div className="col-lg-4 col-md-6 col-12 mt-n5">
-                      <a href="javascript:;">
-                        <div className="p-3 pe-md-0">
-                          <img
-                            className="w-100 border-radius-md shadow-lg"
-                            src={require("../../assets/images/team-5.jpg")}
-                            alt="image"
-                          />
-                        </div>
-                      </a>
-                    </div>
-                    <div className="col-lg-8 col-md-6 col-12 my-auto">
-                      <div className="card-body ps-lg-0">
-                        <h5 className="mb-0">Marquez Garcia</h5>
-                        <h6 className="text-info">JS Developer</h6>
-                        <p className="mb-0">
-                          Artist is a term applied to a person who engages in an activity deemed to
-                          be an art.
-                        </p>
-                      </div>
-                    </div>
+
+              <div className="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.6s">
+                <div className="position-relative shadow rounded border-top border-5 border-primary bg-white ">
+                  <div
+                    className="d-flex align-items-center justify-content-center position-absolute top-0 start-50 translate-middle bg-primary rounded-circle"
+                    style={{ width: "45px", height: "45px", marginTop: "-3px" }}
+                  >
+                    <i className="fa fa-cog text-white"></i>
+                  </div>
+                  <div className="text-center border-bottom p-4 pt-5">
+                    <h4 className="fw-bold">Dedi Hosting</h4>
+                    <p className="mb-0">
+                      Eirmod erat dolor amet est clita lorem erat justo rebum elitr eos
+                    </p>
+                  </div>
+                  <div className="text-center border-bottom p-4">
+                    <p className="text-primary mb-1">
+                      Latest Offer - <strong>Save 30%</strong>
+                    </p>
+                    <h1 className="mb-3">
+                      <small className="align-top" style={{ fontSize: "22px", lineHeight: "45px" }}>
+                        $
+                      </small>
+                      11.49
+                      <small
+                        className="align-bottom"
+                        style={{ fontSize: "16px", lineHeight: "40px" }}
+                      >
+                        / Month
+                      </small>
+                    </h1>
+                    <a className="btn btn-primary px-4 py-2" href="">
+                      Buy Now
+                    </a>
+                  </div>
+                  <div className="p-4">
+                    <p className="border-bottom pb-3">
+                      <i className="fa fa-check text-primary me-3"></i>100 GB Disk Space
+                    </p>
+                    <p className="border-bottom pb-3">
+                      <i className="fa fa-check text-primary me-3"></i>Unlimited Bandwith
+                    </p>
+                    <p className="border-bottom pb-3">
+                      <i className="fa fa-check text-primary me-3"></i>Upgrade to Positive SSL
+                    </p>
+                    <p className="border-bottom pb-3">
+                      <i className="fa fa-check text-primary me-3"></i>Automatic Malware Removal
+                    </p>
+                    <p className="mb-0">
+                      <i className="fa fa-check text-primary me-3"></i>30 Days Money Back Guarantee
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.6s">
+                <div className="position-relative shadow rounded border-top border-5 border-primary bg-white">
+                  <div
+                    className="d-flex align-items-center justify-content-center position-absolute top-0 start-50 translate-middle bg-primary rounded-circle"
+                    style={{ width: "45px", height: "45px", marginTop: "-3px" }}
+                  >
+                    <i className="fa fa-cog text-white"></i>
+                  </div>
+                  <div className="text-center border-bottom p-4 pt-5">
+                    <h4 className="fw-bold">Dedi Hosting</h4>
+                    <p className="mb-0">
+                      Eirmod erat dolor amet est clita lorem erat justo rebum elitr eos
+                    </p>
+                  </div>
+                  <div className="text-center border-bottom p-4">
+                    <p className="text-primary mb-1">
+                      Latest Offer - <strong>Save 30%</strong>
+                    </p>
+                    <h1 className="mb-3">
+                      <small className="align-top" style={{ fontSize: "22px", lineHeight: "45px" }}>
+                        $
+                      </small>
+                      11.49
+                      <small
+                        className="align-bottom"
+                        style={{ fontSize: "16px", lineHeight: "40px" }}
+                      >
+                        / Month
+                      </small>
+                    </h1>
+                    <a className="btn btn-primary px-4 py-2" href="">
+                      Buy Now
+                    </a>
+                  </div>
+                  <div className="p-4">
+                    <p className="border-bottom pb-3">
+                      <i className="fa fa-check text-primary me-3"></i>100 GB Disk Space
+                    </p>
+                    <p className="border-bottom pb-3">
+                      <i className="fa fa-check text-primary me-3"></i>Unlimited Bandwith
+                    </p>
+                    <p className="border-bottom pb-3">
+                      <i className="fa fa-check text-primary me-3"></i>Upgrade to Positive SSL
+                    </p>
+                    <p className="border-bottom pb-3">
+                      <i className="fa fa-check text-primary me-3"></i>Automatic Malware Removal
+                    </p>
+                    <p className="mb-0">
+                      <i className="fa fa-check text-primary me-3"></i>30 Days Money Back Guarantee
+                    </p>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </section>
-        <section className="pt-4 pb-6" id="count-stats">
+
+        {/* <section className="pt-4 pb-6" id="count-stats">
           <div className="container">
             <div className="row mb-7">
               <div className="col-lg-2 col-md-4 col-6 mb-4">
@@ -431,19 +544,14 @@ function Home() {
               </div>
               <div className="col-md-3">
                 <h1 className="text-gradient text-info">
-                  <span id="state2" >
-                    0
-                  </span>
-                  +
+                  <span id="state2">0</span>+
                 </h1>
                 <h5>Hours</h5>
                 <p>That meets quality standards required by our users</p>
               </div>
               <div className="col-md-3">
                 <h1 className="text-gradient text-info">
-                  <span id="state3" >
-                    0
-                  </span>
+                  <span id="state3">0</span>
                   /7
                 </h1>
                 <h5>Support</h5>
@@ -451,7 +559,7 @@ function Home() {
               </div>
             </div>
           </div>
-        </section>
+        </section> */}
         <section className="my-5 pt-5">
           <div className="container">
             <div className="row">
@@ -500,13 +608,13 @@ function Home() {
           <div className=" row">
             <div className="col-md-3 mb-4 ms-auto">
               <div>
-                <a href="#">
+                {/* <a href="#">
                   <img
                     src={require("../../assets/images/apple-icon.png")}
                     className="mb-3 footer-logo"
                     alt="main_logo"
                   />
-                </a>
+                </a> */}
                 <h6 className="font-weight-bolder mb-4">Go Inventory App</h6>
               </div>
               <div>
