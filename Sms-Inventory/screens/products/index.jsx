@@ -11,6 +11,7 @@ import CustomText from "../../components/CustomText";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 import CustomSearch from "../../components/CustomSearch";
 import CustomCard from "../../components/CustomCard";
+import { useNavigation } from "@react-navigation/native";
 
 
 const prductData = [
@@ -41,6 +42,11 @@ const prductData = [
 ];
 
 const ProductScreen = () => {
+  const navigation = useNavigation()
+
+  const MoveproductScreen = ()=>{
+    navigation.navigate("AddProduct")
+  }
   return (
     <View style={styles.conatinter}>
       <View style={styles.top}>
@@ -51,7 +57,7 @@ const ProductScreen = () => {
           </TouchableOpacity>
 
           <View style={styles.right}>
-            <TouchableOpacity style={{ right: 10 }}>
+            <TouchableOpacity onPress={MoveproductScreen} style={{ right: 10 }}>
               <Ionicons name="add-circle-outline" size={24} color="#fff" />
             </TouchableOpacity>
             <TouchableOpacity style={{ left: 2 }}>
