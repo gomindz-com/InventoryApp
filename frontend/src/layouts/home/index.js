@@ -606,50 +606,6 @@ function Home() {
       <footer className="footer pt-5 mt-5">
         <div className="container">
           <div className=" row">
-            <div className="col-md-3 mb-4 ms-auto">
-              <div>
-                {/* <a href="#">
-                  <img
-                    src={require("../../assets/images/apple-icon.png")}
-                    className="mb-3 footer-logo"
-                    alt="main_logo"
-                  />
-                </a> */}
-                <h6 className="font-weight-bolder mb-4">Go Inventory App</h6>
-              </div>
-              <div>
-                <ul className="d-flex flex-row ms-n3 nav">
-                  <li className="nav-item">
-                    <a className="nav-link pe-1" href="https://www.facebook.com/CreativeTim">
-                      <i className="fab fa-facebook text-lg opacity-8"></i>
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a className="nav-link pe-1" href="https://twitter.com/creativetim">
-                      <i className="fab fa-twitter text-lg opacity-8"></i>
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a className="nav-link pe-1" href="https://dribbble.com/creativetim">
-                      <i className="fab fa-dribbble text-lg opacity-8"></i>
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a className="nav-link pe-1" href="https://github.com/creativetimofficial">
-                      <i className="fab fa-github text-lg opacity-8"></i>
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a
-                      className="nav-link pe-1"
-                      href="https://www.youtube.com/channel/UCVyTG4sCw-rOvB9oHkzZD1w"
-                    >
-                      <i className="fab fa-youtube text-lg opacity-8"></i>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
             <div className="col-md-2 col-sm-6 col-6 mb-4">
               <div>
                 <h6 className="text-sm">Company</h6>
@@ -677,6 +633,51 @@ function Home() {
                 </ul>
               </div>
             </div>
+            <div className="col-md-3 mb-4 ms-auto">
+              <div>
+                {/* <a href="#">
+                  <img
+                    src={require("../../assets/images/apple-icon.png")}
+                    className="mb-3 footer-logo"
+                    alt="main_logo"
+                  />
+                </a> */}
+                <h6 className="font-weight-bolder mb-4">Go Inventory App</h6>
+              </div>
+              <div>
+                <ul className="d-flex flex-row ms-n3 nav">
+                  <li className="nav-item">
+                    <a className="nav-link pe-1" href="https://www.facebook.com/CreativeTim">
+                      <i className="fab fa-facebook text-lg opacity-8"></i>
+                    </a>
+                  </li>
+                  <li className="nav-item">
+                    <a className="nav-link pe-1" href="#">
+                      <i className="fab fa-twitter text-lg opacity-8"></i>
+                    </a>
+                  </li>
+                  {/* <li className="nav-item">
+                    <a className="nav-link pe-1" href="https://dribbble.com/creativetim">
+                      <i className="fab fa-dribbble text-lg opacity-8"></i>
+                    </a>
+                  </li> */}
+                  {/* <li className="nav-item">
+                    <a className="nav-link pe-1" href="https://github.com/creativetimofficial">
+                      <i className="fab fa-github text-lg opacity-8"></i>
+                    </a>
+                  </li> */}
+                  {/* <li className="nav-item">
+                    <a
+                      className="nav-link pe-1"
+                      href="https://www.youtube.com/channel/UCVyTG4sCw-rOvB9oHkzZD1w"
+                    >
+                      <i className="fab fa-youtube text-lg opacity-8"></i>
+                    </a>
+                  </li> */}
+                </ul>
+              </div>
+            </div>
+
             {/* <div className="col-md-2 col-sm-6 col-6 mb-4">
               <div>
                 <h6 className="text-sm">Resources</h6>
@@ -699,7 +700,7 @@ function Home() {
                 </ul>
               </div>
             </div> */}
-            <div className="col-md-2 col-sm-6 col-6 mb-4">
+            {/* <div className="col-md-2 col-sm-6 col-6 mb-4">
               <div>
                 <h6 className="text-sm">Help & Support</h6>
                 <ul className="flex-column ms-n3 nav">
@@ -743,7 +744,7 @@ function Home() {
                   </li>
                 </ul>
               </div>
-            </div>
+            </div> */}
             <div className="col-12">
               <div className="text-center">
                 <p className="text-dark my-4 text-sm font-weight-normal">

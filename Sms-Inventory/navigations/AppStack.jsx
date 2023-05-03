@@ -6,7 +6,7 @@ import HomeScreen from "../screens/dashboard/HomeScreen";
 import ProductScreen from "../screens/products";
 import TransactionScreen from "../screens/transaction/transaction";
 import Lowstock from "../screens/lowStock/Lowstock";
-
+import ProductStack from "./ProductStack";
 
 const Tab = createBottomTabNavigator();
 
@@ -38,7 +38,7 @@ const AppStack = () => {
         />
         <Tab.Screen
           name="Products"
-          component={ProductScreen}
+          component={ProductStack}
           options={{
             tabBarLabel: "Products",
             tabBarIcon: ({ size, color }) => (
