@@ -44,7 +44,7 @@ const prductData = [
 const ProductScreen = () => {
   const navigation = useNavigation() 
   const addproductscreen = () =>{
-    navigation.navigate("add")
+    navigation.navigate("addProduct")
   }
   return (
     <View style={styles.conatinter}>
