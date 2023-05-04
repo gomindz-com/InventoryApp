@@ -334,7 +334,7 @@ function Home() {
                   <div className="text-center border-bottom p-4 pt-5">
                     <h4 className="fw-bold">Dedi Hosting</h4>
                     <p className="mb-0">
-                      Eirmod erat dolor amet est clita lorem erat justo rebum elitr eos
+                      Eirmod erat dolor amet est nrdd clita lorem erat justo rebum elitr eos
                     </p>
                   </div>
                   <div className="text-center border-bottom p-4">
@@ -343,7 +343,7 @@ function Home() {
                     </p>
                     <h1 className="mb-3">
                       <small className="align-top" style={{ fontSize: "22px", lineHeight: "45px" }}>
-                        $
+                        D
                       </small>
                       11.49
                       <small
@@ -397,7 +397,7 @@ function Home() {
                     </p>
                     <h1 className="mb-3">
                       <small className="align-top" style={{ fontSize: "22px", lineHeight: "45px" }}>
-                        $
+                        D
                       </small>
                       11.49
                       <small
@@ -451,7 +451,7 @@ function Home() {
                     </p>
                     <h1 className="mb-3">
                       <small className="align-top" style={{ fontSize: "22px", lineHeight: "45px" }}>
-                        $
+                        D
                       </small>
                       11.49
                       <small
