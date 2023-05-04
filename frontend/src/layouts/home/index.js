@@ -118,7 +118,7 @@ function Home() {
                   aria-expanded="false"
                 >
                   <i className="material-icons opacity-6 me-2 text-md">logout</i>
-                  Logout
+                  SignIn
                 </Link>
               </li>
 
@@ -209,11 +209,11 @@ function Home() {
                   </div>
                   <div className="card-body text-center">
                     <h5 className="font-weight-normal">
-                      <a href="javascript:;">Get insights on Search</a>
+                      <a href="javascript:;">Accurate Stock Recordes</a>
                     </h5>
                     <p className="mb-0">
-                      Website visitors today demand a frictionless user expericence — especially
-                      when using search. Because of the hight standards.
+                      Get accurate stock records with stright forword figures . You need not to
+                      worry about counting everything in the store
                     </p>
                   </div>
                 </div>
@@ -228,16 +228,17 @@ function Home() {
                         src={static2}
                         alt="img-colored-shadow"
                         className="img-fluid border-radius-lg"
+                        style={{ height: 275 }}
                       />
                     </a>
                   </div>
                   <div className="card-body text-center">
                     <h5 className="font-weight-normal">
-                      <a href="javascript:;">Get insights on Search</a>
+                      <a href="javascript:;">Statistical Data </a>
                     </h5>
                     <p className="mb-0">
-                      Website visitors today demand a frictionless user expericence — especially
-                      when using search. Because of the hight standards.
+                      With clear figures and graphs , you can read all statistics of your store and
+                      stay in the loop.
                     </p>
                   </div>
                 </div>
@@ -253,16 +254,17 @@ function Home() {
                         src={static3}
                         alt="img-colored-shadow"
                         className="img-fluid border-radius-lg"
+                        style={{ height: 275 }}
                       />
                     </a>
                   </div>
                   <div className="card-body text-center">
                     <h5 className="font-weight-normal">
-                      <a href="javascript:;">Get insights on Search</a>
+                      <a href="javascript:;"> Make Decisions</a>
                     </h5>
                     <p className="mb-0">
-                      Website visitors today demand a frictionless user expericence — especially
-                      when using search. Because of the hight standards.
+                      With ccurate statistics, you can make the best decisions and and improve your
+                      business
                     </p>
                   </div>
                 </div>
@@ -606,13 +608,13 @@ function Home() {
           <div className=" row">
             <div className="col-md-3 mb-4 ms-auto">
               <div>
-                <a href="#">
+                {/* <a href="#">
                   <img
                     src={require("../../assets/images/apple-icon.png")}
                     className="mb-3 footer-logo"
                     alt="main_logo"
                   />
-                </a>
+                </a> */}
                 <h6 className="font-weight-bolder mb-4">Go Inventory App</h6>
               </div>
               <div>
