@@ -42,10 +42,9 @@ const prductData = [
 ];
 
 const ProductScreen = () => {
-  const navigation = useNavigation()
-
-  const MoveproductScreen = ()=>{
-    navigation.navigate("AddProduct")
+  const navigation = useNavigation() 
+  const addproductscreen = () =>{
+    navigation.navigate("addProduct")
   }
   return (
     <View style={styles.conatinter}>
@@ -57,7 +56,7 @@ const ProductScreen = () => {
           </TouchableOpacity>
 
           <View style={styles.right}>
-            <TouchableOpacity onPress={MoveproductScreen} style={{ right: 10 }}>
+            <TouchableOpacity onPress={addproductscreen} style={{ right: 10 }}>
               <Ionicons name="add-circle-outline" size={24} color="#fff" />
             </TouchableOpacity>
             <TouchableOpacity style={{ left: 2 }}>

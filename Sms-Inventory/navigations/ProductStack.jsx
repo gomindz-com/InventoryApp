@@ -13,8 +13,7 @@ const ProductStack = () => {
       <StatusBar backgroundColor={COLORS.green} style="light" />
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Product" component={ProductScreen} />
-        <Stack.Screen name="AddProduct" component={AdProductScreen} />
-
+        <Stack.Screen name="addProduct" component={AdProductScreen} />
       </Stack.Navigator>
     </>
   );

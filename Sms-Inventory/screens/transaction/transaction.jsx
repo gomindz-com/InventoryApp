@@ -12,9 +12,15 @@ import {
   import CustomSearch from "../../components/CustomSearch";
   import CustomCard from "../../components/CustomCard";
   import { Feather } from '@expo/vector-icons';
+  import { useNavigation } from "@react-navigation/native";
 
   
   const TransactionScreen = () => {
+    const navigation = useNavigation()
+
+    const moveAddTransaction = ()=> {
+      navigation.navigate("Filter")
+    }
     return(
         <View style={styles.conatinter}>
         <View style={styles.top}>
@@ -25,7 +31,7 @@ import {
             </TouchableOpacity>
   
             <View style={styles.right}>
-              <TouchableOpacity style={{ left: 2 }}>
+              <TouchableOpacity onPress={moveAddTransaction} style={{ left: 2 }}>
               <AntDesign name="filter" size={24} color="#fff" />
               </TouchableOpacity>
               <TouchableOpacity style={{ left: 10 }}>

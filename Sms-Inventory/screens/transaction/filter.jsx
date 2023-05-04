@@ -1,14 +1,16 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 
-const AdProductScreen = () => {
+const FilterScreen = () => {
   return (
     <View style={{marginTop: 50}} >
-      <Text>add product screen</Text>
+      <Text>Add Transaction</Text>
     </View>
   );
 };
 
-export default AdProductScreen;
+export default FilterScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+
+});
