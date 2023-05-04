@@ -24,14 +24,19 @@ const AdProductScreen = () => {
          
         </TouchableOpacity>
         <View >
-        <CustomText style={styles.title} color="#fff">ADD PRODUCT</CustomText>
+        <CustomText style={styles.title} color="#fff">Add Product</CustomText>
         </View>
 
         <View style={styles.right}>
-         
-          <TouchableOpacity style={{ left: 2 }}>
-            <AntDesign name="dropbox" size={24} color="#fff" />
+
+        <TouchableOpacity style={{ right: 15 }}>
+          <AntDesign name="export" size={24} color="white" />
           </TouchableOpacity>
+         
+          <TouchableOpacity style={{ right: 2 }}>
+          <AntDesign name="check" size={24} color="white" />
+          </TouchableOpacity>
+          
         
         </View>
       </View>
@@ -40,6 +45,16 @@ const AdProductScreen = () => {
 
     <View style={{ marginTop: 2 }}>
         <CustomInput placeholder={"Product Name"} mx={10} mt={10} />
+      </View>
+    <View style={{ marginTop: 2 }}>
+  
+        <CustomInput placeholder={"Product ID"} mx={10} mt={10} />
+      </View>
+    <View style={{ marginTop: 2 }}>
+        <CustomInput placeholder={"Buy Rate"} mx={10} mt={10} />
+      </View>
+    <View style={{ marginTop: 2 }}>
+        <CustomInput placeholder={"Description"} mx={10} mt={10} />
       </View>
 
   </View>
@@ -68,7 +83,8 @@ const styles = StyleSheet.create({
   },
   title:{
     marginTop:40,
-    fontSize:25
+    fontSize:30,
+    fontWeight:"bold"
     
   }
 
