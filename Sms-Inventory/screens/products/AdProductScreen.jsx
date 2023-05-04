@@ -4,7 +4,7 @@ import React from "react";
 const AdProductScreen = () => {
   return (
     <View style={{marginTop: 50}} >
-      <Text>Add Product</Text>
+      <Text>Add Product screen</Text>
     </View>
   );
 };
