@@ -117,7 +117,7 @@ function Home() {
                   aria-expanded="false"
                 >
                   <i className="material-icons opacity-6 me-2 text-md">logout</i>
-                  Logout
+                  SignIn
                 </Link>
               </li>
 
@@ -208,11 +208,11 @@ function Home() {
                   </div>
                   <div className="card-body text-center">
                     <h5 className="font-weight-normal">
-                      <a href="#">Get insights on Search</a>
+                      <a href="javascript:;">Accurate Stock Recordes</a>
                     </h5>
                     <p className="mb-0">
-                      Website visitors today demand a frictionless user expericence — especially
-                      when using search. Because of the hight standards.
+                      Get accurate stock records with stright forword figures . You need not to
+                      worry about counting everything in the store
                     </p>
                   </div>
                 </div>
@@ -227,16 +227,17 @@ function Home() {
                         src={static2}
                         alt="img-colored-shadow"
                         className="img-fluid border-radius-lg"
+                        style={{ height: 275 }}
                       />
                     </a>
                   </div>
                   <div className="card-body text-center">
                     <h5 className="font-weight-normal">
-                      <a href="#">Get insights on Search</a>
+                      <a href="javascript:;">Get insights on Search</a>
                     </h5>
                     <p className="mb-0">
-                      Website visitors today demand a frictionless user expericence — especially
-                      when using search. Because of the hight standards.
+                      With clear figures and graphs , you can read all statistics of your store and
+                      stay in the loop.
                     </p>
                   </div>
                 </div>
@@ -252,16 +253,17 @@ function Home() {
                         src={static3}
                         alt="img-colored-shadow"
                         className="img-fluid border-radius-lg"
+                        style={{ height: 275 }}
                       />
                     </a>
                   </div>
                   <div className="card-body text-center">
                     <h5 className="font-weight-normal">
-                      <a href="#">Get insights on Search</a>
+                      <a href="javascript:;">Get insights on Search</a>
                     </h5>
                     <p className="mb-0">
-                      Website visitors today demand a frictionless user expericence — especially
-                      when using search. Because of the hight standards.
+                      With ccurate statistics, you can make the best decisions and and improve your
+                      business
                     </p>
                   </div>
                 </div>
@@ -331,7 +333,7 @@ function Home() {
                   <div className="text-center border-bottom p-4 pt-5">
                     <h4 className="fw-bold">Dedi Hosting</h4>
                     <p className="mb-0">
-                      Eirmod erat dolor amet est clita lorem erat justo rebum elitr eos
+                      Eirmod erat dolor amet est nrdd clita lorem erat justo rebum elitr eos
                     </p>
                   </div>
                   <div className="text-center border-bottom p-4">
@@ -340,7 +342,7 @@ function Home() {
                     </p>
                     <h1 className="mb-3">
                       <small className="align-top" style={{ fontSize: "22px", lineHeight: "45px" }}>
-                        $
+                        D
                       </small>
                       11.49
                       <small
@@ -394,7 +396,7 @@ function Home() {
                     </p>
                     <h1 className="mb-3">
                       <small className="align-top" style={{ fontSize: "22px", lineHeight: "45px" }}>
-                        $
+                        D
                       </small>
                       11.49
                       <small
@@ -448,7 +450,7 @@ function Home() {
                     </p>
                     <h1 className="mb-3">
                       <small className="align-top" style={{ fontSize: "22px", lineHeight: "45px" }}>
-                        $
+                        D
                       </small>
                       11.49
                       <small
@@ -603,50 +605,6 @@ function Home() {
       <footer className="footer pt-5 mt-5">
         <div className="container">
           <div className=" row">
-            <div className="col-md-3 mb-4 ms-auto">
-              <div>
-                <a href="#">
-                  <img
-                    src={require("../../assets/images/apple-icon.png")}
-                    className="mb-3 footer-logo"
-                    alt="main_logo"
-                  />
-                </a>
-                <h6 className="font-weight-bolder mb-4">Go Inventory App</h6>
-              </div>
-              <div>
-                <ul className="d-flex flex-row ms-n3 nav">
-                  <li className="nav-item">
-                    <a className="nav-link pe-1" href="https://www.facebook.com/CreativeTim">
-                      <i className="fab fa-facebook text-lg opacity-8"></i>
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a className="nav-link pe-1" href="https://twitter.com/creativetim">
-                      <i className="fab fa-twitter text-lg opacity-8"></i>
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a className="nav-link pe-1" href="https://dribbble.com/creativetim">
-                      <i className="fab fa-dribbble text-lg opacity-8"></i>
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a className="nav-link pe-1" href="https://github.com/creativetimofficial">
-                      <i className="fab fa-github text-lg opacity-8"></i>
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a
-                      className="nav-link pe-1"
-                      href="https://www.youtube.com/channel/UCVyTG4sCw-rOvB9oHkzZD1w"
-                    >
-                      <i className="fab fa-youtube text-lg opacity-8"></i>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
             <div className="col-md-2 col-sm-6 col-6 mb-4">
               <div>
                 <h6 className="text-sm">Company</h6>
@@ -674,6 +632,51 @@ function Home() {
                 </ul>
               </div>
             </div>
+            <div className="col-md-3 mb-4 ms-auto">
+              <div>
+                {/* <a href="#">
+                  <img
+                    src={require("../../assets/images/apple-icon.png")}
+                    className="mb-3 footer-logo"
+                    alt="main_logo"
+                  />
+                </a> */}
+                <h6 className="font-weight-bolder mb-4">Go Inventory App</h6>
+              </div>
+              <div>
+                <ul className="d-flex flex-row ms-n3 nav">
+                  <li className="nav-item">
+                    <a className="nav-link pe-1" href="https://www.facebook.com/CreativeTim">
+                      <i className="fab fa-facebook text-lg opacity-8"></i>
+                    </a>
+                  </li>
+                  <li className="nav-item">
+                    <a className="nav-link pe-1" href="#">
+                      <i className="fab fa-twitter text-lg opacity-8"></i>
+                    </a>
+                  </li>
+                  {/* <li className="nav-item">
+                    <a className="nav-link pe-1" href="https://dribbble.com/creativetim">
+                      <i className="fab fa-dribbble text-lg opacity-8"></i>
+                    </a>
+                  </li> */}
+                  {/* <li className="nav-item">
+                    <a className="nav-link pe-1" href="https://github.com/creativetimofficial">
+                      <i className="fab fa-github text-lg opacity-8"></i>
+                    </a>
+                  </li> */}
+                  {/* <li className="nav-item">
+                    <a
+                      className="nav-link pe-1"
+                      href="https://www.youtube.com/channel/UCVyTG4sCw-rOvB9oHkzZD1w"
+                    >
+                      <i className="fab fa-youtube text-lg opacity-8"></i>
+                    </a>
+                  </li> */}
+                </ul>
+              </div>
+            </div>
+
             {/* <div className="col-md-2 col-sm-6 col-6 mb-4">
               <div>
                 <h6 className="text-sm">Resources</h6>
@@ -696,7 +699,7 @@ function Home() {
                 </ul>
               </div>
             </div> */}
-            <div className="col-md-2 col-sm-6 col-6 mb-4">
+            {/* <div className="col-md-2 col-sm-6 col-6 mb-4">
               <div>
                 <h6 className="text-sm">Help & Support</h6>
                 <ul className="flex-column ms-n3 nav">
@@ -740,7 +743,7 @@ function Home() {
                   </li>
                 </ul>
               </div>
-            </div>
+            </div> */}
             <div className="col-12">
               <div className="text-center">
                 <p className="text-dark my-4 text-sm font-weight-normal">

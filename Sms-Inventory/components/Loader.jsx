@@ -10,7 +10,7 @@ const Loader = () => {
         flex: 1,
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: COLORS.brown,
+        backgroundColor: COLORS.green,
       }}
     >
       <LottieView source={IMAGES.loader} autoPlay={true} loop={true} />
