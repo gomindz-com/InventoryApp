@@ -86,7 +86,7 @@
           key: "typewrite",
           value: function(t, e) {
             var s = this;
-            this.fadeOut && this.el.classList.contains(this.fadeOutClass) && (this.el.classList.remove(this.fadeOutClass), this.cursor && this.cursor.classList.remove(this.fadeOutClass));
+            this.fadeOut && this.el.classList?.contains(this.fadeOutClass) && (this.el.classList?.remove(this.fadeOutClass), this.cursor && this.cursor.classList?.remove(this.fadeOutClass));
             var n = this.humanizer(this.typeSpeed),
               i = 1;
             return this.pause.status === !0 ? void this.setPauseStatus(t, e, !0) : void(this.timeout = setTimeout(function() {
@@ -156,7 +156,7 @@
         }, {
           key: "toggleBlinking",
           value: function(t) {
-            this.cursor && (this.pause.status || this.cursorBlinking !== t && (this.cursorBlinking = t, t ? this.cursor.classList.add("typed-cursor--blink") : this.cursor.classList.remove("typed-cursor--blink")))
+            this.cursor && (this.pause.status || this.cursorBlinking !== t && (this.cursorBlinking = t, t ? this.cursor.classList?.add("typed-cursor--blink") : this.cursor.classList?.remove("typed-cursor--blink")))
           }
         }, {
           key: "humanizer",

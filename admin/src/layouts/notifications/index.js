@@ -64,24 +64,19 @@ function Notifications() {
     const isValid = await AddBuyerSchema.isValid(buyerData);
     if (!isValid) {
       toast.error("Please enter all the required fields!!");
-      console.log(buyerData);
     } else {
-      console.log(buyerData);
       await addBuyer(buyerData)
         .then((res) => {
           if (res.data?.status === "true") {
-            console.log("Buyer Added");
             toast.success("Buyer Added Successfully");
             handleGetBuyerList();
-            console.log(res.data.result);
           } else {
-            console.log("Buyer Could Not Be Added");
-            console.log(res.data.result);
+            
             toast.error("Buyer Could Not Be Added");
           }
         })
         .catch((err) => {
-          console.log("Error Adding Buyer", err);
+          return("Error Adding Buyer", err);
         });
     }
   };
@@ -92,24 +87,19 @@ function Notifications() {
     const isValid = await AddBuyerSchema.isValid(buyerData);
     if (!isValid) {
       toast.error("Please enter all the required fields!!");
-      console.log(buyerData);
     } else {
-      console.log(buyerData);
       await editBuyer(buyerData.id, buyerData)
         .then((res) => {
           if (res.data?.status === "true") {
-            console.log("Buyer Updated");
             toast.success("Buyer Updated Successfully");
             handleGetBuyerList();
-            console.log(res.data.result);
           } else {
-            console.log("Buyer Could Not Be Updated");
-            console.log(res.data.result);
+            
             toast.error("Buyer Could Not Be Updated");
           }
         })
         .catch((err) => {
-          console.log("Error Updating Supplier", err);
+          return("Error Updating Supplier", err);
         });
     }
   };
@@ -126,20 +116,18 @@ function Notifications() {
     try {
       await getBuyers()
         .then((res) => {
-          console.log(res);
           if (res.data?.status === "true") {
-            console.log("Buyers List");
-            console.log(res.data.result);
             setBuyerList(res.data.result);
           } else {
             setBuyerList([]);
           }
         })
-        .catch((err) => console.log("Error in Getting Buyers", err));
+        .catch((err) => {return}
+        );
 
       setScreenLoading(false);
     } catch (error) {
-      console.log(error);
+      return(error);
     }
   };
 
@@ -152,7 +140,7 @@ function Notifications() {
         } else {
         }
       })
-      .catch((err) => console.log("Error in Deleting Buyer", err));
+      .catch((err) => {});
   };
 
   const columns = [
@@ -189,7 +177,7 @@ function Notifications() {
             <nav aria-label="breadcrumb">
               <ol className="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
                 <li className="breadcrumb-item text-sm">
-                  <a className="opacity-5 text-dark" href="javascript:;">
+                  <a className="opacity-5 text-dark" href="#">
                     Pages
                   </a>
                 </li>
@@ -231,7 +219,7 @@ function Notifications() {
                 </li>
                 <li className="nav-item d-xl-none ps-3 d-flex align-items-center">
                   <a
-                    href="javascript:;"
+                    href="#"
                     className="nav-link text-body p-0"
                     onClick={() => {
                       setShowAside(!showAside);
@@ -246,13 +234,13 @@ function Notifications() {
                   </a>
                 </li>
                 <li className="nav-item px-3 d-flex align-items-center">
-                  <a href="javascript:;" className="nav-link text-body p-0">
+                  <a href="#" className="nav-link text-body p-0">
                     <i className="fa fa-cog fixed-plugin-button-nav cursor-pointer"></i>
                   </a>
                 </li>
                 <li className="nav-item dropdown pe-2 d-flex align-items-center">
                   <a
-                    href="javascript:;"
+                    href="#"
                     className="nav-link text-body p-0"
                     id="dropdownMenuButton"
                     data-bs-toggle="dropdown"
@@ -265,7 +253,7 @@ function Notifications() {
                     aria-labelledby="dropdownMenuButton"
                   >
                     <li className="mb-2">
-                      <a className="dropdown-item border-radius-md" href="javascript:;">
+                      <a className="dropdown-item border-radius-md" href="#">
                         <div className="d-flex py-1">
                           <div className="my-auto">
                             <img
@@ -286,7 +274,7 @@ function Notifications() {
                       </a>
                     </li>
                     <li className="mb-2">
-                      <a className="dropdown-item border-radius-md" href="javascript:;">
+                      <a className="dropdown-item border-radius-md" href="#">
                         <div className="d-flex py-1">
                           <div className="my-auto">
                             <img
@@ -306,7 +294,7 @@ function Notifications() {
                       </a>
                     </li>
                     <li>
-                      <a className="dropdown-item border-radius-md" href="javascript:;">
+                      <a className="dropdown-item border-radius-md" href="#">
                         <div className="d-flex py-1">
                           <div className="avatar avatar-sm bg-gradient-secondary  me-3  my-auto">
                             {/*  <svg width="12px" height="12px" viewBox="0 0 43 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -351,7 +339,7 @@ function Notifications() {
                   <div className="alert alert-primary alert-dismissible text-white" role="alert">
                     <span className="text-sm">
                       A simple primary alert with{" "}
-                      <a href="javascript:;" className="alert-link text-white">
+                      <a href="#" className="alert-link text-white">
                         an example link
                       </a>
                       . Give it a click if you like.
@@ -368,7 +356,7 @@ function Notifications() {
                   <div className="alert alert-secondary alert-dismissible text-white" role="alert">
                     <span className="text-sm">
                       A simple secondary alert with{" "}
-                      <a href="javascript:;" className="alert-link text-white">
+                      <a href="#" className="alert-link text-white">
                         an example link
                       </a>
                       . Give it a click if you like.
@@ -385,7 +373,7 @@ function Notifications() {
                   <div className="alert alert-success alert-dismissible text-white" role="alert">
                     <span className="text-sm">
                       A simple success alert with{" "}
-                      <a href="javascript:;" className="alert-link text-white">
+                      <a href="#" className="alert-link text-white">
                         an example link
                       </a>
                       . Give it a click if you like.
@@ -402,7 +390,7 @@ function Notifications() {
                   <div className="alert alert-danger alert-dismissible text-white" role="alert">
                     <span className="text-sm">
                       A simple danger alert with{" "}
-                      <a href="javascript:;" className="alert-link text-white">
+                      <a href="#" className="alert-link text-white">
                         an example link
                       </a>
                       . Give it a click if you like.
@@ -419,7 +407,7 @@ function Notifications() {
                   <div className="alert alert-warning alert-dismissible text-white" role="alert">
                     <span className="text-sm">
                       A simple warning alert with{" "}
-                      <a href="javascript:;" className="alert-link text-white">
+                      <a href="#" className="alert-link text-white">
                         an example link
                       </a>
                       . Give it a click if you like.
@@ -436,7 +424,7 @@ function Notifications() {
                   <div className="alert alert-info alert-dismissible text-white" role="alert">
                     <span className="text-sm">
                       A simple info alert with{" "}
-                      <a href="javascript:;" className="alert-link text-white">
+                      <a href="#" className="alert-link text-white">
                         an example link
                       </a>
                       . Give it a click if you like.
@@ -453,7 +441,7 @@ function Notifications() {
                   <div className="alert alert-light alert-dismissible text-white" role="alert">
                     <span className="text-sm">
                       A simple light alert with{" "}
-                      <a href="javascript:;" className="alert-link text-white">
+                      <a href="#" className="alert-link text-white">
                         an example link
                       </a>
                       . Give it a click if you like.
@@ -470,7 +458,7 @@ function Notifications() {
                   <div className="alert alert-dark alert-dismissible text-white" role="alert">
                     <span className="text-sm">
                       A simple dark alert with{" "}
-                      <a href="javascript:;" className="alert-link text-white">
+                      <a href="#" className="alert-link text-white">
                         an example link
                       </a>
                       . Give it a click if you like.

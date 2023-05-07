@@ -36,6 +36,7 @@ import ArgonBadge from "components/ArgonBadge";
 import { Button } from "@mui/material";
 import Table from "examples/Tables/Table";
 
+import { ToastContainer, toast } from "react-toastify";
 
 import { Routes, Route, Navigate, useLocation, } from "react-router-dom";
 
@@ -64,16 +65,14 @@ function Default() {
       await getCategories()
         .then((res) => {
 
-          console.log(res.data)
           if (res.data.status === 'true') {
             setCategoryList(res.data.result);
           } else {
             setCategoryList([]);
           }
         })
-        .catch((err) => console.log("Error in Getting setCategoryList", err));
+        .catch((err) => {});
     } catch (error) {
-      console.log(error);
     }
   };
   //END GET CATEGORY
@@ -108,9 +107,10 @@ function Default() {
             setOrderCount({});
           }
         })
-        .catch((err) => console.log("Error", err));
+        .catch((err) => {
+
+        });
     } catch (error) {
-      console.log(error);
     }
   };
 
@@ -137,9 +137,8 @@ function Default() {
             setProductCount({});
           }
         })
-        .catch((err) => console.log("Error", err));
+        .catch((err) => {});
     } catch (error) {
-      console.log(error);
     }
   };
 
@@ -156,9 +155,8 @@ function Default() {
             setSupplierCount({});
           }
         })
-        .catch((err) => console.log("Error", err));
+        .catch((err) => {});
     } catch (error) {
-      console.log(error);
     }
   };
 
@@ -176,9 +174,8 @@ function Default() {
             setBuyerCount({});
           }
         })
-        .catch((err) => console.log("Error", err));
+        .catch((err) => {});
     } catch (error) {
-      console.log(error);
     }
   };
 
@@ -196,9 +193,8 @@ function Default() {
             setProductList([]);
           }
         })
-        .catch((err) => console.log("Error in Getting Products", err));
+        .catch((err) => {});
     } catch (error) {
-      console.log(error);
     }
   };
   //END GET PRODUCTS
@@ -322,6 +318,8 @@ function Default() {
 
       {user == null && <Navigate to="/authentication/sign-in" replace={true} />}
 
+<ToastContainer/>
+
 
       <DashboardNavbar handleClick={handleClick} data={showSearch} />
 
@@ -329,7 +327,7 @@ function Default() {
         <Grid container spacing={3} mb={3}>
           <Grid item xs={12} md={6} lg={3}>
             <DetailedStatisticsCard
-              title="Orders"
+              title="Cash Pending"
               count={orderCount?.total == undefined ? "D" + 0 : "D" + orderCount?.total}
               amount={
                 orderCount?.ordercount == undefined
@@ -337,27 +335,27 @@ function Default() {
                   : orderCount?.ordercount + " Order(s)"
               }
               icon={{ color: "info", component: <i className="ni ni-money-coins" /> }}
-              percentage={{ color: "success", count: "+55%", text: "since yesterday" }}
+              percentage={{ color: "success", count: "+55%", text: "" }}
             />
           </Grid>
           <Grid item xs={12} md={6} lg={3}>
             <DetailedStatisticsCard
-              title="Product"
-              count={
-                productCount?.productcount == undefined
-                  ? 0 + " Product"
-                  : productCount?.productcount
-              }
+              title="Cash InHand"
+              count={orderCount?.total == undefined ? "D" + 0 : "D" + orderCount?.total}
+
               amount={
-                ''
+                orderCount?.ordercount == undefined
+                  ? 0 + " Orders"
+                  : orderCount?.ordercount + " Order(s)"
               }
+              
               icon={{ color: "error", component: <i className="ni ni-world" /> }}
               percentage={{ color: "success", count: "+3%", text: "since last week" }}
             />
           </Grid>
           <Grid item xs={12} md={6} lg={3}>
             <DetailedStatisticsCard
-              title="Supplier"
+              title="Total Stock In"
               count={
                 supplierCount?.suppliercount == undefined
                   ? 0 + " Supplier"
@@ -372,7 +370,7 @@ function Default() {
           </Grid>
           <Grid item xs={12} md={6} lg={3}>
             <DetailedStatisticsCard
-              title="Buyer"
+              title="Total Stock Out"
               count={
                 buyerCount?.buyercount == undefined
                   ? 0 + " Buyer"

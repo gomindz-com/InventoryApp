@@ -1,11 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from rest_framework import generics, mixins, viewsets, filters, permissions
-from rest_framework_simplejwt.views import TokenObtainPairView
+#from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .serializers import CustomUserSerializer
-from rest_framework_simplejwt.tokens import RefreshToken
+#from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.request import Request
 from django.contrib.auth import authenticate
@@ -45,10 +45,15 @@ class LoginUser(APIView):
                 "user": serializer.data,
                 "token": user.auth_token.key,
             }
-            return Response(data=response, status=status.HTTP_200_OK)
+            return Response(data=response)
 
         else:
-            return Response(data={"message": "Invalid User"}, status=status.HTTP_200_OK)
+            response = {
+                "status": False,
+                "message": "Invalid User"
+            }
+            
+            return Response(data=response)
 
     def get(self, request: Request):
         content = {
@@ -79,8 +84,8 @@ class BlacklistTokenUpdateView(APIView):
     def post(self, request):
         try:
             refresh_token = request.data["refresh_token"]
-            token = RefreshToken(refresh_token)
-            token.blacklist()
+            #token = RefreshToken(refresh_token)
+            #token.blacklist()
             return Response(status=status.HTTP_205_RESET_CONTENT)
         except Exception as e:
             return Response(status=status.HTTP_400_BAD_REQUEST)

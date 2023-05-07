@@ -7,7 +7,7 @@ export const getCustomers = async () => {
       return response;
     })
     .catch((err) => {
-      console.log(err);
+      return(err);
     });
 
   return data;

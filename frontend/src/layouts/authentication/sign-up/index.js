@@ -185,7 +185,7 @@ function Cover() {
             type="email"
             placeholder="Email"
             size="large"
-            autocomplete="off" 
+            autoComplete="off" 
             onChange={handleChange}
           />
               

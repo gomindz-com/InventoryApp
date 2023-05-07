@@ -84,7 +84,22 @@ function Invoices() {
 
   const { v4: uuidv4 } = require("uuid");
 
-  const [uuid, setUuid] = useState(uuidv4().toString());
+  //const [uuid, setUuid] = useState(uuidv4().toString());
+
+  const date = new Date();
+
+  let day = date.getDate();
+  let month = date.getMonth() + 1;
+  let year = date.getFullYear();
+  let hour = date.getHours();
+  let minute = date.getMinutes();
+  let second = date.getMinutes();
+
+  // This arrangement can be altered based on how we want the date's format to appear.
+  let currentDate = `${day}${month}${year}${hour}${minute}${second}`;
+
+  const uuid = currentDate;
+
 
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
 
@@ -129,11 +144,10 @@ function Invoices() {
             setOrderList([]);
           }
         })
-        .catch((err) => console.log("Error in Getting Orders", err));
+        .catch((err) => {});
 
       setScreenLoading(false);
     } catch (error) {
-      console.log(error);
     }
   };
 
@@ -160,11 +174,12 @@ function Invoices() {
             setProductList([]);
           }
         })
-        .catch((err) => console.log("Error in Getting Products", err));
+        .catch((err) => {
+
+        });
 
       setScreenLoading(false);
     } catch (error) {
-      console.log(error);
     }
   };
   //END GET PRODUCTS
@@ -189,41 +204,14 @@ function Invoices() {
             setSupplierList([]);
           }
         })
-        .catch((err) => console.log("Error in Getting Suppliers", err));
+        .catch((err) => {});
 
       setScreenLoading(false);
     } catch (error) {
-      console.log(error);
     }
   };
 
-  // GET BUYERS
-  const handleGetBuyerList = async () => {
-    setBuyerList([]);
-    try {
-      await getBuyers()
-        .then((res) => {
-          if (res.data?.status === "true") {
-            res.data.result.map((item) => {
-              buyer_options.push({
-                value: item.name,
-                label: item.name,
-                id: item.id,
-              });
-            });
-
-            setBuyerOptions(buyer_options);
-          } else {
-            setBuyerList([]);
-          }
-        })
-        .catch((err) => console.log("Error in Getting Buyers", err));
-
-      setScreenLoading(false);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  
 
   const handleEdit = async (id) => {
     await editInvoice(id, { type: "receipt" })
@@ -236,7 +224,6 @@ function Invoices() {
         }
       })
       .catch((err) => {
-        console.log("Error Updating Invoice", err);
       });
   };
 
@@ -272,6 +259,7 @@ function Invoices() {
 
   const [orderData, setOrderData] = useState({
     buyer: "",
+    buyer_location: "",
     status: "pending",
     receipt: uuid,
     total_price: "",
@@ -281,6 +269,7 @@ function Invoices() {
 
   const [invoiceData, setInvoiceData] = useState({
     buyer: "",
+    buyer_location: "",
     status: "pending",
     receipt: uuid,
     total_price: "",
@@ -290,6 +279,7 @@ function Invoices() {
 
   const [ordertotalPrice, setOrderTotalPrice] = useState(0.0);
   const [theBuyer, setTheBuyer] = useState("");
+  const [theBuyerLocation, setTheBuyerLocation] = useState("");
   const [theReceipt, setTheReceipt] = useState("");
 
   // HANDLING PRODUCT ADDITION AND REMOVAL
@@ -341,7 +331,8 @@ function Invoices() {
         } else {
         }
       })
-      .catch((err) => console.log("Error in Deleting Order", err));
+      .catch((err) => {}
+      );
   };
 
   const columns = [
@@ -349,6 +340,7 @@ function Invoices() {
     { name: "product", align: "left" },
     { name: "total price", align: "left" },
     { name: "buyer", align: "center" },
+    { name: "buyer_location", align: "center" },
     { name: "status", align: "center" },
     //{ name: "print receipt", align: "center" },
     { name: "Approve As Receipt", align: "center" },
@@ -398,6 +390,15 @@ function Invoices() {
           container
         />
       ),
+      buyer_location: (
+        <ArgonBadge
+          variant="gradient"
+          badgeContent={item.buyer_location}
+          color="success"
+          size="xs"
+          container
+        />
+      ),
 
       status: (
         <ArgonTypography variant="caption" color="secondary" fontWeight="medium">
@@ -432,6 +433,7 @@ function Invoices() {
 
             setOrderTotalPrice(item.total_price);
             setTheBuyer(item.buyer);
+            setTheBuyerLocation(item.buyer_location);
             setTheReceipt(item.receipt);
 
             //setIdProductRow(0 + 1);
@@ -529,9 +531,7 @@ function Invoices() {
             defaultValue={productOptions[productInputRow[row]?.id]}
             options={productOptions}
             onChange={async (selectedOption) => {
-              console.log("Dealing with Row : ", row);
-              console.log("Selecting New Product", selectedOption.price);
-
+             
               const currentordertotalPrice = isNaN(ordertotalPrice)
                 ? 0 + firstProductTotalPrice
                 : ordertotalPrice;
@@ -563,8 +563,7 @@ function Invoices() {
               setProductInputRow(ProductUpdate);
               setValue1(ProductUpdate);
 
-              console.log("productInputRow[row]?.price");
-              console.log(productInputRow[row]?.price);
+             
 
               if (isNaN(productInputRow[row]?.price)) {
                 setOrderTotalPrice(
@@ -590,9 +589,7 @@ function Invoices() {
               size="large"
               onChange={async (e) => {
                 const result = e.target.value.replace(/\D/g, "");
-                console.log("Amount Changes to : ", result);
-                console.log("Price : ", productInputRow[row].productprice);
-
+                
                 const updateOnOtherProducts = otherProducts.map((obj) => {
                   if (obj.row == row) {
                     return { ...obj, amount: parseInt(result) };
@@ -646,7 +643,7 @@ function Invoices() {
                 setProductInputRow((current) => [...current, { row: idp, amount: 0 }]);
                 setIdProductRow(idp + 1);
               } else {
-                toast.error("Please Choose a Product!!");
+                toast.error("Please Choose a Product!!", {autoClose: 80});
               }
             }}
           >
@@ -775,7 +772,6 @@ function Invoices() {
   const handleComfirm = async () => {
     const isValid = await AddOrderSchema.isValid(orderData);
 
-    console.log(orderData);
 
     if (!isValid) {
       toast.error("Please enter all the required fields!!");
@@ -791,6 +787,7 @@ function Invoices() {
             setProductInputRow([]);
             setOrderData({
               buyer: "",
+              buyer_location: "",
               status: "pending",
               receipt: uuid,
               total_price: "",
@@ -806,12 +803,10 @@ function Invoices() {
             handleGetOrderList();
           } else {
             toast.error(res.data.message);
-            console.log(res.data.message);
             setOpen(false);
           }
         })
         .catch((err) => {
-          console.log("Error Adding Invoice", err);
           setOpen(false);
         });
     }
@@ -830,6 +825,7 @@ function Invoices() {
             toast.success("Order Added Successfully",{ autoClose: 40 });
             setOrderData({
               buyer: "",
+              buyer_location: "",
               status: "pending",
               receipt: uuid,
               total_price: "",
@@ -852,7 +848,6 @@ function Invoices() {
           }
         })
         .catch((err) => {
-          console.log("Error Adding Invoice", err);
           setOpen(false);
         });
     }
@@ -861,8 +856,7 @@ function Invoices() {
   useEffect(() => {
     handleGetOrderList();
     handleGetProductList();
-    //handleGetSupplierList();
-    //handleGetBuyerList();
+  
   }, []);
 
   const [open, setOpen] = React.useState(false);
@@ -912,6 +906,7 @@ function Invoices() {
                   onClick={() => {
                     setOrderData({
                       buyer: "",
+                      buyer_location: "",
                       status: "",
                       receipt: uuid,
                       total_price: "",
@@ -1027,7 +1022,7 @@ function Invoices() {
                               }
 
                               if (firstProductId === "") {
-                                toast.error("Please Choose a Product!!");
+                                toast.error("Please Choose a Product!!", {autoClose: 80});
                               } else {
                                 const result = event.target.value.replace(/\D/g, "");
                                 setValue(result);
@@ -1067,7 +1062,7 @@ function Invoices() {
                           onClick={
                             firstProductId == ""
                               ? async () => {
-                                  toast.error("Please Choose a Product!!");
+                                  toast.error("Please Choose a Product!!", {autoClose: 80});
                                 }
                               : async () => {
                                   if (productInputRow.length == 0) {
@@ -1100,6 +1095,19 @@ function Invoices() {
                       onChange={handleChange}
                     />
                   </ArgonBox>
+
+                  <ArgonBox mb={2} mx={5}>
+                    <ArgonInput
+                      type="name"
+                      name="buyer_location"
+                      value={orderData.buyer_location}
+                      placeholder="Buyer Location"
+                      size="large"
+                      onChange={handleChange}
+                    />
+                  </ArgonBox>
+
+
                   <ArgonBox mb={2} mx={5}>
                     <ArgonInput
                       type="name"
@@ -1210,7 +1218,7 @@ function Invoices() {
                             <address>
                               {theBuyer}
                               <br />
-                              150-600 Church Street, Florida, USA
+                              {theBuyerLocation}
                             </address>
                           </div>
                         </div>

@@ -18,7 +18,7 @@ export default function Footer({}) {
                   <div className="copyright text-center text-sm text-muted text-lg-start">
                     © {(new Date().getFullYear())},{" "}
                     <i className="fa fa-heart"></i> by
-                    <a href="https://www.creative-tim.com" className="font-weight-bold">
+                    <a className="font-weight-bold">
                       {" "}
                       GoMindz
                     </a>

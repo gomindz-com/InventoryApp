@@ -56,7 +56,7 @@ total.forEach(function(item, i) {
   var tab = first_li.cloneNode();
   tab.innerHTML = "-";
 
-  moving_div.classList.add('moving-tab', 'position-absolute', 'nav-link');
+  moving_div.classList?.add('moving-tab', 'position-absolute', 'nav-link');
   moving_div.appendChild(tab);
   item.appendChild(moving_div);
 
@@ -76,7 +76,7 @@ total.forEach(function(item, i) {
       item.querySelector('li:nth-child(' + index + ') .nav-link').onclick = function() {
         moving_div = item.querySelector('.moving-tab');
         let sum = 0;
-        if (item.classList.contains('flex-column')) {
+        if (item.classList?.contains('flex-column')) {
           for (var j = 1; j <= nodes.indexOf(li); j++) {
             sum += item.querySelector('li:nth-child(' + j + ')').offsetHeight;
           }
@@ -104,7 +104,7 @@ window.addEventListener('resize', function(event) {
     var tab = item.querySelector(".nav-link.active").cloneNode();
     tab.innerHTML = "-";
 
-    moving_div.classList.add('moving-tab', 'position-absolute', 'nav-link');
+    moving_div.classList?.add('moving-tab', 'position-absolute', 'nav-link');
     moving_div.appendChild(tab);
 
     item.appendChild(moving_div);
@@ -119,7 +119,7 @@ window.addEventListener('resize', function(event) {
       let index = nodes.indexOf(li) + 1;
 
       let sum = 0;
-      if (item.classList.contains('flex-column')) {
+      if (item.classList?.contains('flex-column')) {
         for (var j = 1; j <= nodes.indexOf(li); j++) {
           sum += item.querySelector('li:nth-child(' + j + ')').offsetHeight;
         }
@@ -139,14 +139,14 @@ window.addEventListener('resize', function(event) {
 
   if (window.innerWidth < 991) {
     total.forEach(function(item, i) {
-      if (!item.classList.contains('flex-column')) {
-        item.classList.add('flex-column', 'on-resize');
+      if (!item.classList?.contains('flex-column')) {
+        item.classList?.add('flex-column', 'on-resize');
       }
     });
   } else {
     total.forEach(function(item, i) {
-      if (item.classList.contains('on-resize')) {
-        item.classList.remove('flex-column', 'on-resize');
+      if (item.classList?.contains('on-resize')) {
+        item.classList?.remove('flex-column', 'on-resize');
       }
     })
   }
@@ -173,7 +173,7 @@ function copyCode(el) {
   window.getSelection().removeAllRanges()
   if (!el.parentElement.querySelector('.alert')) {
     var alert = document.createElement('div');
-    alert.classList.add('alert', 'alert-success', 'position-absolute', 'top-0', 'border-0', 'text-white', 'w-25', 'end-0', 'start-0', 'mt-2', 'mx-auto', 'py-2');
+    alert.classList?.add('alert', 'alert-success', 'position-absolute', 'top-0', 'border-0', 'text-white', 'w-25', 'end-0', 'start-0', 'mt-2', 'mx-auto', 'py-2');
     alert.style.transform = 'translate3d(0px, 0px, 0px)'
     alert.style.opacity = '0';
     alert.style.transition = '.35s ease';
@@ -202,22 +202,22 @@ window.onload = function() {
 
   for (var i = 0; i < inputs.length; i++) {
     inputs[i].addEventListener('focus', function(e) {
-      this.parentElement.classList.add('is-focused');
+      this.parentElement.classList?.add('is-focused');
     }, false);
 
     inputs[i].onkeyup = function(e) {
       if (this.value != "") {
-        this.parentElement.classList.add('is-filled');
+        this.parentElement.classList?.add('is-filled');
       } else {
-        this.parentElement.classList.remove('is-filled');
+        this.parentElement.classList?.remove('is-filled');
       }
     };
 
     inputs[i].addEventListener('focusout', function(e) {
       if (this.value != "") {
-        this.parentElement.classList.add('is-filled');
+        this.parentElement.classList?.add('is-filled');
       }
-      this.parentElement.classList.remove('is-focused');
+      this.parentElement.classList?.remove('is-focused');
     }, false);
   }
 
@@ -230,13 +230,13 @@ window.onload = function() {
       var rippleDiv = targetEl.querySelector('.ripple');
 
       rippleDiv = document.createElement('span');
-      rippleDiv.classList.add('ripple');
+      rippleDiv.classList?.add('ripple');
       rippleDiv.style.width = rippleDiv.style.height = Math.max(targetEl.offsetWidth, targetEl.offsetHeight) + 'px';
       targetEl.appendChild(rippleDiv);
 
       rippleDiv.style.left = (e.offsetX - rippleDiv.offsetWidth / 2) + 'px';
       rippleDiv.style.top = (e.offsetY - rippleDiv.offsetHeight / 2) + 'px';
-      rippleDiv.classList.add('ripple');
+      rippleDiv.classList?.add('ripple');
       setTimeout(function() {
         rippleDiv.parentElement.removeChild(rippleDiv);
       }, 600);

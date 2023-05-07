@@ -88,6 +88,7 @@ function DetailedStaticsCard({ bgColor, title, count, amount, percentage, icon, 
                 >
                   {count}
                 </ArgonTypography>
+                
                 <ArgonTypography
                   variant="h10"
                   fontSize={13}
@@ -121,7 +122,7 @@ function DetailedStaticsCard({ bgColor, title, count, amount, percentage, icon, 
                     <ArgonBox
                       fontSize="1.125rem"
                       display="grid"
-                      placeItems="center"
+                      placeitems="center"
                       color="inherit"
                     >
                       {icon.component}

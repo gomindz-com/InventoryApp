@@ -19,38 +19,29 @@ import { registerUser } from "apiservices/authService";
 import { RegisterUserSchema } from "formValidation/addForm";
 
 import { ToastContainer, toast } from "react-toastify";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import { Grid } from "@mui/material";
 
 // Images
 const bgImage =
   "https://raw.githubusercontent.com/creativetimofficial/public-assets/master/argon-dashboard-pro/assets/img/signup-cover.jpg";
 
-
-
-
-
 function Contact() {
-
-
-  
   //START LOGGING IN USER
   const [userData, setUserData] = useState({
     email: "",
     password: "",
     contact: "",
-    firstname : "",
+    firstname: "",
     lastname: "",
     streetAddress: "",
     postcode: "",
     city: "",
     region: "",
     is_customer: true,
-   
   });
 
   const navigate = useNavigate();
-
 
   const handleSubmit = async (e) => {
     //e.preventDefault();
@@ -62,38 +53,25 @@ function Contact() {
       await registerUser(userData)
         .then((res) => {
           if (res.data) {
-
-           
-            if(res.data.message == 'success'){
-             
+            if (res.data.message == "success") {
               toast.success("User Registered Successfully");
-              localStorage.removeItem("user")
+              localStorage.removeItem("user");
               localStorage.removeItem("token");
-              navigate('/authentication/sign-in');
+              navigate("/authentication/sign-in");
+            } else {
+              toast.error("User Could Not Be Registered");
             }
-
-            else{
-             
-            toast.error("User Could Not Be Registered");
-            }
-            
-            
           } else {
             toast.error("User Could Not Be Registered");
           }
         })
-        .catch((err) => {
-          console.log("Error");
-        });
+        .catch((err) => {});
     }
   };
 
   const handleChange = (e) => {
     setUserData({ ...userData, [e.target.name]: e.target.value });
   };
-
-
-
 
   return (
     <CoverLayout
@@ -106,7 +84,6 @@ function Contact() {
       <ToastContainer />
 
       <Card>
-        
         {/* <ArgonBox mb={2}>
           <Socials />
         </ArgonBox> */}
@@ -114,75 +91,53 @@ function Contact() {
           <Separator />
         </ArgonBox> */}
 
-
-
-
-
         <ArgonBox pt={2} pb={3} px={3}>
           <ArgonBox component="form" role="form">
+            <Grid container spacing={3}>
+              <Grid item xs={12} md={12}>
+                <ArgonBox mb={2}>
+                  <ArgonInput
+                    name="firstname"
+                    type="text"
+                    placeholder="Full Name"
+                    size="large"
+                    onChange={handleChange}
+                  />
+                </ArgonBox>
+              </Grid>
+            </Grid>
 
-
-
-
-          <Grid container spacing={3}>
-          <Grid item xs={12} md={12}>
-          <ArgonBox mb={2}>
-            <ArgonInput
-            name="firstname"
-            type="text"
-            placeholder="Full Name"
-            size="large"
-            onChange={handleChange}
-          />
-            </ArgonBox>
-          </Grid>
-          
-        </Grid>
-
-
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={12}>
-          <ArgonBox mb={2}>
-            <ArgonInput
-            name="email"
-            type="email"
-            placeholder="Email"
-            size="large"
-            autocomplete="off" 
-            onChange={handleChange}
-          />
-              
-            </ArgonBox>
-        </Grid>
-          
-        </Grid>
-
-           
-
-        
-
-           
-        
+            <Grid container spacing={3}>
+              <Grid item xs={12} md={12}>
+                <ArgonBox mb={2}>
+                  <ArgonInput
+                    name="email"
+                    type="email"
+                    placeholder="Email"
+                    size="large"
+                    autocomplete="off"
+                    onChange={handleChange}
+                  />
+                </ArgonBox>
+              </Grid>
+            </Grid>
 
             <ArgonBox mb={2}>
-            <ArgonInput
-            name="region"
-            type="textarea"
-            placeholder="How can we help you?"
-            size="large"
-            autocomplete="off" 
-            onChange={handleChange}
-          />
+              <ArgonInput
+                name="region"
+                type="textarea"
+                placeholder="How can we help you?"
+                size="large"
+                autocomplete="off"
+                onChange={handleChange}
+              />
             </ArgonBox>
 
-
-            
             <ArgonBox mt={4} mb={1}>
               <ArgonButton onClick={handleSubmit} variant="gradient" color="dark" fullWidth>
                 Send Message
               </ArgonButton>
             </ArgonBox>
-           
           </ArgonBox>
         </ArgonBox>
       </Card>

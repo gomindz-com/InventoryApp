@@ -210,6 +210,7 @@ def order_list(request):
                 {
                     "id": item.id,
                     "buyer": item.buyer,
+                    "buyer_location": item.buyer_location,
                     "products": productList,
                     "status": item.status,
                     "receipt":  item.receipt,
@@ -225,7 +226,7 @@ def order_list(request):
         data = request.data
         user = request.user
         new_order = Order.objects.create(
-            owner=user, buyer=data["buyer"], status=data["status"], receipt=data["receipt"], type=data["type"], total_price=data["total_price"])
+            owner=user, buyer=data["buyer"],buyer_location=data["buyer_location"] ,status=data["status"], receipt=data["receipt"], type=data["type"], total_price=data["total_price"])
         new_order.save()
 
         for product in data['products']:
@@ -308,6 +309,7 @@ def receipt_list(request):
                 {
                     "id": item.id,
                     "buyer": item.buyer,
+                    "buyer_location": item.buyer_location,
                     "products": productList,
                     "status": item.status,
                     "receipt":  item.receipt,
@@ -323,7 +325,7 @@ def receipt_list(request):
         data = request.data
         user = request.user
         new_order = Order.objects.create(
-            owner=user, buyer=data["buyer"], status=data["status"], receipt=data["receipt"], type=data["type"], total_price=data["total_price"])
+            owner=user, buyer=data["buyer"],buyer_location=data["buyer_location"],  status=data["status"], receipt=data["receipt"], type=data["type"], total_price=data["total_price"])
         new_order.save()
 
         for product in data['products']:
@@ -406,6 +408,7 @@ def invoice_list(request):
                 {
                     "id": item.id,
                     "buyer": item.buyer,
+                    "buyer_location": item.buyer_location,
                     "products": productList,
                     "status": item.status,
                     "receipt":  item.receipt,
@@ -421,7 +424,7 @@ def invoice_list(request):
         data = request.data
         user = request.user
         new_order = Order.objects.create(
-            owner=user, buyer=data["buyer"], status=data["status"], receipt=data["receipt"], type=data["type"], total_price=data["total_price"])
+            owner=user, buyer=data["buyer"],buyer_location=data["buyer_location"], status=data["status"], receipt=data["receipt"], type=data["type"], total_price=data["total_price"])
         new_order.save()
 
         for product in data['products']:

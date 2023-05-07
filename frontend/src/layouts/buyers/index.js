@@ -84,7 +84,6 @@ function Buyers() {
           }
         })
         .catch((err) => {
-          console.log("Error Adding Buyer", err);
         });
     }
   };
@@ -107,7 +106,6 @@ function Buyers() {
           }
         })
         .catch((err) => {
-          console.log("Error Updating Supplier", err);
         });
     }
   };
@@ -133,11 +131,11 @@ function Buyers() {
             setBuyerList([]);
           }
         })
-        .catch((err) => console.log("Error in Getting Buyers", err));
+        .catch((err) => {});
 
       setScreenLoading(false);
     } catch (error) {
-      console.log(error);
+      return(error);
     }
   };
 
@@ -151,7 +149,7 @@ function Buyers() {
         } else {
         }
       })
-      .catch((err) => console.log("Error in Deleting Buyer", err));
+      .catch((err) => {});
   };
 
 
@@ -231,7 +229,6 @@ function Buyers() {
   });
 
   useEffect(() => {
-    handleGetBuyerList();
   }, []);
 
   return (

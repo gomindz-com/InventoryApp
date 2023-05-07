@@ -8,8 +8,7 @@ import { matchRoutes, useLocation } from "react-router-dom"
 export default function Aside({showAside, setShowAside, matches, activePage}) {
 
   const location = useLocation();
-  console.log("location.pathname");
-  console.log(location.pathname);
+ 
   
     return (
         

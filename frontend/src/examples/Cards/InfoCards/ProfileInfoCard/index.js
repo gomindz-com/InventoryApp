@@ -32,8 +32,9 @@ import ArgonTypography from "components/ArgonTypography";
 // Argon Dashboard 2 MUI base styles
 import colors from "assets/theme/base/colors";
 import typography from "assets/theme/base/typography";
+import ArgonButton from "components/ArgonButton";
 
-function ProfileInfoCard({ title, description, info, social, action }) {
+function ProfileInfoCard({ onclick, title, description, info, social, action }) {
   const labels = [];
   const values = [];
   const { socialMediaColors } = colors;
@@ -92,7 +93,7 @@ function ProfileInfoCard({ title, description, info, social, action }) {
         </ArgonTypography>
         <ArgonTypography component={Link} to={action.route} variant="body2" color="secondary">
           <Tooltip title={action.tooltip} placement="top">
-            <Icon>edit</Icon>
+            <Icon onClick={onclick}>edit</Icon>
           </Tooltip>
         </ArgonTypography>
       </ArgonBox>

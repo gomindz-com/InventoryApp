@@ -66,7 +66,7 @@ function RTL() {
               title="today's money"
               count="D53,000"
               icon={{ color: "info", component: <i className="ni ni-money-coins" /> }}
-              percentage={{ color: "success", count: "+55%", text: "since yesterday" }}
+              percentage={{ color: "success", count: "+55%", text: "" }}
             />
           </Grid>
           <Grid item xs={12} md={6} lg={3}>

@@ -79,7 +79,7 @@ function Default() {
             <nav aria-label="breadcrumb">
               <ol className="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
                 <li className="breadcrumb-item text-sm">
-                  <a className="opacity-5 text-dark" href="javascript:;">
+                  <a className="opacity-5 text-dark" href="#">
                     Pages
                   </a>
                 </li>
@@ -97,9 +97,7 @@ function Default() {
                 </div>
               </div>
               <ul className="navbar-nav  justify-content-end">
-                {/* <li className="nav-item d-flex align-items-center">
-              <a className="btn btn-outline-primary btn-sm mb-0 me-3" href="https://www.creative-tim.com/builder/material?ref=navbar-dashboard">Online Builder</a>
-            </li> */}
+                
                 <li className="nav-item d-flex align-items-center">
                   <button
                     style={{border: 0}}
@@ -130,13 +128,13 @@ function Default() {
                   </a>
                 </li>
                 <li className="nav-item px-3 d-flex align-items-center">
-                  <a href="javascript:;" className="nav-link text-body p-0">
+                  <a href="#" className="nav-link text-body p-0">
                     <i className="fa fa-cog fixed-plugin-button-nav cursor-pointer"></i>
                   </a>
                 </li>
                 <li className="nav-item dropdown pe-2 d-flex align-items-center">
                   <a
-                    href="javascript:;"
+                    href="#"
                     className="nav-link text-body p-0"
                     id="dropdownMenuButton"
                     data-bs-toggle="dropdown"
@@ -149,7 +147,7 @@ function Default() {
                     aria-labelledby="dropdownMenuButton"
                   >
                     <li className="mb-2">
-                      <a className="dropdown-item border-radius-md" href="javascript:;">
+                      <a className="dropdown-item border-radius-md" href="#">
                         <div className="d-flex py-1">
                           <div className="my-auto">
                             <img
@@ -170,7 +168,7 @@ function Default() {
                       </a>
                     </li>
                     <li className="mb-2">
-                      <a className="dropdown-item border-radius-md" href="javascript:;">
+                      <a className="dropdown-item border-radius-md" href="#">
                         <div className="d-flex py-1">
                           <div className="my-auto">
                             <img
@@ -190,22 +188,10 @@ function Default() {
                       </a>
                     </li>
                     <li>
-                      <a className="dropdown-item border-radius-md" href="javascript:;">
+                      <a className="dropdown-item border-radius-md" href="#">
                         <div className="d-flex py-1">
                           <div className="avatar avatar-sm bg-gradient-secondary  me-3  my-auto">
-                            {/* <svg width="12px" height="12px" viewBox="0 0 43 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                          <title>credit-card</title>
-                          <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                            <g transform="translate(-2169.000000, -745.000000)" fill="#FFFFFF" fill-rule="nonzero">
-                              <g transform="translate(1716.000000, 291.000000)">
-                                <g transform="translate(453.000000, 454.000000)">
-                                  <path class="color-background" d="M43,10.7482083 L43,3.58333333 C43,1.60354167 41.3964583,0 39.4166667,0 L3.58333333,0 C1.60354167,0 0,1.60354167 0,3.58333333 L0,10.7482083 L43,10.7482083 Z" opacity="0.593633743"></path>
-                                  <path class="color-background" d="M0,16.125 L0,32.25 C0,34.2297917 1.60354167,35.8333333 3.58333333,35.8333333 L39.4166667,35.8333333 C41.3964583,35.8333333 43,34.2297917 43,32.25 L43,16.125 L0,16.125 Z M19.7083333,26.875 L7.16666667,26.875 L7.16666667,23.2916667 L19.7083333,23.2916667 L19.7083333,26.875 Z M35.8333333,26.875 L28.6666667,26.875 L28.6666667,23.2916667 L35.8333333,23.2916667 L35.8333333,26.875 Z"></path>
-                                </g>
-                              </g>
-                            </g>
-                          </g>
-                        </svg> */}
+                            
                           </div>
                           <div className="d-flex flex-column justify-content-center">
                             <h6 className="text-sm font-weight-normal mb-1">
@@ -401,17 +387,17 @@ function Default() {
                           aria-labelledby="dropdownTable"
                         >
                           <li>
-                            <a className="dropdown-item border-radius-md" href="javascript:;">
+                            <a className="dropdown-item border-radius-md" href="#">
                               Action
                             </a>
                           </li>
                           <li>
-                            <a className="dropdown-item border-radius-md" href="javascript:;">
+                            <a className="dropdown-item border-radius-md" href="#">
                               Another action
                             </a>
                           </li>
                           <li>
-                            <a className="dropdown-item border-radius-md" href="javascript:;">
+                            <a className="dropdown-item border-radius-md" href="#">
                               Something else here
                             </a>
                           </li>
@@ -458,7 +444,7 @@ function Default() {
                           <td>
                             <div className="avatar-group mt-2">
                               <a
-                                href="javascript:;"
+                                href="#"
                                 className="avatar avatar-xs rounded-circle"
                                 data-bs-toggle="tooltip"
                                 data-bs-placement="bottom"
@@ -467,7 +453,7 @@ function Default() {
                                 <img src="../assets/img/team-1.jpg" alt="team1" />
                               </a>
                               <a
-                                href="javascript:;"
+                                href="#"
                                 className="avatar avatar-xs rounded-circle"
                                 data-bs-toggle="tooltip"
                                 data-bs-placement="bottom"
@@ -476,7 +462,7 @@ function Default() {
                                 <img src="../assets/img/team-2.jpg" alt="team2" />
                               </a>
                               <a
-                                href="javascript:;"
+                                href="#"
                                 className="avatar avatar-xs rounded-circle"
                                 data-bs-toggle="tooltip"
                                 data-bs-placement="bottom"
@@ -485,7 +471,7 @@ function Default() {
                                 <img src="../assets/img/team-3.jpg" alt="team3" />
                               </a>
                               <a
-                                href="javascript:;"
+                                href="#"
                                 className="avatar avatar-xs rounded-circle"
                                 data-bs-toggle="tooltip"
                                 data-bs-placement="bottom"
@@ -535,7 +521,7 @@ function Default() {
                           <td>
                             <div className="avatar-group mt-2">
                               <a
-                                href="javascript:;"
+                                href="#"
                                 className="avatar avatar-xs rounded-circle"
                                 data-bs-toggle="tooltip"
                                 data-bs-placement="bottom"
@@ -544,7 +530,7 @@ function Default() {
                                 <img src="../assets/img/team-2.jpg" alt="team5" />
                               </a>
                               <a
-                                href="javascript:;"
+                                href="#"
                                 className="avatar avatar-xs rounded-circle"
                                 data-bs-toggle="tooltip"
                                 data-bs-placement="bottom"
@@ -594,7 +580,7 @@ function Default() {
                           <td>
                             <div className="avatar-group mt-2">
                               <a
-                                href="javascript:;"
+                                href="#"
                                 className="avatar avatar-xs rounded-circle"
                                 data-bs-toggle="tooltip"
                                 data-bs-placement="bottom"
@@ -603,7 +589,7 @@ function Default() {
                                 <img src="../assets/img/team-3.jpg" alt="team8" />
                               </a>
                               <a
-                                href="javascript:;"
+                                href="#"
                                 className="avatar avatar-xs rounded-circle"
                                 data-bs-toggle="tooltip"
                                 data-bs-placement="bottom"
@@ -653,7 +639,7 @@ function Default() {
                           <td>
                             <div className="avatar-group mt-2">
                               <a
-                                href="javascript:;"
+                                href="#"
                                 className="avatar avatar-xs rounded-circle"
                                 data-bs-toggle="tooltip"
                                 data-bs-placement="bottom"
@@ -662,7 +648,7 @@ function Default() {
                                 <img src="../assets/img/team-4.jpg" alt="user1" />
                               </a>
                               <a
-                                href="javascript:;"
+                                href="#"
                                 className="avatar avatar-xs rounded-circle"
                                 data-bs-toggle="tooltip"
                                 data-bs-placement="bottom"
@@ -671,7 +657,7 @@ function Default() {
                                 <img src="../assets/img/team-3.jpg" alt="user2" />
                               </a>
                               <a
-                                href="javascript:;"
+                                href="#"
                                 className="avatar avatar-xs rounded-circle"
                                 data-bs-toggle="tooltip"
                                 data-bs-placement="bottom"
@@ -680,7 +666,7 @@ function Default() {
                                 <img src="../assets/img/team-4.jpg" alt="user3" />
                               </a>
                               <a
-                                href="javascript:;"
+                                href="#"
                                 className="avatar avatar-xs rounded-circle"
                                 data-bs-toggle="tooltip"
                                 data-bs-placement="bottom"
@@ -730,7 +716,7 @@ function Default() {
                           <td>
                             <div className="avatar-group mt-2">
                               <a
-                                href="javascript:;"
+                                href="#"
                                 className="avatar avatar-xs rounded-circle"
                                 data-bs-toggle="tooltip"
                                 data-bs-placement="bottom"
@@ -780,7 +766,7 @@ function Default() {
                           <td>
                             <div className="avatar-group mt-2">
                               <a
-                                href="javascript:;"
+                                href="#"
                                 className="avatar avatar-xs rounded-circle"
                                 data-bs-toggle="tooltip"
                                 data-bs-placement="bottom"
@@ -789,7 +775,7 @@ function Default() {
                                 <img src="../assets/img/team-1.jpg" alt="user6" />
                               </a>
                               <a
-                                href="javascript:;"
+                                href="#"
                                 className="avatar avatar-xs rounded-circle"
                                 data-bs-toggle="tooltip"
                                 data-bs-placement="bottom"

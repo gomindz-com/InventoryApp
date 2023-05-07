@@ -86,7 +86,6 @@ function Invoices() {
 
   // USER VARIABLES
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
-  console.log(JSON.parse(localStorage.getItem("user")));
 
   const componentRef = useRef();
 
@@ -126,11 +125,13 @@ function Invoices() {
             setOrderList([]);
           }
         })
-        .catch((err) => console.log("Error in Getting Orders", err));
+        .catch((err) => {
+
+        }
+        );
 
       setScreenLoading(false);
     } catch (error) {
-      console.log(error);
     }
   };
 
@@ -159,11 +160,11 @@ function Invoices() {
             setProductList([]);
           }
         })
-        .catch((err) => console.log("Error in Getting Products", err));
+        .catch((err) => {}
+        );
 
       setScreenLoading(false);
     } catch (error) {
-      console.log(error);
     }
   };
   //END GET PRODUCTS
@@ -189,11 +190,10 @@ function Invoices() {
             setSupplierList([]);
           }
         })
-        .catch((err) => console.log("Error in Getting Suppliers", err));
+        .catch((err) => {});
 
       setScreenLoading(false);
     } catch (error) {
-      console.log(error);
     }
   };
 
@@ -218,11 +218,11 @@ function Invoices() {
             setBuyerList([]);
           }
         })
-        .catch((err) => console.log("Error in Getting Buyers", err));
+        .catch((err) => {}
+        );
 
       setScreenLoading(false);
     } catch (error) {
-      console.log(error);
     }
   };
 
@@ -238,7 +238,6 @@ function Invoices() {
         }
       })
       .catch((err) => {
-        console.log("Error Updating Supplier", err);
       });
   };
 
@@ -331,7 +330,10 @@ function Invoices() {
         } else {
         }
       })
-      .catch((err) => console.log("Error in Deleting Order", err));
+      .catch((err) => {
+
+      }
+      );
   };
 
   const columns = [
@@ -718,7 +720,6 @@ function Invoices() {
           }
         })
         .catch((err) => {
-          console.log("Error Adding Order", err);
           setOpen(false);
         });
     }

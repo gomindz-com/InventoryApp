@@ -64,8 +64,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 function DashboardNavbar({ absolute, light, isMini, handleClick, data }) {
   const [navbarType, setNavbarType] = useState();
 
-  console.log("object")
-  console.log(data)
+
 
   const [controller, dispatch] = useArgonController();
   const { miniSidenav, transparentNavbar, fixedNavbar, openConfigurator } = controller;
@@ -73,8 +72,7 @@ function DashboardNavbar({ absolute, light, isMini, handleClick, data }) {
   const route = useLocation().pathname.split("/").slice(1);
 
   const [token, setToken] = useState(localStorage.getItem("token"));
-  console.log("Token")
-  console.log(token)
+  
 
   useEffect(() => {
     // Setting the navbar type

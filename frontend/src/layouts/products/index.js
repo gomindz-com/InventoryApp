@@ -69,13 +69,10 @@ function Products() {
   //START ADDING NEW PRODUCT
   const [productData, setProductData] = useState({
     name: "",
-    sortno: "",
     category: "",
-    sku: "",
     stock: "",
     description_color: "",
     price: "",
-    label_size: "",
     status: "in_stock",
   });
 
@@ -120,11 +117,8 @@ function Products() {
       formData.append("userid", user.id);
       formData.append("description_color", productData.description_color);
       formData.append("status", productData.status);
-      formData.append("label_size", productData.label_size);
       formData.append("price", productData.price);
       formData.append("category", productData.category);
-      formData.append("sku", productData.sku);
-      formData.append("sortno", productData.sortno);
       formData.append("stock", productData.stock);
       formData.append("image", productImage == null ? "" : productImage?.image[0]);
 
@@ -132,8 +126,7 @@ function Products() {
         .post(url, formData, config)
         .then((res) => {
 
-          console.log('Response From Add Product API')
-          console.log(res)
+          
 
           if (res.status == 201) {
             toast.success("Successfully Added ");
@@ -145,13 +138,8 @@ function Products() {
         })
         .catch((err) => {
 
-          console.log('Response From Add Product API')
-
-          console.log(Object.values(err.response?.data)[0][0])
-          console.log(err.response?.data )
-          
-          //toast.error("Product Could Not Be Added");
-          toast.error(Object.values(err.response?.data)[0][0]);
+                            
+                    toast.error(Object.values(err.response?.data)[0][0]);
         });
     }
   };
@@ -173,18 +161,18 @@ function Products() {
   };
 
   const handleChangeCategory = async (selectedOption) => {
-    setProductData({ ...productData, ["category"]: selectedOption.value });
+    setProductData({ ...productData, ["category_id"]: selectedOption.value , ["category"]: selectedOption.value});
   };
 
   //END ADDING NEW PRODUCT
 
   const handleEdit = async (e) => {
-    //e.preventDefault();
 
-    console.log(productData)
 
     delete productData.image;
-    console.log(productData)
+
+
+
 
     const isValid = await AddProductSchema.isValid(productData);
     if (!isValid) {
@@ -193,11 +181,9 @@ function Products() {
       await editProduct(productData)
         .then((res) => {
 
-          console.log(res.status)
 
           if (res.status == 400){
-            console.log("Response from Edit Product")
-            console.log(res.data)
+            
             toast.error(Object.keys(res.data)[0], {autoClose : 300})
             toast.error(Object.values(res.data)[0][0], {autoClose : 300})
               
@@ -215,7 +201,6 @@ function Products() {
 
         })
         .catch((err) => {
-          console.log("Error Updating product", err);
         });
     }
   };
@@ -229,14 +214,17 @@ function Products() {
         } else {
         }
       })
-      .catch((err) => console.log("Error in Deleting Product", err));
+      .catch((err) => {
+
+      }
+      );
   };
 
   //START GET PRODUCTS
   const handleGetProductList = async () => {
     const user = JSON.parse(localStorage.getItem("user"));
 
-    toast.success("Fetching Products!!", { autoClose: 1000 });
+    //toast.success("Fetching Products!!", { autoClose: 1000 });
 
     setProductList([]);
     setScreenLoading(true);
@@ -250,11 +238,15 @@ function Products() {
             setProductList([]);
           }
         })
-        .catch((err) => console.log("Error in Getting Products", err));
+        .catch((err) => 
+        {
+
+        }
+        )
+;
 
       setScreenLoading(false);
     } catch (error) {
-      console.log(error);
     }
   };
   //END GET PRODUCTS
@@ -284,9 +276,10 @@ function Products() {
             setCategoryList([]);
           }
         })
-        .catch((err) => console.log("Error in Getting setCategoryList", err));
+        .catch((err) => {
+          
+        });
     } catch (error) {
-      console.log(error);
     }
   };
   //END GET CATEGORY
@@ -372,10 +365,18 @@ function Products() {
             setEditFormActive(true);
             setShowAddProductForm(true);
             setProductData(item);
+
+            const index = categoryOptions.findIndex(object => {
+              return object.value === item.category;
+            });
+            
+
+            
+            
             setProductData({
               ...item,
-              ["category_id"]: item.category.id,
-              ["category"]: item.category.id,
+              ["category_id"]: index,
+              ["category"]: item.category,
             });
           }}
         >
@@ -447,12 +448,12 @@ function Products() {
                     setProductData({
                       id: "",
                       name: "",
-                      sortno: "",
+                    
                       category: { id: "" },
                       stock: "",
                       description_color: "",
                       price: "",
-                      label_size: "",
+                      
                       status: "in_stock",
                     });
 
@@ -513,38 +514,10 @@ function Products() {
                     onChange={handleChange}
                   />
                 </ArgonBox>
-                <ArgonBox mb={2} mx={5}>
-                  <ArgonInput
-                    type="name"
-                    name="sortno"
-                    value={productData.sortno}
-                    style={{ borderColor: isNaN(productData.sortno) && "red" }}
-                    placeholder="Sort Number"
-                    size="large"
-                    onChange={handleChange}
-                  />
-                </ArgonBox>
-                <ArgonBox mb={2} mx={5}>
-                  <ArgonInput
-                    type="label_size"
-                    name="label_size"
-                    value={productData.label_size}
-                    placeholder="Label/Size"
-                    size="large"
-                    onChange={handleChange}
-                  />
-                </ArgonBox>
+                
+                
 
-                <ArgonBox mb={2} mx={5}>
-                  <ArgonInput
-                    type="sku"
-                    name="sku"
-                    value={productData.sku}
-                    placeholder="SKU"
-                    size="large"
-                    onChange={handleChange}
-                  />
-                </ArgonBox>
+                
 
                 {
                 !editFormActive   && 
@@ -571,7 +544,7 @@ function Products() {
                   <Select
                     name="category"
                     placeholder="Category"
-                    value={categoryOptions[productData?.category - 1]}
+                    value={categoryOptions[productData?.category_id]}
                     options={categoryOptions}
                     onChange={handleChangeCategory}
                   />

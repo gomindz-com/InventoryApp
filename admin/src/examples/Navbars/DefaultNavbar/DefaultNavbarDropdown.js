@@ -68,7 +68,7 @@ function DefaultNavbarDropdown({
             variant="body2"
             lineHeight={1}
             color="inherit"
-            sx={{ alignSelf: "center", "& *": { verticalAlign: "middle" } }}
+            sx={{ alignSelf: "center", "& *": { verticalalign: "middle" } }}
           >
             {icon}
           </ArgonTypography>
@@ -83,7 +83,7 @@ function DefaultNavbarDropdown({
           {name}
         </ArgonTypography>
         <ArgonTypography variant="body2" color={light ? "white" : "dark"} ml="auto">
-          <Icon sx={{ fontWeight: "normal", verticalAlign: "middle" }}>
+          <Icon sx={{ fontWeight: "normal", verticalalign: "middle" }}>
             {collapse && "keyboard_arrow_down"}
           </Icon>
         </ArgonTypography>

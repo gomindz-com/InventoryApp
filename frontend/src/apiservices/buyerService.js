@@ -8,7 +8,7 @@ export const getBuyers = async () => {
       return response;
     })
     .catch((err) => {
-      console.log(err);
+      return(err);
     });
 
   return data;
@@ -39,7 +39,7 @@ export const getBuyerCount = async () => {
       return response;
     })
     .catch((err) => {
-      console.log(err);
+      return(err);
       toast.error(err);
     });
 

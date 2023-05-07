@@ -27,7 +27,6 @@ function Illustration() {
   const [rememberMe, setRememberMe] = useState(false);
 
   const handleSetRememberMe = () => {
-    console.log("you click me");
   };
 
   const [admin, setAdmin] = useState(null);
@@ -44,28 +43,22 @@ function Illustration() {
     const isValid = await UserSchema.isValid(userData);
     if (!isValid) {
       toast.error("Please enter all the required fields!!");
-      console.log(userData);
     } else {
-      console.log(userData);
       await loginUser(userData)
         .then((res) => {
           if (res.data) {
-            console.log("User Logged In Success");
-            console.log(res.data.status);
+            
             toast.success("User Login Successfully");
             setAdmin(res.data.result);
-            console.log(res.data.result);
             localStorage.setItem("admintoken", res.data.result.jwt);
             localStorage.setItem("admin", JSON.stringify(res.data.result.user));
           } else {
-            console.log("User Could Not Be Logged In");
-            console.log(res.data);
+          
             toast.error("Authnentication Failed");
           }
         })
         .catch((err) => {
-          console.log("Error");
-          console.log(err);
+         return error;
         });
     }
   };

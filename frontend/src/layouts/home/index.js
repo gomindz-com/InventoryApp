@@ -40,7 +40,6 @@ const bgImage =
 function Home() {
   const [rememberMe, setRememberMe] = useState(false);
   const handleSetRememberMe = () => {
-    console.log("you click me");
   };
 
   const [controller, dispatch] = useArgonController();
@@ -172,16 +171,16 @@ function Home() {
 
                 {/* <h6 className="mb-2 mt-5" style={{paddingTop: 70}} >Find us on</h6> */}
                 <div style={{}} className="d-flex justify-content-center">
-                  <a href="javascript:;">
+                  <a href="#">
                     <i style={{ color: "white" }} className="fab fa-facebook text-lg me-4"></i>
                   </a>
-                  <a href="javascript:;">
+                  <a href="#">
                     <i style={{ color: "black" }} className="fab fa-instagram text-lg  me-4"></i>
                   </a>
-                  <a href="javascript:;">
+                  <a href="#">
                     <i style={{ color: "black" }} className="fab fa-twitter text-lg  me-4"></i>
                   </a>
-                  <a href="javascript:;">
+                  <a href="#">
                     <i style={{ color: "black" }} className="fab fa-google-plus text-lg "></i>
                   </a>
                 </div>
@@ -209,7 +208,7 @@ function Home() {
                   </div>
                   <div className="card-body text-center">
                     <h5 className="font-weight-normal">
-                      <a href="javascript:;">Get insights on Search</a>
+                      <a href="#">Get insights on Search</a>
                     </h5>
                     <p className="mb-0">
                       Website visitors today demand a frictionless user expericence — especially
@@ -233,7 +232,7 @@ function Home() {
                   </div>
                   <div className="card-body text-center">
                     <h5 className="font-weight-normal">
-                      <a href="javascript:;">Get insights on Search</a>
+                      <a href="#">Get insights on Search</a>
                     </h5>
                     <p className="mb-0">
                       Website visitors today demand a frictionless user expericence — especially
@@ -258,7 +257,7 @@ function Home() {
                   </div>
                   <div className="card-body text-center">
                     <h5 className="font-weight-normal">
-                      <a href="javascript:;">Get insights on Search</a>
+                      <a href="#">Get insights on Search</a>
                     </h5>
                     <p className="mb-0">
                       Website visitors today demand a frictionless user expericence — especially
@@ -283,7 +282,7 @@ function Home() {
                   </div>
                   <div className="card-body text-center">
                     <h5 className="font-weight-normal">
-                      <a href="javascript:;">Get insights on Search</a>
+                      <a href="#">Get insights on Search</a>
                     </h5>
                     <p className="mb-0">
                       Website visitors today demand a frictionless user expericence — especially

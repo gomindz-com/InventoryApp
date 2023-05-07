@@ -31,7 +31,7 @@ function Billing() {
             <nav aria-label="breadcrumb">
               <ol className="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
                 <li className="breadcrumb-item text-sm">
-                  <a className="opacity-5 text-dark" href="javascript:;">
+                  <a className="opacity-5 text-dark" >
                     Pages
                   </a>
                 </li>
@@ -88,13 +88,13 @@ function Billing() {
                   </a>
                 </li>
                 <li className="nav-item px-3 d-flex align-items-center">
-                  <a href="javascript:;" className="nav-link text-body p-0">
+                  <a className="nav-link text-body p-0">
                     <i className="fa fa-cog fixed-plugin-button-nav cursor-pointer"></i>
                   </a>
                 </li>
                 <li className="nav-item dropdown pe-2 d-flex align-items-center">
                   <a
-                    href="javascript:;"
+                    
                     className="nav-link text-body p-0"
                     id="dropdownMenuButton"
                     data-bs-toggle="dropdown"
@@ -107,7 +107,7 @@ function Billing() {
                     aria-labelledby="dropdownMenuButton"
                   >
                     <li className="mb-2">
-                      <a className="dropdown-item border-radius-md" href="javascript:;">
+                      <a className="dropdown-item border-radius-md" href="#">
                         <div className="d-flex py-1">
                           <div className="my-auto">
                             <img
@@ -128,7 +128,7 @@ function Billing() {
                       </a>
                     </li>
                     <li className="mb-2">
-                      <a className="dropdown-item border-radius-md" href="javascript:;">
+                      <a className="dropdown-item border-radius-md" href="#">
                         <div className="d-flex py-1">
                           <div className="my-auto">
                             <img
@@ -148,7 +148,7 @@ function Billing() {
                       </a>
                     </li>
                     <li>
-                      <a className="dropdown-item border-radius-md" href="javascript:;">
+                      <a className="dropdown-item border-radius-md" href="#">
                         <div className="d-flex py-1">
                           <div className="avatar avatar-sm bg-gradient-secondary  me-3  my-auto">
                             {/*  <svg width="12px" height="12px" viewBox="0 0 43 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -265,7 +265,7 @@ function Billing() {
                           <h6 className="mb-0">Payment Method</h6>
                         </div>
                         <div className="col-6 text-end">
-                          <a className="btn bg-gradient-dark mb-0" href="javascript:;">
+                          <a className="btn bg-gradient-dark mb-0" href="#">
                             <i className="material-icons text-sm">add</i>&nbsp;&nbsp;Add New Card
                           </a>
                         </div>
@@ -444,11 +444,11 @@ function Billing() {
                       <div className="ms-auto text-end">
                         <a
                           className="btn btn-link text-danger text-gradient px-3 mb-0"
-                          href="javascript:;"
+                          href="#"
                         >
                           <i className="material-icons text-sm me-2">delete</i>Delete
                         </a>
-                        <a className="btn btn-link text-dark px-3 mb-0" href="javascript:;">
+                        <a className="btn btn-link text-dark px-3 mb-0" href="#">
                           <i className="material-icons text-sm me-2">edit</i>Edit
                         </a>
                       </div>
@@ -476,11 +476,11 @@ function Billing() {
                       <div className="ms-auto text-end">
                         <a
                           className="btn btn-link text-danger text-gradient px-3 mb-0"
-                          href="javascript:;"
+                          href="#"
                         >
                           <i className="material-icons text-sm me-2">delete</i>Delete
                         </a>
-                        <a className="btn btn-link text-dark px-3 mb-0" href="javascript:;">
+                        <a className="btn btn-link text-dark px-3 mb-0" href="#">
                           <i className="material-icons text-sm me-2">edit</i>Edit
                         </a>
                       </div>
@@ -506,11 +506,11 @@ function Billing() {
                       <div className="ms-auto text-end">
                         <a
                           className="btn btn-link text-danger text-gradient px-3 mb-0"
-                          href="javascript:;"
+                          href="#"
                         >
                           <i className="material-icons text-sm me-2">delete</i>Delete
                         </a>
-                        <a className="btn btn-link text-dark px-3 mb-0" href="javascript:;">
+                        <a className="btn btn-link text-dark px-3 mb-0" href="#">
                           <i className="material-icons text-sm me-2">edit</i>Edit
                         </a>
                       </div>

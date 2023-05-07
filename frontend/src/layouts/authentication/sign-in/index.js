@@ -19,7 +19,7 @@ import { UserSchema } from "../../../formValidation/addForm";
 import { loginUser } from "apiservices/authService";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
-import { Routes, Route, Navigate, useLocation, } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { getUserDetails } from "apiservices/userService";
 
 // Image
@@ -30,7 +30,6 @@ function Illustration() {
   const [rememberMe, setRememberMe] = useState(false);
 
   const handleSetRememberMe = () => {
-    console.log("you click me");
   };
 
   const [user, setUser] = useState(null);
@@ -51,37 +50,31 @@ function Illustration() {
       await loginUser(userData)
         .then(async (res) => {
 
-        
-          
-          if (res.status == 200) {
+          if (res.data.status) {
+
+
             localStorage.setItem("token", res.data.token);
 
             try {
               await getUserDetails(userData.email)
                 .then((res) => {
                   if (res?.status == 200) {
-                   
                     localStorage.setItem("user", JSON.stringify(res.data));
-
-                  } else {
                   }
                 })
                 .catch((err) => console.log("Error in Getting User Detail", err));
-                } catch (error) {
-              console.log(error);
+            } catch (error) {
+              return(error);
             }
 
-            
-            setUser(JSON.parse(localStorage.getItem("user")))
-            toast.success("User Login Successfully");
 
-            
+            setUser(JSON.parse(localStorage.getItem("user")));
           } else {
-            toast.error("User Could Not Be Logged In");
+            toast.error("Incorrect Credentials");
           }
         })
         .catch((err) => {
-          console.log(err);
+          return(err);
         });
     }
   };
@@ -133,12 +126,12 @@ function Illustration() {
           </ArgonTypography>
         </ArgonBox>
         <ArgonBox mt={4} mb={1}>
-          <ArgonButton onClick={handleSubmit} color="info" size="large" fullWidth>
+          <ArgonButton onClick={() => handleSubmit()} color="info" size="large" fullWidth>
             Sign In
           </ArgonButton>
         </ArgonBox>
 
-         <ArgonBox mt={3} textAlign="center">
+        <ArgonBox mt={3} textAlign="center">
           <ArgonTypography variant="button" color="text" fontWeight="regular">
             Don&apos;t have an account?{" "}
             <ArgonTypography
@@ -152,7 +145,6 @@ function Illustration() {
             </ArgonTypography>
           </ArgonTypography>
         </ArgonBox>
-
       </ArgonBox>
     </IllustrationLayout>
   );

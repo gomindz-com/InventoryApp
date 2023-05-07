@@ -99,7 +99,7 @@ function Categories() {
           }
         })
         .catch((err) => {
-          console.log("Error Adding Category", err);
+          
         });
     }
   };
@@ -128,7 +128,6 @@ function Categories() {
           }
         })
         .catch((err) => {
-          console.log("Error Updating Supplier", err);
         });
     }
   };
@@ -155,7 +154,9 @@ function Categories() {
         } else {
         }
       })
-      .catch((err) => console.log("Error in Deleting Product", err));
+      .catch((err) => {
+
+      });
   };
 
   //START GET CATEGORY
@@ -181,9 +182,10 @@ function Categories() {
             setCategoryList([]);
           }
         })
-        .catch((err) => console.log("Error in Getting setCategoryList", err));
+        .catch((err) => {
+
+        });
     } catch (error) {
-      console.log(error);
     }
   };
   //END GET CATEGORY

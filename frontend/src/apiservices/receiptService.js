@@ -36,6 +36,7 @@ export const addReceipt = async (productData) => {
       return response;
     })
     .catch((err) => {
+     
       return err.response;
     });
 

@@ -16,7 +16,7 @@ import Products from "layouts/products";
 import Categories from "layouts/categories";
 import Invoices from "layouts/invoices";
 import Home from "layouts/home";
-import ContactUs from "layouts/contact-us";
+import ContactUs from "layouts/contact";
 import Receipts from "layouts/receipts";
 
 const routes = [
@@ -121,7 +121,6 @@ const routes = [
   //   icon: <ArgonBox component="i" color="success" fontSize="14px" className="ni ni-credit-card" />,
   //   component: <Billing />,
   // },
-
   {
     type: "route",
     name: "Contact Us",

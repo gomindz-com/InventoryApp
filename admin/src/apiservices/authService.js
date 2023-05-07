@@ -2,7 +2,6 @@ import { baseUrl } from "./baseURL";
 import axiosConfig from "./axios-configAuth";
 
 export const loginUser = async (userData) => {
-  console.log("Calling Login API Service");
   const data = await axiosConfig
     .post(`/user/login/`, userData)
     .then(async (response) => {

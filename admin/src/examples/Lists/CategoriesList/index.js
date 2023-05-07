@@ -57,7 +57,7 @@ function CategoriesList({ title, categories }) {
           <Icon
             sx={{
               display: "grid",
-              placeItems: "center",
+              placeitems: "center",
             }}
           >
             {icon}

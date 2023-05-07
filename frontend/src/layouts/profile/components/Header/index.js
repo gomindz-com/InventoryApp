@@ -40,6 +40,8 @@ import './index.css';
 // Images
 import burceMars from "assets/images/bruce-mars.jpg";
 import { getUserDetails } from "apiservices/userService";
+import ArgonInput from "components/ArgonInput";
+import ArgonButton from "components/ArgonButton";
 
 function Header() {
   const [tabsOrientation, setTabsOrientation] = useState("horizontal");
@@ -58,6 +60,9 @@ function Header() {
 
     const uploadData = new FormData();
     uploadData.append('profile', profile, profile.name)
+
+
+    
 
     fetch(`http://localhost:8000/api/user/userdetails/${user.email}/`, {
       method: 'PATCH',
@@ -79,16 +84,15 @@ function Header() {
               } else {
               }
             })
-            .catch((err) => console.log("Error in Getting User Detail", err));
+            .catch((err) => {});
             } catch (error) {
-          console.log(error);
         }
       }
       else{
         toast.error("Upload Error");
       }
     })
-    .catch(error => console.log(error))
+    .catch(error => {})
 
   }
 
@@ -168,48 +172,36 @@ function Header() {
           </Grid>
           <Grid item xs={8} md={5} lg={4} sx={{ ml: "auto" }}>
             <AppBar position="static">
-              {/* <Tabs orientation={tabsOrientation} value={tabValue} onChange={handleSetTabValue}> */}
-                {/* <Tab
-                  label="App"
-                  icon={
-                    <i className="ni ni-app" style={{ marginTop: "6px", marginRight: "8px" }} />
-                  }
-                />
-                <Tab
-                  label="Message"
-                  icon={
-                    <i
-                      className="ni ni-email-83"
-                      style={{ marginTop: "6px", marginRight: "8px" }}
-                    />
-                  }
-                /> */}
-                {/* <Tab
-                  //onClick={}
-                  icon={
-                    <i
-                      className="ni ni-settings-gear-65"
-                      style={{ marginTop: "6px", marginRight: "8px" }}
-                    />
-                  }
-                /> */}
-              {/* </Tabs> */}
-              <input 
-                className="upload-input"
-                type="file"
-                onChange={(e) => setProfile(e.target.files[0])}
-               />
-               <button 
-                style={{
-                  fontSize: 15,
-                  border: 0,
-                  backgroundColor: '#3a4e9e',
-                  marginTop: 10,
-                  color: 'white',
-                  paddingTop: 5,
-                  paddingBottom: 5
-                }}
-                onClick={()=> updateCustomer()}> Update Profile Picture</button>
+              
+              
+
+<ArgonBox mb={2} mx={5}>
+
+                  
+<ArgonInput
+  type="file"
+  name="image"
+  accept="image/*"
+  placeholder="Image"
+  size="large"
+  onChange={(e) => setProfile(e.target.files[0])}
+/>
+</ArgonBox>
+
+
+<ArgonBox mb={2} mx={5}>
+                  <ArgonButton
+                    onClick={()=> updateCustomer()}
+                    color="info"
+                    size="large"
+                    fullWidth
+                  >
+                  Update Profile
+                  </ArgonButton>
+                </ArgonBox>
+
+
+               
             </AppBar>
           </Grid>
         </Grid>

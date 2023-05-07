@@ -8,7 +8,7 @@ export const getInvoices = async () => {
       return response;
     })
     .catch((err) => {
-      console.log(err);
+      return(err);
       toast.error(err);
     });
 
@@ -23,7 +23,7 @@ export const getInvoiceCount = async () => {
       return response;
     })
     .catch((err) => {
-      console.log(err);
+      return(err);
       toast.error(err);
     });
 
@@ -39,8 +39,7 @@ export const addInvoice = async (productData) => {
       return response;
     })
     .catch((err) => {
-      console.log(err.response.data.result);
-      return err.response;
+        return err.response;
     });
 
   return data;
@@ -65,14 +64,12 @@ export const deleteInvoice = async (id) => {
 
 export const editInvoice = async (id, data) => {
 
-  console.log(data)
   const data1 = await axiosConfig
     .put(`/store/invoices/${id}`, data)
     .then((response) => {
       return response;
     })
     .catch((err) => {
-      console.log(err)
       return err.response;
     });
 
