@@ -19,13 +19,35 @@ class Product(models.Model):
     status = models.CharField(max_length=120, choices=STATUS_CHOICE, default='')
     supplier = models.CharField(max_length=50, default='')
     image = models.ImageField(_('Image'), upload_to= upload_to, default='products/default.png')
-    owner = models.ForeignKey('users.CustomUser', related_name='products', on_delete=models.CASCADE,  default=1)
+    owner = models.ForeignKey('users.CustomUser', related_name='%(class)s_products', on_delete=models.CASCADE,  default=1)
     category = models.ForeignKey('Category', on_delete=models.CASCADE, default='')
     created_date = models.DateField(auto_now_add=True)
+
+    # class Meta:
+    #     abstract = True
   
     def __str__(self):
         return self.name
 
+class mobileProduct(Product):
+    # additional fields for MobileProduct model
+    # -------------------------------------------
+    # inherits owner foreign key relationship from the Product model
+    pass
+# define related_name argument for MobileProduct's owner foreign key relationship
+mobileProduct.owner.related_name = 'mobile_products'
+
+
+    # class Meta:
+    #     verbose_name = 'Mobile User'
+    #     verbose_name_plural = 'Mobile Users'
+
+    # def __str__(self):
+    #     return self.email
+
+    # def save(self, *args, **kwargs):
+    #     self.username = self.email
+    #     super().save(*args, **kwargs)
 
 
 class Category(models.Model):
