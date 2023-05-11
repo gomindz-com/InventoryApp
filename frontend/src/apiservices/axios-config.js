@@ -9,10 +9,11 @@ const axiosConfig = axios.create({
 });
 
 axiosConfig.interceptors.request.use(async function (config) {
-  let token = localStorage.getItem("token");
-  console.log(token ? token : "Empty Token");
-  token ? config.headers.Authorization = `Token ${token}` : "";
-  //config.headers.Authorization = token ? `Token ${token}` : "";
+  const token = localStorage.getItem('token');
+  if(token){
+      console.log('Token :' , token);
+      config.headers.Authorization = `Token ${token}`;
+  }
   return config;
 });
 

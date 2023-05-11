@@ -28,7 +28,7 @@ class RegisterUser(generics.CreateAPIView):
             "status": True,
             "message": "Customer Successfully Registered",
                     }                
-        return Response(data=response)
+        return Response(data=response, status=status.HTTP_201_CREATED)
 
     
 
@@ -45,20 +45,17 @@ class LoginUser(APIView):
             response = {
                 "status": True,
                 "message": "login Successful",
-                "data": {
-                    "user": serializer.data,
-                    "token": user.auth_token.key
-                    }
+                "user": serializer.data,
+                "token": user.auth_token.key
             }
-            return Response(data=response)
+            return Response(data=response, status=status.HTTP_200_OK)
 
         else:
             response = {
                 "status": False,
                 "message": "Invalid User"
             }
-            
-            return Response(data=response)
+            return Response(data=response, status=status.HTTP_401_UNAUTHORIZED)
 
 
 
@@ -78,7 +75,7 @@ class UserRetrieveView(generics.RetrieveAPIView):
         response = {
                     "status": True,
                     "message": "",
-                    "data" : serializer.data
+                    "user" : serializer.data
 
                 }
         return Response(data=response)

@@ -49,29 +49,7 @@ function Footer() {
                 </ArgonTypography>
               </Link>
             </ArgonBox>
-            {/* <ArgonBox mr={{ xs: 0, lg: 3, xl: 6 }}>
-            <Link to={{}}>
-              <ArgonTypography component="a" variant="body2" color="secondary">
-                Team
-              </ArgonTypography>
-              </Link>
-            </ArgonBox>
-            <ArgonBox mr={{ xs: 2, lg: 3, xl: 6 }}>
-            <Link to={{}}>
-              <ArgonTypography component="a"  variant="body2" color="secondary">
-                Product
-              </ArgonTypography>
-              </Link>
-            </ArgonBox>
             
-            <ArgonBox>
-            <Link to={{}}>
-              <ArgonTypography component="a" variant="body2" color="secondary">
-                Pricing
-              </ArgonTypography>
-              </Link>
-              
-            </ArgonBox> */}
           </ArgonBox>
         </Grid>
         <Grid item xs={12} lg={8}>

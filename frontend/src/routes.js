@@ -113,14 +113,6 @@ const routes = [
     icon: <ArgonBox component="i" color="dark" fontSize="14px" className="ni ni-single-02" />,
     component: <Profile />,
   },
-  // {
-  //   type: "route",
-  //   name: "Billing",
-  //   key: "billing",
-  //   route: "/billing",
-  //   icon: <ArgonBox component="i" color="success" fontSize="14px" className="ni ni-credit-card" />,
-  //   component: <Billing />,
-  // },
   {
     type: "route",
     name: "Contact Us",

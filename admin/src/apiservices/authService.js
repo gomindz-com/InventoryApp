@@ -3,7 +3,7 @@ import axiosConfig from "./axios-configAuth";
 
 export const loginUser = async (userData) => {
   const data = await axiosConfig
-    .post(`/user/login/`, userData)
+    .post(`/customer/login`, userData)
     .then(async (response) => {
       return response;
     })
@@ -16,7 +16,7 @@ export const loginUser = async (userData) => {
 
 export const registerUser = async (userData) => {
   const data = await axiosConfig
-    .post(`/user/register`, userData)
+    .post(`/customer/register`, userData)
     .then((response) => {
       return response;
     })
