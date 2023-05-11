@@ -1,17 +1,13 @@
 from django.urls import path
-from .views import (
-    twilio,
+from .views import ( twilio, CategoryListCreateView, CategoryRetreiveUpdateDeleteView,
     ProductListCreateView,
     ProductRetreiveUpdateDeleteView,
-    CategoryListCreateView,
-    CategoryRetreiveUpdateDeleteView,
     order_list,
     order_details,
     receipt_list,
     receipt_details,
     invoice_list,
     invoice_details,
-
     productCounts,
     buyerCounts,
     deliveryCounts,
@@ -20,7 +16,6 @@ from .views import (
     total_orders,
     total_stock,
     total_price,
-
     categoryProducts,
     lowstockproduct
 )
@@ -30,6 +25,14 @@ app_name = 'store_api'
 
 urlpatterns = [
     path('twilio/', twilio),
+    path('categories/', CategoryListCreateView.as_view(),name='listcreatecategories'),
+    path('categories/<int:pk>/', CategoryRetreiveUpdateDeleteView.as_view(), name='detailupdatedeletecategories'),
+
+
+
+
+
+
     path('products/', ProductListCreateView.as_view(), name='listcreateproducts'),
     path('products/<int:pk>/', ProductRetreiveUpdateDeleteView.as_view(),
          name='detailupdatedeleteproducts'),
@@ -56,10 +59,10 @@ urlpatterns = [
     path('totalprice/', total_price),
 
     path('categoryproducts/<int:id>', categoryProducts),
-    
+
     path('lowstockproduct/', lowstockproduct),
 
 
-    
+
 
 ]
