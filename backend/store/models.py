@@ -23,31 +23,9 @@ class Product(models.Model):
     category = models.ForeignKey('Category', on_delete=models.CASCADE, default='')
     created_date = models.DateField(auto_now_add=True)
 
-    # class Meta:
-    #     abstract = True
   
     def __str__(self):
         return self.name
-
-class mobileProduct(Product):
-    # additional fields for MobileProduct model
-    # -------------------------------------------
-    # inherits owner foreign key relationship from the Product model
-    pass
-# define related_name argument for MobileProduct's owner foreign key relationship
-mobileProduct.owner.related_name = 'mobile_products'
-
-
-    # class Meta:
-    #     verbose_name = 'Mobile User'
-    #     verbose_name_plural = 'Mobile Users'
-
-    # def __str__(self):
-    #     return self.email
-
-    # def save(self, *args, **kwargs):
-    #     self.username = self.email
-    #     super().save(*args, **kwargs)
 
 
 class Category(models.Model):
@@ -93,11 +71,6 @@ class OrderProducts(models.Model):
 
     def __str__(self):
         return "{}_{}".format(self.order.__str__(), self.product.__str__())
-
-
-
-
-
 
 
 class Supplier(models.Model):
@@ -146,20 +119,10 @@ class Delivery(models.Model):
 
 
 class mobileProduct(models.Model):
-    STATUS_CHOICE = (
-        ('in_stock', 'In Stock'),
-        ('out_of_stock', 'Out of Stock'),
-    )
     name = models.CharField(max_length=120, unique=True)
-    description_color = models.CharField(max_length=120, default='')
+    description = models.CharField(max_length=120, default='')
     price = models.DecimalField(max_digits=120, decimal_places=2)
-    status = models.CharField(max_length=120, choices=STATUS_CHOICE, default='')
-    owner = models.ForeignKey('users.CustomUser', related_name='products', on_delete=models.CASCADE,  default=1)
     created_date = models.DateField(auto_now_add=True)
-    # stock = models.PositiveIntegerField(default='')
-    # supplier = models.CharField(max_length=50, default='')
-    # image = models.ImageField(_('Image'), upload_to= upload_to, default='products/default.png')
-    # category = models.ForeignKey('Category', on_delete=models.CASCADE, default='')
   
     def __str__(self):
         return self.name
