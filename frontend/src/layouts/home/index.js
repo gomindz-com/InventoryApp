@@ -117,7 +117,7 @@ function Home() {
                   aria-expanded="false"
                 >
                   <i className="material-icons opacity-6 me-2 text-md">logout</i>
-                  SignIn
+                  Signout
                 </Link>
               </li>
 
@@ -208,7 +208,7 @@ function Home() {
                   </div>
                   <div className="card-body text-center">
                     <h5 className="font-weight-normal">
-                      <a href="javascript:;">Accurate Stock Recordes</a>
+                      <a href="#">Accurate Stock Recordes</a>
                     </h5>
                     <p className="mb-0">
                       Get accurate stock records with stright forword figures . You need not to
@@ -233,7 +233,7 @@ function Home() {
                   </div>
                   <div className="card-body text-center">
                     <h5 className="font-weight-normal">
-                      <a href="javascript:;">Get insights on Search</a>
+                      <a href="#">Get insights on Search</a>
                     </h5>
                     <p className="mb-0">
                       With clear figures and graphs , you can read all statistics of your store and
@@ -259,7 +259,7 @@ function Home() {
                   </div>
                   <div className="card-body text-center">
                     <h5 className="font-weight-normal">
-                      <a href="javascript:;">Get insights on Search</a>
+                      <a href="#">Get insights on Search</a>
                     </h5>
                     <p className="mb-0">
                       With ccurate statistics, you can make the best decisions and and improve your

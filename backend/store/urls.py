@@ -59,4 +59,7 @@ urlpatterns = [
     
     path('lowstockproduct/', lowstockproduct),
 
+
+    
+
 ]

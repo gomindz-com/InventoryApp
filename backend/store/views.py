@@ -101,6 +101,9 @@ class CategoryListCreateView(generics.ListCreateAPIView, mixins.ListModelMixin, 
 
     def get(self, request, *args, **kwargs):
         user = self.request.user
+
+        print("user")
+        print(user)
         category = Category.objects.filter(owner=user)
         categoryList = []
         categoryAmountSoldList = []
@@ -385,12 +388,19 @@ def receipt_details(request, id):
 @api_view(['GET', 'POST'])
 def invoice_list(request):
     if request.method == 'GET':
-        user = request.user
+        user = request.user.id
+
+        print('item')
+        print(request.method)
+
+
         order = Order.objects.filter(owner=user).filter(type="invoice")
         orderList = []
         for item in order.iterator():
             productList = []
             price = 0
+            print('item')
+            print(item)
             productsOrders = OrderProducts.objects.filter(order_id=item.id)
 
             for productsOrdersItem in productsOrders.iterator():
