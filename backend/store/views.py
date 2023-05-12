@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.db.models import Sum
+from django.db.models import Sum
 
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -389,18 +390,13 @@ def receipt_details(request, id):
 def invoice_list(request):
     if request.method == 'GET':
         user = request.user.id
-
-        print('item')
-        print(request.method)
-
-
         order = Order.objects.filter(owner=user).filter(type="invoice")
         orderList = []
         for item in order.iterator():
             productList = []
             price = 0
-            print('item')
-            print(item)
+            totalPending = 0
+
             productsOrders = OrderProducts.objects.filter(order_id=item.id)
 
             for productsOrdersItem in productsOrders.iterator():
@@ -428,6 +424,9 @@ def invoice_list(request):
                     "total_price":  price,
                 },
             )
+            # totalPending = totalPending + orderList.all().aggregate(TOTAL=Sum('total_price'))['TOTAL']
+            # print(totalPending)
+            
         serializer = OrderSerializer(order, many=True)
         return JsonResponse(status=200, data={'status': 'true', 'message': 'success', 'result': orderList})
 
@@ -462,6 +461,7 @@ def invoice_list(request):
             return JsonResponse(status=status.HTTP_201_CREATED, data={'status': 'true', 'message': 'success', 'result': serializer.data})
         else:
             return JsonResponse(status=status.HTTP_400_BAD_REQUEST, data={'status': 'false', 'message': 'Bad Request', 'result': serializer.errors})
+
 
 
 # LIST A SINGLE CUSTOMER ORDERS DETAIL / UPDATE / DELETE
@@ -563,6 +563,14 @@ def orderCounts(request):
               }
     return JsonResponse(status=200, data={'status': 'true', 'message': 'success', 'result': result})
 
+
+@api_view(['GET'])
+def cash_invoice(request):
+    order = Order.objects.filter(type="invoice")
+    totalPending = 0
+    totalPending += order.all().aggregate(TOTAL=Sum('total_price'))['TOTAL']
+    print(totalPending)
+    return JsonResponse(status=200, data={'status': 'true', 'message': 'success', 'result': totalPending})
 
 @api_view(['GET'])
 def productCounts(request):

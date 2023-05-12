@@ -1,4 +1,4 @@
-
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Group, PermissionsMixin, Permission
 from django.contrib.auth.models import AbstractUser, PermissionsMixin
 from django.db import models
 from django.utils.translation import gettext as _
@@ -22,6 +22,7 @@ class CustomUser(AbstractUser, PermissionsMixin):
     postcode = models.CharField(max_length=120, default='')
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
+    groups = models.ManyToManyField(Group, blank=True, related_name='custom_users')
     
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ('username',)

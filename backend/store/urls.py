@@ -8,6 +8,7 @@ from .views import ( twilio, CategoryListCreateView, CategoryRetreiveUpdateDelet
     receipt_details,
     invoice_list,
     invoice_details,
+    cash_invoice,
     productCounts,
     buyerCounts,
     deliveryCounts,
@@ -45,6 +46,9 @@ urlpatterns = [
 
     path('invoices/', invoice_list),
     path('invoices/<int:id>', invoice_details),
+    
+    path('cashpending/', cash_invoice),
+    path('cashpending/<int:id>', cash_invoice),
 
     path('receipts/', receipt_list),
     path('receipts/<int:id>', receipt_details),

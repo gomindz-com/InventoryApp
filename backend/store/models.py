@@ -18,9 +18,10 @@ class Product(models.Model):
     status = models.CharField(max_length=120, choices=STATUS_CHOICE, default='')
     supplier = models.CharField(max_length=50, default='')
     image = models.ImageField(_('Image'), upload_to= upload_to, default='products/default.png')
-    owner = models.ForeignKey('users.CustomUser', related_name='products', on_delete=models.CASCADE,  default=1)
+    owner = models.ForeignKey('users.CustomUser', related_name='%(class)s_products', on_delete=models.CASCADE,  default=1)
     category = models.ForeignKey('Category', on_delete=models.CASCADE, default='')
     created_date = models.DateField(auto_now_add=True)
+
   
     def __str__(self):
         return self.name
@@ -117,3 +118,11 @@ class Delivery(models.Model):
         return self.courier_name
 
 
+class mobileProduct(models.Model):
+    name = models.CharField(max_length=120, unique=True)
+    description = models.CharField(max_length=120, default='')
+    price = models.DecimalField(max_digits=120, decimal_places=2)
+    created_date = models.DateField(auto_now_add=True)
+  
+    def __str__(self):
+        return self.name
