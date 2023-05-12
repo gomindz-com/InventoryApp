@@ -1,5 +1,4 @@
 from django.db import models
-from users.models import CustomUser
 from django.utils.translation import gettext_lazy as _
 
 
@@ -71,6 +70,7 @@ class OrderProducts(models.Model):
 
     def __str__(self):
         return "{}_{}".format(self.order.__str__(), self.product.__str__())
+
 
 
 class Supplier(models.Model):

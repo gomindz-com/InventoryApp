@@ -1,92 +1,148 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from rest_framework import generics, mixins, viewsets, filters, permissions
-#from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework import generics
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .serializers import CustomUserSerializer
-#from rest_framework_simplejwt.tokens import RefreshToken
+from .serializers import RegisterSerializer, LoginSerializer, CustomUserSerializer, UpdateUserProfileSerializer, UpdatePasswordSerializer
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.request import Request
 from django.contrib.auth import authenticate
+from django.shortcuts import get_object_or_404
+from django.db import IntegrityError
 from .models import CustomUser
-from rest_framework.parsers import MultiPartParser, FormParser
+
+
 import logging
 logger = logging.getLogger('app_api')
 
 
-class RegisterUser(APIView):
+class RegisterUser(generics.CreateAPIView):
     permission_classes = [AllowAny]
-    def post(self, request, format='json'):
-        serializer = CustomUserSerializer(data=request.data)
-        if serializer.is_valid():
-            user = serializer.save()
-            if user:
-                json = serializer.data
-                return Response(json, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    queryset = CustomUser.objects.all()
+    serializer_class = RegisterSerializer
 
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        response = {
+            "status": True,
+            "message": "Customer Successfully Registered",
+                    }                
+        return Response(data=response, status=status.HTTP_201_CREATED)
+
+    
 
 class LoginUser(APIView):
     permission_classes = [AllowAny]
     def post(self, request: Request):
+        serializer = LoginSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
         email = request.data.get('email')
         password = request.data.get('password')
-
-        print(email)
         user = authenticate(email=email, password=password)
-
         if user is not None:
             serializer = CustomUserSerializer(user)
-
             response = {
                 "status": True,
                 "message": "login Successful",
                 "user": serializer.data,
-                "token": user.auth_token.key,
+                "token": user.auth_token.key
             }
-            return Response(data=response)
+            return Response(data=response, status=status.HTTP_200_OK)
 
         else:
             response = {
                 "status": False,
                 "message": "Invalid User"
             }
-            
-            return Response(data=response)
-
-    def get(self, request: Request):
-        content = {
-            "user": str(request.user),
-            "auth": str(request.auth),
-        }
-        return Response(data=content, status=status.HTTP_200_OK)
+            return Response(data=response, status=status.HTTP_401_UNAUTHORIZED)
 
 
-class UserRetreiveUpdateView(generics.RetrieveUpdateAPIView):
+
+class UserRetrieveView(generics.RetrieveAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = CustomUserSerializer
     queryset = CustomUser.objects.all()
 
-    def get_queryset(self):
-        user = self.request.user
-        return CustomUser.objects.filter(id=user.id)
+    def get_object(self):
+        queryset = self.filter_queryset(self.get_queryset())
+        obj = queryset.get(pk=self.request.user.id)
+        self.check_object_permissions(self.request, obj)
+        return obj
 
-    def get_object(self, queryset=None, **kwargs):
-        item = self.kwargs.get('pk')
-        return get_object_or_404(CustomUser, email=item)
+    def get(self, request, format=None):
+        serializer = CustomUserSerializer(request.user)
+        response = {
+                    "status": True,
+                    "message": "",
+                    "user" : serializer.data
+
+                }
+        return Response(data=response)
 
 
-class BlacklistTokenUpdateView(APIView):
-    permission_classes = [AllowAny]
-    authentication_classes = ()
+    
+class UserUpdateView(generics.UpdateAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = UpdateUserProfileSerializer
+    queryset = CustomUser.objects.all()
+    http_method_names = ['get', 'patch', 'put']
 
-    def post(self, request):
-        try:
-            refresh_token = request.data["refresh_token"]
-            #token = RefreshToken(refresh_token)
-            #token.blacklist()
-            return Response(status=status.HTTP_205_RESET_CONTENT)
-        except Exception as e:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+    def get_object(self):
+        queryset = self.filter_queryset(self.get_queryset())
+        obj = queryset.get(pk=self.request.user.id)
+        self.check_object_permissions(self.request, obj)
+        return obj
 
+    def get(self, request, format=None):
+        serializer = CustomUserSerializer(request.user)
+        return Response(serializer.data)
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        updateUserSerializer = UpdateUserProfileSerializer(data=request.data, context={'request': request})
+        updateUserSerializer.is_valid(raise_exception=True)
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        response = {
+                    "status": True,
+                    "message": "",
+                    "data" : serializer.data
+
+                }
+        return Response(data=response)
+
+
+       
+class UserUpdatePasswordView(generics.UpdateAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = UpdatePasswordSerializer
+    queryset = CustomUser.objects.all()
+    
+    def get_object(self):
+        queryset = self.filter_queryset(self.get_queryset())
+        obj = queryset.get(pk=self.request.user.id)
+        self.check_object_permissions(self.request, obj)
+        return obj
+
+    def get(self, request, format=None):
+        serializer = CustomUserSerializer(request.user)
+        return Response(serializer.data)
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        updatePasswordSerializer = UpdatePasswordSerializer(data=request.data, context={'request': request})
+        updatePasswordSerializer.is_valid(raise_exception=True)
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        response = {
+                    "status": True,
+                    "message": "Successfully Updated",
+
+                }
+        return Response(data=response)
+   

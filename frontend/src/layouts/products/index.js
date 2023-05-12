@@ -324,7 +324,7 @@ function Products() {
       stock: (
         <ArgonBox display="flex" flexDirection="column">
           <ArgonTypography variant="caption" fontWeight="medium" fontSize= "1.75rem" 
-              color = {item.stock >= 5 ? "primary" : "error"}>
+              color = {item.stock >= 50 ? "primary" : "error"}>
             {item.stock}
           </ArgonTypography>
         </ArgonBox>

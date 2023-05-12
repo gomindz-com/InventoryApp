@@ -225,7 +225,7 @@ function Overview() {
                         type="mobile"
                         placeholder="Mobile"
                         size="large"
-                        autocomplete="off"
+                        autoComplete="off"
                         onChange={handleChange}
                       />
                     </ArgonBox>
@@ -238,7 +238,7 @@ function Overview() {
                     type="textarea"
                     placeholder="Location"
                     size="large"
-                    autocomplete="off"
+                    autoComplete="off"
                     onChange={handleChange}
                   />
                 </ArgonBox>

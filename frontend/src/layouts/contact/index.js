@@ -117,7 +117,7 @@ function ContactUs() {
                     type="email"
                     placeholder="Email"
                     size="large"
-                    autocomplete="off"
+                    autoComplete="off"
                     onChange={handleChange}
                   />
                 </ArgonBox>
@@ -130,7 +130,7 @@ function ContactUs() {
                 type="textarea"
                 placeholder="How can we help you?"
                 size="large"
-                autocomplete="off"
+                autoComplete="off"
                 onChange={handleChange}
               />
             </ArgonBox>

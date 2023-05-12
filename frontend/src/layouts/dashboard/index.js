@@ -325,37 +325,46 @@ function Default() {
 
       <ArgonBox py={3}>
         <Grid container spacing={3} mb={3}>
-          <Grid item xs={12} md={6} lg={3}>
+          <Grid item xs={12} md={4} lg={2}>
             <DetailedStatisticsCard
               title="Cash Pending"
               count={orderCount?.total == undefined ? "D" + 0 : "D" + orderCount?.total}
               amount={
-                orderCount?.ordercount == undefined
-                  ? 0 + " Orders"
-                  : orderCount?.ordercount + " Order(s)"
+                ''
               }
               icon={{ color: "info", component: <i className="ni ni-money-coins" /> }}
               percentage={{ color: "success", count: "+55%", text: "" }}
             />
           </Grid>
-          <Grid item xs={12} md={6} lg={3}>
+          <Grid item xs={12} md={4} lg={2}>
             <DetailedStatisticsCard
               title="Cash InHand"
               count={orderCount?.total == undefined ? "D" + 0 : "D" + orderCount?.total}
 
               amount={
-                orderCount?.ordercount == undefined
-                  ? 0 + " Orders"
-                  : orderCount?.ordercount + " Order(s)"
+                ''
               }
               
               icon={{ color: "error", component: <i className="ni ni-world" /> }}
               percentage={{ color: "success", count: "+3%", text: "since last week" }}
             />
           </Grid>
-          <Grid item xs={12} md={6} lg={3}>
+          <Grid item xs={12} md={6} lg={2}>
             <DetailedStatisticsCard
-              title="Total Stock In"
+              title="Categories"
+              count={orderCount?.total == undefined ? "D" + 0 : "D" + orderCount?.total}
+
+              amount={
+                ''
+              }
+              
+              icon={{ color: "error", component: <i className="ni ni-world" /> }}
+              percentage={{ color: "success", count: "+3%", text: "since last week" }}
+            />
+          </Grid>
+          <Grid item xs={12} md={6} lg={2}>
+            <DetailedStatisticsCard
+              title="Stock-In-Hand"
               count={
                 supplierCount?.suppliercount == undefined
                   ? 0 + " Supplier"
@@ -368,9 +377,23 @@ function Default() {
               percentage={{ color: "error", count: "-2%", text: "since last quarter" }}
             />
           </Grid>
-          <Grid item xs={12} md={6} lg={3}>
+          <Grid item xs={12} md={5} lg={2}>
             <DetailedStatisticsCard
-              title="Total Stock Out"
+              title="Stock-Out"
+              count={
+                buyerCount?.buyercount == undefined
+                  ? 0 + " Buyer"
+                  : buyerCount?.buyercount 
+              }
+              amount={''
+                }
+              icon={{ color: "warning", component: <i className="ni ni-cart" /> }}
+              percentage={{ color: "success", count: "+5%", text: "than last month" }}
+            />
+          </Grid>
+          <Grid item xs={12} md={5} lg={2}>
+            <DetailedStatisticsCard
+              title="Stock-In"
               count={
                 buyerCount?.buyercount == undefined
                   ? 0 + " Buyer"
