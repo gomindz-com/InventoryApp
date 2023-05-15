@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
-from .models import CustomUser
+from .models import CustomUser, mobileCustomer
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
 
@@ -117,9 +117,14 @@ class UpdatePasswordSerializer(serializers.ModelSerializer):
 
 
 
-
-
-
-
-
-       
+class mobileUserSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(required=True)
+    first_name = serializers.CharField(required=True)
+    password = serializers.CharField(min_length=8, write_only=True)
+    
+    class Meta:
+        model = mobileCustomer
+        fields = [ 'email', 'password', 'first_name', 'last_name']
+        extra_kwargs = {
+            'password': {'write_only': True}
+        }
