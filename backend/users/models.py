@@ -32,3 +32,12 @@ class CustomUser(AbstractUser, PermissionsMixin):
     def __str__(self):
         return self.email
  
+class mobileCustomer(models.Model):
+    first_name = models.CharField(max_length=120, default='')
+    last_name = models.CharField(max_length=120, default='')
+    email = models.EmailField(_('email address'), unique=True)
+    contact = models.CharField(max_length=120, default='')
+    #password = models.CharField(max_length =8, default = '')
+    
+    def __str__(self):
+        return self.name
