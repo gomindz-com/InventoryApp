@@ -24,7 +24,7 @@ const AdProductScreen = () => {
          
         </TouchableOpacity>
         <View >
-        <CustomText style={styles.title} color="#fff">Add Product</CustomText>
+        <CustomText style={styles.title} color="#fff">Add Products</CustomText>
         </View>
 
         <View style={styles.right}>
