@@ -24,7 +24,7 @@ const AdProductScreen = () => {
          
         </TouchableOpacity>
         <View >
-        <CustomText style={styles.title} color="#fff">Add Products</CustomText>
+        <CustomText style={styles.title} color="#fff">Add Product</CustomText>
         </View>
 
         <View style={styles.right}>
@@ -54,7 +54,7 @@ const AdProductScreen = () => {
         <CustomInput placeholder={"Buy Rate"} mx={10} mt={10} />
       </View>
     <View style={{ marginTop: 2 }}>
-        <CustomInput placeholder={"Description"} mx={10} mt={10} />
+        <CustomInput placeholder={"Product escription"} mx={10} mt={10} />
       </View>
 
   </View>
