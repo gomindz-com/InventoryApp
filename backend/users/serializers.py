@@ -116,7 +116,7 @@ class UpdatePasswordSerializer(serializers.ModelSerializer):
 
 
 
-
+# Mobile User Serializer
 class mobileUserSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(required=True)
     first_name = serializers.CharField(required=True)
@@ -124,7 +124,8 @@ class mobileUserSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = mobileCustomer
-        fields = [ 'email', 'password', 'first_name', 'last_name']
+        fields = [ 'email', 'first_name', 'last_name', 'contact']
         extra_kwargs = {
             'password': {'write_only': True}
         }
+
