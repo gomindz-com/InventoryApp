@@ -1,0 +1,19 @@
+.img-wrapper{
+    justify-content: center;
+    align-items: center;
+    display:flex;
+    padding-top:20%;
+  }
+.hover-zoom:hover {
+    transform: scale(2.25);
+  }
+
+.upload-input {
+    font-size: 15px;
+    border: 0;
+    background-color: #3a4e9e;
+    color: white;
+    margin-top: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}

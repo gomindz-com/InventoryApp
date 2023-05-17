@@ -60,7 +60,7 @@
       }, e.attr = function(t, e) {
         return t && e ? (this.selector.setAttribute(t, e), this) : this.selector.getAttribute(t)
       }, e.addClass = function(t) {
-        return this.selector.classList ? (this.selector.classList.add(t), this) : (-1 == this.selector.className.split(" ").indexOf(t) && (this.selector.className += " " + t), this)
+        return this.selector.classList? ? (this.selector.classList?.add(t), this) : (-1 == this.selector.className.split(" ").indexOf(t) && (this.selector.className += " " + t), this)
       }, e.append = function(t) {
         return this.selector.appendChild(t), this
       }, e.show = function() {

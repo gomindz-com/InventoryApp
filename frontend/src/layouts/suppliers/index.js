@@ -80,7 +80,6 @@ function Suppliers() {
           }
         })
         .catch((err) => {
-          console.log("Error Adding Supplier", err);
         });
     }h
   };
@@ -104,7 +103,6 @@ function Suppliers() {
           }
         })
         .catch((err) => {
-          console.log("Error Updating Supplier", err);
         });
     }
   };
@@ -130,11 +128,10 @@ function Suppliers() {
             setSupplierList([]);
           }
         })
-        .catch((err) => console.log("Error in Getting Suppliers", err));
+        .catch((err) =>{});
 
       setScreenLoading(false);
     } catch (error) {
-      console.log(error);
     }
   };
 
@@ -148,7 +145,10 @@ function Suppliers() {
         } else {
         }
       })
-      .catch((err) => console.log("Error in Deleting Supplier", err));
+      .catch((err) => {
+        
+      }
+      );
   };
 
   const columns = [
@@ -233,7 +233,7 @@ function Suppliers() {
   
 
   useEffect(() => {
-    handleGetSupplierList();
+    //handleGetSupplierList();
   }, []);
 
   

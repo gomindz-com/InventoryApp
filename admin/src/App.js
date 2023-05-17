@@ -40,7 +40,6 @@ export default function App() {
   const matches = useMediaQuery("(max-width: 1199.98px)");
 
   const [admin, setAdmin] = useState(JSON.parse(localStorage.getItem("admin")));
-  console.log(admin)
 
 
 

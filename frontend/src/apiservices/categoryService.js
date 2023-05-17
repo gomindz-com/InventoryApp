@@ -8,7 +8,7 @@ export const getCategories = async (customerId) => {
       return response;
     })
     .catch((err) => {
-      console.log(err);
+      return(err);
     });
 
   return data;
@@ -56,9 +56,7 @@ export const deleteCategory= async (id) => {
       return response;
     })
     .catch((err) => {
-      
-      console.log(err);
-      return err;
+            return err;
     });
 
   return data;

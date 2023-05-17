@@ -9,13 +9,10 @@ export const AddCategorySchema = Yup.object().shape({
 
 export const AddProductSchema = Yup.object().shape({
   name: Yup.string().required("Name is required"),
-  sortno: Yup.number().required("Required"),
   stock: Yup.number().required("Required"),
   description_color: Yup.string().required("Required"),
   price: Yup.number().required("Required"),
-  label_size: Yup.string().required("Required"),
   status: Yup.string().required("Required"),
-  //email: Yup.string().email("Email is required").required("Required"),
 });
 
 
@@ -25,7 +22,6 @@ export const AddSupplierSchema = Yup.object().shape({
     phone_number: Yup.string().required("Required"),
     contactName: Yup.string().required("Required"),
     address: Yup.string().required("Required"),
-    //email: Yup.string().email("Email is required").required("Required"),
 });
   
 
@@ -49,16 +45,16 @@ export const AddOrderSchema = Yup.object().shape({
 
 
 export const UserSchema = Yup.object().shape({
-    password: Yup.string().required("Required"),
-    email: Yup.string().email("Email is required").required("Required"),
+    email: Yup.string().email("Email Must Be Valid").required("Email is Required"),
+    password: Yup.string().required("Password is Required"),
 });
 
 
 export const RegisterUserSchema = Yup.object().shape({
-  password: Yup.string().required("Required"),
-  first_name: Yup.string().required("Required"),
-  last_name: Yup.string().required("Required"),
-  username: Yup.string().required("Required"),
-  contact: Yup.string().required("Required"),
-  email: Yup.string().email("Email is required").required("Required"),
+  password: Yup.string().required("Password is Required"),
+  first_name: Yup.string().required("First Name is Required"),
+  last_name: Yup.string().required("Last Name is Required"),
+  username: Yup.string().required("Username is Required"),
+  contact: Yup.string().required("Contact is Required"),
+  email: Yup.string().email("Email Format is required").required("Email is Required"),
 });

@@ -109,7 +109,7 @@ function Table({ columns, rows }) {
             component="td"
             p={1}
             textAlign={align}
-            verticalAlign="middle"
+            verticalalign="middle"
             lineHeight={0.65}
             sx={({ palette: { light } }) => ({
               borderBottom: row.hasBorder ? `${borderWidth[1]} solid ${light.main}` : null,

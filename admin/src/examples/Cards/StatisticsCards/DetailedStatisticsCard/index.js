@@ -61,7 +61,7 @@ function DetailedStaticsCard({ bgColor, title, count, amount, percentage, icon, 
                     <ArgonBox
                       fontSize="1.125rem"
                       display="grid"
-                      placeItems="center"
+                      placeitems="center"
                       color="inherit"
                     >
                       {icon.component}
@@ -121,7 +121,7 @@ function DetailedStaticsCard({ bgColor, title, count, amount, percentage, icon, 
                     <ArgonBox
                       fontSize="1.125rem"
                       display="grid"
-                      placeItems="center"
+                      placeitems="center"
                       color="inherit"
                     >
                       {icon.component}

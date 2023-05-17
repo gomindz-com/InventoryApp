@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // react-router-dom components
 import { Link } from "react-router-dom";
@@ -17,85 +17,80 @@ import IllustrationLayout from "layouts/authentication/components/IllustrationLa
 
 import { UserSchema } from "../../../formValidation/addForm";
 import { loginUser } from "apiservices/authService";
-import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
-import { Routes, Route, Navigate, useLocation, } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { getUserDetails } from "apiservices/userService";
 
-// Image
-const bgImage =
-  "https://us.123rf.com/450wm/kostsov/kostsov1906/kostsov190600026/126080344-modern-showcase-with-empty-space-on-pedestal-on-blue-background-3d-rendering-.jpg?ver=6";
-
 function Illustration() {
+
+
   const [rememberMe, setRememberMe] = useState(false);
-
   const handleSetRememberMe = () => {
-    console.log("you click me");
   };
-
   const [user, setUser] = useState(null);
-
-  //START LOGGING IN USER
   const [userData, setUserData] = useState({
     email: "",
     password: "",
   });
 
-  const handleSubmit = async (e) => {
-    //e.preventDefault();
-
-    const isValid = await UserSchema.isValid(userData);
-    if (!isValid) {
-      toast.error("Please enter all the required fields!!");
-    } else {
-      await loginUser(userData)
-        .then(async (res) => {
-
-        
-          
-          if (res.status == 200) {
-            localStorage.setItem("token", res.data.token);
-
-            try {
-              await getUserDetails(userData.email)
-                .then((res) => {
-                  if (res?.status == 200) {
-                   
-                    localStorage.setItem("user", JSON.stringify(res.data));
-
-                  } else {
-                  }
-                })
-                .catch((err) => console.log("Error in Getting User Detail", err));
-                } catch (error) {
-              console.log(error);
-            }
-
-            
-            setUser(JSON.parse(localStorage.getItem("user")))
-            toast.success("User Login Successfully");
-
-            
-          } else {
-            toast.error("User Could Not Be Logged In");
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  };
+  useEffect(() => {
+    localStorage.clear();
+  }, []);
 
   const handleChange = (e) => {
     setUserData({ ...userData, [e.target.name]: e.target.value });
   };
+
+  
+  const handleValidateSubmit = async (e) => {
+    UserSchema
+    .validate(userData, { abortEarly: false })
+    .then(async() => {
+      handleSubmit()
+    })
+    .catch((err) => {
+      toast.error(err.errors[0]);
+    });
+
+  };
+
+
+  const handleSubmit = async()=>{
+
+    await loginUser(userData)
+        .then(async (res) => {
+          if (res.status == 200) {
+            localStorage.setItem("token", res.data?.token);
+            try {
+              await getUserDetails(userData.email)
+                .then((res) => {
+                  if (res?.status == 200) {
+                    localStorage.setItem("user", JSON.stringify(res.data.user));
+                    setUser(res.data.user);
+                  }
+                })
+                .catch((err) => console.log("Error in Getting User Detail", err));
+            } catch (error) {
+              console.log(error.message)
+            }
+
+          } else {
+            toast.error("Incorrect Credentials");
+          }
+        })
+        .catch((err) => {
+          console.log("Response is : ", err)
+        });
+  }
+
+ 
 
   return (
     <IllustrationLayout
       title="Sign In"
       description="Enter your email and password to sign in"
       illustration={{
-        image: bgImage,
+        image: "https://us.123rf.com/450wm/kostsov/kostsov1906/kostsov190600026/126080344-modern-showcase-with-empty-space-on-pedestal-on-blue-background-3d-rendering-.jpg?ver=6",
         title: '"Our Inventory App Is The One"',
         description: "The more difficult management looks, the more easy we make it for you.",
       }}
@@ -133,12 +128,12 @@ function Illustration() {
           </ArgonTypography>
         </ArgonBox>
         <ArgonBox mt={4} mb={1}>
-          <ArgonButton onClick={handleSubmit} color="info" size="large" fullWidth>
+          <ArgonButton onClick={() => handleValidateSubmit()} color="info" size="large" fullWidth>
             Sign In
           </ArgonButton>
         </ArgonBox>
 
-         <ArgonBox mt={3} textAlign="center">
+        <ArgonBox mt={3} textAlign="center">
           <ArgonTypography variant="button" color="text" fontWeight="regular">
             Don&apos;t have an account?{" "}
             <ArgonTypography
@@ -152,7 +147,6 @@ function Illustration() {
             </ArgonTypography>
           </ArgonTypography>
         </ArgonBox>
-
       </ArgonBox>
     </IllustrationLayout>
   );

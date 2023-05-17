@@ -1,5 +1,4 @@
 from django.db import models
-from users.models import CustomUser
 from django.utils.translation import gettext_lazy as _
 
 
@@ -14,21 +13,18 @@ class Product(models.Model):
     )
     name = models.CharField(max_length=120, unique=True)
     description_color = models.CharField(max_length=120, default='')
-    label_size = models.CharField(max_length=120, default='')
     price = models.DecimalField(max_digits=120, decimal_places=2)
     stock = models.PositiveIntegerField(default='')
-    sku = models.CharField(max_length=120, default='')
     status = models.CharField(max_length=120, choices=STATUS_CHOICE, default='')
     supplier = models.CharField(max_length=50, default='')
-    sortno = models.PositiveIntegerField()
     image = models.ImageField(_('Image'), upload_to= upload_to, default='products/default.png')
-    owner = models.ForeignKey('users.CustomUser', related_name='products', on_delete=models.CASCADE,  default=1)
+    owner = models.ForeignKey('users.CustomUser', related_name='%(class)s_products', on_delete=models.CASCADE,  default=1)
     category = models.ForeignKey('Category', on_delete=models.CASCADE, default='')
     created_date = models.DateField(auto_now_add=True)
+
   
     def __str__(self):
         return self.name
-
 
 
 class Category(models.Model):
@@ -57,6 +53,7 @@ class Order(models.Model):
         ('order', 'Order'),
     )
     buyer = models.CharField(max_length=50, default='')
+    buyer_location = models.CharField(max_length=50, default='')
     status = models.CharField(max_length=20, choices=STATUS_CHOICE, default='')
     receipt = models.CharField(max_length=50, default='')
     total_price = models.FloatField(default=0.00) 
@@ -73,10 +70,6 @@ class OrderProducts(models.Model):
 
     def __str__(self):
         return "{}_{}".format(self.order.__str__(), self.product.__str__())
-
-
-
-
 
 
 
@@ -125,3 +118,11 @@ class Delivery(models.Model):
         return self.courier_name
 
 
+class mobileProduct(models.Model):
+    name = models.CharField(max_length=120, unique=True)
+    description = models.CharField(max_length=120, default='')
+    price = models.DecimalField(max_digits=120, decimal_places=2)
+    created_date = models.DateField(auto_now_add=True)
+  
+    def __str__(self):
+        return self.name

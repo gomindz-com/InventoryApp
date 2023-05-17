@@ -8,7 +8,7 @@ export const getSuppliers = async () => {
       return response;
     })
     .catch((err) => {
-      console.log(err);
+      return(err);
       toast.error(err);
     });
 
@@ -23,7 +23,7 @@ export const getSupplierCount = async () => {
       return response;
     })
     .catch((err) => {
-      console.log(err);
+      return(err);
       toast.error(err);
     });
 
@@ -37,14 +37,13 @@ export const addSupplier = async (supplierData) => {
   const data = await axiosConfig
     .post(`/suppliers/`, supplierData)
     .then((response) => {
-      console.log("Api Response")
-      console.log(response)
+      
+      
       return response;
     })
     .catch((err) => {
-      console.log("Api Error")
-      console.log(err.response.data.result);
-      return err.response;
+      
+        return err.response;
     });
 
   return data;
@@ -55,14 +54,13 @@ export const editSupplier = async (supplierId, supplierData) => {
   const data = await axiosConfig
     .put(`/suppliers/${supplierId}`, supplierData)
     .then((response) => {
-      console.log("Api Response")
-      console.log(response)
+      
+      
       return response;
     })
     .catch((err) => {
-      console.log("Api Error")
-      console.log(err.response.data.result);
-      return err.response;
+      
+        return err.response;
     });
 
   return data;
@@ -73,14 +71,13 @@ export const deleteSupplier = async (supplierId) => {
   const data = await axiosConfig
     .delete(`/suppliers/${supplierId}`)
     .then((response) => {
-      console.log("Api Response")
-      console.log(response)
+      
+      
       return response;
     })
     .catch((err) => {
-      console.log("Api Error")
-      console.log(err.response.data.result);
-      return err.response;
+      
+        return err.response;
     });
 
   return data;

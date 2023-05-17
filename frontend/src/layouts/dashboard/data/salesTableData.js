@@ -22,24 +22,12 @@ import Bj from "assets/images/icons/flags/gambia.jpeg";
 
 const salesTableData = [
   {
+    
     Region: [Bj, "Kanifing"],
     sales: 2500,
     'stocks-inhand': "230 Items",
     delivery: "190 Items",
   },
-  {
-    Region: [Bj, "Brikama"],
-    sales: "3.900",
-    'stocks-inhand': "440 Items",
-    delivery: "190 Items",
-  },
-  {
-    Region: [Bj, "Banjul"],
-    sales: "1.400",
-    'stocks-inhand': "190 Items",
-    delivery: "190 Items",
-  },
-  { Region: [Bj, "Basse"], sales: 562, 'stocks-inhand': "43 Items", delivery: "190 Items", },
-];
+  ];
 
 export default salesTableData;
