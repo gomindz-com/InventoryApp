@@ -13,7 +13,7 @@ const Tab = createBottomTabNavigator();
 const AppStack = () => {
   return (
     <>
-      <Tab.Navigator
+      <Tab.Navigator 
         screenOptions={{
           headerShown: false,
           tabBarStyle: {
