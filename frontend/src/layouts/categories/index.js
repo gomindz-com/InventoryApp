@@ -1,19 +1,3 @@
-/**
-=========================================================
-* Argon Dashboard 2 MUI - v3.0.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-material-ui
-* Copyright 2022 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
-// @mui material components
 import Card from "@mui/material/Card";
 
 import { useState, useEffect } from "react";
@@ -22,7 +6,6 @@ import { useState, useEffect } from "react";
 import ArgonBox from "components/ArgonBox";
 import ArgonTypography from "components/ArgonTypography";
 import ArgonAvatar from "components/ArgonAvatar";
-import ArgonBadge from "components/ArgonBadge";
 
 // Argon Dashboard 2 MUI examples
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
@@ -35,55 +18,28 @@ import ArgonButton from "components/ArgonButton";
 import { Button } from "@mui/material";
 import logoSpotify from "assets/images/small-logos/logo-spotify.svg";
 import { AddCategorySchema } from "formValidation/addForm";
-import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
-import Select from "react-select";
 import { addCategory } from "apiservices/categoryService";
 import { deleteCategory } from "apiservices/categoryService";
 import { getCategories } from "apiservices/categoryService";
 import { editCategoriee } from "apiservices/categoryService";
 
 function Categories() {
-  const [rememberMe, setRememberMe] = useState(false);
   const [showAddCategoryForm, setShowAddCategoryForm] = useState(false);
-  const handleSetRememberMe = () => setRememberMe(!rememberMe);
   const [screenloading, setScreenLoading] = useState(true);
   const [categoryList, setCategoryList] = useState([]);
   const [editFormActive, setEditFormActive] = useState(false);
 
-
-  const navigate = useNavigate();
-
   const user = JSON.parse(localStorage.getItem("user"));
 
-
-  //START ADDING NEW PRODUCT
   const [categoryData, setCategoryData] = useState({
     name: "",
     description: "",
     userid: user.id
   });
 
-  const status_options = [
-    {
-      value: "In Stock",
-      label: "In Stock",
-      id: "1",
-    },
-    {
-      value: "Out of Stock",
-      label: "Out of Stock",
-      id: "2",
-    },
-  ];
-
   const handleSubmit = async (e) => {
-    //e.preventDefault();
-
-
-
-
+    
     const isValid = await AddCategorySchema.isValid(categoryData);
     if (!isValid) {
       toast.error("Please enter all the required fields!!");
@@ -104,13 +60,7 @@ function Categories() {
     }
   };
 
-
-
-  //handledit
-
   const handleEdit = async (e) => {
-    //e.preventDefault();
-
 
     setCategoryData({ ...categoryData, userid: user.id});
 
@@ -133,19 +83,11 @@ function Categories() {
   };
 
 
-
-
-
-  // 
-
   const handleChange = (e) => {
     setCategoryData({ ...categoryData, [e.target.name]: e.target.value });
   };
 
-  //END ADDING NEW PRODUCT
 
-
-  //DELETE SUPPLIER
   const handleDeleteCategory = async (id) => {
     await deleteCategory(id)
       .then((res) => {
@@ -159,25 +101,18 @@ function Categories() {
       });
   };
 
-  //START GET CATEGORY
+  
   const handleGetCategoryList = async () => {
 
-    toast.success("Fetching Categories!!", { autoClose: 2000 });
-
-
-    const user = JSON.parse(localStorage.getItem("user"));
- 
+    toast.success("Fetching Categories!!", { autoClose: 2000 }); 
     setCategoryList([]);
     setScreenLoading(true);
 
     try {
       await getCategories()
         .then((res) => {
-          
-
-           if (res.data.status === 'true') {
-           
-            setCategoryList(res.data.result);
+           if (res.data.status === true) {
+            setCategoryList(res.data.categories);
           } else {
             setCategoryList([]);
           }
@@ -188,7 +123,6 @@ function Categories() {
     } catch (error) {
     }
   };
-  //END GET CATEGORY
 
   const columns = [
     { name: "category", align: "left" },
@@ -335,10 +269,6 @@ function Categories() {
                   <ArgonButton onClick={editFormActive ? handleEdit : handleSubmit} color="info" size="large" fullWidth>
                     {editFormActive ? "Edit Category" : "Add Category"}
                   </ArgonButton>
-
-                  {/* <ArgonButton onClick={editFormActive? handleEdit: handleSubmit} color="info" size="large" fullWidth>
-                    { editFormActive ?  "Edit Buyer" : 'Add Buyer' }
-                  </ArgonButton> */}
                 </ArgonBox>
               </ArgonBox>
             </Card>

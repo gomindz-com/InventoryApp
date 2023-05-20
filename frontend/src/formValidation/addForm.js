@@ -38,7 +38,7 @@ export const AddOrderSchema = Yup.object().shape({
     products: Yup.array().required("Required"),
     buyer: Yup.string().required("Required"),
     status: Yup.string().required("Required"),
-    receipt: Yup.string().required("Required"),
+    ref: Yup.string().required("Required"),
     total_price: Yup.number().required("Required"),
 
 });

@@ -6,7 +6,6 @@ import { useState, useEffect, useRef } from "react";
 // Argon Dashboard 2 MUI components
 import ArgonBox from "components/ArgonBox";
 import ArgonTypography from "components/ArgonTypography";
-import ArgonAvatar from "components/ArgonAvatar";
 import ArgonBadge from "components/ArgonBadge";
 import ToggleButton from "@mui/material/ToggleButton";
 import CheckIcon from "@mui/icons-material/Check";
@@ -20,19 +19,9 @@ import Table from "examples/Tables/Table";
 import ArgonInput from "components/ArgonInput";
 import ArgonButton from "components/ArgonButton";
 import { Button } from "@mui/material";
-import logoSpotify from "assets/images/small-logos/logo-spotify.svg";
 
 import { AddOrderSchema } from "formValidation/addForm";
 import Select from "react-select";
-import { getInvoices, addInvoice, deleteInvoice } from "apiservices/invoiceService";
-
-import { getProducts } from "apiservices/productService";
-import { getSuppliers } from "apiservices/supplierService";
-import "react-toastify/dist/ReactToastify.css";
-import { ToastContainer, toast } from "react-toastify";
-import { getBuyers } from "apiservices/buyerService";
-import typography from "assets/theme/base/typography";
-import borders from "assets/theme/base/borders";
 
 import * as React from "react";
 import Backdrop from "@mui/material/Backdrop";
@@ -41,24 +30,20 @@ import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
 import Typography from "@mui/material/Typography";
 import { useReactToPrint } from "react-to-print";
-import { SignalCellularNull } from "@mui/icons-material";
-import { v4 as uuidv4 } from "uuid";
-import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { Navigate } from "react-router-dom";
+import { getOrders, deleteOrder, addOrder, editOrder} from "apiservices/orderService";
+import { getProducts } from "apiservices/productService";
 
-import { useNavigate } from "react-router-dom";
-
+import { ToastContainer, toast } from "react-toastify";
 import "./index.css";
-import { editInvoice } from "apiservices/invoiceService";
+
 
 function Invoices() {
+
+  const product_options = [];
+
   const [value, setValue] = useState("");
   const [value1, setValue1] = useState([]);
-
-  const handleChangeTT = (event) => {
-    const result = event.target.value.replace(/\D/g, "");
-
-    setValue(result);
-  };
 
   const [rememberMe, setRememberMe] = useState(false);
   const [showAddForm, setShowAddForm] = useState(false);
@@ -67,39 +52,81 @@ function Invoices() {
   const [showPrintView, setShowPrintView] = useState(false);
 
   const [viewOrderActive, setViewOrderActive] = useState(true);
-  const handleSetRememberMe = () => setRememberMe(!rememberMe);
   const [screenloading, setScreenLoading] = useState(true);
   const [orderList, setOrderList] = useState([]);
   const [productList, setProductList] = useState([]);
-  const [supplierList, setSupplierList] = useState([]);
-  const [buyerList, setBuyerList] = useState([]);
   const [productOptions, setProductOptions] = useState(null);
-  const [supplierOptions, setSupplierOptions] = useState(null);
-  const [buyerOptions, setBuyerOptions] = useState(null);
   const [productPrice, setProductPrice] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
   const [quantity, setQuantity] = useState(0);
 
   const [selected, setSelected] = React.useState(false);
 
-  const { v4: uuidv4 } = require("uuid");
 
-  //const [uuid, setUuid] = useState(uuidv4().toString());
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
 
   const date = new Date();
-
   let day = date.getDate();
   let month = date.getMonth() + 1;
   let year = date.getFullYear();
   let hour = date.getHours();
   let minute = date.getMinutes();
   let second = date.getMinutes();
-
-  // This arrangement can be altered based on how we want the date's format to appear.
   let currentDate = `${day}${month}${year}${hour}${minute}${second}`;
 
   const uuid = currentDate;
 
+  const [invoiceData, setInvoiceData] = useState({
+    buyer: "",
+    buyer_location: "",
+    status: "pending",
+    ref: uuid,
+    total_price: "",
+    type: "",
+    products: [],
+  });
+
+  const [ordertotalPrice, setOrderTotalPrice] = useState(0.0);
+  const [theBuyer, setTheBuyer] = useState("");
+  const [theBuyerLocation, setTheBuyerLocation] = useState("");
+  const [theReceipt, setTheReceipt] = useState("");
+
+  const [firstProductId, setFirstProductId] = useState("");
+  const [firstProductPrice, setFirstProductPrice] = useState(null);
+  const [firstProductTotalPrice, setFirstProductTotalPrice] = useState(null);
+
+  const [orderData, setOrderData] = useState({
+    buyer: "",
+    buyer_location: "",
+    status: "pending",
+    receipt: uuid,
+    total_price: "",
+    type: "",
+    products: [],
+  });
+
+
+  const columns = [
+    { name: "id", align: "left" },
+    { name: "product", align: "left" },
+    { name: "total price", align: "left" },
+    { name: "buyer", align: "center" },
+    { name: "buyer_location", align: "center" },
+    { name: "status", align: "center" },
+    { name: "Approve As Receipt", align: "center" },
+    { name: "View & Print", align: "center" },
+    { name: "delete", align: "center" },
+  ];
+  const rows = [];
+
+  const [idProductRow, setIdProductRow] = useState(0);
+  const [productInputRow, setProductInputRow] = useState([]);
+
+  const [otherProducts, setOtherProducts] = useState([]);
+  const [otherProductsQuantity, setOtherProductsQuantity] = useState([]);
 
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
 
@@ -109,11 +136,6 @@ function Invoices() {
     content: () => componentRef.current,
   });
 
-  const ComponentToPrint = React.forwardRef((props, ref) => {
-    return <div ref={ref}>My cool content here!</div>;
-  });
-
-  const navigate = useNavigate();
 
   const style = {
     position: "absolute",
@@ -136,173 +158,62 @@ function Invoices() {
     setScreenLoading(true);
 
     try {
-      await getInvoices()
-        .then((res) => {
-          if (res.data?.status === "true") {
-            setOrderList(res.data.result);
-          } else {
-            setOrderList([]);
-          }
-        })
-        .catch((err) => {});
 
-      setScreenLoading(false);
+      
+      const res = await getOrders('invoice');
+
+      
+      if (res.data?.status === true) {
+        setOrderList(res.data.orders);
+      } else {
+        setOrderList([]);
+      }
+      
     } catch (error) {
+      toast.error("Invoice Could Not Be Retrieved");
+
     }
   };
 
-  //START GET PRODUCTS
   const handleGetProductList = async () => {
-    const user = JSON.parse(localStorage.getItem("user"));
 
     setProductList([]);
     try {
-      await getProducts()
-        .then((res) => {
-          if (res.data.length > 0) {
-            res.data.map((item) => {
-              product_options.push({
-                value: item.name,
-                label: item.name,
-                price: item.price,
-                id: item.id,
-              });
-            });
-
-            setProductOptions(product_options);
-          } else {
-            setProductList([]);
-          }
-        })
-        .catch((err) => {
-
+      const res = await getProducts()
+      if (res.data?.status == true) {
+        res.data?.products.map((item) => {
+          product_options.push({
+            value: item.name,
+            label: item.name,
+            price: item.price,
+            id: item.id,
+          });
         });
 
-      setScreenLoading(false);
+        setProductOptions(product_options);
+      }
+
+      else {
+        setProductList([]);
+      }
     } catch (error) {
+      
     }
   };
-  //END GET PRODUCTS
-
-  const handleGetSupplierList = async () => {
-    setSupplierList([]);
-
-    try {
-      await getSuppliers()
-        .then((res) => {
-          if (res.data?.status === "true") {
-            res.data.result.map((item) => {
-              supplier_options.push({
-                value: item.companyName,
-                label: item.companyName,
-                id: item.id,
-              });
-            });
-
-            setSupplierOptions(supplier_options);
-          } else {
-            setSupplierList([]);
-          }
-        })
-        .catch((err) => {});
-
-      setScreenLoading(false);
-    } catch (error) {
-    }
-  };
-
-  
 
   const handleEdit = async (id) => {
-    await editInvoice(id, { type: "receipt" })
-      .then((res) => {
-        if (res.data?.status === "true") {
-          toast.success("Invoice added as a Receipt Successfully"), { autoClose: 40 };
-          handleGetOrderList();
-        } else {
-          toast.error("Invoice Could Not Be Updated");
-        }
-      })
-      .catch((err) => {
-      });
-  };
 
-  //START ADDING NEW PRODUCT
+    const res = await editOrder(id, { type: "receipt" })
 
-  const status_options = [
-    {
-      value: "pending",
-      label: "Pending",
-      id: "1",
-    },
-    {
-      value: "approved",
-      label: "Approved",
-      id: "3",
-    },
-    {
-      value: "processing",
-      label: "Processing",
-      id: "4",
-    },
-    {
-      value: "complete",
-      label: "Complete",
-      id: "5",
-    },
-  ];
-  const product_options = [];
-  const supplier_options = [];
-  const buyer_options = [];
-
-  //HANDLING ADD ORDER
-
-  const [orderData, setOrderData] = useState({
-    buyer: "",
-    buyer_location: "",
-    status: "pending",
-    receipt: uuid,
-    total_price: "",
-    type: "",
-    products: [],
-  });
-
-  const [invoiceData, setInvoiceData] = useState({
-    buyer: "",
-    buyer_location: "",
-    status: "pending",
-    receipt: uuid,
-    total_price: "",
-    type: "",
-    products: [],
-  });
-
-  const [ordertotalPrice, setOrderTotalPrice] = useState(0.0);
-  const [theBuyer, setTheBuyer] = useState("");
-  const [theBuyerLocation, setTheBuyerLocation] = useState("");
-  const [theReceipt, setTheReceipt] = useState("");
-
-  // HANDLING PRODUCT ADDITION AND REMOVAL
-
-  const [products, setProducts] = useState([]);
-  const [firstProductId, setFirstProductId] = useState("");
-  const [firstProductPrice, setFirstProductPrice] = useState(null);
-  const [firstProductTotalPrice, setFirstProductTotalPrice] = useState(null);
-
-  const handleChangeProduct = async (selectedOption) => {
-    setFirstProductId(selectedOption.id);
-    setFirstProductPrice(selectedOption.price);
-
-    if (firstProductId === "") {
-      setQuantity(quantity + 1);
-      setFirstProductTotalPrice(selectedOption.price);
-      setOrderTotalPrice(selectedOption.price);
-    } else {
-      setFirstProductTotalPrice(quantity * selectedOption.price);
-      setOrderTotalPrice(quantity * parseFloat(selectedOption.price));
+    if(res.status == 200){
+      toast.success("Invoice added as a Receipt Successfully"), { autoClose: 40 };
+      handleGetOrderList();
+    }
+    else {
+      toast.error("Invoice Could Not Be Updated");
     }
   };
-
+  
   const handleChange = (e) => {
     setOrderData({ ...orderData, [e.target.name]: e.target.value });
   };
@@ -316,38 +227,111 @@ function Invoices() {
     setTotalPrice(productPrice * e.target.value);
   };
 
-  const handleChangeStatus = async (selectedOption) => {
-    setOrderData({ ...orderData, ["status"]: selectedOption.value });
-  };
 
-  //END ADDING NEW PRODUCT
-
-  //DELETE SUPPLIER
   const handleDeleteInvoice = async (id) => {
-    await deleteInvoice(id)
+    await deleteOrder(id)
       .then((res) => {
-        if (res.data?.status === "true") {
+
+        console.log(res)
+        if (res.status == 204) {
+          toast.success("Successfully Deleted")
           handleGetOrderList();
         } else {
+          toast.error("Could Not Be Deleted")
+
         }
       })
       .catch((err) => {}
       );
   };
 
-  const columns = [
-    { name: "id", align: "left" },
-    { name: "product", align: "left" },
-    { name: "total price", align: "left" },
-    { name: "buyer", align: "center" },
-    { name: "buyer_location", align: "center" },
-    { name: "status", align: "center" },
-    //{ name: "print receipt", align: "center" },
-    { name: "Approve As Receipt", align: "center" },
-    { name: "View & Print", align: "center" },
-    { name: "delete", align: "center" },
-  ];
-  const rows = [];
+  const handleSubmit = async (e) => {
+
+    const user = JSON.parse(localStorage.getItem("user"));
+    let resTopics = [
+      {
+        id: firstProductId,
+        amount: parseInt(quantity),
+      },
+    ];
+    for (let topic of otherProducts) {
+      resTopics.push({
+        id: topic.id,
+        amount: topic.amount,
+      });
+    }
+
+    const firstProduct = {
+      id: firstProductId,
+      amount: quantity,
+    };
+
+    setOrderData({
+      ...orderData,
+      ["products"]: resTopics,
+      ["total_price"]: ordertotalPrice,
+      ["type"]: "invoice",
+      ["status"]: "pending",
+      ["userid"]: user.id,
+    });
+
+    setInvoiceData({
+      ...orderData,
+      ["products"]: resTopics,
+      ["total_price"]: ordertotalPrice,
+      ["type"]: "invoice",
+      ["status"]: "pending",
+      ["userid"]: user.id,
+    });
+
+    handleOpen();
+  };
+
+  const handleComfirm = async () => {
+    const isValid = await AddOrderSchema.isValid(orderData);
+    if (!isValid) {
+      toast.error("Please enter all the required fields!!");
+    } else {
+      toast.success("Adding Invoice!!", { autoClose: 80 });
+      await addOrder(orderData)
+        .then((res) => {
+          if (res.data?.status == true) {
+            toast.success(" Successfully Added", { autoClose: 40 });
+            setFirstProductId("");
+            setIdProductRow(0);
+            setProductInputRow([]);
+            setOrderData({
+              buyer: "",
+              buyer_location: "",
+              status: "pending",
+              ref: uuid,
+              total_price: "",
+              type: "invoice",
+              products: [],
+            });
+
+            setQuantity(0);
+            setShowAddForm(false);
+            setShowOrderTable(true);
+            setValue("");
+            setOpen(false);
+            handleGetOrderList();
+          } else {
+            toast.error(res.data.message);
+            setOpen(false);
+          }
+        })
+        .catch((err) => {
+          setOpen(false);
+        });
+    }
+  };
+
+  useEffect(() => {
+    handleGetOrderList();
+    handleGetProductList();
+  }, []);
+
 
   orderList.map(function (item, i) {
     rows.push({
@@ -434,7 +418,7 @@ function Invoices() {
             setOrderTotalPrice(item.total_price);
             setTheBuyer(item.buyer);
             setTheBuyerLocation(item.buyer_location);
-            setTheReceipt(item.receipt);
+            setTheReceipt(item.ref);
 
             //setIdProductRow(0 + 1);
           }}
@@ -454,11 +438,6 @@ function Invoices() {
     });
   });
 
-  const [idProductRow, setIdProductRow] = useState(0);
-  const [productInputRow, setProductInputRow] = useState([]);
-
-  const [otherProducts, setOtherProducts] = useState([]);
-  const [otherProductsQuantity, setOtherProductsQuantity] = useState([]);
 
   const renderColumns = productInputRow.map(({ row, amount }, key) => {
     const handleChangeOtherProduct = async (selectedOption) => {
@@ -520,8 +499,7 @@ function Invoices() {
       }
     };
 
-    // Other Products Input Entries
-
+    // OTHER PRODUCT INPUT ROWS
     return (
       <ArgonBox key={row} mb={2} mx={5} display="flex">
         <div style={{ flex: 5, paddingRight: 10 }}>
@@ -724,151 +702,12 @@ function Invoices() {
       </ArgonBox>
     );
   });
-
-  const handleSubmit = async (e) => {
-    //e.preventDefault();
-
-    const user = JSON.parse(localStorage.getItem("user"));
-
-    let resTopics = [
-      {
-        id: firstProductId,
-        amount: parseInt(quantity),
-      },
-    ];
-    for (let topic of otherProducts) {
-      resTopics.push({
-        id: topic.id,
-        amount: topic.amount,
-      });
-    }
-
-    const firstProduct = {
-      id: firstProductId,
-      amount: quantity,
-    };
-
-    setOrderData({
-      ...orderData,
-      ["products"]: resTopics,
-      ["total_price"]: ordertotalPrice,
-      ["type"]: "invoice",
-      ["status"]: "pending",
-      ["userid"]: user.id,
-    });
-
-    setInvoiceData({
-      ...orderData,
-      ["products"]: resTopics,
-      ["total_price"]: ordertotalPrice,
-      ["type"]: "invoice",
-      ["status"]: "pending",
-      ["userid"]: user.id,
-    });
-
-    handleOpen();
-  };
-
-  const handleComfirm = async () => {
-    const isValid = await AddOrderSchema.isValid(orderData);
-
-
-    if (!isValid) {
-      toast.error("Please enter all the required fields!!");
-    } else {
-      toast.success("Adding Invoice!!", { autoClose: 80 });
-      await addInvoice(orderData)
-        .then((res) => {
-          if (res.data?.status === "true") {
-            toast.success(" Successfully Added", { autoClose: 40 });
-
-            setFirstProductId("");
-            setIdProductRow(0);
-            setProductInputRow([]);
-            setOrderData({
-              buyer: "",
-              buyer_location: "",
-              status: "pending",
-              receipt: uuid,
-              total_price: "",
-              type: "invoice",
-              products: [],
-            });
-
-            setQuantity(0);
-            setShowAddForm(false);
-            setShowOrderTable(true);
-            setValue("");
-            setOpen(false);
-            handleGetOrderList();
-          } else {
-            toast.error(res.data.message);
-            setOpen(false);
-          }
-        })
-        .catch((err) => {
-          setOpen(false);
-        });
-    }
-  };
-
-  const handleComfirmInvoice = async () => {
-    const isValid = await AddOrderSchema.isValid(orderData);
-
-    if (!isValid) {
-      toast.error("Please enter all the required fields!!");
-    } else {
-      toast.success("Adding Invoice!!");
-      await addInvoice(invoiceData)
-        .then((res) => {
-          if (res.data?.status === "true") {
-            toast.success("Order Added Successfully",{ autoClose: 40 });
-            setOrderData({
-              buyer: "",
-              buyer_location: "",
-              status: "pending",
-              receipt: uuid,
-              total_price: "",
-              type: "invoice",
-              products: [],
-            });
-            setFirstProductId("");
-            setProductInputRow([]);
-            setOrderTotalPrice(0);
-            setQuantity(0);
-            setShowAddForm(false);
-            setShowOrderTable(true);
-            setOtherProducts([]);
-            setOpen(false);
-            handleGetOrderList();
-            navigate("/invoices");
-          } else {
-            toast.error("Order Could Not Be Added");
-            setOpen(false);
-          }
-        })
-        .catch((err) => {
-          setOpen(false);
-        });
-    }
-  };
-
-  useEffect(() => {
-    handleGetOrderList();
-    handleGetProductList();
   
-  }, []);
-
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
 
   return (
     <DashboardLayout>
       {user == null && <Navigate to="/authentication/sign-in" replace={true} />}
-
       <ToastContainer />
-
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -908,7 +747,7 @@ function Invoices() {
                       buyer: "",
                       buyer_location: "",
                       status: "",
-                      receipt: uuid,
+                      ref: uuid,
                       total_price: "",
                       type: "",
                       products: [],
@@ -1120,7 +959,7 @@ function Invoices() {
                   <ArgonBox mb={2} mx={5}>
                     <ArgonInput
                       type="name"
-                      name="receipt"
+                      name="ref"
                       placeholder={`Receipt ID : ${uuid}`}
                       readOnly={true}
                       size="large"
