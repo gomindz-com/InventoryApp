@@ -1,24 +1,23 @@
 import axiosConfig from "./axios-config";
 
-export const getCategories = async (customerId) => {
+export const getCategories = async () => {
 
   const data = await axiosConfig
-    .get(`/store/categories/`)
+    .get(`/store/categories`)
     .then((response) => {
       return response;
     })
     .catch((err) => {
-      return(err);
+      return err.response;
     });
 
   return data;
 };
 
-export const addCategory = async (productData) => {
+export const addCategory = async (categoryData) => {
   const data = await axiosConfig
-    .post(`/store/categories/`, productData)
+    .post(`/store/categories`, categoryData)
     .then((response) => {
-      
       return response;
     })
     .catch((err) => {
@@ -32,13 +31,11 @@ export const addCategory = async (productData) => {
 
 export const editCategoriee = async (categorieId, categorieData) => {
   const data = await axiosConfig
-    .put(`/store/categories/${categorieId}/`, categorieData)
+    .put(`/store/categories/${categorieId}`, categorieData)
     .then((response) => {
-     
       return response;
     })
     .catch((err) => {
-      
       return err.response;
     });
 
@@ -49,23 +46,14 @@ export const editCategoriee = async (categorieId, categorieData) => {
 
 export const deleteCategory= async (id) => {
   const data = await axiosConfig
-    .delete(`/store/categories/${id}/`)
+    .delete(`/store/categories/${id}`)
     .then((response) => {
-      
-      
       return response;
     })
     .catch((err) => {
-            return err;
+      return err.response;
     });
 
   return data;
 };
 
-const categoryService = {
-  getCategories,
-  addCategory,
-  deleteCategory
-};
-
-export default categoryService;

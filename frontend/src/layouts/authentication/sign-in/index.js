@@ -19,14 +19,10 @@ import { UserSchema } from "../../../formValidation/addForm";
 import { loginUser } from "apiservices/authService";
 import { ToastContainer, toast } from "react-toastify";
 import { Navigate } from "react-router-dom";
-import { getUserDetails } from "apiservices/userService";
 
 function Illustration() {
-
-
   const [rememberMe, setRememberMe] = useState(false);
-  const handleSetRememberMe = () => {
-  };
+  const handleSetRememberMe = () => {};
   const [user, setUser] = useState(null);
   const [userData, setUserData] = useState({
     email: "",
@@ -41,56 +37,41 @@ function Illustration() {
     setUserData({ ...userData, [e.target.name]: e.target.value });
   };
 
-  
   const handleValidateSubmit = async (e) => {
-    UserSchema
-    .validate(userData, { abortEarly: false })
-    .then(async() => {
-      handleSubmit()
-    })
-    .catch((err) => {
-      toast.error(err.errors[0]);
-    });
-
+    UserSchema.validate(userData, { abortEarly: false })
+      .then(async () => {
+        handleSubmit();
+      })
+      .catch((err) => {
+        toast.error(err.errors[0]);
+      });
   };
 
-
-  const handleSubmit = async()=>{
-
+  const handleSubmit = async () => {
     await loginUser(userData)
-        .then(async (res) => {
-          if (res.status == 200) {
-            localStorage.setItem("token", res.data?.token);
-            try {
-              await getUserDetails(userData.email)
-                .then((res) => {
-                  if (res?.status == 200) {
-                    localStorage.setItem("user", JSON.stringify(res.data.user));
-                    setUser(res.data.user);
-                  }
-                })
-                .catch((err) => console.log("Error in Getting User Detail", err));
-            } catch (error) {
-              console.log(error.message)
-            }
-
-          } else {
-            toast.error("Incorrect Credentials");
-          }
-        })
-        .catch((err) => {
-          console.log("Response is : ", err)
-        });
-  }
-
- 
+      .then(async (res) => {
+        console.log("object");
+        console.log(res.data);
+        if (res.status == 200) {
+          localStorage.setItem("token", res.data?.token);
+          localStorage.setItem("user", JSON.stringify(res.data.user));
+          setUser(res.data.user);
+        } else {
+          toast.error("Incorrect Credentials");
+        }
+      })
+      .catch((err) => {
+        console.log("Response is : ", err);
+      });
+  };
 
   return (
     <IllustrationLayout
       title="Sign In"
       description="Enter your email and password to sign in"
       illustration={{
-        image: "https://us.123rf.com/450wm/kostsov/kostsov1906/kostsov190600026/126080344-modern-showcase-with-empty-space-on-pedestal-on-blue-background-3d-rendering-.jpg?ver=6",
+        image:
+          "https://us.123rf.com/450wm/kostsov/kostsov1906/kostsov190600026/126080344-modern-showcase-with-empty-space-on-pedestal-on-blue-background-3d-rendering-.jpg?ver=6",
         title: '"Our Inventory App Is The One"',
         description: "The more difficult management looks, the more easy we make it for you.",
       }}

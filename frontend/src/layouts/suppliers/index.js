@@ -233,7 +233,6 @@ function Suppliers() {
   
 
   useEffect(() => {
-    //handleGetSupplierList();
   }, []);
 
   

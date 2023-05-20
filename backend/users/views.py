@@ -6,8 +6,6 @@ from .serializers import RegisterSerializer, LoginSerializer, CustomUserSerializ
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.request import Request
 from django.contrib.auth import authenticate
-from django.shortcuts import get_object_or_404
-from django.db import IntegrityError
 from .models import CustomUser
 
 
@@ -47,6 +45,7 @@ class LoginUser(APIView):
                 "message": "login Successful",
                 "user": serializer.data,
                 "token": user.auth_token.key
+                
             }
             return Response(data=response, status=status.HTTP_200_OK)
 
@@ -76,6 +75,7 @@ class UserRetrieveView(generics.RetrieveAPIView):
                     "status": True,
                     "message": "",
                     "user" : serializer.data
+                
 
                 }
         return Response(data=response)
@@ -109,8 +109,7 @@ class UserUpdateView(generics.UpdateAPIView):
         response = {
                     "status": True,
                     "message": "",
-                    "data" : serializer.data
-
+                    "user" : serializer.data
                 }
         return Response(data=response)
 

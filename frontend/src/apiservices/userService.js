@@ -1,7 +1,7 @@
 import axiosConfig from "./axios-config";
 
 
-export const getUserDetails = async (email) => {
+export const getUserDetails = async () => {
   
   const data = await axiosConfig
     .get(`/customer/details`)

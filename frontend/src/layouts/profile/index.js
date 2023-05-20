@@ -1,18 +1,3 @@
-/**
-=========================================================
-* Argon Dashboard 2 MUI - v3.0.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-material-ui
-* Copyright 2022 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
 import { useState } from "react";
 
 // @mui material components
@@ -30,100 +15,72 @@ import ArgonBox from "components/ArgonBox";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import Footer from "examples/Footer";
 import ProfileInfoCard from "examples/Cards/InfoCards/ProfileInfoCard";
-// Overview page components
+
 import Header from "layouts/profile/components/Header";
 import ArgonInput from "components/ArgonInput";
-import { Card, Divider, Icon, Tooltip } from "@mui/material";
 import ArgonTypography from "components/ArgonTypography";
 import ArgonButton from "components/ArgonButton";
 import { ToastContainer, toast } from "react-toastify";
 import { getUserDetails } from "apiservices/userService";
+import { Card, Icon, Tooltip } from "@mui/material";
 
-
-const bgImage =
-  "https://raw.githubusercontent.com/creativetimofficial/public-assets/master/argon-dashboard-pro/assets/img/profile-layout-header.jpg";
 
 function Overview() {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
   const [editFormActive, setEditFormActive] = useState(false);
 
-
   const [userData, setUserData] = useState({
-    first_name: "",
-    last_name: "",
-    contact: "",
-    city: ""
+    first_name: user.first_name,
+    last_name: user.last_name,
+    contact: user.contact,
+    city: user.city,
   });
 
-
   const handleChange = (e) => {
-
-      setUserData({ ...userData, [e.target.name]: e.target.value });
-    
+    setUserData({ ...userData, [e.target.name]: e.target.value });
   };
 
-
   const updateCustomer = () => {
-
     const uploadData = new FormData();
     uploadData.append("first_name", userData.first_name);
     uploadData.append("last_name", userData.last_name);
-    uploadData.append("contact",  userData.contact);
-    uploadData.append("city",  userData.city);
-    
-
+    uploadData.append("contact", userData.contact);
+    uploadData.append("city", userData.city);
 
     let token = localStorage.getItem("token");
 
-
-    fetch(`http://localhost:8000/api/user/userdetails/${user.email}/`, {
-      method: 'PATCH',
+    fetch(`http://localhost:8000/api/customer/update`, {
+      method: "PATCH",
       headers: new Headers({
-        'Authorization': token ? `Token ${token}` : "",
-      }), 
+        Authorization: token ? `Token ${token}` : "",
+      }),
       body: uploadData,
     })
-    .then(async res => {
-
-  
-
-
-      if(res.status == 200 ){
-        
-
-        
-     await getUserDetails(user.email).then((res) => {
-   
-           
-              if (res.status == 200) {
-                
-                
-                localStorage.setItem("user", JSON.stringify(res.data));
-                setUser(JSON.parse(localStorage.getItem("user")))
-              } else {
-              }
-            })
-            
+      .then(async (res) => {
+        if (res.status == 200) {
+          await getUserDetails().then((res) => {
+            if (res.status == 200) {
+              toast.success("Update Successful");
+              localStorage.setItem("user", JSON.stringify(res.data.user));
+              setUser(JSON.parse(localStorage.getItem("user")));
+            } else {
+              toast.error("Upload Error");
+            }
+          });
+        } else {
           
-      }
-      else{
-        toast.error("Upload Error");
-      }
-    })
-    .catch(error => {})
-
-  }
-
-
+        }
+      })
+      .catch((error) => {});
+  };
 
   return (
     <DashboardLayout
       sx={{
         backgroundImage: ({ functions: { rgba, linearGradient }, palette: { gradients } }) =>
-          `${linearGradient(
-            rgba(gradients.info.main, 0.6),
-            rgba(gradients.info.state, 0.6)
-          )}, url(${bgImage})`,
+          `${linearGradient(rgba(gradients.info.main, 0.6), rgba(gradients.info.state, 0.6))}, url(
+            https://raw.githubusercontent.com/creativetimofficial/public-assets/master/argon-dashboard-pro/assets/img/profile-layout-header.jpg
+          )`,
         backgroundPositionY: "50%",
       }}
     >
@@ -177,10 +134,6 @@ function Overview() {
                 Edit
               </ArgonTypography>
               <ArgonTypography variant="body2" color="secondary">
-
-              
-
-
                 <Tooltip title={"Cancel"} placement="top">
                   <Icon onClick={() => setEditFormActive(!editFormActive)}> cancel</Icon>
                 </Tooltip>
@@ -196,6 +149,7 @@ function Overview() {
                         name="first_name"
                         type="text"
                         placeholder="Frist Name"
+                        value={userData?.first_name}
                         size="large"
                         onChange={handleChange}
                       />
@@ -210,6 +164,7 @@ function Overview() {
                         name="last_name"
                         type="text"
                         placeholder="Last Name"
+                        value={userData?.last_name}
                         size="large"
                         onChange={handleChange}
                       />
@@ -224,6 +179,7 @@ function Overview() {
                         name="contact"
                         type="mobile"
                         placeholder="Mobile"
+                        value={userData?.contact}
                         size="large"
                         autoComplete="off"
                         onChange={handleChange}
@@ -237,6 +193,7 @@ function Overview() {
                     name="city"
                     type="textarea"
                     placeholder="Location"
+                    value={userData?.city}
                     size="large"
                     autoComplete="off"
                     onChange={handleChange}
@@ -244,7 +201,7 @@ function Overview() {
                 </ArgonBox>
 
                 <ArgonBox mt={4} mb={1}>
-                  <ArgonButton  onClick={updateCustomer} variant="gradient" color="dark" fullWidth>
+                  <ArgonButton onClick={updateCustomer} variant="gradient" color="dark" fullWidth>
                     Update
                   </ArgonButton>
                 </ArgonBox>

@@ -1,72 +1,47 @@
 from django.urls import path
-from .views import ( twilio, CategoryListCreateView, CategoryRetreiveUpdateDeleteView,
-    ProductListCreateView,
-    ProductRetreiveUpdateDeleteView,
-    order_list,
-    order_details,
-    receipt_list,
-    receipt_details,
-    invoice_list,
-    invoice_details,
-    cash_invoice,
-    productCounts,
-    buyerCounts,
-    deliveryCounts,
-    supplierCounts,
-    orderCounts,
-    total_orders,
-    total_stock,
-    total_price,
-    categoryProducts,
-    lowstockproduct
+from .views import ( 
+     twilio, 
+     CategoryListCreateView, CategoryRetreiveUpdateDeleteView,
+     ProductListCreateView, ProductRetreiveUpdateDeleteView,
+     OrderListCreateView, OrderRetreiveUpdateDeleteView,
+     StoreStatisticsView,
+
+
+     productCounts, buyerCounts, deliveryCounts, supplierCounts, orderCounts,
+     total_stock, total_price,
+     lowstockproduct,
+     categoryProducts,
+     cash_invoice,
+
 )
 
 
 app_name = 'store_api'
 
 urlpatterns = [
-    path('twilio/', twilio),
-    path('categories/', CategoryListCreateView.as_view(),name='listcreatecategories'),
-    path('categories/<int:pk>/', CategoryRetreiveUpdateDeleteView.as_view(), name='detailupdatedeletecategories'),
+     path('twilio', twilio),
+     path('categories', CategoryListCreateView.as_view(), name='listcreatecategories'),
+     path('categories/<int:pk>', CategoryRetreiveUpdateDeleteView.as_view(), name='detailupdatedeletecategories'),
+     path('products', ProductListCreateView.as_view(), name='listcreateproducts'),
+     path('products/<int:pk>', ProductRetreiveUpdateDeleteView.as_view(), name='detailupdatedeleteproducts'),
+     path('orders', OrderListCreateView.as_view(), name='listcreateorders'),
+     path('orders/<int:pk>', OrderRetreiveUpdateDeleteView.as_view(), name='detaildeleteorders'),
+     path('storestatistics', StoreStatisticsView.as_view(), name='liststorestatistics'),
 
 
 
-
-
-
-    path('products/', ProductListCreateView.as_view(), name='listcreateproducts'),
-    path('products/<int:pk>/', ProductRetreiveUpdateDeleteView.as_view(),
-         name='detailupdatedeleteproducts'),
-    path('categories/', CategoryListCreateView.as_view(),
-         name='listcreatecategories'),
-    path('categories/<int:pk>/', CategoryRetreiveUpdateDeleteView.as_view(),
-         name='detailupdatedeletecategories'),
-    path('orders/', order_list),
-    path('orders/<int:id>', order_details),
-
-    path('invoices/', invoice_list),
-    path('invoices/<int:id>', invoice_details),
     
-    path('cashpending/', cash_invoice),
-    path('cashpending/<int:id>', cash_invoice),
-
-    path('receipts/', receipt_list),
-    path('receipts/<int:id>', receipt_details),
-
+    
     path('ordercount/', orderCounts),
     path('buyercount/', buyerCounts),
     path('suppliercount/', supplierCounts),
     path('productcount/', productCounts),
     path('deliverycount/', deliveryCounts),
-
     path('totalstock/', total_stock),
     path('totalprice/', total_price),
-
     path('categoryproducts/<int:id>', categoryProducts),
-
     path('lowstockproduct/', lowstockproduct),
-
-
-
+    path('cashpending/', cash_invoice),
+    path('cashpending/<int:id>', cash_invoice),
 
 ]
