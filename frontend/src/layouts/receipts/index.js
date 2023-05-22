@@ -249,7 +249,7 @@ function Receipts() {
         <ArgonBox display="flex" alignItems="center" px={3} py={0.5}>
           <ArgonBox display="flex" flexDirection="column">
             <ArgonTypography variant="button" fontWeight="medium">
-              {item.id}
+              {item.receipt}
             </ArgonTypography>
           </ArgonBox>
         </ArgonBox>
@@ -398,24 +398,7 @@ function Receipts() {
         //
       }
 
-      //setProductInputRow(productInputRow.filter((a) => a.name !== name));
-      /* 
-      let newValues={...productInputRow}
-      const requiredFields = Object.keys(newValues).forEach((key) => {
-      let field=newValues[key];
-      if (field.required === true && field.value.length === 0) {
-              field.helperText=`Enter the ${field.label}`;
-              field.error = true;
-              newValues[key]= field;
-          }else{
-            newValues[key].error=false;
-            newValues[key].helperText='';
-          }
-      }) */
-      //setInpValues(newValues);
-
-      //setOtherProducts(productInputRow.filter((a) => a.name !== name));
-    };
+      };
 
     return (
       <ArgonBox key={row} mb={2} mx={5} display="flex">
