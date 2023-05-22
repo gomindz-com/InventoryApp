@@ -2,7 +2,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Group,
 from django.contrib.auth.models import AbstractUser, PermissionsMixin
 from django.db import models
 from django.utils.translation import gettext as _
-from .managers import CustomUserManager
+from .managers import CustomUserManager, MobileUserManager
 from django.utils import timezone
 
 
@@ -21,6 +21,7 @@ class CustomUser(AbstractUser, PermissionsMixin):
     city = models.CharField(max_length=120, default='')
     postcode = models.CharField(max_length=120, default='')
     is_staff = models.BooleanField(default=False)
+    is_mobile_user = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     groups = models.ManyToManyField(Group, blank=True, related_name='custom_users')
     
@@ -32,12 +33,6 @@ class CustomUser(AbstractUser, PermissionsMixin):
     def __str__(self):
         return self.email
  
-class mobileCustomer(models.Model):
-    first_name = models.CharField(max_length=120, default='')
-    last_name = models.CharField(max_length=120, default='')
-    email = models.EmailField(_('email address'), unique=True)
-    contact = models.CharField(max_length=120, default='')
-    #password = models.CharField(max_length =8, default = '')
-    
-    def __str__(self):
-        return self.name
+
+
+

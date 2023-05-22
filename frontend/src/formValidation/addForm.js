@@ -16,6 +16,12 @@ export const AddProductSchema = Yup.object().shape({
 });
 
 
+export const AddDamagesSchema = Yup.object().shape({
+  product: Yup.string().required("Name is required"),
+  damages: Yup.number().required("Required"),
+});
+
+
 export const AddSupplierSchema = Yup.object().shape({
     companyName: Yup.string().required("Name is required"),
     country: Yup.string().required("Required"),

@@ -11,8 +11,8 @@ from rest_framework import status
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework import generics
 
-from .models import Product, OrderProducts, Supplier, Buyer, Order, Delivery, Category
-from .serializers import ProductSerializer, CategorySerializer, OrderSerializer
+from .models import Product,Category, Damages, OrderProducts, Supplier, Buyer, Order, Delivery
+from .serializers import ProductSerializer, CategorySerializer, DamagesSerializer, OrderSerializer
 
 
 # FORM DATA FOR PRODUCT IMAGE
@@ -165,6 +165,55 @@ class ProductRetreiveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
 
                     }                
         return Response(data=response, status=status.HTTP_201_CREATED)
+
+
+
+
+
+
+
+
+
+
+# LIST ALL CUSTOMER PRODUCT CATEGORIES / CREATE A PRODUCT CATEGORY
+class DamagesListCreateView(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = DamagesSerializer
+    queryset = Damages.objects.all()
+
+    def get_queryset(self):
+        user = self.request.user
+        return Damages.objects.filter(owner=user)
+
+    def get(self, request, *args, **kwargs):
+        user = self.request.user
+        queryset = Damages.objects.filter(owner=user)
+        serializer = self.get_serializer(queryset, many=True)
+        response = {
+                    "status": True,
+                    "message": "",
+                    "damages" : serializer.data
+
+                }
+        return Response(response)
+        
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        
+        self.perform_create(serializer)
+        response = {
+            "status": True,
+            "message": "Damages Successfully Added",
+                    }                
+        return Response(data=response, status=status.HTTP_201_CREATED)
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
+
+
+
 
 
 
@@ -401,7 +450,6 @@ class StoreStatisticsView(generics.ListAPIView):
         return Response(response)
         
     
-
 
 
 
