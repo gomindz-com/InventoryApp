@@ -1,12 +1,84 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import CustomCard from "../../components/CustomCard";
 import { COLORS } from "../../constants/Theme";
 import { Feather } from "@expo/vector-icons";
 import CustomText from "../../components/CustomText";
 import PieChart from "react-native-expo-pie-chart";
+import { BottomSheet } from "react-native-btr";
+import CustomButton from "../../components/CustomButton";
+import { useNavigation } from "@react-navigation/native";
+import { useRoute } from "@react-navigation/native";
 
-const HomeScreen = () => {
+const ProductData = [
+  {
+    id: 1,
+    product: "orange",
+    productType: "Fruite",
+    currentStock: "44",
+    quantity: "55",
+    remark: "slay",
+    date: "22/44/2033",
+  },
+  {
+    id: 2,
+    product: "Mango",
+    productType: "Fruite",
+    currentStock: "55",
+    quantity: "45",
+    remark: "sley",
+    date: "22/64/2033",
+  },
+];
+
+const HomeScreen = ({ route }) => {
+  // const route = useRoute();
+  const { params } = route;
+  const inputValues = params?.inputValues || [];
+  console.log(inputValues);
+  const navigation = useNavigation();
+  const [bottomsheet, setButtomsheet] = useState(false);
+  const [productDataValue, setProductDataValue] = useState(inputValues);
+
+  const togoleButtomSheet = () => {
+    setButtomsheet(!bottomsheet);
+  };
+
+  const AddNewTansact = () => {
+    navigation.navigate("NewTransact");
+  };
+
+  const Card = ({ item }) => {
+    const { product, productType, currentStock, quantity, remark, date } = item;
+
+    return (
+      <View style={styles.card}>
+        <View style={styles.avatarContainer}>
+          <View style={styles.avatar}>
+            <CustomText style={styles.textIn}>IN</CustomText>
+          </View>
+        </View>
+        <View style={styles.contentContainer}>
+          <View>
+            <Text style={styles.subtitle}>Product: {product}</Text>
+            <Text style={styles.subtitle}>productType: {productType}</Text>
+            <Text style={styles.subtitle}>currentStock: {currentStock}</Text>
+          </View>
+          <View
+            style={{
+              marginLeft: 20,
+            }}
+          >
+            <Text style={styles.subtitle}>quantity: {quantity}</Text>
+
+            <Text style={styles.subtitle}>remark: {remark}</Text>
+            <Text style={styles.subtitle}>Date: {date}</Text>
+          </View>
+        </View>
+      </View>
+    );
+  };
+
   return (
     <View>
       <View style={styles.top}>
@@ -32,7 +104,7 @@ const HomeScreen = () => {
             </CustomText>
           </TouchableOpacity>
 
-          <TouchableOpacity>
+          <TouchableOpacity onPress={togoleButtomSheet}>
             <Feather name="more-vertical" size={30} color="#fff" />
           </TouchableOpacity>
         </View>
@@ -51,12 +123,12 @@ const HomeScreen = () => {
                 {
                   key: "Third Data",
                   count: 40,
-                  color: "red",
+                  color: "#70ff7e",
                 },
                 {
                   key: "Forth Data",
                   count: 35,
-                  color: "orange",
+                  color: "#70ff7e",
                 },
               ]}
               length={100}
@@ -89,8 +161,11 @@ const HomeScreen = () => {
       </View>
 
       {/* Transactions */}
+      {ProductData.map((item) => (
+        <Card key={item.id} item={item} />
+      ))}
 
-      <View>
+      {/* <View>
         <View style={{ marginHorizontal: 15 }}>
           <View style={styles.transctContainer}>
             <View style={{ left: 40 }}>
@@ -130,7 +205,43 @@ const HomeScreen = () => {
             </View>
           </View>
         </View>
-      </View>
+      </View> */}
+
+      <BottomSheet
+        visible={bottomsheet}
+        onBackButtonPress={togoleButtomSheet}
+        onBackdropPress={togoleButtomSheet}
+      >
+        <View style={styles.buttomSheetContainer}>
+          <View style={styles.addButtonSheet}>
+            <CustomText style={styles.texTtransact}>Add Transaction</CustomText>
+          </View>
+
+          <View style={{}}>
+            <CustomButton
+              mt={20}
+              width={400}
+              height={200}
+              title={"Product In"}
+              titleSize={30}
+              bg={"#fff"}
+              bc={"black"}
+              bw={1}
+              onPress={AddNewTansact}
+            />
+            <CustomButton
+              width={400}
+              height={200}
+              mt={20}
+              title={"Product Out"}
+              titleSize={30}
+              bg={"#fff"}
+              bc={"black"}
+              bw={1}
+            />
+          </View>
+        </View>
+      </BottomSheet>
     </View>
   );
 };
@@ -148,7 +259,7 @@ const styles = StyleSheet.create({
   buttonIn: {
     height: 30,
     width: 30,
-    backgroundColor: "yellow",
+    backgroundColor: "#70ff7e",
     borderRadius: 6,
   },
 
@@ -162,7 +273,7 @@ const styles = StyleSheet.create({
   buttonInHand: {
     height: 30,
     width: 30,
-    backgroundColor: "orange",
+    backgroundColor: "yellow",
     borderRadius: 6,
     marginTop: 10,
   },
@@ -213,5 +324,71 @@ const styles = StyleSheet.create({
     top: 7,
     alignItems: "center",
     justifyContent: "center",
+  },
+  buttomSheetContainer: {
+    backgroundColor: "#fff",
+    height: "40%",
+
+    alignItems: "center",
+    borderTopLeftRadius: 40,
+    borderTopRightRadius: 40,
+  },
+  addButtonSheet: {
+    backgroundColor: COLORS.green,
+    width: "100%",
+    height: 100,
+    borderTopLeftRadius: 40,
+    borderTopRightRadius: 40,
+    alignItems: "center",
+  },
+  texTtransact: {
+    marginTop: 20,
+    fontSize: 30,
+    color: "#fff",
+  },
+  card: {
+    flexDirection: "row",
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 10,
+    padding: 10,
+    marginBottom: 10,
+  },
+  avatarContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 10,
+  },
+  avatar: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 1,
+    borderColor: "#70ff7e",
+  },
+  contentContainer: {
+    flex: 1,
+    flexDirection: "row",
+  },
+  row: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  title: {
+    fontWeight: "bold",
+    fontSize: 16,
+    marginBottom: 5,
+    width: "100%",
+  },
+  subtitle: {
+    flex: 1,
+    marginRight: 5,
+  },
+  textIn: {
+    fontWeight: "bold",
+    fontSize: 30,
   },
 });

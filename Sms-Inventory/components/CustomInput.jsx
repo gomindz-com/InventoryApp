@@ -9,10 +9,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "@react-navigation/native";
 
-
-const CustomButton = () =>{
-  
-}
+const CustomButton = () => {};
 
 const CustomInput = ({
   label,
@@ -57,7 +54,6 @@ const CustomInput = ({
           marginLeft: ml || mx,
           marginRight: mr || mx,
           flex,
-          
         },
       ]}
     >
