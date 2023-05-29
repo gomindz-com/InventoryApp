@@ -1,3 +1,26 @@
 from django.db import models
+from django.utils.translation import gettext_lazy as _
+
 
 # Create your models here.
+class Product(models.Model):
+    name = models.CharField(max_length=120, unique=True)
+    description_color = models.CharField(max_length=120, default='')
+    buy_rate = models.DecimalField(max_digits=120, decimal_places=2)
+    owner = models.ForeignKey('users.CustomUser', related_name='%(class)s_products', on_delete=models.CASCADE,  default=1)
+    created_date = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+    
+class Transaction(models.Model):
+    TYPE_CHOICE = (
+        ('in', 'In'),
+        ('out', 'Out'),
+    )
+    current_stock = models.CharField(max_length=50, default='')
+    total_price = models.FloatField(default=0.00) 
+    products = models.ManyToManyField(Product, through='OrderProducts')
+    type=models.CharField(max_length=20, choices=TYPE_CHOICE, default='')
+    created_date = models.DateField(auto_now_add=True)
+    owner = models.ForeignKey('users.CustomUser', related_name='orders', on_delete=models.CASCADE, default='')
