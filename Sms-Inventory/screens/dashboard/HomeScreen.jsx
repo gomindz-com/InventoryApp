@@ -48,11 +48,17 @@ const HomeScreen = ({ route }) => {
     navigation.navigate("NewTransact");
   };
 
+  const SettingScreen = () => {
+    navigation.navigate("Setting");
+  };
+
+  
+
   const Card = ({ item }) => {
     const { product, productType, currentStock, quantity, remark, date } = item;
 
     return (
-      <View style={styles.card}>
+      <TouchableOpacity style={styles.card}>
         <View style={styles.avatarContainer}>
           <View style={styles.avatar}>
             <CustomText style={styles.textIn}>IN</CustomText>
@@ -75,7 +81,7 @@ const HomeScreen = ({ route }) => {
             <Text style={styles.subtitle}>Date: {date}</Text>
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   };
 
@@ -90,7 +96,7 @@ const HomeScreen = ({ route }) => {
             marginHorizontal: 10,
           }}
         >
-          <TouchableOpacity style={{ flexDirection: "row" }}>
+          <TouchableOpacity onPress={SettingScreen} style={{ flexDirection: "row" }}>
             <Feather name="settings" size={30} color="#fff" />
             <CustomText
               style={{

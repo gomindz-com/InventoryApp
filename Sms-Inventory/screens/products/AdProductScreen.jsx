@@ -12,14 +12,23 @@ import { AntDesign, Ionicons } from "@expo/vector-icons";
 import CustomSearch from "../../components/CustomSearch";
 import CustomCard from "../../components/CustomCard";
 import CustomInput from "../../components/CustomInput";
+import { useNavigation } from "@react-navigation/native";
 
 
 const AdProductScreen = () => {
+  const  navigation = useNavigation()
+
+  const backScreen  = () =>{
+    navigation.goBack()
+  }
+
+
+
   return (
     <View style={styles.conatinter}>
     <View style={styles.top}>
       <View style={styles.flexContainer}>
-        <TouchableOpacity style={styles.left}>
+        <TouchableOpacity onPress={backScreen} style={styles.left}>
           <AntDesign name="left" size={24} color="#fff" />
          
         </TouchableOpacity>
@@ -29,11 +38,11 @@ const AdProductScreen = () => {
 
         <View style={styles.right}>
 
-        <TouchableOpacity style={{ right: 15 }}>
+        <TouchableOpacity onPress={backScreen} style={{ right: 15 }}>
           <AntDesign name="export" size={24} color="white" />
           </TouchableOpacity>
          
-          <TouchableOpacity style={{ right: 2 }}>
+          <TouchableOpacity onPress={backScreen} style={{ right: 2 }}>
           <AntDesign name="check" size={24} color="white" />
           </TouchableOpacity>
           
