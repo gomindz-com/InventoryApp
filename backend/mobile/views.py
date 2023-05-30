@@ -1,3 +1,158 @@
 from django.shortcuts import render
 
-# Create your views here.
+from twilio.rest import Client
+from django.http import JsonResponse
+from django.http import HttpResponse
+from django.db import Error
+from django.db.models import Sum
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view
+from rest_framework import status
+from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework import generics
+
+from .models import Product,Category,TransactionProducts, Damages,Transaction, OrderProducts, Supplier, Buyer, Order, Delivery
+from .serializers import ProductSerializer, CategorySerializer, DamagesSerializer, OrderSerializer
+
+
+# FORM DATA FOR PRODUCT IMAGE
+parser_classes = [MultiPartParser, FormParser]
+
+# TWILIO
+account_sid = '12334'
+authToken = '14456'
+client = Client(account_sid, authToken)
+
+
+@csrf_exempt
+def twilio(request):
+    # message = request.POST["message"]
+    client.messages.create(
+        from_='whatsapp:+14155238886',
+        body="Hi",
+        # media_url='https://www.aims.ca/site/media/aims/2.pdf',
+        # media_url='https://91d7-197-255-199-14.eu.ngrok.io/static/images/gooo.pdf',
+        to='whatsapp:+2207677435',
+    )
+    print(request.POST)
+    return HttpResponse("Hello")
+
+
+# LIST ALL CUSTOMER PRODUCTS / CREATE A PRODUCT
+class ProductListCreateView(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = ProductSerializer
+    queryset = Product.objects.all()
+
+    def get_queryset(self):
+        user = self.request.user
+        return Product.objects.filter(owner=user)
+
+    def get(self, request, *args, **kwargs):
+        user = self.request.user
+        queryset = Product.objects.filter(owner=user)
+        serializer = self.get_serializer(queryset, many=True)
+        response = {
+                    "status": True,
+                    "message": "",
+                    "products" : serializer.data
+
+                }
+        return Response(response)
+        
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        response = {
+            "status": True,
+            "message": "Product Successfully Added",
+                    }                
+        return Response(data=response, status=status.HTTP_201_CREATED)
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
+
+# LIST DETAIL OF ONE PRODUCT / UPDATE / DELETE
+class ProductRetreiveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = ProductSerializer
+    queryset = Product.objects.all()
+
+    def get_queryset(self):
+        user = self.request.user
+        return Product.objects.filter(owner=user)
+
+        
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        response = {
+            "status": True,
+            "message": "",
+            "product": serializer.data
+
+                    }                
+        return Response(data=response, status=status.HTTP_201_CREATED)
+
+
+# LIST ALL CUSTOMER PRODUCT CATEGORIES / CREATE A PRODUCT CATEGORY
+class DamagesListCreateView(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = DamagesSerializer
+    queryset = Damages.objects.all()
+
+    def get_queryset(self):
+        user = self.request.user
+        return Damages.objects.filter(owner=user)
+
+    def get(self, request, *args, **kwargs):
+        user = self.request.user
+        queryset = Damages.objects.filter(owner=user)
+        serializer = self.get_serializer(queryset, many=True)
+        response = {
+                    "status": True,
+                    "message": "",
+                    "damages" : serializer.data
+
+                }
+        return Response(response)
+        
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        
+        self.perform_create(serializer)
+        response = {
+            "status": True,
+            "message": "Damages Successfully Added",
+                    }                
+        return Response(data=response, status=status.HTTP_201_CREATED)
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
+# LIST DETAIL OF ONE PRODUCT / UPDATE / DELETE
+class OrderRetreiveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = OrderSerializer
+    queryset = Order.objects.all()
+
+    def get_queryset(self):
+        user = self.request.user
+        return Order.objects.filter(owner=user)
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        response = {
+            "status": True,
+            "message": "",
+            "order": serializer.data
+
+                    }                
+        return Response(data=response, status=status.HTTP_201_CREATED)
