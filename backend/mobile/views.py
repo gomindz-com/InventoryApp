@@ -13,8 +13,8 @@ from rest_framework import status
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework import generics
 
-from .models import Product,Category,TransactionProducts, Damages,Transaction, OrderProducts, Supplier, Buyer, Order, Delivery
-from .serializers import ProductSerializer, CategorySerializer, DamagesSerializer, OrderSerializer
+from .models import Product,TransactionProducts, Damages,Transaction
+from .serializers import ProductSerializer, DamagesSerializer
 
 
 # FORM DATA FOR PRODUCT IMAGE
@@ -41,7 +41,7 @@ def twilio(request):
 
 
 # LIST ALL CUSTOMER PRODUCTS / CREATE A PRODUCT
-class ProductListCreateView(generics.ListCreateAPIView):
+class MobileProductListCreateView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = ProductSerializer
     queryset = Product.objects.all()
@@ -137,22 +137,22 @@ class DamagesListCreateView(generics.ListCreateAPIView):
         serializer.save(owner=self.request.user)
 
 # LIST DETAIL OF ONE PRODUCT / UPDATE / DELETE
-class OrderRetreiveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [IsAuthenticated]
-    serializer_class = OrderSerializer
-    queryset = Order.objects.all()
+# class OrderRetreiveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
+#     permission_classes = [IsAuthenticated]
+#     serializer_class = OrderSerializer
+#     queryset = Order.objects.all()
 
-    def get_queryset(self):
-        user = self.request.user
-        return Order.objects.filter(owner=user)
+#     def get_queryset(self):
+#         user = self.request.user
+#         return Order.objects.filter(owner=user)
 
-    def retrieve(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = self.get_serializer(instance)
-        response = {
-            "status": True,
-            "message": "",
-            "order": serializer.data
+#     def retrieve(self, request, *args, **kwargs):
+#         instance = self.get_object()
+#         serializer = self.get_serializer(instance)
+#         response = {
+#             "status": True,
+#             "message": "",
+#             "order": serializer.data
 
-                    }                
-        return Response(data=response, status=status.HTTP_201_CREATED)
+#                     }                
+#         return Response(data=response, status=status.HTTP_201_CREATED)
