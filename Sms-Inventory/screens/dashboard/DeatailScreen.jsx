@@ -34,71 +34,67 @@ const DeatailScreen = ({ route }) => {
         <CustomText style={styles.title}>{productData.product}</CustomText>
       </View>
 
-      <CustomCard style={styles.card}>
-        <ScrollView>
-          <View style={styles.singleButton}>
-            <CustomText style={styles.h1}>Product:</CustomText>
-            <CustomText style={styles.h4}>{productData.product}</CustomText>
-          </View>
+      <ScrollView>
+        <View style={styles.singleButton}>
+          <CustomText style={styles.h1}>Product:</CustomText>
+          <CustomText style={styles.h4}>{productData.product}</CustomText>
+        </View>
 
-          <View style={styles.singleButton}>
-            <CustomText style={styles.h1}>Type:</CustomText>
-            <CustomText style={styles.h4}>{productData.status}</CustomText>
-          </View>
+        <View style={styles.singleButton}>
+          <CustomText style={styles.h1}>Type:</CustomText>
+          <CustomText style={styles.h4}>{productData.status}</CustomText>
+        </View>
 
-          <View style={styles.singleButton}>
-            <CustomText style={styles.h1}>Product Type:</CustomText>
-            <CustomText style={styles.h4}>{productData.productType}</CustomText>
-          </View>
+        <View style={styles.singleButton}>
+          <CustomText style={styles.h1}>Product Type:</CustomText>
+          <CustomText style={styles.h4}>{productData.productType}</CustomText>
+        </View>
 
-          <View style={styles.singleButton}>
-            <CustomText style={styles.h1}>Quantity:</CustomText>
-            <CustomText style={styles.h4}>{productData.quantity}</CustomText>
-          </View>
+        <View style={styles.singleButton}>
+          <CustomText style={styles.h1}>Quantity:</CustomText>
+          <CustomText style={styles.h4}>{productData.quantity}</CustomText>
+        </View>
 
-          <View style={styles.singleButton}>
-            <CustomText style={styles.h1}>CurrentStock:</CustomText>
-            <CustomText style={styles.h4}>
-              {productData.currentStock}
-            </CustomText>
-          </View>
+        <View style={styles.singleButton}>
+          <CustomText style={styles.h1}>CurrentStock:</CustomText>
+          <CustomText style={styles.h4}>{productData.currentStock}</CustomText>
+        </View>
 
-          <View style={styles.singleButton}>
-            <CustomText style={styles.h1}>Remark:</CustomText>
-            <CustomText style={styles.h4}>{productData.remark}</CustomText>
-          </View>
+        <View style={styles.singleButton}>
+          <CustomText style={styles.h1}>Remark:</CustomText>
+          <CustomText style={styles.h4}>{productData.remark}</CustomText>
+        </View>
 
-          <View
-            style={{
-              flexDirection: "row",
-              marginTop: 20,
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginHorizontal: 40,
-            }}
-          >
-            <CustomButton
-              width={100}
-              height={45}
-              titleSize={20}
-              title={"Delete"}
-              br={10}
-              bg={"#fff"}
-              bc={"#2e9a90"}
-            />
+        <View
+          style={{
+            flexDirection: "row",
+            marginTop: 20,
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginHorizontal: 40,
+          }}
+        >
+          <CustomButton
+            width={100}
+            height={45}
+            titleSize={20}
+            title={"Delete"}
+            br={10}
+            bg={"#fff"}
+            bc={"#2e9a90"}
+          />
 
-            <CustomButton
-              br={10}
-              height={45}
-              titleSize={20}
-              width={100}
-              title={"Edit"}
-              bg={"#fff"}
-              bc={"#2e9a90"}
-            />
-          </View>
-        </ScrollView>
-      </CustomCard>
+          <CustomButton
+            br={10}
+            height={45}
+            titleSize={20}
+            width={100}
+            title={"Edit"}
+            bg={"#fff"}
+            bc={"#2e9a90"}
+          />
+        </View>
+      </ScrollView>
     </View>
   );
 };

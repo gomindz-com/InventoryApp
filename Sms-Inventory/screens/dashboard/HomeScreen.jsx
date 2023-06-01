@@ -4,6 +4,7 @@ import {
   View,
   TouchableOpacity,
   ScrollView,
+  FlatList,
 } from "react-native";
 import React, { useState } from "react";
 import CustomCard from "../../components/CustomCard";
@@ -122,6 +123,26 @@ const ProductData = [
   },
   {
     id: 10,
+    product: "Water",
+    productType: "Fruite",
+    currentStock: "55",
+    quantity: "45",
+    remark: "sley",
+    date: "22/64/2033",
+    status: "OUT",
+  },
+  {
+    id: 11,
+    product: "Water",
+    productType: "Fruite",
+    currentStock: "55",
+    quantity: "45",
+    remark: "sley",
+    date: "22/64/2033",
+    status: "OUT",
+  },
+  {
+    id: 12,
     product: "Water",
     productType: "Fruite",
     currentStock: "55",
@@ -270,7 +291,41 @@ const HomeScreen = ({ route }) => {
         <Card key={item.id} item={item} />
       ))} */}
 
-      <ScrollView>
+      <FlatList
+        data={ProductData}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            onPress={() => navigation.navigate("ProductDetail", { item })}
+          >
+            <View style={{ marginHorizontal: 15, marginTop: 10 }}>
+              <View style={styles.transctContainer}>
+                <View style={{ left: 40 }}>
+                  <CustomText style={{ fontWeight: "bold", left: 10 }}>
+                    {item.currentStock}
+                  </CustomText>
+                  <CustomText style={{ fontWeight: "bold" }}>
+                    {item.product}
+                  </CustomText>
+                </View>
+                <View>
+                  <CustomText>{item.date}</CustomText>
+                </View>
+              </View>
+              <View
+                style={[
+                  styles.taranctIn,
+                  item.status === "IN" ? { backgroundColor: "red" } : null,
+                ]}
+              >
+                <CustomText style={{ color: "#fff" }}>{item.status}</CustomText>
+              </View>
+            </View>
+          </TouchableOpacity>
+        )}
+      />
+
+      {/* <ScrollView>
         {ProductData.map((item, i) => (
           <TouchableOpacity
             onPress={() => navigation.navigate("ProductDetail", { item })}
@@ -302,7 +357,7 @@ const HomeScreen = ({ route }) => {
             </View>
           </TouchableOpacity>
         ))}
-      </ScrollView>
+      </ScrollView> */}
 
       <BottomSheet
         visible={bottomsheet}
