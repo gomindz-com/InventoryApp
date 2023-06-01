@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity, Alert } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, Picker } from "react-native";
 import React, { useState } from "react";
 import { COLORS } from "../../constants/Theme";
 import { AntDesign } from "@expo/vector-icons";
@@ -6,7 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 import CustomText from "../../components/CustomText";
 import CustomDatePicker from "../../components/CustomDatePicker";
 import CustomInput from "../../components/CustomInput";
-import InputComponent from "../../components/InputComponent";
+import DropdownSelect from "../../components/CustomDrop";
 
 // const { params } = route;
 // const inputValues = params?.inputValues || [];
@@ -99,6 +99,10 @@ const AddNewTransact = () => {
           mt={10}
           placeholder={"Remark"}
         />
+      </View>
+
+      <View style={{ top: -50 }}>
+        <DropdownSelect />
       </View>
     </View>
   );
