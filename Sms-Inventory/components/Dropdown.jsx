@@ -1,12 +1,18 @@
-import { StyleSheet, Text, TouchableOpacity, View, ScrollView } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  ScrollView,
+} from "react-native";
 import React, { useState } from "react";
 import { Feather } from "@expo/vector-icons";
 
-const Dropdown = ({ data = [], value = {id: null}, onSelect = () => {} }) => {
+const Dropdown = ({ data = [], value = { id: null }, onSelect = () => {} }) => {
   console.log("selected value", value);
   const [showOption, setShowOption] = useState(false);
 
-  console.log(data)
+  console.log(data);
 
   const onSelectedItem = (val) => {
     setShowOption(false);
@@ -29,14 +35,16 @@ const Dropdown = ({ data = [], value = {id: null}, onSelect = () => {} }) => {
         />
       </TouchableOpacity>
       {showOption && (
-        <View style={{
+        <View
+          style={{
             backgroundColor: "white",
             padding: 2,
             borderRadius: 1,
             borderColor: "black",
             borderWidth: 1,
-            marginTop: -1
-        }}>
+            marginTop: -1,
+          }}
+        >
           {data.map((val, i) => {
             return (
               <TouchableOpacity
@@ -44,11 +52,11 @@ const Dropdown = ({ data = [], value = {id: null}, onSelect = () => {} }) => {
                 onPress={() => {
                   onSelectedItem(val);
                 }}
-                style= {{ 
-                    ...styles.selectedItemStyle,
-                    backgroundColor: value && value.id === val.id ? "pink" : "white",
-
-            }}
+                style={{
+                  ...styles.selectedItemStyle,
+                  backgroundColor:
+                    value && value.id === val.id ? "pink" : "white",
+                }}
               >
                 <Text>{val.name}</Text>
               </TouchableOpacity>
@@ -75,7 +83,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 0
+    marginBottom: 0,
   },
 
   selectedItemStyle: {
@@ -83,7 +91,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     paddingHorizontal: 6,
     marginBottom: 0,
-  }
+  },
 });
 
 export default Dropdown;
