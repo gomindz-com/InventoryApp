@@ -14,7 +14,7 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework import generics
 
 from .models import Product,TransactionProducts, Damages,Transaction
-from .serializers import ProductSerializer, DamagesSerializer
+from .serializers import ProductSerializer, DamagesSerializer,TransactionSerializer
 
 
 # FORM DATA FOR PRODUCT IMAGE
@@ -98,6 +98,22 @@ class ProductRetreiveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
 
                     }                
         return Response(data=response, status=status.HTTP_201_CREATED)
+
+class TransactionListCreateAPIView(generics.ListCreateAPIView):
+    queryset = Transaction.objects.all()
+    serializer_class = TransactionSerializer
+
+    def perform_create(self, serializer):
+        transaction = serializer.save()
+        productstock = transaction.products
+
+        if transaction.type == 'in':
+            productstock.stock += transaction.quantity
+            productstock.save()
+        elif transaction.type == 'out':
+            productstock.stock -= transaction.quantity
+            productstock.save()
+
 
 
 # LIST ALL CUSTOMER PRODUCT CATEGORIES / CREATE A PRODUCT CATEGORY

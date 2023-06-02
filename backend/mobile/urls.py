@@ -2,7 +2,7 @@ from django.urls import path
 from .views import ( 
      twilio, 
      MobileProductListCreateView, ProductRetreiveUpdateDeleteView,
-     DamagesListCreateView,
+     DamagesListCreateView,TransactionListCreateAPIView
 
      # StoreStatisticsView,
      # OrderListCreateView, OrderRetreiveUpdateDeleteView,
@@ -23,10 +23,10 @@ urlpatterns = [
      path('mobileProducts/<int:pk>', ProductRetreiveUpdateDeleteView.as_view(), name='detailupdatedeletemobileproducts'),
      path('damaged', DamagesListCreateView.as_view(), name='listcreatemobiledamages'),
 
-
-
-     # path('orders', OrderListCreateView.as_view(), name='listcreateorders'),
+     path('transactions', TransactionListCreateAPIView.as_view(), name='listcreatetransaction'),
      # path('orders/<int:pk>', OrderRetreiveUpdateDeleteView.as_view(), name='detaildeleteorders'),
+
+
      # path('storestatistics', StoreStatisticsView.as_view(), name='liststorestatistics'),
      
 

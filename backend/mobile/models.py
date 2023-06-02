@@ -7,6 +7,7 @@ class Product(models.Model):
     name = models.CharField(max_length=120, unique=True)
     description_color = models.CharField(max_length=120, default='')
     buy_rate = models.DecimalField(max_digits=120, decimal_places=2)
+    stock= models.PositiveIntegerField(default=0)
     owner = models.ForeignKey('users.CustomUser', related_name='%(class)s_mobile_products', on_delete=models.CASCADE,  default=1)
     created_date = models.DateField(auto_now_add=True)
 
@@ -18,12 +19,13 @@ class Transaction(models.Model):
         ('in', 'In'),
         ('out', 'Out'),
     )
-    current_stock = models.CharField(max_length=50, default='')
-    total_price = models.FloatField(default=0.00) 
-    products = models.ManyToManyField(Product, through='TransactionProducts')
+    current_stock = models.PositiveIntegerField(default=0)
+    quantity = models.PositiveIntegerField(default=0) 
+    remark = models.CharField(max_length=120, default='')
+    products = models.ForeignKey("Product", on_delete=models.CASCADE)
     type=models.CharField(max_length=20, choices=TYPE_CHOICE, default='')
     created_date = models.DateField(auto_now_add=True)
-    owner = models.ForeignKey('users.CustomUser', related_name='transaction', on_delete=models.CASCADE, default='')
+    owner = models.ForeignKey('users.CustomUser', related_name='transaction', on_delete=models.CASCADE, default=1)
 
 class TransactionProducts(models.Model):
     transaction = models.ForeignKey(Transaction, on_delete=models.CASCADE)

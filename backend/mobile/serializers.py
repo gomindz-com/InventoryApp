@@ -11,16 +11,21 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ('id', 'name', 'description_color', 'buy_rate', 'owner')
+        fields = ('id', 'name','stock', 'description_color', 'buy_rate', 'owner')
 
 
-class TransactionSerializer(serializers.ModelSerializer):    
+class TransactionSerializer(serializers.ModelSerializer): 
+    products = serializers.SlugRelatedField(
+                read_only=False,
+                slug_field="name",
+                queryset=Product.objects.all()
+                )   
     owner = serializers.PrimaryKeyRelatedField(
         read_only=True,
     )
     class Meta:
         model = Transaction
-        fields = ('id', 'products', 'buyer','current_stock', 'type', 'total_price', 'owner')
+        fields = ('id', 'products','current_stock','remark', 'quantity', 'type', 'owner')
         depth = 1
 
 
