@@ -152,23 +152,19 @@ class DamagesListCreateView(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
-# LIST DETAIL OF ONE PRODUCT / UPDATE / DELETE
-# class OrderRetreiveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
-#     permission_classes = [IsAuthenticated]
-#     serializer_class = OrderSerializer
-#     queryset = Order.objects.all()
 
-#     def get_queryset(self):
-#         user = self.request.user
-#         return Order.objects.filter(owner=user)
 
-#     def retrieve(self, request, *args, **kwargs):
-#         instance = self.get_object()
-#         serializer = self.get_serializer(instance)
-#         response = {
-#             "status": True,
-#             "message": "",
-#             "order": serializer.data
-
-#                     }                
-#         return Response(data=response, status=status.HTTP_201_CREATED)
+#API to get products on low stock
+@api_view(['GET'])
+def lowstockproduct(request):
+    product = Product.objects.filter()
+    low_stock_products = []
+    for item in product.iterator():
+        if item.stock <= 5:  
+            low_stock_products.append({
+            "id": item.id,
+            "name": item.name,
+            # "description": item.description,
+            # "products": productList
+            })
+    return JsonResponse(status=200, data={'status': 'true', 'message': 'success', 'result': low_stock_products}) 
