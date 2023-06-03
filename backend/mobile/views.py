@@ -110,9 +110,12 @@ class TransactionListCreateAPIView(generics.ListCreateAPIView):
         if transaction.type == 'in':
             productstock.stock += transaction.quantity
             productstock.save()
+            transaction.current_stock = productstock.stock
         elif transaction.type == 'out':
             productstock.stock -= transaction.quantity
             productstock.save()
+            transaction.current_stock = productstock.stock
+
 
 
 
