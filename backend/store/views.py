@@ -200,13 +200,38 @@ class DamagesListCreateView(generics.ListCreateAPIView):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+        data = request.data
         
-        self.perform_create(serializer)
-        response = {
-            "status": True,
-            "message": "Damages Successfully Added",
+
+        try:
+            iproduct = Product.objects.get(name=data['product'])
+            if (iproduct.stock - int(data['damages']) < 0):
+                response = {
+                            "status": True,
+                            "message": "Damages is more than Of Stock Error",
+                        }                
+                return Response(data=response, status=status.HTTP_406_NOT_ACCEPTABLE)
+            else:
+                serializer = ProductSerializer(iproduct, data = {'stock': iproduct.stock - int(data['damages'])}, partial=True)
+
+                damages = Damages.objects.create(owner=request.user, product=iproduct, category=data["category"], damages=data["damages"])
+                damages.save()
+
+                if serializer.is_valid():
+                    serializer.save()
+                    response = {
+                    "status": True,
+                    "message": "Damages Successfully Added",
+                            }                
+                    return Response(data=response, status=status.HTTP_201_CREATED)
+
+                        
+        except Product.DoesNotExist:
+            response = {
+                    "status": True,
+                    "message": "Product Does Not Existr"
                     }                
-        return Response(data=response, status=status.HTTP_201_CREATED)
+            return Response(data=response, status=status.HTTP_404_NOT_FOUND)
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
@@ -279,10 +304,6 @@ class OrderListCreateView(generics.ListCreateAPIView):
         return Response(response)
 
 
-
-
-
-
         
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -335,8 +356,6 @@ class OrderListCreateView(generics.ListCreateAPIView):
 
 
 
-
-
 # LIST DETAIL OF ONE PRODUCT / UPDATE / DELETE
 class OrderRetreiveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]
@@ -354,7 +373,6 @@ class OrderRetreiveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
             "status": True,
             "message": "",
             "order": serializer.data
-
                     }                
         return Response(data=response, status=status.HTTP_201_CREATED)
 
@@ -393,6 +411,12 @@ class StoreStatisticsView(generics.ListAPIView):
                 stock_out = stock_out + productOrdersItem.quantity
 
         stock_in = stock_current + stock_out
+
+        number_of_damages = 0
+        damages = Damages.objects.filter(owner=user)
+        for item in damages.iterator():
+            number_of_damages = number_of_damages + item.damages
+
 
         category = Category.objects.filter(owner=user)
         categoryList = []
@@ -441,6 +465,7 @@ class StoreStatisticsView(generics.ListAPIView):
                         "cash_pending" : total_invoice,
                         "cash_inhand" : total_receipt,
                         "number_of_categories" : number_of_categories,
+                        "number_of_damages" : number_of_damages,
                         "stock_inhand" : stock_current,
                         "stock_out" : stock_out,
                         "stock_in" : stock_in,

@@ -63,7 +63,7 @@ import { useNavigate } from 'react-router-dom';
 
 
 
-function DashboardNavbar({ absolute, light, isMini, handleClick, data }) {
+function DashboardNavbar({ absolute, light, isMini, handleClick, handleKeyDown, data }) {
   const [navbarType, setNavbarType] = useState();
 
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
@@ -181,6 +181,7 @@ function DashboardNavbar({ absolute, light, isMini, handleClick, data }) {
               <ArgonInput
                 placeholder="Type here..."
                 onChange={handleClick}
+                onKeyDown={handleKeyDown}
                 startAdornment={
                   <Icon fontSize="small" style={{ marginRight: "6px" }}>
                     search
