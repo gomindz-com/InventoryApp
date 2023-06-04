@@ -52,6 +52,7 @@ function Receipts() {
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
   const [screenloading, setScreenLoading] = useState(true);
   const [orderList, setOrderList] = useState([]);
+  const [currentOrderList, setCurrentOrderList] = useState([]);
   const [productList, setProductList] = useState([]);
   const [buyerList, setBuyerList] = useState([]);
   const [productOptions, setProductOptions] = useState(null);
@@ -59,15 +60,6 @@ function Receipts() {
   const [totalPrice, setTotalPrice] = useState(0);
   const [quantity, setQuantity] = useState(0);
 
-  const date = new Date();
-  let day = date.getDate();
-  let month = date.getMonth() + 1;
-  let year = date.getFullYear();
-  let hour = date.getHours();
-  let minute = date.getMinutes();
-  let second = date.getMinutes();
-  let currentDate = `${day}${month}${year}${hour}${minute}${second}`;
-  const uuid = currentDate;
 
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
 
@@ -104,7 +96,7 @@ function Receipts() {
     buyer: "",
     buyer_location: "",
     status: "pending",
-    receipt: uuid,
+    receipt: '',
     total_price: "",
     type: "",
     products: [],
@@ -114,7 +106,7 @@ function Receipts() {
     buyer: "",
     buyer_location: "",
     status: "pending",
-    receipt: uuid,
+    receipt: '',
     total_price: "",
     type: "",
     products: [],
@@ -178,6 +170,8 @@ function Receipts() {
     
       if (res.data?.status === true) {
         setOrderList(res.data.orders);
+        setCurrentOrderList(res.data.orders);
+
       } else {
         setOrderList([]);
       }
@@ -327,6 +321,8 @@ function Receipts() {
           <ArgonBox component="i" color="red" fontSize="34px" className="ni ni-fat-remove" />
         </Button>
       ),
+      
+     
     });
   });
 
@@ -604,6 +600,18 @@ function Receipts() {
   });
 
   const handleSubmit = async (e) => {
+
+    const date = new Date();
+    let day = date.getDate();
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+    let hour = date.getHours();
+    let minute = date.getMinutes();
+    let second = date.getSeconds();
+    let currentDate = `${day}${month}${year}${hour}${minute}${second}`;
+
+    const uuid = currentDate;
+
     const user = JSON.parse(localStorage.getItem("user"));
 
     let resTopics = [
@@ -625,6 +633,7 @@ function Receipts() {
       ["total_price"]: ordertotalPrice,
       ["type"]: "receipt",
       ["status"]: "pending",
+      ["ref"]: uuid,
       ["userid"]: user.id,
     });
 
@@ -634,6 +643,7 @@ function Receipts() {
       ["total_price"]: ordertotalPrice,
       ["type"]: "receipt",
       ["status"]: "pending",
+      ["ref"]: uuid,
       ["userid"]: user.id,
     });
 
@@ -661,7 +671,7 @@ function Receipts() {
               buyer: "",
               buyer_location: "",
               status: "pending",
-              ref: uuid,
+              ref: '',
               total_price: "",
               type: "receipt",
               products: [],
@@ -720,7 +730,28 @@ function Receipts() {
         </Fade>
       </Modal>
 
-      <DashboardNavbar />
+      <DashboardNavbar
+      
+      handleClick ={(e) => {
+        
+        const filteredOrderList = [];
+        orderList.map((obj) => {
+
+          if (e.target.value === '') {
+            setOrderList(currentOrderList)
+          }
+
+          else if(
+            obj.buyer.toLowerCase() === e.target.value.toLowerCase() ||
+            obj.receipt.toLowerCase() === e.target.value.toLowerCase()) {
+            filteredOrderList.push(obj);
+            setOrderList(filteredOrderList);
+          }
+        });
+      
+      }
+    }
+    />
       <ArgonBox py={3}>
         {showOrderTable && (
           <ArgonBox mb={35}>
@@ -734,7 +765,7 @@ function Receipts() {
                       buyer: "",
                       buyer_location: "",
                       status: "",
-                      ref: uuid,
+                      ref: '',
                       total_price: "",
                       type: "",
                       products: [],
@@ -947,7 +978,7 @@ function Receipts() {
                     <ArgonInput
                       type="name"
                       name="ref"
-                      placeholder={`Receipt ID : ${uuid}`}
+                      placeholder={`Receipt ID : XxxxxxxxxxxxxX`}
                       readOnly={true}
                       size="large"
                       onChange={handleChange}

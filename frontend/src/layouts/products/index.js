@@ -36,6 +36,7 @@ function Products() {
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
   const [screenloading, setScreenLoading] = useState(true);
   const [productList, setProductList] = useState([]);
+  const [currentProductList, setCurrentProductList] = useState([]);
   const [categoryList, setCategoryList] = useState([]);
   const [categoryOptions, setCategoryOptions] = useState([]);
   const category_options = [];
@@ -191,6 +192,7 @@ function Products() {
       const res = await getProducts();
       if (res.data?.status) {
         setProductList(res.data.products);
+        setCurrentProductList(res.data.products)
       } else {
         setProductList({});
       }
@@ -336,7 +338,28 @@ function Products() {
     <DashboardLayout>
       <ToastContainer />
 
-      <DashboardNavbar />
+      <DashboardNavbar 
+        handleClick ={(e) => {
+          
+          const filteredProductList = [];
+          productList.map((obj) => {
+
+            if (e.target.value === '') {
+              setProductList(currentProductList)
+            }
+
+            else if(
+              obj.name.toLowerCase() === e.target.value.toLowerCase()  ||
+              obj.category.toLowerCase() === e.target.value.toLowerCase()
+            ) {
+              filteredProductList.push(obj);
+              setProductList(filteredProductList);
+            }
+          });
+        
+        }
+    }
+    />
       <ArgonBox py={3}>
         {!showAddProductForm ? (
           <ArgonBox mb={3}>

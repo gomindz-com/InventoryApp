@@ -39,6 +39,14 @@ class Product(models.Model):
         return self.name
 
 
+class Damages(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    category = models.CharField(max_length=220)
+    damages = models.PositiveIntegerField(default=0) 
+    created_date = models.DateField(auto_now_add=True)
+    owner = models.ForeignKey('users.CustomUser', related_name='damages', on_delete=models.CASCADE, default='')
+
+
 
 
 class Order(models.Model):
@@ -76,12 +84,6 @@ class OrderProducts(models.Model):
 
 
 
-class Damages(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    category = models.CharField(max_length=220)
-    damages = models.PositiveIntegerField(default=0) 
-    created_date = models.DateField(auto_now_add=True)
-    owner = models.ForeignKey('users.CustomUser', related_name='damages', on_delete=models.CASCADE, default='')
 
 
 

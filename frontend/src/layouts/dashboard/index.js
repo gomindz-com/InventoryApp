@@ -141,8 +141,8 @@ function Default() {
           </Grid>
           <Grid item xs={12} md={6} lg={2}>
             <DetailedStatisticsCard
-              title="Categories"
-              count={storeStatistics?.number_of_categories}
+              title="Damages"
+              count={storeStatistics?.number_of_damages}
               amount={""}
               icon={{ color: "error", component: <i className="ni ni-world" /> }}
               percentage={{ color: "success", count: "+3%", text: "since last week" }}
