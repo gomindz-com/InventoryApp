@@ -171,3 +171,51 @@ def lowstockproduct(request):
             # "products": productList
             })
     return JsonResponse(status=200, data={'status': 'true', 'message': 'success', 'result': low_stock_products}) 
+
+
+@api_view(['GET'])
+def total_stock_in(request):
+    total = Transaction.objects.filter(type="in").aggregate(TOTAL=Sum('quantity'))['TOTAL']
+    return JsonResponse(status=200, data={'status': 'true', 'message': 'success', 'result': total})
+
+@api_view(['GET'])
+def total_stock_out(request):
+    total = Transaction.objects.filter(type="out").aggregate(TOTAL=Sum('quantity'))['TOTAL']
+    return JsonResponse(status=200, data={'status': 'true', 'message': 'success', 'result': total})
+
+@api_view(['GET'])
+def total_stock_in_hand(request):
+    total_in = Transaction.objects.filter(type="in").aggregate(TOTAL=Sum('quantity'))['TOTAL']
+    total_out = Transaction.objects.filter(type="out").aggregate(TOTAL=Sum('quantity'))['TOTAL']
+    total_in_hand = total_in - total_out
+
+    return JsonResponse(status=200, data={'status': 'true', 'message': 'success', 'result': total_in_hand})
+
+# LIST ALL CUSTOMER ORDERS [INVOICE/RECEIPT] / CREATE A CUSTOMER ORDER
+class StoreStatisticsView(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = TransactionSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        return Transaction.objects.filter(owner=user)
+
+
+    def get(self, request, *args, **kwargs):
+        user = self.request.user
+        total_stock_in = Transaction.objects.filter(owner=user).filter(type='in').aggregate(TOTAL=Sum('quantity'))['TOTAL']
+        total_stock_out = Transaction.objects.filter(owner=user).filter(type='out').aggregate(TOTAL=Sum('quantity'))['TOTAL']
+
+        total_stock_in_hand = total_stock_in - total_stock_out
+
+        response = {
+                    "status": True,
+                    "message": "",
+                    "statistics" : {
+                        "stock_in" : total_stock_in,
+                        "stock_out" : total_stock_out,
+                        "stock_inhand" : total_stock_in_hand,
+                    }
+                }
+        return Response(response)
+        
