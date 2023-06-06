@@ -38,6 +38,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "./index.css";
 import { item } from "examples/Sidenav/styles/sidenavItem";
 import { editInvoice } from "apiservices/orderService";
+import { updateOrder } from "apiservices/orderService";
 
 
 function Invoices() {
@@ -85,16 +86,7 @@ function Invoices() {
   }
   const handleClosePayment = () => setOpenPayment(false);
 
-  const [invoiceData, setInvoiceData] = useState({
-    buyer: "",
-    buyer_location: "",
-    status: "pending",
-    ref: '',
-    total_price: "",
-    type: "",
-    products: [],
-  });
-
+  
   const [ordertotalPrice, setOrderTotalPrice] = useState(0.0);
   const [theBuyer, setTheBuyer] = useState("");
   const [theBuyerLocation, setTheBuyerLocation] = useState("");
@@ -241,13 +233,17 @@ function Invoices() {
     }
   };
 
+  const handleApprovePartPayment = async (item) => {
 
-  const handleEditPartPayment = async (id) => {
+    const res = await updateOrder(item.id, { 
+      "status": "approved"
+     })
 
-    const res = await editOrder(id, { status: "approved" })
+    console.log("Respond From Approve Part Payment")
+    console.log(res)
 
     if(res.status == 200){
-      toast.success("Invoice partly approved as piad Successfully"), { autoClose: 40 };
+      toast.success("Invoice partly approved partly paid"), { autoClose: 40 };
       handleGetOrderList();
       handleClosePayment();
     }
@@ -268,7 +264,6 @@ function Invoices() {
     });
     setTotalPrice(productPrice * e.target.value);
   };
-
 
   const handleDeleteInvoice = async (id) => {
     await deleteOrder(id)
@@ -330,16 +325,6 @@ function Invoices() {
       ["userid"]: user.id,
     });
 
-    setInvoiceData({
-      ...orderData,
-      ["products"]: resTopics,
-      ["total_price"]: ordertotalPrice,
-      ["type"]: "invoice",
-      ["status"]: "pending",
-      ["ref"]: uuid,
-      ["userid"]: user.id,
-    });
-
     handleOpen();
   };
 
@@ -389,8 +374,7 @@ function Invoices() {
     }
   };
 
-
-  const handleEditInvoice = async (id) => {
+  const handleEditOrderInvoice = async (id) => {
 
     console.log("Edit Order Data")
     console.log(editData)
@@ -1233,7 +1217,7 @@ function Invoices() {
             <Button style={{ marginLeft: -11 }} onClick={() => setOpenPayment(false)}>
               Cancel
             </Button>
-            <Button onClick={() => handleEditPartPayment(modalItem.id)}>
+            <Button onClick={() => handleApprovePartPayment(modalItem)}>
               Part Payment
             </Button>
             <Button onClick={() => handleApproveAsReceipt(modalItem)}>
@@ -1604,7 +1588,7 @@ function Invoices() {
                   <ArgonBox mb={"20%"} display="flex" mx={5}>
                     <ArgonButton
                       onClick={async () => {            
-                        handleEditInvoice(editData.id)
+                        handleEditOrderInvoice(editData.id)
                       }}
                       color="info"
                       size="large"
