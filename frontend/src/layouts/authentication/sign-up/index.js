@@ -178,7 +178,7 @@ function Cover() {
                   <ArgonInput
                     name="password2"
                     type="password"
-                    placeholder="Comfirm Password"
+                    placeholder="Confirm Password"
                     size="large"
                     autoComplete="off"
                     onChange={handleChange}

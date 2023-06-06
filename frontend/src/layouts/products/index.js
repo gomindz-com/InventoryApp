@@ -365,7 +365,7 @@ function Products() {
           <ArgonBox mb={3}>
             <Card>
               <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
-                <ArgonTypography variant="h6">Products table</ArgonTypography>
+                <ArgonTypography variant="h6">Products</ArgonTypography>
                 <Button
                   onClick={() => {
                     setProductData({
@@ -404,9 +404,9 @@ function Products() {
           <ArgonBox mb={3}>
             <Card>
               <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
-                <ArgonTypography variant="h6">Products table</ArgonTypography>
+                <ArgonTypography variant="h6">Products List</ArgonTypography>
                 <Button onClick={() => setShowAddProductForm(!showAddProductForm)}>
-                  <h4 style={{ paddingRight: 10 }}>Show Product Table </h4>
+                  <h4 style={{ paddingRight: 10 }}>Show Product List </h4>
                   <ArgonBox
                     component="i"
                     color="info"

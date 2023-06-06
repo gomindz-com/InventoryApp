@@ -188,7 +188,7 @@ function Damages() {
           <ArgonBox mb={3}>
             <Card>
               <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
-                <ArgonTypography variant="h6">Damages table</ArgonTypography>
+                <ArgonTypography variant="h6">Damages List</ArgonTypography>
                 <Button
                   onClick={() => {
                     setDamagesData({
@@ -221,9 +221,9 @@ function Damages() {
           <ArgonBox mb={3}>
             <Card>
               <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
-                <ArgonTypography variant="h6">Damages table</ArgonTypography>
+                <ArgonTypography variant="h6">Damages List</ArgonTypography>
                 <Button onClick={() => setShowAddForm(!showAddForm)}>
-                  <h4 style={{ paddingRight: 10 }}>Show Damages Table </h4>
+                  <h4 style={{ paddingRight: 10 }}>Show Damages List </h4>
                   <ArgonBox
                     component="i"
                     color="info"

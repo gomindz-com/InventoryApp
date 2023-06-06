@@ -309,6 +309,7 @@ class OrderListCreateView(generics.ListCreateAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         data = request.data
+        type = self.request.query_params.get('type')
         order = Order.objects.create(owner=request.user, buyer=data["buyer"],buyer_location=data["buyer_location"] ,status=data["status"], ref=data["ref"], type=data["type"], total_price=data["total_price"])
         order.save()
 
@@ -325,12 +326,21 @@ class OrderListCreateView(generics.ListCreateAPIView):
                     return Response(data=response, status=status.HTTP_406_NOT_ACCEPTABLE)
 
                 orderProduct = OrderProducts.objects.create(product_id=product['id'],  order_id=order.id, quantity=product['amount'])
+
+                print("dddd")
+                print(type)
+
+                if(type == 'receipt'):
+                    theproduct = Product.objects.get(pk=product['id'])
+                    theproduct.stock = theproduct.stock - product['amount']
+                    theproduct.save()
+
                 orderProduct.save()
 
             response = {
-            "status": True,
-            "message": "Order Successfully Added",
-                    }                
+                "status": True,
+                "message": "Order Successfully Added",
+                        }                
             return Response(data=response, status=status.HTTP_201_CREATED)
 
                         
@@ -377,6 +387,60 @@ class OrderRetreiveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
         return Response(data=response, status=status.HTTP_201_CREATED)
 
 
+    def patch(self, request,  *args, **kwargs):
+                
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        data = request.data
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        # self.perform_update(serializer)
+
+        instance.total_price = data['total_price']
+        instance.type = data['type']
+        instance.save()
+
+        productOrders = OrderProducts.objects.filter(order_id=instance.id)
+
+        for productsOrdersItem in productOrders.iterator():
+            productsOrdersItem.delete()
+
+        try:
+            for product in data['products']:
+                iproductstock = Product.objects.get(pk=product['id']).stock
+                
+                if (iproductstock - int(product['amount']) < 0):
+                    response = {
+                                "status": True,
+                                "message": "Product Is Out Of Stock Error",
+                            }                
+                    return Response(data=response, status=status.HTTP_406_NOT_ACCEPTABLE)
+
+                orderProduct = OrderProducts.objects.create(product_id=product['id'],  order_id=instance.id, quantity=product['amount'])
+
+                if(data['type'] == 'receipt'):
+                    theproduct = Product.objects.get(pk=product['id'])
+                    theproduct.stock = theproduct.stock - int(product['amount'])
+                    theproduct.save()
+        
+        except Product.DoesNotExist:
+            response = {
+                    "status": True,
+                    "message": "Product Does Not Existr",
+                    # "ssffs": data['type']
+                    }                
+            return Response(data=response, status=status.HTTP_404_NOT_FOUND)
+
+            
+            
+
+        response = {
+            "status": True,
+            "message": "Updated Successfully",
+            "order": instance.id,
+            # "ssffs": data['type'] 
+                    }                
+        return Response(data=response, status=status.HTTP_201_CREATED)
 
 
 
@@ -403,6 +467,7 @@ class StoreStatisticsView(generics.ListAPIView):
             stock_current = stock_current + iproduct.stock
 
         stock_out = 0
+        damagesnumber = 0
         orders = Order.objects.filter(owner=user).filter(type='receipt')
         for item in orders.iterator():
             productOrders = OrderProducts.objects.filter(order_id=item.id)
@@ -410,7 +475,15 @@ class StoreStatisticsView(generics.ListAPIView):
             for productOrdersItem in productOrders.iterator():
                 stock_out = stock_out + productOrdersItem.quantity
 
-        stock_in = stock_current + stock_out
+                damages = Damages.objects.filter(product_id=productOrdersItem.product_id)
+                for damage in damages.iterator():
+                    damagesnumber = damagesnumber + damage.damages
+                    
+                    
+        
+
+        
+        stock_in = stock_current + stock_out + damagesnumber
 
         number_of_damages = 0
         damages = Damages.objects.filter(owner=user)
@@ -430,7 +503,7 @@ class StoreStatisticsView(generics.ListAPIView):
                 "amount":  0
             })
 
-            myorder = Order.objects.filter(owner=user)
+            myorder = Order.objects.filter(owner=user).filter(type='receipt')
             for orderitems in myorder.iterator():
                 productQuantity = OrderProducts.objects.filter(
                     order_id=orderitems.id)
