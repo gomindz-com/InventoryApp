@@ -37,6 +37,7 @@ import {v4 as uuidv4} from 'uuid';
 import { ToastContainer, toast } from "react-toastify";
 import "./index.css";
 import { item } from "examples/Sidenav/styles/sidenavItem";
+import { editInvoice } from "apiservices/orderService";
 
 
 function Invoices() {
@@ -130,6 +131,7 @@ function Invoices() {
     { name: "Approve As Receipt", align: "center" },
     { name: "View & Print", align: "center" },
     { name: "edit", align: "center" },
+    { name: "delete", align: "center" },
   ];
   const rows = [];
 
@@ -218,11 +220,18 @@ function Invoices() {
     }
   };
 
-  const handleEdit = async (id) => {
+  const handleApproveAsReceipt = async (item) => {
 
-    const res = await editOrder(id, { type: "receipt" })
+    const res = await editInvoice(item.id, {
+      "products": item.products,
+      "total_price": item.total_price,
+      "type": "receipt" 
+    })
 
-    if(res.status == 200){
+    console.log("Respond From Approve Order As Receipt")
+    console.log(res)
+
+    if(res.status == 201){
       toast.success("Invoice added as a Receipt Successfully"), { autoClose: 40 };
       handleGetOrderList();
       handleClosePayment();
@@ -346,7 +355,7 @@ function Invoices() {
       toast.error("Please enter all the required fields!!");
     } else {
       toast.success("Adding Invoice!!", { autoClose: 80 });
-      await addOrder(orderData)
+      await addOrder("invoice", orderData)
         .then((res) => {
           if (res.data?.status == true) {
             toast.success(" Successfully Added", { autoClose: 40 });
@@ -378,6 +387,38 @@ function Invoices() {
           setOpen(false);
         });
     }
+  };
+
+
+  const handleEditInvoice = async (id) => {
+
+    console.log("Edit Order Data")
+    console.log(editData)
+    console.log(productEditRows)
+    console.log(totalPriceEditData)
+    
+    toast.success("Editing Invoice!!", { autoClose: 80 });
+    await editInvoice(id, {
+      "products": productEditRows,
+      "total_price": totalPriceEditData,
+      "type": "invoice" 
+    })
+      .then((res) => {
+        console.log("Edit Invoice Respond")
+        console.log(res)
+
+        if (res.data?.status == true) {
+          toast.success(" Successfully Editing", { autoClose: 40 });
+          handleGetOrderList();
+        } else {
+          toast.error(res.data.message);
+          setOpen(false);
+        }
+      })
+      .catch((err) => {
+        setOpen(false);
+      });
+    
   };
 
   useEffect(() => {
@@ -471,6 +512,12 @@ function Invoices() {
             setOrderTotalPrice(0);
             setViewOrderActive(true);
 
+
+            console.log("Product Options")
+            console.log(productOptions)
+            console.log("Product Items")
+            console.log(item.products)
+
             setOrderTotalPrice(item.total_price);
             setTheBuyer(item.buyer);
             setTheBuyerLocation(item.buyer_location);
@@ -486,30 +533,27 @@ function Invoices() {
         <Button
           onClick={async () => {
 
-            i = 0;
-            console.log("Edit Order Item")
-            console.log(item)
-            setEditData(item)
 
+            console.log("Current Edit Products Input Rows : ");
+            i = 0;
+            setEditData(item)
             setTotalPriceEditData(item.total_price)
             
             const updateState = item.products.map((obj) => {
-
-              console.log(obj)
-              
-              console.log('key')
-              console.log(i)
+              console.log("Current Edit Products Input Rows : ");
               return {
                 ...obj,
                 row: i++,
                 amount: obj.quantity,
-                price: obj.price * obj.quantity
+                price: obj.price * obj.quantity,
+                productprice: obj.price
               };
-             
-              
             });
 
             setProductEditRows(updateState);
+
+            console.log("updateState")
+            console.log(updateState)
             setShowOrderTable(false)
             setViewOrderActive(false)
             setShowAddForm(false);
@@ -518,16 +562,16 @@ function Invoices() {
         >
           <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-ruler-pencil" />
         </Button>
-      )
-      // delete: (
-      //   <Button
-      //     onClick={async () => {
-      //       handleDeleteInvoice(item.id);
-      //     }}
-      //   >
-      //     <ArgonBox component="i" color="red" fontSize="34px" className="ni ni-fat-remove" />
-      //   </Button>
-      // ),
+      ),
+      delete: (
+        <Button
+          onClick={async () => {
+            handleDeleteInvoice(item.id);
+          }}
+        >
+          <ArgonBox component="i" color="red" fontSize="34px" className="ni ni-fat-remove" />
+        </Button>
+      ),
     });
   });
 
@@ -858,7 +902,19 @@ function Invoices() {
         );
       }
     };
+    let indexx;
 
+    productOptions.forEach(function (arrayItem, i) {
+
+      var x = arrayItem.value;
+      
+      if(x == productEditRows[key]?.name){
+        indexx = i
+      }
+    });
+
+
+    
     
     return (
       <ArgonBox key={key} mb={2} mx={5} display="flex">
@@ -866,45 +922,32 @@ function Invoices() {
           <Select
             name="product"
             placeholder="Products"
-            defaultValue={productOptions[product?.id - 1]}
+            defaultValue={productOptions[indexx]}
             options={productOptions}
             onChange={async (selectedOption) => {
 
-             
-              // We have Define our Edit Data Which is an Object With Buyer Buyer Location Total Price Receipt
-             
-              // const currentordertotalPrice = isNaN(ordertotalPrice)? 0 + firstProductTotalPrice: ordertotalPrice;
-
-              // setProductEditRows((current) => [
-              //   ...current,
-              //   {
-              //     id: selectedOption.id,
-              //     row: key,
-              //     amount: 1,
-              //     productprice: selectedOption.price,
-              //     price: selectedOption.price,
-              //   },
-              // ]);
-
-              console.log("selected optoon")
+              console.log("Selecting A Product For Edit Products Row ")
               console.log(selectedOption)
-
-              console.log("Total Price")
+              console.log("Current Total Price")
               console.log(totalPriceEditData)
               console.log("Current Row Price")
               console.log(productEditRows[key]?.price)
 
-              if(productEditRows[key]?.price == undefined){
-                setTotalPriceEditData(totalPriceEditData + parseFloat(selectedOption.price))
 
-              }
-              else{
-                setTotalPriceEditData(totalPriceEditData - productEditRows[key].price + parseFloat(selectedOption.price))
+              if (isNaN(productEditRows[key]?.price)) {
+                setTotalPriceEditData(
+                  parseFloat(totalPriceEditData) + parseFloat(selectedOption.price)
+                );
+              } else {
+                setTotalPriceEditData(
 
+                  parseFloat(totalPriceEditData) +
+                    parseFloat(productEditRows[key]?.price) +
+                    parseFloat(selectedOption.price)
+                );
               }
               
               const ProductUpdate = productEditRows.map((obj) => {
-
                 console.log(obj)
                 if (obj.row == key) {
                   console.log('key')
@@ -912,6 +955,7 @@ function Invoices() {
                   return {
                     ...obj,
                     amount: 1,
+                    id:selectedOption.id,
                     productprice: selectedOption.price,
                     price: selectedOption.price,
                   };
@@ -922,29 +966,6 @@ function Invoices() {
 
               setProductEditRows(ProductUpdate);
 
-              
-
-            
-              
-
-
-              //setEditData(...editData, obj.total_price = 1)
-
-              //setValue1(ProductUpdate);
-
-             
-
-              // if (isNaN(productInputRow[product]?.price)) {
-              //   setOrderTotalPrice(
-              //     parseFloat(currentordertotalPrice) + parseFloat(selectedOption.price)
-              //   );
-              // } else {
-              //   setOrderTotalPrice(
-              //     parseFloat(currentordertotalPrice) -
-              //       parseFloat(productInputRow[product]?.price) +
-              //       parseFloat(selectedOption.price)
-              //   );
-              // }
             }}
           />
         </div>
@@ -959,31 +980,81 @@ function Invoices() {
               onChange={async (e) => {
                 const result = e.target.value.replace(/\D/g, "");
 
-                console.log('TTTTTT ')
-                console.log(result)
+                console.log('Edit Products Input Row :', key)
+                console.log("Input Value : ", result)
+                console.log("Current Edit Products Input Rows State : ")
                 console.log(productEditRows)
+
+              
                 
-                const updateOnOtherProducts = productEditRows.map((obj) => {
-                  if (obj.key == key) {
-                    return { ...obj, amount: parseInt(result) };
-                  } else {
-                    return { ...obj };
-                  }
-                });
-                setProductEditRows(updateOnOtherProducts);
+                // const updateOnOtherProducts = productEditRows.map((obj) => {
+
+                //   console.log('obj')
+                //   console.log(obj)
+
+                //   if(obj.hasOwnProperty('productprice')){
+
+                //     console.log("hasssss  jsdkvsdf")
+                //   }
+
+                //   else{
+
+
+                //     console.log("has noooot")
+
+                //     const ProductUpdate = productEditRows.map((obj) => {
+
+                //       console.log(obj)
+                //       if (obj.row == key) {
+                //         console.log('key')
+                //         console.log(key)
+                //         return {
+                //           ...obj,
+                //           amount: 1,
+                //           productprice: obj.price,
+                //           price: obj.price,
+                //         };
+                //       } else {
+                //         return { ...obj };
+                //       }
+                //     });
+      
+                //     setProductEditRows(ProductUpdate);
+
+                    
+                //   }
+
+
+
+
+                //   if (obj.key == key) {
+                //     return { ...obj, amount: parseInt(result), price:parseInt(result)  };
+                //   } else {
+                //     return { ...obj };
+                //   }
+                // });
+                // setProductEditRows(updateOnOtherProducts);
 
                 const AmountValueUpdate = productEditRows.map((obj) => {
 
                   console.log("fdgdf")
                   console.log(obj.row)
 
-                  if (obj.row == key) {
+                   
+                  if (obj.row == 0) {
 
-                    setOrderTotalPrice(
-                      parseFloat(ordertotalPrice) -
-                      productEditRows[key].price +
-                        result * obj.productprice
-                    );
+                    setTotalPriceEditData( parseFloat((result * obj.productprice)));
+
+                    return {
+                      ...obj,
+                      amount: result,
+                      price: result * obj.productprice,
+                    };
+                  } 
+
+                 else if (obj.row == key) {
+
+                    setTotalPriceEditData( parseFloat(productEditRows[key].price) + parseFloat((result * obj.productprice)));
 
                     return {
                       ...obj,
@@ -991,6 +1062,9 @@ function Invoices() {
                       price: result * obj.productprice,
                     };
                   } else {
+
+
+
                     return { ...obj };
                   }
                 });
@@ -1162,7 +1236,7 @@ function Invoices() {
             <Button onClick={() => handleEditPartPayment(modalItem.id)}>
               Part Payment
             </Button>
-            <Button onClick={() => handleEdit(modalItem.id)}>
+            <Button onClick={() => handleApproveAsReceipt(modalItem)}>
               Full Payment
             </Button>
           </Box>
@@ -1198,7 +1272,7 @@ function Invoices() {
           <ArgonBox mb={35}>
             <Card>
               <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
-                <ArgonTypography variant="h6">Invoice table</ArgonTypography>
+                <ArgonTypography variant="h6">Invoice List</ArgonTypography>
 
                 <Button
                   onClick={() => {
@@ -1247,14 +1321,14 @@ function Invoices() {
             <ArgonBox mb={3} pb={20}>
               <Card>
                 <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
-                  <ArgonTypography variant="h6">Invoice table</ArgonTypography>
+                  <ArgonTypography variant="h6">Invoice List</ArgonTypography>
                   <Button
                     onClick={() => {
                       setShowOrderTable(true);
                       setShowAddForm(false);
                     }}
                   >
-                    <h4 style={{ paddingRight: 10 }}>Show Invoice Table </h4>
+                    <h4 style={{ paddingRight: 10 }}>Show Invoice List </h4>
                     <ArgonBox
                       component="i"
                       color="info"
@@ -1461,7 +1535,7 @@ function Invoices() {
                       setShowEditForm(false)
                     }}
                   >
-                    <h4 style={{ paddingRight: 10 }}>Show Invoice Table </h4>
+                    <h4 style={{ paddingRight: 10 }}>Show Invoice List </h4>
                     <ArgonBox
                       component="i"
                       color="info"
@@ -1512,7 +1586,7 @@ function Invoices() {
                       type="name"
                       name="total_price"
                       value={`Total Price : ${totalPriceEditData}`}
-                      placeholder={`Total Price : ${Math.round(ordertotalPrice * 100) / 100}`}
+                      placeholder={`Total Price : ${Math.round(totalPriceEditData * 100) / 100}`}
                       size="large"
                     />
                   </ArgonBox>
@@ -1529,18 +1603,14 @@ function Invoices() {
 
                   <ArgonBox mb={"20%"} display="flex" mx={5}>
                     <ArgonButton
-                      onClick={async () => {
-                        
-                        console.log("Submit Data")
-                        console.log(editData)
-                        console.log(productEditRows)
-                        console.log(totalPriceEditData)
+                      onClick={async () => {            
+                        handleEditInvoice(editData.id)
                       }}
                       color="info"
                       size="large"
                       fullWidth
                     >
-                     Edit
+                     Edit Invoice
                     </ArgonButton>
                   </ArgonBox>
                 </ArgonBox>
@@ -1568,7 +1638,7 @@ function Invoices() {
                   }}
                   className="btn btn-secondary"
                 >
-                  <i className="icon-printer"></i> Show Invoice Table
+                  <i className="icon-printer"></i> Show Invoice List
                 </a>
               </div>
             </div>

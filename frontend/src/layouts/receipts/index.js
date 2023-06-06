@@ -139,7 +139,7 @@ function Receipts() {
     { name: "buyer_location", align: "center" },
     { name: "status", align: "center" },
     { name: "View & Print", align: "center" },
-    { name: "delete", align: "center" },
+    //{ name: "delete", align: "center" },
   ];
   const rows = [];
 
@@ -658,7 +658,7 @@ function Receipts() {
     } else {
 
       toast.success("Adding Receipt!!");
-      await addOrder(orderData)
+      await addOrder('receipt', orderData)
         .then((res) => {
 
           if (res.status == 201 ) {
@@ -757,7 +757,7 @@ function Receipts() {
           <ArgonBox mb={35}>
             <Card>
               <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
-                <ArgonTypography variant="h6">Receipt table</ArgonTypography>
+                <ArgonTypography variant="h6">Receipt List</ArgonTypography>
 
                 <Button
                   onClick={() => {
@@ -806,14 +806,14 @@ function Receipts() {
             <ArgonBox mb={3} pb={20}>
               <Card>
                 <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
-                  <ArgonTypography variant="h6">Receipt table</ArgonTypography>
+                  <ArgonTypography variant="h6">Receipt</ArgonTypography>
                   <Button
                     onClick={() => {
                       setShowOrderTable(true);
                       setShowAddForm(false);
                     }}
                   >
-                    <h4 style={{ paddingRight: 10 }}>Show Receipt Table </h4>
+                    <h4 style={{ paddingRight: 10 }}>Receipt List </h4>
                     <ArgonBox
                       component="i"
                       color="info"
@@ -1017,7 +1017,7 @@ function Receipts() {
                   }}
                   className="btn btn-secondary"
                 >
-                  <i className="icon-printer"></i> Show Receipt Table
+                  <i className="icon-printer"></i> Show Receipt List
                 </a>
               </div>
             </div>
