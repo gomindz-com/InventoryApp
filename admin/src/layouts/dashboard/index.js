@@ -1,64 +1,15 @@
-/* eslint-disable no-unused-vars */
-/**
-=========================================================
-* Argon Dashboard 2 MUI - v3.0.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-material-ui
-* Copyright 2022 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
 import { useState, useEffect } from "react";
-
-// Argon Dashboard 2 MUI example components
-
-// Argon Dashboard 2 MUI base styles
-
-// Dashboard layout components
-
-// Data
-import salesTableData from "layouts/dashboard/data/salesTableData";
-import { getOrderCount } from "apiservices/orderService";
-import { getProductCount } from "apiservices/productService";
-import { getSupplierCount } from "apiservices/supplierService";
-import { getBuyerCount } from "apiservices/buyerService";
-import { getCategories } from "apiservices/categoryService";
-import { getProducts } from "apiservices/productService";
-
-import $ from "../../assets/js/plugins/perfect-scrollbar.min.js";
-
-import { Helmet } from "react-helmet";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Aside from "examples/Aside/index.js";
 import Footer from "examples/Footer/index.js";
-
 import { useNavigate } from 'react-router-dom';
 
 
 
 // pro
 function Default() {
-  const [orderCount, setOrderCount] = useState({});
-  const [productCount, setProductCount] = useState({});
-  const [supplierCount, setSupplierCount] = useState({});
-  const [buyerCount, setBuyerCount] = useState({});
-  const [categoryList, setCategoryList] = useState([]);
-
-  const [productList, setProductList] = useState([]);
-  const [productListA, setProductListA] = useState([]);
-
-  const categoriesListData = [];
 
   const navigate = useNavigate();
-
-  const [showSearch, setShowSearch] = useState(false);
-
   const [showAside, setShowAside] = useState(true);
   const matches = useMediaQuery("(max-width: 1199.98px)");
 

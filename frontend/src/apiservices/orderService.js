@@ -68,19 +68,6 @@ export const updateOrder = async (id, updateData) => {
 };
 
 
-export const editInvoice = async (id, updateData) => {
-
-  const data = await axiosConfig
-    .patch(`/store/orders/${id}`, updateData)
-    .then((response) => {
-      return response;
-    })
-    .catch((err) => {
-      return err.response;
-    });
-  return data;
-};
-
 
 export const deleteOrder = async (id) => {
   const data = await axiosConfig

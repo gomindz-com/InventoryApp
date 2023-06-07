@@ -17,7 +17,6 @@ import Table from "examples/Tables/Table";
 import ArgonInput from "components/ArgonInput";
 import ArgonButton from "components/ArgonButton";
 import { Button } from "@mui/material";
-import { getOrders } from "apiservices/orderService";
 import { AddOrderSchema } from "formValidation/addForm";
 import Select from "react-select";
 import { getProducts } from "apiservices/productService";
@@ -30,8 +29,7 @@ import Fade from "@mui/material/Fade";
 import Typography from "@mui/material/Typography";
 import { useReactToPrint } from "react-to-print";
 import { Navigate, useNavigate } from "react-router-dom";
-import { addOrder } from "apiservices/orderService";
-import { deleteOrder } from "apiservices/orderService";
+import { getOrders, addOrder, deleteOrder} from "apiservices/orderService";
 import "./index.css";
 
 
