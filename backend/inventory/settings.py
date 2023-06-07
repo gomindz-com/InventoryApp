@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     # local
     'store.apps.StoreConfig',
     'users.apps.UsersConfig',
+    'mobile.apps.MobileConfig',
 
     # Third-party apps
     'rest_framework',
