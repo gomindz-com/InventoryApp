@@ -167,31 +167,10 @@ def lowstockproduct(request):
             low_stock_products.append({
             "id": item.id,
             "name": item.name,
-            # "description": item.description,
-            # "products": productList
             })
     return JsonResponse(status=200, data={'status': 'true', 'message': 'success', 'result': low_stock_products}) 
 
-
-@api_view(['GET'])
-def total_stock_in(request):
-    total = Transaction.objects.filter(type="in").aggregate(TOTAL=Sum('quantity'))['TOTAL']
-    return JsonResponse(status=200, data={'status': 'true', 'message': 'success', 'result': total})
-
-@api_view(['GET'])
-def total_stock_out(request):
-    total = Transaction.objects.filter(type="out").aggregate(TOTAL=Sum('quantity'))['TOTAL']
-    return JsonResponse(status=200, data={'status': 'true', 'message': 'success', 'result': total})
-
-@api_view(['GET'])
-def total_stock_in_hand(request):
-    total_in = Transaction.objects.filter(type="in").aggregate(TOTAL=Sum('quantity'))['TOTAL']
-    total_out = Transaction.objects.filter(type="out").aggregate(TOTAL=Sum('quantity'))['TOTAL']
-    total_in_hand = total_in - total_out
-
-    return JsonResponse(status=200, data={'status': 'true', 'message': 'success', 'result': total_in_hand})
-
-# LIST ALL CUSTOMER ORDERS [INVOICE/RECEIPT] / CREATE A CUSTOMER ORDER
+# API FOR STOCK STATISTICS
 class StoreStatisticsView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = TransactionSerializer
