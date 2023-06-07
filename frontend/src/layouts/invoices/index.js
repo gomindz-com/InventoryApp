@@ -37,7 +37,6 @@ import {v4 as uuidv4} from 'uuid';
 import { ToastContainer, toast } from "react-toastify";
 import "./index.css";
 import { item } from "examples/Sidenav/styles/sidenavItem";
-import { editInvoice } from "apiservices/orderService";
 import { updateOrder } from "apiservices/orderService";
 
 
@@ -214,7 +213,7 @@ function Invoices() {
 
   const handleApproveAsReceipt = async (item) => {
 
-    const res = await editInvoice(item.id, {
+    const res = await editOrder(item.id, {
       "products": item.products,
       "total_price": item.total_price,
       "type": "receipt" 
@@ -330,8 +329,6 @@ function Invoices() {
 
   const handleComfirm = async () => {
 
-    
-
     console.log("Invoice Data Sent To Api")
     console.log(orderData)
 
@@ -343,11 +340,11 @@ function Invoices() {
       await addOrder("invoice", orderData)
         .then((res) => {
 
-          console.log("Adding Invoice Api Response")
-          console.log(res)
+          console.log("Adding Invoice Api Response ---")
+          console.log(res.status)
 
-          if (res.tatus == 200) {
-            toast.success("Successfully Added", { autoClose: 40 });
+          if (res.status == 201) {
+            
             setFirstProductId("");
             setIdProductRow(0);
             setProductInputRow([]);
@@ -386,7 +383,7 @@ function Invoices() {
     console.log(totalPriceEditData)
     
     toast.success("Editing Invoice!!", { autoClose: 80 });
-    await editInvoice(id, {
+    await editOrder(id, {
       "products": productEditRows,
       "total_price": totalPriceEditData,
       "type": "invoice" 
