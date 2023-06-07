@@ -317,13 +317,17 @@ class OrderListCreateView(generics.ListCreateAPIView):
             for product in data['products']:
                 iproductstock = Product.objects.get(pk=product['id']).stock
                 
+                print("dddd")
+                print(type)
+
+
                 if (iproductstock - product['amount'] < 0):
                     order.delete()
                     response = {
                                 "status": True,
                                 "message": "Product Is Out Of Stock Error",
                             }                
-                    return Response(data=response, status=status.HTTP_406_NOT_ACCEPTABLE)
+                    return Response(data=response, status=status.HTTP_404_NOT_FOUND)
 
                 orderProduct = OrderProducts.objects.create(product_id=product['id'],  order_id=order.id, quantity=product['amount'])
 
@@ -409,12 +413,16 @@ class OrderRetreiveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
             for product in data['products']:
                 iproductstock = Product.objects.get(pk=product['id']).stock
                 
+                
+                
                 if (iproductstock - int(product['amount']) < 0):
-                    response = {
-                                "status": True,
-                                "message": "Product Is Out Of Stock Error",
-                            }                
-                    return Response(data=response, status=status.HTTP_406_NOT_ACCEPTABLE)
+                    
+                    if(data['type'] == 'invoice'):
+                        response = {
+                                    "status": True,
+                                    "message": "Product Is Out Of Stock Error",
+                                }                
+                        return Response(data=response, status=status.HTTP_406_NOT_ACCEPTABLE)
 
                 orderProduct = OrderProducts.objects.create(product_id=product['id'],  order_id=instance.id, quantity=product['amount'])
 

@@ -243,7 +243,7 @@ function Invoices() {
     console.log(res)
 
     if(res.status == 200){
-      toast.success("Invoice partly approved partly paid"), { autoClose: 40 };
+      toast.success("Invoice Partly Approved paid"), { autoClose: 40 };
       handleGetOrderList();
       handleClosePayment();
     }
@@ -332,7 +332,7 @@ function Invoices() {
 
     
 
-    console.log("orderData")
+    console.log("Invoice Data Sent To Api")
     console.log(orderData)
 
     const isValid = await AddOrderSchema.isValid(orderData);
@@ -342,8 +342,12 @@ function Invoices() {
       toast.success("Adding Invoice!!", { autoClose: 80 });
       await addOrder("invoice", orderData)
         .then((res) => {
-          if (res.data?.status == true) {
-            toast.success(" Successfully Added", { autoClose: 40 });
+
+          console.log("Adding Invoice Api Response")
+          console.log(res)
+
+          if (res.tatus == 200) {
+            toast.success("Successfully Added", { autoClose: 40 });
             setFirstProductId("");
             setIdProductRow(0);
             setProductInputRow([]);
