@@ -324,16 +324,16 @@ function Home() {
 
         {/* Testtimoney end */}
         <section
-      style={{ backgroundco: "#11cdef" }}
-      className="pb-5 position-relative bg-info p-3 mb-5 mx-n5"
+      style={{  background: "#e7e9eb", borderRadius: 20 }}
+      className=" card-header "
     >
       <div className="container">
         <div className="row">
           <div className="col-md-8 text-start mb-5 mt-5">
-            <h3 className="text-white z-index-1 position-relative">
+            <h3 className="text-black z-index-1 position-relative">
               The Executive Team
             </h3>
-            <p className="text-white opacity-8 mb-0">
+            <p className="text-black opacity-8 mb-0">
               There’s nothing I really wanted to do in life that I wasn’t able to get good at. That’s my skill.
             </p>
           </div>
@@ -343,10 +343,10 @@ function Home() {
           {/* first card */}
           <div className="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.6s">
             {/* Card content */}
-            <div className="position-relative shadow rounded border-top border-5 border-primary bg-white">
+            <div className="position-relative shadow rounded border-top border-5 border-info bg-white"   >
               {/* Card icon */}
               <div
-                className="d-flex align-items-center justify-content-center position-absolute top-0 start-50 translate-middle bg-primary rounded-circle"
+                className="d-flex align-items-center justify-content-center position-absolute top-0 start-50 translate-middle bg-info rounded-circle"
                 style={{ width: "45px", height: "45px", marginTop: "-3px" }}
               >
                 <i className="fa fa-cog text-white"></i>
@@ -360,7 +360,7 @@ function Home() {
               </div>
               {/* Card body */}
               <div className="text-center border-bottom p-4">
-                <p className="text-primary mb-1">
+                <p className="text-info mb-1">
                   Latest Offer - <strong>Save 30%</strong>
                 </p>
                 <h1 className="mb-3">
@@ -378,26 +378,26 @@ function Home() {
                     / Month
                   </small>
                 </h1>
-                <a className="btn btn-primary px-4 py-2" href="">
+                <a className="btn btn-info px-4 py-2" href="">
                   Buy Now
                 </a>
               </div>
               {/* Card footer */}
               <div className="p-4">
                 <p className="border-bottom pb-3">
-                  <i className="fa fa-check text-primary me-3"></i>100 GB Disk Space
+                  <i className="fa fa-check  me-3"></i>100 GB Disk Space
                 </p>
                 <p className="border-bottom pb-3">
-                  <i className="fa fa-check text-primary me-3"></i>Unlimited Bandwith
+                  <i className="fa fa-check  me-3"></i>Unlimited Bandwith
                 </p>
                 <p className="border-bottom pb-3">
-                  <i className="fa fa-check text-primary me-3"></i>Upgrade to Positive SSL
+                  <i className="fa fa-check  me-3"></i>Upgrade to Positive SSL
                 </p>
                 <p className="border-bottom pb-3">
-                  <i className="fa fa-check text-primary me-3"></i>Automatic Malware Removal
+                  <i className="fa fa-check  me-3"></i>Automatic Malware Removal
                 </p>
                 <p className="mb-0">
-                  <i className="fa fa-check text-primary me-3"></i>30 Days Money Back Guarantee
+                  <i className="fa fa-check  me-3"></i>30 Days Money Back Guarantee
                 </p>
               </div>
             </div>
@@ -406,10 +406,10 @@ function Home() {
           {/* second card */}
           <div className="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="1.2s">
             {/* Card content */}
-            <div className="position-relative shadow rounded border-top border-5 border-primary bg-white">
+            <div className="position-relative shadow rounded border-top border-5 border-info bg-white">
               {/* Card icon */}
               <div
-                className="d-flex align-items-center justify-content-center position-absolute top-0 start-50 translate-middle bg-primary rounded-circle"
+                className="d-flex align-items-center justify-content-center position-absolute top-0 start-50 translate-middle bg-info rounded-circle"
                 style={{ width: "45px", height: "45px", marginTop: "-3px" }}
               >
                 <i className="fa fa-cog text-white"></i>
@@ -423,7 +423,7 @@ function Home() {
               </div>
               {/* Card body */}
               <div className="text-center border-bottom p-4">
-                <p className="text-primary mb-1">
+                <p className="text-info mb-1">
                   Latest Offer - <strong>Save 30%</strong>
                 </p>
                 <h1 className="mb-3">
@@ -441,26 +441,26 @@ function Home() {
                     / Month
                   </small>
                 </h1>
-                <a className="btn btn-primary px-4 py-2" href="">
+                <a className="btn btn-info px-4 py-2" href="">
                   Buy Now
                 </a>
               </div>
               {/* Card footer */}
               <div className="p-4">
                 <p className="border-bottom pb-3">
-                  <i className="fa fa-check text-primary me-3"></i>100 GB Disk Space
+                  <i className="fa fa-check  me-3"></i>100 GB Disk Space
                 </p>
                 <p className="border-bottom pb-3">
-                  <i className="fa fa-check text-primary me-3"></i>Unlimited Bandwith
+                  <i className="fa fa-check  me-3"></i>Unlimited Bandwith
                 </p>
                 <p className="border-bottom pb-3">
-                  <i className="fa fa-check text-primary me-3"></i>Upgrade to Positive SSL
+                  <i className="fa fa-check  me-3"></i>Upgrade to Positive SSL
                 </p>
                 <p className="border-bottom pb-3">
-                  <i className="fa fa-check text-primary me-3"></i>Automatic Malware Removal
+                  <i className="fa fa-check  me-3"></i>Automatic Malware Removal
                 </p>
                 <p className="mb-0">
-                  <i className="fa fa-check text-primary me-3"></i>30 Days Money Back Guarantee
+                  <i className="fa fa-check  me-3"></i>30 Days Money Back Guarantee
                 </p>
               </div>
             </div>
@@ -469,10 +469,10 @@ function Home() {
           {/* third card */}
           <div className="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="1.8s">
             {/* Card content */}
-            <div className="position-relative shadow rounded border-top border-5 border-primary bg-white">
+            <div className="position-relative shadow rounded border-top border-5 border-info bg-white">
               {/* Card icon */}
               <div
-                className="d-flex align-items-center justify-content-center position-absolute top-0 start-50 translate-middle bg-primary rounded-circle"
+                className="d-flex align-items-center justify-content-center position-absolute top-0 start-50 translate-middle bg-info rounded-circle"
                 style={{ width: "45px", height: "45px", marginTop: "-3px" }}
               >
                 <i className="fa fa-cog text-white"></i>
@@ -486,7 +486,7 @@ function Home() {
               </div>
               {/* Card body */}
               <div className="text-center border-bottom p-4">
-                <p className="text-primary mb-1">
+                <p className="text-info mb-1">
                   Latest Offer - <strong>Save 30%</strong>
                 </p>
                 <h1 className="mb-3">
@@ -504,26 +504,26 @@ function Home() {
                     / Month
                   </small>
                 </h1>
-                <a className="btn btn-primary px-4 py-2" href="">
+                <a className="btn btn-info px-4 py-2" href="">
                   Buy Now
                 </a>
               </div>
               {/* Card footer */}
               <div className="p-4">
                 <p className="border-bottom pb-3">
-                  <i className="fa fa-check text-primary me-3"></i>100 GB Disk Space
+                  <i className="fa fa-check  me-3"></i>100 GB Disk Space
                 </p>
                 <p className="border-bottom pb-3">
-                  <i className="fa fa-check text-primary me-3"></i>Unlimited Bandwith
+                  <i className="fa fa-check  me-3"></i>Unlimited Bandwith
                 </p>
                 <p className="border-bottom pb-3">
-                  <i className="fa fa-check text-primary me-3"></i>Upgrade to Positive SSL
+                  <i className="fa fa-check  me-3"></i>Upgrade to Positive SSL
                 </p>
                 <p className="border-bottom pb-3">
-                  <i className="fa fa-check text-primary me-3"></i>Automatic Malware Removal
+                  <i className="fa fa-check  me-3"></i>Automatic Malware Removal
                 </p>
                 <p className="mb-0">
-                  <i className="fa fa-check text-primary me-3"></i>30 Days Money Back Guarantee
+                  <i className="fa fa-check me-3"></i>30 Days Money Back Guarantee
                 </p>
               </div>
             </div>
