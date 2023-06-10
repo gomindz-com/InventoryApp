@@ -213,8 +213,28 @@ function Invoices() {
 
   const handleApproveAsReceipt = async (item) => {
 
+
+    const newState = item.products.map((obj) => {
+      
+        return {
+          ...obj,
+          amount: obj.quantity
+        };
+      
+    });
+
+
+    // console.log("new state")
+    // console.log(newState)
+    // console.log(item.products)
+    // console.log(item.total_price)
+    
+
+    // return false;
+
+
     const res = await editOrder(item.id, {
-      "products": item.products,
+      "products": newState,
       "total_price": item.total_price,
       "type": "receipt" 
     })

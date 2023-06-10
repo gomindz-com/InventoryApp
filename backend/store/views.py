@@ -486,17 +486,21 @@ class StoreStatisticsView(generics.ListAPIView):
                 damages = Damages.objects.filter(product_id=productOrdersItem.product_id)
                 for damage in damages.iterator():
                     damagesnumber = damagesnumber + damage.damages
+            
+
                     
                     
         
 
         
-        stock_in = stock_current + stock_out + damagesnumber
 
         number_of_damages = 0
         damages = Damages.objects.filter(owner=user)
         for item in damages.iterator():
             number_of_damages = number_of_damages + item.damages
+
+
+        stock_in = stock_current + stock_out + number_of_damages
 
 
         category = Category.objects.filter(owner=user)

@@ -194,7 +194,7 @@ function Products() {
         setProductList(res.data.products);
         setCurrentProductList(res.data.products)
       } else {
-        setProductList({});
+        setProductList([]);
       }
     } catch (error) {}
   };
@@ -230,7 +230,7 @@ function Products() {
 
   
 
-  productList.map(function (item, i) {
+  productList?.map(function (item, i) {
     rows.push({
       product: (
         <ArgonBox display="flex" alignItems="center" px={1} py={0.5}>
@@ -342,7 +342,7 @@ function Products() {
         handleClick ={(e) => {
           
           const filteredProductList = [];
-          productList.map((obj) => {
+          productList?.map((obj) => {
 
             if (e.target.value === '') {
               setProductList(currentProductList)
