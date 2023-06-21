@@ -34,7 +34,7 @@ const DeatailScreen = ({ route }) => {
         <CustomText style={styles.title}>{productData.product}</CustomText>
       </View>
 
-      <ScrollView>
+      <ScrollView style={{ marginHorizontal: 20 }}>
         <View style={styles.singleButton}>
           <CustomText style={styles.h1}>Product:</CustomText>
           <CustomText style={styles.h4}>{productData.product}</CustomText>
@@ -132,13 +132,15 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     color: "#2e9a90",
     fontWeight: "bold",
-    fontSize: 25,
+    fontSize: 20,
+    left: 10,
   },
   h1: {
     alignSelf: "center",
     color: "#2e9a90",
     fontWeight: "bold",
-    fontSize: 25,
+    fontSize: 20,
+    left: 10,
   },
   card: {
     borderTopEndRadius: 0,
