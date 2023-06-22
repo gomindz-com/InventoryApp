@@ -141,6 +141,7 @@ function Home() {
                       fontSize: 10,
                       paddingLeft: 10,
                       paddingRight: 10,
+
                     }}
                     className="btn btn-sm  mb-0 me-1 mt-2 mt-md-0"
                   >
@@ -353,7 +354,7 @@ function Home() {
               </div>
               {/* Card header */}
               <div className="text-center border-bottom p-4 pt-5">
-                <h4 className="fw-bold">Dedi Hosting</h4>
+                <h4 className="fw-bold">Basic</h4>
                 <p className="mb-0">
                   Eirmod erat dolor amet est nrdd clita lorem erat justo rebum elitr eos
                 </p>
@@ -368,14 +369,13 @@ function Home() {
                     className="align-top"
                     style={{ fontSize: "22px", lineHeight: "45px" }}
                   >
-                    D
+                    
                   </small>
-                  11.49
+                  Free
                   <small
                     className="align-bottom"
                     style={{ fontSize: "16px", lineHeight: "40px" }}
                   >
-                    / Month
                   </small>
                 </h1>
                 <a className="btn btn-info px-4 py-2" href="">
@@ -385,19 +385,19 @@ function Home() {
               {/* Card footer */}
               <div className="p-4">
                 <p className="border-bottom pb-3">
-                  <i className="fa fa-check  me-3"></i>100 GB Disk Space
+                  <i className="fa fa-check  me-3"></i>  1 user
                 </p>
                 <p className="border-bottom pb-3">
-                  <i className="fa fa-check  me-3"></i>Unlimited Bandwith
+                  <i className="fa fa-check  me-3"></i>3 Product Categories
                 </p>
                 <p className="border-bottom pb-3">
-                  <i className="fa fa-check  me-3"></i>Upgrade to Positive SSL
+                  <i className="fa fa-check  me-3"></i>
                 </p>
                 <p className="border-bottom pb-3">
-                  <i className="fa fa-check  me-3"></i>Automatic Malware Removal
+                  <i className="fa fa-check  me-3"></i>
                 </p>
                 <p className="mb-0">
-                  <i className="fa fa-check  me-3"></i>30 Days Money Back Guarantee
+                  <i className="fa fa-check  me-3"></i>
                 </p>
               </div>
             </div>
@@ -416,7 +416,7 @@ function Home() {
               </div>
               {/* Card header */}
               <div className="text-center border-bottom p-4 pt-5">
-                <h4 className="fw-bold">Dedi Hosting</h4>
+                <h4 className="fw-bold">Standard</h4>
                 <p className="mb-0">
                   Eirmod erat dolor amet est clita lorem erat justo rebum elitr eos
                 </p>
@@ -433,7 +433,7 @@ function Home() {
                   >
                     D
                   </small>
-                  11.49
+                  500
                   <small
                     className="align-bottom"
                     style={{ fontSize: "16px", lineHeight: "40px" }}
@@ -448,19 +448,19 @@ function Home() {
               {/* Card footer */}
               <div className="p-4">
                 <p className="border-bottom pb-3">
-                  <i className="fa fa-check  me-3"></i>100 GB Disk Space
+                  <i className="fa fa-check  me-3"></i>2 Users
                 </p>
                 <p className="border-bottom pb-3">
-                  <i className="fa fa-check  me-3"></i>Unlimited Bandwith
+                  <i className="fa fa-check  me-3"></i>15 Product categories
                 </p>
                 <p className="border-bottom pb-3">
-                  <i className="fa fa-check  me-3"></i>Upgrade to Positive SSL
+                  <i className="fa fa-check  me-3"></i>Monthly Stock notification
                 </p>
                 <p className="border-bottom pb-3">
-                  <i className="fa fa-check  me-3"></i>Automatic Malware Removal
+                  <i className="fa fa-check  me-3"></i>Single Warehouse managment
                 </p>
                 <p className="mb-0">
-                  <i className="fa fa-check  me-3"></i>30 Days Money Back Guarantee
+                  <i className="fa fa-check  me-3"></i>Expired Product Tracking
                 </p>
               </div>
             </div>
@@ -479,7 +479,7 @@ function Home() {
               </div>
               {/* Card header */}
               <div className="text-center border-bottom p-4 pt-5">
-                <h4 className="fw-bold">Dedi Hosting</h4>
+                <h4 className="fw-bold">Enterprise</h4>
                 <p className="mb-0">
                   Eirmod erat dolor amet est clita lorem erat justo rebum elitr eos
                 </p>
@@ -496,7 +496,7 @@ function Home() {
                   >
                     D
                   </small>
-                  11.49
+                  2500
                   <small
                     className="align-bottom"
                     style={{ fontSize: "16px", lineHeight: "40px" }}
@@ -511,19 +511,21 @@ function Home() {
               {/* Card footer */}
               <div className="p-4">
                 <p className="border-bottom pb-3">
-                  <i className="fa fa-check  me-3"></i>100 GB Disk Space
+                  <i className="fa fa-check  me-3"></i>10 Users
                 </p>
                 <p className="border-bottom pb-3">
-                  <i className="fa fa-check  me-3"></i>Unlimited Bandwith
+                  <i className="fa fa-check  me-3"></i>Unlimited categories
                 </p>
                 <p className="border-bottom pb-3">
-                  <i className="fa fa-check  me-3"></i>Upgrade to Positive SSL
+                  <i className="fa fa-check  me-3"></i>Weekly stock notification
                 </p>
                 <p className="border-bottom pb-3">
-                  <i className="fa fa-check  me-3"></i>Automatic Malware Removal
+                  <i className="fa fa-check  me-3"></i>Multiple warehouse managment
                 </p>
+
+              
                 <p className="mb-0">
-                  <i className="fa fa-check me-3"></i>30 Days Money Back Guarantee
+                  <i className="fa fa-check me-3"></i>notification on whatsapp
                 </p>
               </div>
             </div>
