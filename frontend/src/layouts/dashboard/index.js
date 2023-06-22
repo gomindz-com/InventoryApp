@@ -122,11 +122,28 @@ function Default() {
                   : "D" + storeStatistics?.cash_inhand
               }
               amount={""}
-              icon={{ color: "error", component: <i className="ni ni-world" /> }}
-              percentage={{ color: "success", count: "+3%", text: "since last week" }}
+              icon={{ color: "error", component: <i className="ni ni-money-coins" /> }}
+              // percentage={{ color: "success", count: "+3%", text: "since last week" }}
             />
           </Grid>
+
+
           <Grid item xs={12} md={4} lg={2}>
+            <DetailedStatisticsCard
+              title="Cash Pending"
+              count={
+                storeStatistics?.cash_inhand == undefined
+                  ? "D" + 0
+                  : "D" + storeStatistics?.cash_inhand
+              }
+              amount={""}
+              icon={{ color: "error", component: <i className="ni ni-world" /> }}
+              // percentage={{ color: "success", count: "+3%", text: "since last week" }}
+            />
+          </Grid>
+
+
+          {/* <Grid item xs={12} md={5} lg={2}>
             <DetailedStatisticsCard
               title="Cash Pending"
               count={
@@ -136,17 +153,17 @@ function Default() {
               }
               amount={""}
               icon={{ color: "info", component: <i className="ni ni-money-coins" /> }}
-              percentage={{ color: "success", count: "+55%", text: "" }}
+              // percentage={{ color: "success", count: "+55%", text: "" }}
             />
-          </Grid>
+          </Grid> */}
           
           <Grid item xs={12} md={5} lg={2}>
             <DetailedStatisticsCard
               title="Stock-In"
               count={storeStatistics?.stock_in}
               amount={""}
-              icon={{ color: "warning", component: <i className="ni ni-cart" /> }}
-              percentage={{ color: "success", count: "+5%", text: "than last month" }}
+              icon={{ color: "warning",  component: <i className="ni ni-bold-down" /> }}
+              // percentage={{ color: "success", count: "+5%", text: "than last month" }}
             />
           </Grid>
         
@@ -155,8 +172,8 @@ function Default() {
               title="Stock-Out"
               count={storeStatistics?.stock_out}
               amount={""}
-              icon={{ color: "warning", component: <i className="ni ni-cart" /> }}
-              percentage={{ color: "success", count: "+5%", text: "than last month" }}
+              icon={{ color: "warning", component: <i className="ni ni-bold-up" /> }}
+              // percentage={{ color: "success", count: "+5%", text: "than last month" }}
             />
           </Grid>
           
@@ -165,10 +182,13 @@ function Default() {
               title="Stock-In-Hand"
               count={storeStatistics?.stock_inhand}
               amount={""}
-              icon={{ color: "success", component: <i className="ni ni-paper-diploma" /> }}
-              percentage={{ color: "error", count: "", text: "" }}
+              icon={{ color: "success", component: <i className="ni ni-archive-2" /> }}
+              // percentage={{ color: "error", count: "", text: "" }}
             />
           </Grid>
+
+
+          
           
           
 
@@ -177,8 +197,8 @@ function Default() {
               title="Damages"
               count={storeStatistics?.number_of_damages}
               amount={""}
-              icon={{ color: "error", component: <i className="ni ni-world" /> }}
-              percentage={{ color: "success", count: "+3%", text: "since last week" }}
+              icon={{ color: "error", component: <i className="ni ni-basket" /> }}
+              // percentage={{ color: "success", count: "+3%", text: "since last week" }}
             />
           </Grid>
         </Grid>
