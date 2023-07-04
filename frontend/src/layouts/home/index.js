@@ -34,15 +34,30 @@ import static2 from "../../assets/images/staic2.png";
 
 import static3 from "../../assets/images/staic3.png";
 import { height } from "@mui/system";
+import { Swiper, SwiperSlide } from "swiper/react";
+
+import 'swiper/swiper.min.css';
+import 'swiper/components/navigation/navigation.min.css';
+import 'swiper/components/pagination/pagination.min.css';
+import SwiperCore, { Navigation, Pagination, Autoplay } from 'swiper';
+// import { Autoplay, Pagination, Navigation } from 'swiper/modules';
+
+SwiperCore.use([Navigation, Pagination, Autoplay]);
+
 
 // Image
-const bgImage =
-  "https://us.123rf.com/450wm/kostsov/kostsov1906/kostsov190600026/126080344-modern-showcase-with-empty-space-on-pedestal-on-blue-background-3d-rendering-.jpg?ver=6";
+const bgImage = [
+  "https://articles.cyzerg.com/hubfs/Warehouse%20Inventory%20Management.jpg",
 
+  "https://www.maersk.com/~/media_sc9/maersk/news/press-releases/images/2022/11/maersk-warehouse-bangladesh_1024x576.jpg?w=877&hash=8DED7E83FF7A116871655E909C77BA9D",
+"https://media.sortly.com/wp-content/uploads/2021/10/20040652/Warehouse-management-team.jpg",
+]
+ 
 function Home() {
   const [rememberMe, setRememberMe] = useState(false);
   const handleSetRememberMe = () => {
   };
+
 
   const [controller, dispatch] = useArgonController();
 
@@ -57,10 +72,10 @@ function Home() {
   }, [pathname]);
 
   return (
-    <div className="about-us bg-gray-200">
+    <div  className="about-us bg-gray-200">
       <ToastContainer />
 
-      <nav className="navbar navbar-expand-lg position-absolute top-0 z-index-3 w-100 shadow-none my-3  navbar-transparent ">
+      <nav  className="navbar navbar-expand-lg position-absolute top-0 z-index-3 w-100 shadow-none my-3  navbar-transparent ">
         <div className="container">
           <a
             className="navbar-brand  text-white  "
@@ -154,17 +169,30 @@ function Home() {
         </div>
       </nav>
 
+
+      <Swiper  
+         spaceBetween={30}
+         centeredSlides={true}
+         autoplay={{
+           delay: 2500,
+           disableOnInteraction: false,
+         }}
+         pagination={{
+           clickable: true,
+         }}
+         navigation={true}
+         modules={[Autoplay, Pagination, Navigation]} >
+  {bgImage.map((imageUrl, index) => (
+    <SwiperSlide key={index}>
       <header className="bg-gradient-dark">
         <div
           className="page-header min-vh-75"
           style={{
-            backgroundImage: `url(${backgroudImage})`,
+            backgroundImage: `url(${imageUrl})`,
           }}
-          /*        style="background-image: url('../assets/img/bg9.jpg');"
-           */
         >
-          <span className="mask bg-gradient-dark opacity-6"></span>
-          <div className="container" style={{ marginTop: 100 }}>
+
+<div className="container" style={{ marginTop: 100 }}>
             <div className="row justify-content-center">
               <div className="col-lg-8 text-center mx-auto my-auto">
                 <h1 className="text-white">Work with an amazing Inventory System</h1>
@@ -175,23 +203,22 @@ function Home() {
                 <section className="py-7 animate__animated animate__fadeInUp">
                 <div style={{}} className="d-flex justify-content-center">
 
-<a href="https://www.facebook.com/GomindzAcademy/">
-<i style={{ color: "white" }} className="fab fa-facebook text-lg me-4"></i>
+<a style={{ marginRight: '20px' }}  href="https://www.facebook.com/GomindzAcademy/">
+<i className="fa fa-facebook-square fa-4x" aria-hidden="true"></i>
 </a>
 
-<a href="https://www.linkedin.com/company/gomindz/" >
-<i style={{ color: "black" }} className="fab fa-linkedin text-lg me-4"></i>
-
+<a style={{ marginRight: '20px' }} href="https://www.linkedin.com/company/gomindz/" >
+<i className="fa fa-linkedin fa-4x" aria-hidden="true"></i>
 </a> 
-<a href="#">
-<i style={{ color: "black" }} className="fab fa-instagram text-lg  me-4"></i>
+<a style={{ marginRight: '20px' }}  href="#">
+<i className="fa fa-instagram fa-4x " aria-hidden="true"></i>
 </a>
-<a href="#">
-<i style={{ color: "black" }} className="fab fa-twitter text-lg  me-4"></i>
+<a  style={{ marginRight: '20px' }} href="#">
+<i className="fa fa-twitter fa-4x" aria-hidden="true"></i>
 </a>
-<a href="#">
-<i style={{ color: "black" }} className="fab fa-google-plus text-lg "></i>
-</a>
+{/* <a href="#">
+<i className="fa fa-university fa-5x " aria-hidden="true"></i>
+</a> */}
 </div>
 </section>
 
@@ -201,8 +228,13 @@ function Home() {
               </div>
             </div>
           </div>
+
+
         </div>
       </header>
+    </SwiperSlide>
+  ))}
+</Swiper>
 
 
 
@@ -254,7 +286,7 @@ function Home() {
                   </div>
                   <div className="card-body text-center">
                     <h5 className="font-weight-normal">
-                      <a href="#">Get insights on Search</a>
+                      <a href="#">clear figures  and graphs</a>
                     </h5>
                     <p className="mb-0">
                       With clear figures and graphs , you can read all statistics of your store and
@@ -280,7 +312,7 @@ function Home() {
                   </div>
                   <div className="card-body text-center">
                     <h5 className="font-weight-normal">
-                      <a href="#">Get insights on Search</a>
+                      <a href="#">ccurate statistics</a>
                     </h5>
                     <p className="mb-0">
                       With ccurate statistics, you can make the best decisions and and improve your
@@ -332,11 +364,11 @@ function Home() {
         <div className="row">
           <div className="col-md-8 text-start mb-5 mt-5">
             <h3 className="text-black z-index-1 position-relative">
-              The Executive Team
+              Payment methods 
             </h3>
-            <p className="text-black opacity-8 mb-0">
+            {/* <p className="text-black opacity-8 mb-0">
               There’s nothing I really wanted to do in life that I wasn’t able to get good at. That’s my skill.
-            </p>
+            </p> */}
           </div>
         </div>
 
@@ -355,14 +387,14 @@ function Home() {
               {/* Card header */}
               <div className="text-center border-bottom p-4 pt-5">
                 <h4 className="fw-bold">Basic</h4>
-                <p className="mb-0">
+                {/* <p className="mb-0">
                   Eirmod erat dolor amet est nrdd clita lorem erat justo rebum elitr eos
-                </p>
+                </p> */}
               </div>
               {/* Card body */}
               <div className="text-center border-bottom p-4">
                 <p className="text-info mb-1">
-                  Latest Offer - <strong>Save 30%</strong>
+                  Latest Offer 
                 </p>
                 <h1 className="mb-3">
                   <small
@@ -379,7 +411,7 @@ function Home() {
                   </small>
                 </h1>
                 <a className="btn btn-info px-4 py-2" href="">
-                  Buy Now
+                  Subscribe
                 </a>
               </div>
               {/* Card footer */}
@@ -417,14 +449,14 @@ function Home() {
               {/* Card header */}
               <div className="text-center border-bottom p-4 pt-5">
                 <h4 className="fw-bold">Standard</h4>
-                <p className="mb-0">
+                {/* <p className="mb-0">
                   Eirmod erat dolor amet est clita lorem erat justo rebum elitr eos
-                </p>
+                </p> */}
               </div>
               {/* Card body */}
               <div className="text-center border-bottom p-4">
                 <p className="text-info mb-1">
-                  Latest Offer - <strong>Save 30%</strong>
+                  Latest Offer 
                 </p>
                 <h1 className="mb-3">
                   <small
@@ -442,7 +474,7 @@ function Home() {
                   </small>
                 </h1>
                 <a className="btn btn-info px-4 py-2" href="">
-                  Buy Now
+                  Subscribe
                 </a>
               </div>
               {/* Card footer */}
@@ -480,14 +512,14 @@ function Home() {
               {/* Card header */}
               <div className="text-center border-bottom p-4 pt-5">
                 <h4 className="fw-bold">Enterprise</h4>
-                <p className="mb-0">
+                {/* <p className="mb-0">
                   Eirmod erat dolor amet est clita lorem erat justo rebum elitr eos
-                </p>
+                </p> */}
               </div>
               {/* Card body */}
               <div className="text-center border-bottom p-4">
                 <p className="text-info mb-1">
-                  Latest Offer - <strong>Save 30%</strong>
+                  Latest Offer 
                 </p>
                 <h1 className="mb-3">
                   <small
@@ -505,7 +537,7 @@ function Home() {
                   </small>
                 </h1>
                 <a className="btn btn-info px-4 py-2" href="">
-                  Buy Now
+                  Subscribe
                 </a>
               </div>
               {/* Card footer */}
@@ -525,7 +557,7 @@ function Home() {
 
               
                 <p className="mb-0">
-                  <i className="fa fa-check me-3"></i>notification on whatsapp
+                  <i className="fa fa-check me-3"></i>Notification on whatsapp
                 </p>
               </div>
             </div>
@@ -788,3 +820,12 @@ function Home() {
 }
 
 export default Home;
+
+
+
+
+
+
+
+
+  

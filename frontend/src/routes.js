@@ -23,10 +23,10 @@ const routes = [
 
   {
     type: "route",
-    name: "Home",
-    key: "home",
+    name: "Homes",
+    key: "home", 
     route: "/home",
-    icon: <ArgonBox component="i" color="primary" fontSize="14px" className="ni ni-tv-2" />,
+    icon: <i className="fa fa-home" aria-hidden="true"></i>,
     component: <Home />,
   },
   {
