@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Animated,
+  ScrollView,
 } from "react-native";
 import { COLORS } from "../../constants/Theme";
 import {
@@ -55,43 +56,94 @@ const SettingScreen = () => {
       <AntDesign
         name="appstore-o"
         style={{ alignSelf: "center" }}
-        size={40}
+        size={35}
         color="#2e9a90"
       />,
       <MaterialIcons
         name="date-range"
         style={{ alignSelf: "center" }}
-        size={40}
+        size={35}
         color="#2e9a90"
       />,
       <MaterialCommunityIcons
         name="lock-reset"
         style={{ alignSelf: "center" }}
-        size={40}
+        size={35}
         color="#2e9a90"
       />,
       <FontAwesome5
         style={{ alignSelf: "center" }}
         name="file-export"
-        size={40}
+        size={35}
         color="#2e9a90"
       />,
       <MaterialIcons
         style={{ alignSelf: "center" }}
         name="backup"
-        size={40}
+        size={35}
         color="#2e9a90"
       />,
       <Entypo
         style={{ alignSelf: "center" }}
         name="share"
-        size={40}
+        size={35}
         color="#2e9a90"
       />,
       <MaterialIcons
         style={{ alignSelf: "center" }}
         name="clear-all"
-        size={40}
+        size={35}
+        color="#2e9a90"
+      />,
+    ];
+
+    const nextIcon = [
+      <AntDesign
+        style={{ alignSelf: "center" }}
+        name="right"
+        size={35}
+        color="#2e9a90"
+      />,
+
+      <AntDesign
+        style={{ alignSelf: "center" }}
+        name="right"
+        size={35}
+        color="#2e9a90"
+      />,
+
+      <AntDesign
+        style={{ alignSelf: "center" }}
+        name="right"
+        size={35}
+        color="#2e9a90"
+      />,
+
+      <AntDesign
+        style={{ alignSelf: "center" }}
+        name="right"
+        size={35}
+        color="#2e9a90"
+      />,
+
+      <AntDesign
+        style={{ alignSelf: "center" }}
+        name="right"
+        size={35}
+        color="#2e9a90"
+      />,
+
+      <AntDesign
+        style={{ alignSelf: "center" }}
+        name="right"
+        size={35}
+        color="#2e9a90"
+      />,
+
+      <AntDesign
+        style={{ alignSelf: "center" }}
+        name="right"
+        size={35}
         color="#2e9a90"
       />,
     ];
@@ -110,30 +162,31 @@ const SettingScreen = () => {
 
     return (
       <Animated.View style={{ opacity: fadeInAnim }}>
-        <TouchableOpacity
-          style={styles.singleButton}
-          onPress={handlePress}
-          activeOpacity={0.7}
-        >
-          {icons[index]}
-          <CustomText
-            style={{
-              marginLeft: 10,
-              alignSelf: "center",
-              color: "#2e9a90",
-              fontWeight: "bold",
-              fontSize: 25,
-            }}
-          >
-            {texts[index]}
-          </CustomText>
+        <TouchableOpacity onPress={handlePress} activeOpacity={0.7}>
+          <View style={styles.singleButton}>
+            <View style={styles.flexContainer}>
+              {icons[index]}
+              <CustomText
+                style={{
+                  marginLeft: 10,
+                  alignSelf: "center",
+                  color: "#2e9a90",
+                  fontWeight: "bold",
+                  fontSize: 20,
+                }}
+              >
+                {texts[index]}
+              </CustomText>
+            </View>
+            <View style={styles.iconEnd}>{nextIcon[index]}</View>
+          </View>
         </TouchableOpacity>
       </Animated.View>
     );
   };
 
   return (
-    <View>
+    <View style={styles.container}>
       <View style={styles.top}>
         <TouchableOpacity onPress={goBackScreen} style={styles.backtouch}>
           <AntDesign name="left" size={40} color="#fff" />
@@ -142,13 +195,15 @@ const SettingScreen = () => {
         <CustomText style={styles.settingText}>Settings</CustomText>
       </View>
 
-      <View style={styles.stylesButtonCopntainer}>
-        {Array(touchableCount)
-          .fill()
-          .map((_, index) => (
-            <TouchableItem key={index} index={index} />
-          ))}
-      </View>
+      <ScrollView>
+        <View style={styles.stylesButtonCopntainer}>
+          {Array(touchableCount)
+            .fill()
+            .map((_, index) => (
+              <TouchableItem key={index} index={index} />
+            ))}
+        </View>
+      </ScrollView>
     </View>
   );
 };
@@ -156,6 +211,9 @@ const SettingScreen = () => {
 export default SettingScreen;
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   top: {
     height: 150,
     backgroundColor: COLORS.green,
@@ -187,5 +245,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#f5faf8",
     borderRadius: 10,
     marginBottom: 20,
+    justifyContent: "space-between",
+  },
+  iconEnd: {
+    justifyContent: "center",
+  },
+  flexContainer: {
+    flexDirection: "row",
   },
 });
