@@ -38,6 +38,7 @@ const CustomInput = ({
   px = 5,
   tt,
   py = 0,
+  editable = true, // Add editable prop with default value as true
   ...rest
 }) => {
   const { colors } = useTheme();
@@ -81,6 +82,8 @@ const CustomInput = ({
           keyboardType={keyboardType}
           onChangeText={onChangeText}
           secureTextEntry={showPassword}
+          editable={editable} // Pass the editable prop
+          pointerEvents={editable ? "auto" : "none"} // Set pointerEvents based on editable prop
           {...rest}
         />
         {password && (

@@ -3,7 +3,6 @@ import {
   Text,
   View,
   TouchableOpacity,
-  ScrollView,
   FlatList,
 } from "react-native";
 import React, { useState } from "react";
@@ -143,18 +142,17 @@ const ProductData = [
   },
   {
     id: 12,
-    product: "Water",
+    product: "Bannana",
     productType: "Fruite",
     currentStock: "55",
     quantity: "45",
     remark: "sley",
     date: "22/64/2033",
-    status: "OUT",
+    status: "IN",
   },
 ];
 
 const HomeScreen = ({ route }) => {
-  // const route = useRoute();
   const { params } = route;
   const inputValues = params?.inputValues || [];
   console.log(inputValues);
@@ -167,40 +165,12 @@ const HomeScreen = ({ route }) => {
   };
 
   const AddNewTansact = () => {
-    navigation.navigate("NewTransact");
+    navigation.navigate("AddNewTransact");
   };
 
   const SettingScreen = () => {
     navigation.navigate("Setting");
   };
-
-  //   return (
-  //     <TouchableOpacity style={styles.card}>
-  //       <View style={styles.avatarContainer}>
-  //         <View style={styles.avatar}>
-  //           <CustomText style={styles.textIn}>IN</CustomText>
-  //         </View>
-  //       </View>
-  //       <View style={styles.contentContainer}>
-  //         <View>
-  //           <Text style={styles.subtitle}>Product: {product}</Text>
-  //           <Text style={styles.subtitle}>productType: {productType}</Text>
-  //           <Text style={styles.subtitle}>currentStock: {currentStock}</Text>
-  //         </View>
-  //         <View
-  //           style={{
-  //             marginLeft: 20,
-  //           }}
-  //         >
-  //           <Text style={styles.subtitle}>quantity: {quantity}</Text>
-
-  //           <Text style={styles.subtitle}>remark: {remark}</Text>
-  //           <Text style={styles.subtitle}>Date: {date}</Text>
-  //         </View>
-  //       </View>
-  //     </TouchableOpacity>
-  //   );
-  // };
 
   return (
     <View>
@@ -260,7 +230,6 @@ const HomeScreen = ({ route }) => {
               length={100}
             />
           </View>
-          {/* ButtonContainer */}
 
           <View style={styles.leftButtonContainer}>
             <View style={styles.pieChate}>
@@ -285,11 +254,6 @@ const HomeScreen = ({ route }) => {
           list of 10 last Transaction
         </CustomText>
       </View>
-
-      {/* Transactions */}
-      {/* {ProductData.map((item) => (
-        <Card key={item.id} item={item} />
-      ))} */}
 
       <FlatList
         data={ProductData}
@@ -323,41 +287,9 @@ const HomeScreen = ({ route }) => {
             </View>
           </TouchableOpacity>
         )}
+        contentContainerStyle={{ paddingBottom: 200 }} // Add spacing at the bottom
+        keyboardShouldPersistTaps="always" // Ensure list items remain visible when keyboard is open
       />
-
-      {/* <ScrollView>
-        {ProductData.map((item, i) => (
-          <TouchableOpacity
-            onPress={() => navigation.navigate("ProductDetail", { item })}
-            key={i}
-          >
-            <View style={{ marginHorizontal: 15, marginTop: 10 }}>
-              <View style={styles.transctContainer}>
-                <View style={{ left: 40 }}>
-                  <CustomText style={{ fontWeight: "bold", left: 10 }}>
-                    {item.currentStock}
-                  </CustomText>
-                  <CustomText style={{ fontWeight: "bold" }}>
-                    {item.product}
-                  </CustomText>
-                </View>
-
-                <View>
-                  <CustomText>{item.date}</CustomText>
-                </View>
-              </View>
-              <View
-                style={[
-                  styles.taranctIn,
-                  item.status === "IN" ? { backgroundColor: "red" } : null,
-                ]}
-              >
-                <CustomText style={{ color: "#fff" }}>{item.status}</CustomText>
-              </View>
-            </View>
-          </TouchableOpacity>
-        ))}
-      </ScrollView> */}
 
       <BottomSheet
         visible={bottomsheet}
@@ -466,17 +398,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  taranctout: {
-    height: 40,
-    width: 40,
-    borderRadius: 10,
-    backgroundColor: "red",
-    position: "absolute",
-    left: -10,
-    top: 7,
-    alignItems: "center",
-    justifyContent: "center",
-  },
+
   buttomSheetContainer: {
     backgroundColor: "#fff",
     height: "40%",
@@ -498,14 +420,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     color: "#fff",
   },
-  card: {
-    flexDirection: "row",
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 10,
-    padding: 10,
-    marginBottom: 10,
-  },
+
   avatarContainer: {
     justifyContent: "center",
     alignItems: "center",
@@ -520,27 +435,5 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderWidth: 1,
     borderColor: "#70ff7e",
-  },
-  contentContainer: {
-    flex: 1,
-    flexDirection: "row",
-  },
-  row: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  title: {
-    fontWeight: "bold",
-    fontSize: 16,
-    marginBottom: 5,
-    width: "100%",
-  },
-  subtitle: {
-    flex: 1,
-    marginRight: 5,
-  },
-  textIn: {
-    fontWeight: "bold",
-    fontSize: 30,
   },
 });
