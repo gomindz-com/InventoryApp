@@ -4,9 +4,9 @@ import { StyleSheet, Text } from "react-native";
 
 const CustomText = ({
   children,
-  color = "#000",
+  color = "#333",
   fontSize = 14,
-  fw = "normal",
+  fw = "500",
   light = false,
   ta = "left",
   my = 0,

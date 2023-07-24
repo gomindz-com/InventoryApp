@@ -1,143 +1,195 @@
-import { StyleSheet, Text, View, TouchableOpacity} from "react-native";
-import React from "react";
-
+import {
+  Image,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  secureTextEntry,
+  View,
+} from "react-native";
+import React, { useContext } from "react";
+import { IMAGES, COLORS } from "../../constants/Theme";
 import { useNavigation } from "@react-navigation/native";
-
-import CustomInput from "../../components/CustomInput";
-import CustomButton from "../../components/CustomButton";
-import CustomSearch from "../../components/CustomSearch";
 import CustomText from "../../components/CustomText";
-import CustomCheckbox from "../../components/CustomCheckbox";
+import { Ionicons } from "@expo/vector-icons";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+
 
 const RegisterScreen = () => {
-
   const navigation = useNavigation();
+
+  const HomeScreen = () => {
+    navigation.navigate("Main");
+  };
+
+  const RegisterScreen = () => {
+    navigation.navigate("Register");
+  };
 
   const LoginScreen = () => {
     navigation.navigate("Login");
-  }
+  };
+
+  const [data, setData] = React.useState({
+    secureTextEntry: true,
+  });
+
+  const handlePasswordChange = (val) => {
+    setData({
+      ...data,
+      password: val,
+    });
+  };
+
+  const updateSecureTextEntry = () => {
+    setData({
+      ...data,
+      secureTextEntry: !data.secureTextEntry,
+    });
+  };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={{ flex: 1, justifyContent: "center" }}>
+      <View style={{ paddingHorizontal: 25 }}>
+        <View style={{ alignItems: "center" }}>
+          <Image
+            source={require("../../../Sms-Inventory/assets/images/Signup.png")}
+            style={styles.image}
+          />
+        </View>
+        <Text style={{ fontSize: 30, fontWeight: "500", marginBottom: 30 }}>
+          Sign up
+        </Text>
 
-      <CustomText style={styles.signup}>SIGN UP</CustomText>
-      <CustomInput placeholder={"Sign up with google"} mx={30} height={55} bc={"#000"} bg={"#FFFFFF"} mb={50} br={5} px={100}/>
-      <CustomText style={styles.OR}>OR</CustomText>
-
-      <CustomInput placeholder={"Name"} mx={30}
-          mb={20}
-          bc={"#000"}
-          mt={10}
-          height={60}
-          bg={"#FFFFFF"}
-          width={100}
-          bw={1}
-          px={20}
-          br={5}/>
-      <CustomInput placeholder={"Email"} mx={30}
-          mb={20}
-          bc={"#000"}
-          mt={10}
-          height={60}
-          bg={"#FFFFFF"}
-          width={100}
-          bw={1}
-          px={20}
-          br={5}/>
-      <CustomInput placeholder={"Password"} mx={30}
-          mb={20}
-          bc={"#000"}
-          mt={10}
-          height={60}
-          bg={"#FFFFFF"}
-          width={100}
-          bw={1}
-          px={20}
-          br={5}/>
-
-      <View style={styles.SignupBtn}>
-          <CustomButton title={"SIGN UP"} titleSize={20} br={5} height={70} mt={30} color={"#FFFFFF"} mb={5} />
+        <View
+          style={{
+            flexDirection: "row",
+            
+          }}
+        >
+          <Ionicons
+            name="at-sharp"
+            size={24}
+            color="#666"
+            style={{ marginRight: 5 }}
+          />
+          <TextInput
+            placeholder="Email"
+            style={{ width: "86%", paddingVertical: 0, color: "#337037", borderBottomColor: "#ccc",
+            borderBottomWidth: 1,
+            paddingBottom: 8,
+            marginBottom: 25, }}
+            keyboardType="email-address"
+          />
         </View>
 
-      <View style={styles.Remembrance}>
-          <View style={{ flexDirection: "row" }}>
-            <CustomCheckbox/>
-            <CustomText fontSize={13} fw={"normal"} color={"#000000"}>
-              Remember
-            </CustomText>
-          </View>
+        <View
+          style={{
+            flexDirection: "row",
+            
+          }}
+        >
+          <Ionicons name="person-outline" size={24} color="#666" style={{ marginRight: 5 }} />
+          <TextInput
+            placeholder="Full name"
+            style={{ width: "86%", paddingVertical: 0, color: "#337037", borderBottomColor: "#ccc",
+            borderBottomWidth: 1,
+            paddingBottom: 8,
+            marginBottom: 25, }}
+            keyboardType="email-address"
+          />
+        </View>
 
-          <TouchableOpacity>
-            <CustomText
-              style={{ textDecorationLine: "underline", left: 5}}
-              fontSize={13}
-              fw={"normal"}
-              color={"#000000"}
-            >
-              Forgot Password
-            </CustomText>
+        <View
+          style={{
+            flexDirection: "row",
+          }}
+        >
+          <MaterialIcons
+            name="lock-outline"
+            size={24}
+            color="#666"
+            style={{ marginRight: 5 }}
+          />
+          <TextInput
+          style={{borderBottomWidth: 1, borderBottomColor: "#ccc", paddingBottom: 8, flex: 1,  color: "#337037"}}
+            placeholder="Password"
+            onChangeText={(val) => handlePasswordChange(val)}
+            secureTextEntry={data.secureTextEntry ? true : false}
+          />
+          <TouchableOpacity onPress={updateSecureTextEntry}>
+            {data.secureTextEntry ? (
+              <Ionicons name="ios-eye-off-outline" size={24} color="#666" />
+            ) : (
+              <Ionicons name="ios-eye-outline" size={24} color="#666" />
+            )}
           </TouchableOpacity>
         </View>
 
-        <View style={styles.Accounts}>
-        <CustomText fontSize={18} mx={3} fw={"bold"} color={"#565656"}>
-          Already have an account?
-        </CustomText>
+        <View style={{marginTop: 15, marginBottom: 20,}}>
+        <Text style={{color: "#666", fontSize: 15}}>By signing up you've agree to our <Text style={{color: "#337037"}}>Terms & Conditions</Text> </Text>
+        <Text style={{color: "#666", fontSize: 15}}>and <Text style={{color: "#337037"}}>Privacy Policy</Text></Text>
+        </View>
 
-        <TouchableOpacity>
-          <CustomText mx={5} fw={"bold"} fontSize={18} onPress={LoginScreen} >
-            Sign In
-          </CustomText>
+
+        <TouchableOpacity
+          onPress={() => {}}
+          style={{
+            backgroundColor: "#337037",
+            padding: 15,
+            borderRadius: 10,
+            marginBottom: 30,
+            marginTop: 20,
+          }}
+        >
+          <Text
+            style={{
+              color: "#FFFFFF",
+              textAlign: "center",
+              fontSize: 16,
+              fontWeight: "700",
+            }}
+          >
+            Continue
+          </Text>
         </TouchableOpacity>
-      </View>
 
-    </View>
+        <View style={styles.Accounts}>
+          <CustomText fontSize={15} fw={"normal"} color={"#666"} >
+            Joined us before?
+          </CustomText>
+
+          <TouchableOpacity style= {{marginLeft:5}}>
+            <CustomText
+              fw={"bold"}
+              fontSize={15}
+              onPress={LoginScreen}
+              color={"#337037"}
+            >
+              Login
+            </CustomText>
+          </TouchableOpacity>
+        </View>
+       
+       
+      </View>
+    </SafeAreaView>
   );
 };
 
 export default RegisterScreen;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: 50,
-    backgroundColor: "#EEEEEE",
-    height: "100%",
-},
-  signup: {
-    alignSelf: "center",
-    justifyContent:  "center", 
-    fontSize: 50,
-    fontWeight: "bold",
-    marginBottom: 20
-  },
-  OR: {
-    alignSelf: "center",
-    justifyContent: "center",
-    fontWeight: "normal",
-    fontSize: 20,
-    marginBottom: 5
+  image: {
+    height: 300,
+    width: 300,
+    marginHorizontal: 30,
   },
 
-  SignupBtn: {
-    marginHorizontal: 20
-  },
-
-  Remembrance: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: 30,
-    marginHorizontal: 60,
-    marginBottom: 20,
-},
   Accounts: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    alignSelf: "center",
-    marginHorizontal: 30,
-    height: "25%",
-    marginTop: 10
-}
-
-
+    justifyContent: "center",
+    marginTop: 10,
+  }
 });
