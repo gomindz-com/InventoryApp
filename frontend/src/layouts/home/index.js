@@ -1,20 +1,7 @@
-/**
-=========================================================
-* Argon Dashboard 2 MUI - v3.0.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-material-ui
-* Copyright 2022 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
 
 import { useState, useEffect } from "react";
 import backgroudImage from "../../assets/images/ware.jpg";
+import style from "./HomeCss.module.css"
 // react-router-dom components
 import { Link } from "react-router-dom";
 
@@ -24,6 +11,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
 import { useLocation } from "react-router-dom";
 import avatar from "../../assets/images/bg9.jpg";
+import "animate.css/animate.min.css";
+
 
 import { useNavigate } from "react-router-dom";
 
@@ -31,16 +20,50 @@ import static1 from "../../assets/images/staic1.png";
 import static2 from "../../assets/images/staic2.png";
 
 import static3 from "../../assets/images/staic3.png";
+import multipleUser from "../../assets/images/multipleUser.png";
+import notified from "../../assets/images/notified.png";
+import werehousing from "../../assets/images/werehousing.png"
 import { height } from "@mui/system";
+import { Swiper, SwiperSlide } from "swiper/react";
+
+import 'swiper/swiper.min.css';
+import 'swiper/components/navigation/navigation.min.css';
+import 'swiper/components/pagination/pagination.min.css';
+import SwiperCore, { Navigation, Pagination, Autoplay, EffectCoverflow } from 'swiper';
+import { FacebookIcon } from "assets/images/icons/facebookIcon";
+import { Twitter } from "assets/images/icons/twitter";
+import { Linkiding } from "assets/images/icons/linkding";
+import { Instagram } from "assets/images/icons/instagram";
+// import { Autoplay, Pagination, Navigation } from 'swiper/modules';
+
+SwiperCore.use([Navigation, Pagination, Autoplay, EffectCoverflow]);
+
+
+const slide_img = [
+  "https://www.maersk.com/~/media_sc9/maersk/news/press-releases/images/2022/11/maersk-warehouse-bangladesh_1024x576.jpg?w=877&hash=8DED7E83FF7A116871655E909C77BA9D",
+  "https://media.sortly.com/wp-content/uploads/2021/10/20040652/Warehouse-management-team.jpg",
+
+];
+
+
 
 // Image
-const bgImage =
-  "https://us.123rf.com/450wm/kostsov/kostsov1906/kostsov190600026/126080344-modern-showcase-with-empty-space-on-pedestal-on-blue-background-3d-rendering-.jpg?ver=6";
+const bgImage = [
+
+  "https://www.maersk.com/~/media_sc9/maersk/news/press-releases/images/2022/11/maersk-warehouse-bangladesh_1024x576.jpg?w=877&hash=8DED7E83FF7A116871655E909C77BA9D",
+"https://media.sortly.com/wp-content/uploads/2021/10/20040652/Warehouse-management-team.jpg",
+]
+ 
+
 
 function Home() {
   const [rememberMe, setRememberMe] = useState(false);
   const handleSetRememberMe = () => {
   };
+
+
+  
+
 
   const [controller, dispatch] = useArgonController();
 
@@ -55,20 +78,30 @@ function Home() {
   }, [pathname]);
 
   return (
-    <div className="about-us bg-gray-200">
+    <div   className="about-us bg-gray-200">
       <ToastContainer />
 
-      <nav className="navbar navbar-expand-lg position-absolute top-0 z-index-3 w-100 shadow-none my-3  navbar-transparent ">
-        <div className="container">
-          <a
+      <nav   className="navbar navbar-expand-lg position-absolute top-0 z-index-3 w-100 shadow-none my-3  navbar-transparent ">
+        <div   className="container">
+
+
+          <div  style={{fontSize: 30, fontWeight: "bold", color: "#fff"}} className="navbar-brand   "
+ >
+          Go Inventory App
+
+          </div>
+          {/* <a
             className="navbar-brand  text-white  "
             href="#"
             rel="tooltip"
             title="Designed and Coded by Creative Tim"
             data-placement="bottom"
+
+            
+            
           >
             Go Inventory App
-          </a>
+          </a> */}
           <button
             className="navbar-toggler shadow-none ms-2"
             type="button"
@@ -117,19 +150,11 @@ function Home() {
                   aria-expanded="false"
                 >
                   <i className="material-icons opacity-6 me-2 text-md">logout</i>
-                  Signout
+                  SignIn
                 </Link>
               </li>
 
-              {/* <li  className="nav-item my-auto ms-3 ms-lg-0">
-                <Link
-                style={{fontSize: 10, paddingLeft: 10, paddingRight: 10}}
-                  to="/authentication/sign-up"
-                  className="btn btn-sm  bg-white  mb-0 me-1 mt-2 mt-md-0"
-                >
-                  Register With Us
-                </Link>
-              </li> */}
+         
 
               {user != null && (
                 <li className="nav-item my-auto ms-3 ms-lg-0">
@@ -139,6 +164,7 @@ function Home() {
                       fontSize: 10,
                       paddingLeft: 10,
                       paddingRight: 10,
+
                     }}
                     className="btn btn-sm  mb-0 me-1 mt-2 mt-md-0"
                   >
@@ -151,75 +177,158 @@ function Home() {
         </div>
       </nav>
 
-      <header className="bg-gradient-dark">
+
+      <Swiper  
+         spaceBetween={30}
+         centeredSlides={true}
+         autoplay={{
+           delay: 2500,
+           disableOnInteraction: false,
+         }}
+         pagination={{
+           clickable: true,
+           
+         }}
+         navigation={true}
+         modules={[Autoplay, Pagination, Navigation]} >
+  {bgImage.map((imageUrl, index) => (
+    <SwiperSlide key={index}>
+      <header style={{
+
+      }} className="bg-gradient-dark">
         <div
+        
           className="page-header min-vh-75"
           style={{
-            backgroundImage: `url(${backgroudImage})`,
+            backgroundImage: `url(${imageUrl})`,
           }}
-          /*        style="background-image: url('../assets/img/bg9.jpg');"
-           */
         >
-          <span className="mask bg-gradient-dark opacity-6"></span>
-          <div className="container" style={{ marginTop: 100 }}>
+
+<div className="container" style={{ marginTop: 100 }}>
             <div className="row justify-content-center">
               <div className="col-lg-8 text-center mx-auto my-auto">
                 <h1 className="text-white">Work with an amazing Inventory System</h1>
-                <p className="lead mb-4 text-white opacity-8">
+                <p className="    lead mb-5 text-white mx-auto">
                   We’re constantly trying to express ourselves and actualize our dreams.{" "}
                 </p>
 
-                {/* <h6 className="mb-2 mt-5" style={{paddingTop: 70}} >Find us on</h6> */}
+                <section className="py-7 animate__animated animate__fadeInUp">
                 <div style={{}} className="d-flex justify-content-center">
-                  <a href="#">
-                    <i style={{ color: "white" }} className="fab fa-facebook text-lg me-4"></i>
-                  </a>
-                  <a href="#">
-                    <i style={{ color: "black" }} className="fab fa-instagram text-lg  me-4"></i>
-                  </a>
-                  <a href="#">
-                    <i style={{ color: "black" }} className="fab fa-twitter text-lg  me-4"></i>
-                  </a>
-                  <a href="#">
-                    <i style={{ color: "black" }} className="fab fa-google-plus text-lg "></i>
-                  </a>
-                </div>
+
+
+
+<Link to = "/" style={{width: "30px", height: "30px", fill: "#fff", marginLeft: "20px"}}>
+      <FacebookIcon/>
+</Link>
+
+
+{/* <Link to = "/" style={{width: "30px", height: "30px", fill: "#32b6e6", marginLeft: "20px"}}>
+  <Twitter/>
+</Link> */}
+
+
+<Link to = "/" style={{width: "30px", height: "30px", fill: "#fff", marginLeft: "20px"}}>
+  <Linkiding/>
+</Link>
+
+
+
+{/* <Link to = "/" style={{width: "30px", height: "30px", fill: "#32b6e6", marginLeft: "20px"}}>
+  <Instagram/>
+</Link> */}
+
+
+</div>
+</section>
+
+              
               </div>
             </div>
           </div>
+
+
         </div>
       </header>
+    </SwiperSlide>
+  ))}
+</Swiper>
+<section className="py-7 animate__animated animate__fadeInUp">
 
-      <div className="card card-body shadow-xl mx-3 mx-md-4 mt-n6">
+
+
+
+  <div></div>
+  
+<div className="card card-body shadow-xl mx-3 mx-md-4 mt-n6">
         <section className="py-7">
-          <div className="container">
-            <div className="row">
-              <div className="  col-lg-4 mt-lg-0 mt-4">
+
+        <div style={{ alignItems: "center"}} className="container ">
+        <div className="row" style={{ flexWrap: "nowrap" }}>
+          <div        style={{ display: "block", width: "100%", }}  className="col-lg-4 mt-lg-0 mt-4">
+            <Swiper
+             spaceBetween={30}
+           
+              effect={"coverflow"}
+              grabCursor={true}
+              centeredSlides={true}
+              slidesPerView={"auto"}
+              coverflowEffect={{
+                rotate: 50,
+                stretch: 0,
+                depth: 100,
+                modifier: 1,
+                slideShadows: false,
+              }}
+
+              autoplay={{
+                delay: 2500,
+                disableOnInteraction: false,
+              }}
+              pagination={{
+                clickable: true,
+                
+              }}
+           
+              className="mySwiper"
+              style={{
+                width: "100%",
+                paddingBottom: "100px",
+                marginBottom: "100px"
+              }}
+            >
+              <SwiperSlide    style={{
+      backgroundPosition: "center",
+      backgroundSize: "cover",
+      width: "350px",
+      height: "100px",
+    }} >
                 <div className="card">
                   <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                     <a className="d-block blur-shadow-image">
                       <img
-                        style={{ height: 250 }}
                         src={static1}
                         alt="img-colored-shadow"
                         className="img-fluid border-radius-lg"
+                        style={{ height: 250 }}
                       />
                     </a>
                   </div>
                   <div className="card-body text-center">
                     <h5 className="font-weight-normal">
-                      <a href="#">Accurate Stock Recordes</a>
+                      <div>Accurate Stock Recordes</div>
                     </h5>
                     <p className="mb-0">
-                      Get accurate stock records with stright forword figures . You need not to
-                      worry about counting everything in the store
+                      Get accurate stock records with straightforward figures. You need not worry about counting everything in the store.
                     </p>
                   </div>
                 </div>
-              </div>
-              {/* second card */}
-
-              <div className="  col-lg-4 mt-lg-0 mt-4">
+              </SwiperSlide>
+              <SwiperSlide   style={{
+      backgroundPosition: "center",
+      backgroundSize: "cover",
+      width: "300px",
+      height: "300px",
+    }}         >
                 <div className="card">
                   <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                     <a className="d-block blur-shadow-image">
@@ -233,19 +342,20 @@ function Home() {
                   </div>
                   <div className="card-body text-center">
                     <h5 className="font-weight-normal">
-                      <a href="#">Get insights on Search</a>
+                      <div>Clear figures and graphs</div>
                     </h5>
                     <p className="mb-0">
-                      With clear figures and graphs , you can read all statistics of your store and
-                      stay in the loop.
+                      With clear figures and graphs, you can read all statistics of your store and stay in the loop.
                     </p>
                   </div>
                 </div>
-              </div>
-
-              {/* third cord */}
-
-              <div className="  col-lg-4 mt-lg-0 mt-4">
+              </SwiperSlide>
+              <SwiperSlide  style={{
+      backgroundPosition: "center",
+      backgroundSize: "cover",
+      width: "300px",
+      height: "300px",
+    }} >
                 <div className="card">
                   <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                     <a className="d-block blur-shadow-image">
@@ -259,348 +369,471 @@ function Home() {
                   </div>
                   <div className="card-body text-center">
                     <h5 className="font-weight-normal">
-                      <a href="#">Get insights on Search</a>
+                      <div>Accurate statistics</div>
                     </h5>
                     <p className="mb-0">
-                      With ccurate statistics, you can make the best decisions and and improve your
-                      business
+                      With accurate statistics, you can make the best decisions and improve your business.
                     </p>
                   </div>
                 </div>
-              </div>
+              </SwiperSlide>
 
-              {/* furth card */}
-
-              {/* <div className="  col-lg-4 mt-lg-0 mt-4">
+              <SwiperSlide    style={{
+      backgroundPosition: "center",
+      backgroundSize: "cover",
+      width: "300px",
+      height: "300px",
+    }} >
                 <div className="card">
                   <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                     <a className="d-block blur-shadow-image">
                       <img
-                        src="https://images.unsplash.com/photo-1544717302-de2939b7ef71?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
+                        src={notified}
                         alt="img-colored-shadow"
                         className="img-fluid border-radius-lg"
+                        style={{ height: 250 }}
                       />
                     </a>
                   </div>
                   <div className="card-body text-center">
                     <h5 className="font-weight-normal">
-                      <a href="#">Get insights on Search</a>
+                      <div>Get notified</div>
                     </h5>
                     <p className="mb-0">
-                      Website visitors today demand a frictionless user expericence — especially
-                      when using search. Because of the hight standards.
+                      Get weekly notification about  the  status of your business on whatsApp
                     </p>
-                    <button type="button" className="btn bg-gradient-info btn-sm mb-0 mt-3">
-                      Find out more
-                    </button>
                   </div>
                 </div>
-              </div> */}
-            </div>
+              </SwiperSlide>
+
+
+              <SwiperSlide  style={{
+      backgroundPosition: "center",
+      backgroundSize: "cover",
+      width: "300px",
+      height: "300px",
+    }} >
+                <div className="card">
+                  <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                    <a className="d-block blur-shadow-image">
+                      <img
+                        src={werehousing}
+                        alt="img-colored-shadow"
+                        className="img-fluid border-radius-lg"
+                        style={{ height: 275 }}
+                      />
+                    </a>
+                  </div>
+                  <div className="card-body text-center">
+                    <h5 className="font-weight-normal">
+                      <div>Multiple   Werehousing</div>
+                    </h5>
+                    <p className="mb-0">
+                      With our Enterprise plan. you can  manage multiple werehousces in diffrent location .
+                    </p>
+                  </div>
+                </div>
+              </SwiperSlide>
+
+              <SwiperSlide   style={{
+      backgroundPosition: "center",
+      backgroundSize: "cover",
+      width: "300px",
+      height: "300px",
+    }}         >
+                <div className="card">
+                  <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                    <a className="d-block blur-shadow-image">
+                      <img
+                        src={multipleUser}
+                        alt="img-colored-shadow"
+                        className="img-fluid border-radius-lg"
+                        style={{ height: 275 }}
+                      />
+                    </a>
+                  </div>
+                  <div className="card-body text-center">
+                    <h5 className="font-weight-normal">
+                      <a href="#">Multiple User Sign Up</a>
+                    </h5>
+                    <p className="mb-0">
+                      Register up to ten users with diffrenct roles and permission.
+                    </p>
+                  </div>
+                </div>
+              </SwiperSlide>
+              {/* Add more SwiperSlides for additional cards */}
+            </Swiper>
+            <div style={{ backgroundColor: "red"}} className="swiper-pagination"></div>
           </div>
+          {/* Add other card items here */}
+        </div>
+        </div>
+         
+         
         </section>
+
+
 
         {/* Testimoney */}
 
         {/* Testtimoney end */}
-
         <section
-          style={{ backgroundco: "#11cdef" }}
-          className="pb-5 position-relative bg-info p-3 mb-5 mx-n5"
-        >
-          <div className="container">
-            <div className="row">
-              <div className="col-md-8 text-start mb-5 mt-5">
-                <h3 className="text-white z-index-1 position-relative">The Executive Team</h3>
-                <p className="text-white opacity-8 mb-0">
-                  There’s nothing I really wanted to do in life that I wasn’t able to get good at.
-                  That’s my skill.
+      style={{  background: "#e7e9eb", borderRadius: 20 }}
+      className=" card-header "
+    >
+      <div className="container">
+        <div className="row">
+          <div className="col-md-8 text-start mb-5 mt-5">
+            <h3 className="text-black z-index-1 position-relative">
+              Payment methods 
+            </h3>
+          
+          </div>
+        </div>
+
+        <div className="row mt-4">
+          {/* first card */}
+          <div className="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.6s">
+            {/* Card content */}
+            <div className="position-relative shadow rounded border-top border-5 border-info bg-white"   >
+              {/* Card icon */}
+              <div
+                className="d-flex align-items-center justify-content-center position-absolute top-0 start-50 translate-middle bg-info rounded-circle"
+                style={{ width: "45px", height: "45px", marginTop: "-3px" }}
+              >
+                <i className="fa fa-cog text-white"></i>
+              </div>
+              {/* Card header */}
+              <div className="text-center border-bottom p-4 pt-5">
+                <h4 className="fw-bold">Basic</h4>
+             
+              </div>
+              {/* Card body */}
+              <div className="text-center border-bottom p-4">
+              
+                <h1 className="mb-3">
+                  <small
+                    className="align-top"
+                    style={{ fontSize: "22px", lineHeight: "45px" }}
+                  >
+                    
+                  </small>
+                  Free
+                  <small
+                    className="align-bottom"
+                    style={{ fontSize: "16px", lineHeight: "40px" }}
+                  >
+                  </small>
+                </h1>
+                <a className="btn btn-info px-4 py-2" href="">
+                  Subscribe
+                </a>
+              </div>
+              {/* Card footer */}
+              <div className="p-4">
+                <p className="border-bottom pb-3">
+                  <i className="fa fa-check  me-3"></i>  1 user
                 </p>
-              </div>
-            </div>
+                <p className="border-bottom pb-3">
+                  <i className="fa fa-check  me-3"></i>3 Product Categories
+                </p>
+                <p className="border-bottom pb-9  ">
+                </p>
+               
 
-            <div className="row mt-4">
-              {/* first card */}
-
-              <div className="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.6s">
-                <div className="position-relative shadow rounded border-top border-5 border-primary bg-white ">
-                  <div
-                    className="d-flex align-items-center justify-content-center position-absolute top-0 start-50 translate-middle bg-primary rounded-circle"
-                    style={{ width: "45px", height: "45px", marginTop: "-3px" }}
-                  >
-                    <i className="fa fa-cog text-white"></i>
-                  </div>
-                  <div className="text-center border-bottom p-4 pt-5">
-                    <h4 className="fw-bold">Dedi Hosting</h4>
-                    <p className="mb-0">
-                      Eirmod erat dolor amet est nrdd clita lorem erat justo rebum elitr eos
-                    </p>
-                  </div>
-                  <div className="text-center border-bottom p-4">
-                    <p className="text-primary mb-1">
-                      Latest Offer - <strong>Save 30%</strong>
-                    </p>
-                    <h1 className="mb-3">
-                      <small className="align-top" style={{ fontSize: "22px", lineHeight: "45px" }}>
-                        D
-                      </small>
-                      11.49
-                      <small
-                        className="align-bottom"
-                        style={{ fontSize: "16px", lineHeight: "40px" }}
-                      >
-                        / Month
-                      </small>
-                    </h1>
-                    <a className="btn btn-primary px-4 py-2" href="">
-                      Buy Now
-                    </a>
-                  </div>
-                  <div className="p-4">
-                    <p className="border-bottom pb-3">
-                      <i className="fa fa-check text-primary me-3"></i>100 GB Disk Space
-                    </p>
-                    <p className="border-bottom pb-3">
-                      <i className="fa fa-check text-primary me-3"></i>Unlimited Bandwith
-                    </p>
-                    <p className="border-bottom pb-3">
-                      <i className="fa fa-check text-primary me-3"></i>Upgrade to Positive SSL
-                    </p>
-                    <p className="border-bottom pb-3">
-                      <i className="fa fa-check text-primary me-3"></i>Automatic Malware Removal
-                    </p>
-                    <p className="mb-0">
-                      <i className="fa fa-check text-primary me-3"></i>30 Days Money Back Guarantee
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.6s">
-                <div className="position-relative shadow rounded border-top border-5 border-primary bg-white ">
-                  <div
-                    className="d-flex align-items-center justify-content-center position-absolute top-0 start-50 translate-middle bg-primary rounded-circle"
-                    style={{ width: "45px", height: "45px", marginTop: "-3px" }}
-                  >
-                    <i className="fa fa-cog text-white"></i>
-                  </div>
-                  <div className="text-center border-bottom p-4 pt-5">
-                    <h4 className="fw-bold">Dedi Hosting</h4>
-                    <p className="mb-0">
-                      Eirmod erat dolor amet est clita lorem erat justo rebum elitr eos
-                    </p>
-                  </div>
-                  <div className="text-center border-bottom p-4">
-                    <p className="text-primary mb-1">
-                      Latest Offer - <strong>Save 30%</strong>
-                    </p>
-                    <h1 className="mb-3">
-                      <small className="align-top" style={{ fontSize: "22px", lineHeight: "45px" }}>
-                        D
-                      </small>
-                      11.49
-                      <small
-                        className="align-bottom"
-                        style={{ fontSize: "16px", lineHeight: "40px" }}
-                      >
-                        / Month
-                      </small>
-                    </h1>
-                    <a className="btn btn-primary px-4 py-2" href="">
-                      Buy Now
-                    </a>
-                  </div>
-                  <div className="p-4">
-                    <p className="border-bottom pb-3">
-                      <i className="fa fa-check text-primary me-3"></i>100 GB Disk Space
-                    </p>
-                    <p className="border-bottom pb-3">
-                      <i className="fa fa-check text-primary me-3"></i>Unlimited Bandwith
-                    </p>
-                    <p className="border-bottom pb-3">
-                      <i className="fa fa-check text-primary me-3"></i>Upgrade to Positive SSL
-                    </p>
-                    <p className="border-bottom pb-3">
-                      <i className="fa fa-check text-primary me-3"></i>Automatic Malware Removal
-                    </p>
-                    <p className="mb-0">
-                      <i className="fa fa-check text-primary me-3"></i>30 Days Money Back Guarantee
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.6s">
-                <div className="position-relative shadow rounded border-top border-5 border-primary bg-white">
-                  <div
-                    className="d-flex align-items-center justify-content-center position-absolute top-0 start-50 translate-middle bg-primary rounded-circle"
-                    style={{ width: "45px", height: "45px", marginTop: "-3px" }}
-                  >
-                    <i className="fa fa-cog text-white"></i>
-                  </div>
-                  <div className="text-center border-bottom p-4 pt-5">
-                    <h4 className="fw-bold">Dedi Hosting</h4>
-                    <p className="mb-0">
-                      Eirmod erat dolor amet est clita lorem erat justo rebum elitr eos
-                    </p>
-                  </div>
-                  <div className="text-center border-bottom p-4">
-                    <p className="text-primary mb-1">
-                      Latest Offer - <strong>Save 30%</strong>
-                    </p>
-                    <h1 className="mb-3">
-                      <small className="align-top" style={{ fontSize: "22px", lineHeight: "45px" }}>
-                        D
-                      </small>
-                      11.49
-                      <small
-                        className="align-bottom"
-                        style={{ fontSize: "16px", lineHeight: "40px" }}
-                      >
-                        / Month
-                      </small>
-                    </h1>
-                    <a className="btn btn-primary px-4 py-2" href="">
-                      Buy Now
-                    </a>
-                  </div>
-                  <div className="p-4">
-                    <p className="border-bottom pb-3">
-                      <i className="fa fa-check text-primary me-3"></i>100 GB Disk Space
-                    </p>
-                    <p className="border-bottom pb-3">
-                      <i className="fa fa-check text-primary me-3"></i>Unlimited Bandwith
-                    </p>
-                    <p className="border-bottom pb-3">
-                      <i className="fa fa-check text-primary me-3"></i>Upgrade to Positive SSL
-                    </p>
-                    <p className="border-bottom pb-3">
-                      <i className="fa fa-check text-primary me-3"></i>Automatic Malware Removal
-                    </p>
-                    <p className="mb-0">
-                      <i className="fa fa-check text-primary me-3"></i>30 Days Money Back Guarantee
-                    </p>
-                  </div>
-                </div>
+               
+                <p className="border-bottom pb-5">
+                </p>
+                
               </div>
             </div>
           </div>
-        </section>
 
-        {/* <section className="pt-4 pb-6" id="count-stats">
-          <div className="container">
-            <div className="row mb-7">
-              <div className="col-lg-2 col-md-4 col-6 mb-4">
-                <img
-                  className="w-100 opacity-7"
-                  src="../assets/img/logos/gray-logos/logo-coinbase.svg"
-                  alt="logo"
-                />
+          {/* second card */}
+          <div className="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="1.2s">
+            {/* Card content */}
+            <div className="position-relative shadow rounded border-top border-5 border-info bg-white">
+              {/* Card icon */}
+              <div
+                className="d-flex align-items-center justify-content-center position-absolute top-0 start-50 translate-middle bg-info rounded-circle"
+                style={{ width: "45px", height: "45px", marginTop: "-3px" }}
+              >
+                <i className="fa fa-cog text-white"></i>
               </div>
-              <div className="col-lg-2 col-md-4 col-6 mb-4">
-                <img
-                  className="w-100 opacity-7"
-                  src="../assets/img/logos/gray-logos/logo-nasa.svg"
-                  alt="logo"
-                />
+              {/* Card header */}
+              <div className="text-center border-bottom p-4 pt-5">
+                <h4 className="fw-bold">Standard</h4>
+            
               </div>
-              <div className="col-lg-2 col-md-4 col-6 mb-4">
-                <img
-                  className="w-100 opacity-7"
-                  src="../assets/img/logos/gray-logos/logo-netflix.svg"
-                  alt="logo"
-                />
-              </div>
-              <div className="col-lg-2 col-md-4 col-6 mb-4">
-                <img
-                  className="w-100 opacity-7"
-                  src="../assets/img/logos/gray-logos/logo-pinterest.svg"
-                  alt="logo"
-                />
-              </div>
-              <div className="col-lg-2 col-md-4 col-6 mb-4">
-                <img
-                  className="w-100 opacity-7"
-                  src="../assets/img/logos/gray-logos/logo-spotify.svg"
-                  alt="logo"
-                />
-              </div>
-              <div className="col-lg-2 col-md-4 col-6 mb-4">
-                <img
-                  className="w-100 opacity-7"
-                  src="../assets/img/logos/gray-logos/logo-vodafone.svg"
-                  alt="logo"
-                />
-              </div>
-            </div>
-            <div className="row justify-content-center text-center">
-              <div className="col-md-3">
-                <h1 className="text-gradient text-info" id="state1">
-                  0
+              {/* Card body */}
+              <div className="text-center border-bottom p-4">
+              
+                <h1 className="mb-3">
+                  <small
+                    className="align-top"
+                    style={{ fontSize: "22px", lineHeight: "45px" }}
+                  >
+                    D
+                  </small>
+                  500
+                  <small
+                    className="align-bottom"
+                    style={{ fontSize: "16px", lineHeight: "40px" }}
+                  >
+                    / Month
+                  </small>
                 </h1>
-                <h5>Projects</h5>
-                <p>Of “high-performing” level are led by a certified project manager</p>
+                <a className="btn btn-info px-4 py-2" href="">
+                  Subscribe
+                </a>
               </div>
-              <div className="col-md-3">
-                <h1 className="text-gradient text-info">
-                  <span id="state2">0</span>+
-                </h1>
-                <h5>Hours</h5>
-                <p>That meets quality standards required by our users</p>
-              </div>
-              <div className="col-md-3">
-                <h1 className="text-gradient text-info">
-                  <span id="state3">0</span>
-                  /7
-                </h1>
-                <h5>Support</h5>
-                <p>Actively engage team members that finishes on time</p>
+              {/* Card footer */}
+              <div className="p-4">
+                <p className="border-bottom pb-3">
+                  <i className="fa fa-check  me-3"></i>2 Users
+                </p>
+                <p className="border-bottom pb-3">
+                  <i className="fa fa-check  me-3"></i>15 Product categories
+                </p>
+                <p className="border-bottom pb-3">
+                  <i className="fa fa-check  me-3"></i>Monthly Stock notification
+                </p>
+                <p className="border-bottom pb-3">
+                  <i className="fa fa-check  me-3"></i>Single Warehouse managment
+                </p>
+
+                <p className="border-bottom pb-3">
+                  <i className="fa fa-check  me-3"></i>Expired Product Tracking
+                </p>
+                <p className="pb-3">
+                </p>
               </div>
             </div>
           </div>
-        </section> */}
-        <section className="my-5 pt-5">
-          <div className="container">
-            <div className="row">
-              <div className="col-md-6 m-auto">
-                <h4>Be the first to see the news</h4>
-                <p className="mb-4">
-                  Your company may not be in the software business, but eventually, a software
-                  company will be in your business.
-                </p>
-                <div className="row">
-                  <div className="col-8">
-                    <div className="input-group input-group-outline">
-                      <label className="form-label">Email Here...</label>
-                      <input type="text" className="form-control mb-sm-0" />
-                    </div>
-                  </div>
-                  <div className="col-4 ps-0">
-                    <button
-                      onClick={() => {
-                        toast.success("Subscribed Successfully!!");
-                      }}
-                      type="button"
-                      className="btn bg-gradient-info mb-0 h-100 position-relative z-index-2"
-                    >
-                      Subscribe
-                    </button>
-                  </div>
-                </div>
+
+          {/* third card */}
+          <div className="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="1.8s">
+            {/* Card content */}
+            <div className="position-relative shadow rounded border-top border-5 border-info bg-white">
+              {/* Card icon */}
+              <div
+                className="d-flex align-items-center justify-content-center position-absolute top-0 start-50 translate-middle bg-info rounded-circle"
+                style={{ width: "45px", height: "45px", marginTop: "-3px" }}
+              >
+                <i className="fa fa-cog text-white"></i>
               </div>
-              <div className="col-md-5 ms-auto">
+              {/* Card header */}
+              <div className="text-center border-bottom p-4 pt-5">
+                <h4 className="fw-bold">Enterprise</h4>
+              
+              </div>
+              {/* Card body */}
+              <div className="text-center border-bottom p-4">
+                
+                <h1 className="mb-3">
+                  <small
+                    className="align-top"
+                    style={{ fontSize: "22px", lineHeight: "45px" }}
+                  >
+                    D
+                  </small>
+                  2500
+                  <small
+                    className="align-bottom"
+                    style={{ fontSize: "16px", lineHeight: "40px" }}
+                  >
+                    / Month
+                  </small>
+                </h1>
+                <a className="btn btn-info px-4 py-2" href="">
+                  Subscribe
+                </a>
+              </div>
+              {/* Card footer */}
+              <div className="p-4">
+                <p className="border-bottom pb-3">
+                  <i className="fa fa-check  me-3"></i>10 Users
+                </p>
+                <p className="border-bottom pb-3">
+                  <i className="fa fa-check  me-3"></i>Unlimited categories
+                </p>
+                <p className="border-bottom pb-3">
+                  <i className="fa fa-check  me-3"></i>Weekly stock notification
+                </p>
+                <p className="border-bottom pb-3">
+                  <i className="fa fa-check  me-3"></i>Multiple warehouse managment
+                </p>
+
+                <p className="border-bottom pb-3">
+                  <i className="fa fa-check  me-3"></i>Expired Product Tracking
+                </p>
+
+              
+                <p className="mb-0">
+                  <i className="fa fa-check me-3"></i>Notification on whatsapp
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <section className="py-7">
+
+  
+    <div className="container">
+  <div className="row align-items-center">
+    <div className="col-lg-12">
+      <div className="row justify-content-start">
+        <div className="col-md-6 col-lg-4 mb-4">
+          <div className="card border-primary" style={{ width: "100%", height: "90%" }}>
+            <div className="card-body text-primary">
+              <h5 className="card-title">Stock Management</h5>
+              <p className="card-text" style={{ color: "black" }} >Track and  monitor quantity of products</p>
+              <p className="card-text" style={{ color: "black" }} >Reconcile your purchase with  current stock</p>
+
+              <p className="card-text" style={{ color: "black" }} >Keep  track  of suplliers and products .</p>
+
+
+            </div>
+          </div>
+        </div>
+        <div  className="col-md-6 col-lg-4 mb-4">
+          <div className="card border-primary" style={{ height: "90%",  width: "100%" }}>
+            <div className="card-body text-primary">
+              <h5 className="card-title">Expiry Managment</h5>
+              <p className="card-text" style={{ color: "black" }} >Keep track of and monitor expired/ expiring item in the stock .</p>
+              <p className="card-text" style={{ color: "black" }} >pre notifications on items about to expire .</p>
+              <p className="card-text" style={{ color: "black" }} >get report of all expired items in one click .</p>
+
+
+
+            </div>
+          </div>
+        </div>
+        <div className="col-md-6 col-lg-4 mb-4">
+          <div className="card border-primary" style={{ height: "90%", width: "100%" }}>
+            <div className="card-body text-primary">
+              <h5 className="card-title">User friendly interface</h5>
+              <p className="card-text" style={{ color: "black" }} >Comprehensive and mordern user friendly interface .</p>
+              <p className="card-text" style={{ color: "black" }} >Paster service expriance  .</p>
+              <p className="card-text" style={{ color: "black" }} >Diffrent user themes: light mode or Dark mode.</p>
+
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="row justify-content-start mt-4">
+        <div className="col-md-6 col-lg-4 mb-4">
+          <div className="card border-primary" style={{height: "90%", width: "100%" }}>
+            <div className="card-body text-primary">
+              <h5 className="card-title">Sales management</h5>
+              <p className="card-text" style={{ color: "black" }} >Calculate profite on diffrent products and categories in real time </p>
+              <p className="card-text" style={{ color: "black" }} >Automatically update stock after each sale .</p>
+              <p className="card-text" style={{ color: "black" }} >Notify on  product shortage</p>
+
+
+            </div>
+          </div>
+        </div>
+        <div className="col-md-6 col-lg-4 mb-4">
+          <div className="card border-primary" style={{ height: "90%", width: "100%" }}>
+            <div className="card-body text-primary">
+              <h5 className="card-title">Reporting </h5>
+              <p className="card-text" style={{ color: "black" }} >Sales and Stock report</p>
+              <p className="card-text" style={{ color: "black" }} >Purchase and supply reports</p>
+              <p className="card-text" style={{ color: "black" }} >Debtors and creditors report</p>
+              <p className="card-text" style={{ color: "black" }} >petty cash and cash  book report</p>
+
+
+
+
+            </div>
+          </div>
+        </div>
+        <div className="col-md-6 col-lg-4 mb-4">
+          <div className="card border-primary" style={{ height: "90%", width: "100%" }}>
+            <div className="card-body text-primary">
+              <h5 className="card-title">notifications</h5>
+              <p className="card-text" style={{ color: "black" }} >Whatsapp notification on sales reports  </p>
+              <p className="card-text"  style={{ color: "black" }} >Monthly and  qurtely report on transaction </p>
+              <p className="card-text" style={{ color: "black" }} >closing and opening stock</p>
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+</section>
+
+
+        {/* <div className="col-md-5 ">
                 <div className="position-relative">
                   <img
-                    className="max-width-50 w-100 position-relative z-index-2"
+                    className="max-width-10 w-100 "
                     src={require("../../assets/images/GomindzInventory.png")}
                     alt="image"
                   />
                 </div>
-              </div>
-            </div>
-          </div>
-        </section>
+              </div> */}
       </div>
+</section>
+
+
+
+
+
+
+{/* <div>
+      <Swiper
+        effect={"coverflow"}
+        grabCursor={true}
+        centeredSlides={true}
+        slidesPerView={"auto"}
+        coverflowEffect={{
+          rotate: 50,
+          stretch: 0,
+          depth: 100,
+          modifier: 1,
+          slideShadows: false,
+        }}
+        pagination={true}
+      >
+        {slide_img.map((img, i) => {
+          return (
+            <SwiperSlide style={{backgroundImage: 'url("your-image.jpg")',
+            backgroundPosition: 'center',
+            backgroundSize: 'cover',
+            width: '300px',
+            height: '300px', }} key={i}>
+              <img style={{width: "50%"}} src={img} alt="" />
+            </SwiperSlide>
+          );
+        })}
+      </Swiper>
+    </div> */}
+
+
+
 
       <footer className="footer pt-5 mt-5">
         <div className="container">
@@ -614,33 +847,13 @@ function Home() {
                       About Us
                     </Link>
                   </li>
-                  {/* <li className="nav-item">
-                    <a className="nav-link" href="https://www.creative-tim.com/templates/free">
-                      Freebies
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a className="nav-link" href="https://www.creative-tim.com/templates/premium">
-                      Premium Tools
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a className="nav-link" href="https://www.creative-tim.com/blog">
-                      Blog
-                    </a>
-                  </li> */}
+                  
                 </ul>
               </div>
             </div>
             <div className="col-md-3 mb-4 ms-auto">
               <div>
-                {/* <a href="#">
-                  <img
-                    src={require("../../assets/images/apple-icon.png")}
-                    className="mb-3 footer-logo"
-                    alt="main_logo"
-                  />
-                </a> */}
+              
                 <h6 className="font-weight-bolder mb-4">Go Inventory App</h6>
               </div>
               <div>
@@ -655,95 +868,24 @@ function Home() {
                       <i className="fab fa-twitter text-lg opacity-8"></i>
                     </a>
                   </li>
-                  {/* <li className="nav-item">
-                    <a className="nav-link pe-1" href="https://dribbble.com/creativetim">
-                      <i className="fab fa-dribbble text-lg opacity-8"></i>
-                    </a>
-                  </li> */}
-                  {/* <li className="nav-item">
-                    <a className="nav-link pe-1" href="https://github.com/creativetimofficial">
-                      <i className="fab fa-github text-lg opacity-8"></i>
-                    </a>
-                  </li> */}
-                  {/* <li className="nav-item">
-                    <a
-                      className="nav-link pe-1"
-                      href="https://www.youtube.com/channel/UCVyTG4sCw-rOvB9oHkzZD1w"
-                    >
-                      <i className="fab fa-youtube text-lg opacity-8"></i>
-                    </a>
-                  </li> */}
+                 
                 </ul>
               </div>
             </div>
 
-            {/* <div className="col-md-2 col-sm-6 col-6 mb-4">
-              <div>
-                <h6 className="text-sm">Resources</h6>
-                <ul className="flex-column ms-n3 nav">
-                  <li className="nav-item">
-                    <a className="nav-link" href="https://iradesign.io/">
-                      Illustrations
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a className="nav-link" href="https://www.creative-tim.com/bits">
-                      Bits & Snippets
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a className="nav-link" href="https://www.creative-tim.com/affiliates/new">
-                      Affiliate Program
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div> */}
-            {/* <div className="col-md-2 col-sm-6 col-6 mb-4">
-              <div>
-                <h6 className="text-sm">Help & Support</h6>
-                <ul className="flex-column ms-n3 nav">
-                  <li className="nav-item">
-                    <Link className="nav-link" to="/contact-us">
-                      Contact Us
-                    </Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link className="nav-link" to="/dashboard">
-                      Knowledge Center
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div className="col-md-2 col-sm-6 col-6 mb-4 me-auto">
-              <div>
-                <h6 className="text-sm">Legal</h6>
-                <ul className="flex-column ms-n3 nav">
-                  <li className="nav-item">
-                    <a
-                      className="nav-link"
-                      href="https://www.creative-tim.com/knowledge-center/terms-of-service"
-                    >
-                      Terms & Conditions
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a
-                      className="nav-link"
-                      href="https://www.creative-tim.com/knowledge-center/privacy-policy"
-                    >
-                      Privacy Policy
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a className="nav-link" href="https://www.creative-tim.com/license">
-                      Licenses (EULA)
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div> */}
+
+            {/* starting */}
+
+
+
+
+
+            
+
+
+            {/* closing */}
+
+        
             <div className="col-12">
               <div className="text-center">
                 <p className="text-dark my-4 text-sm font-weight-normal">
@@ -760,3 +902,12 @@ function Home() {
 }
 
 export default Home;
+
+
+
+
+
+
+
+
+  

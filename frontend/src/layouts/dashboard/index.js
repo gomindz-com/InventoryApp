@@ -113,7 +113,37 @@ function Default() {
       <DashboardNavbar />
       <ArgonBox py={3}>
         <Grid container spacing={3} mb={3}>
+        <Grid item xs={12} md={4} lg={2}>
+            <DetailedStatisticsCard
+              title="Cash InHand"
+              count={
+                storeStatistics?.cash_inhand == undefined
+                  ? "D" + 0
+                  : "D" + storeStatistics?.cash_inhand
+              }
+              amount={""}
+              icon={{ color: "error", component: <i className="ni ni-money-coins" /> }}
+              // percentage={{ color: "success", count: "+3%", text: "since last week" }}
+            />
+          </Grid>
+
+
           <Grid item xs={12} md={4} lg={2}>
+            <DetailedStatisticsCard
+              title="Cash Pending"
+              count={
+                storeStatistics?.cash_inhand == undefined
+                  ? "D" + 0
+                  : "D" + storeStatistics?.cash_inhand
+              }
+              amount={""}
+              icon={{ color: "error", component: <i className="ni ni-world" /> }}
+              // percentage={{ color: "success", count: "+3%", text: "since last week" }}
+            />
+          </Grid>
+
+
+          {/* <Grid item xs={12} md={5} lg={2}>
             <DetailedStatisticsCard
               title="Cash Pending"
               count={
@@ -123,56 +153,52 @@ function Default() {
               }
               amount={""}
               icon={{ color: "info", component: <i className="ni ni-money-coins" /> }}
-              percentage={{ color: "success", count: "+55%", text: "" }}
+              // percentage={{ color: "success", count: "+55%", text: "" }}
             />
-          </Grid>
-          <Grid item xs={12} md={4} lg={2}>
-            <DetailedStatisticsCard
-              title="Cash InHand"
-              count={
-                storeStatistics?.cash_inhand == undefined
-                  ? "D" + 0
-                  : "D" + storeStatistics?.cash_inhand
-              }
-              amount={""}
-              icon={{ color: "error", component: <i className="ni ni-world" /> }}
-              percentage={{ color: "success", count: "+3%", text: "since last week" }}
-            />
-          </Grid>
-          <Grid item xs={12} md={6} lg={2}>
-            <DetailedStatisticsCard
-              title="Categories"
-              count={storeStatistics?.number_of_categories}
-              amount={""}
-              icon={{ color: "error", component: <i className="ni ni-world" /> }}
-              percentage={{ color: "success", count: "+3%", text: "since last week" }}
-            />
-          </Grid>
-          <Grid item xs={12} md={6} lg={2}>
-            <DetailedStatisticsCard
-              title="Stock-In-Hand"
-              count={storeStatistics?.stock_inhand}
-              amount={""}
-              icon={{ color: "success", component: <i className="ni ni-paper-diploma" /> }}
-              percentage={{ color: "error", count: "", text: "" }}
-            />
-          </Grid>
-          <Grid item xs={12} md={5} lg={2}>
-            <DetailedStatisticsCard
-              title="Stock-Out"
-              count={storeStatistics?.stock_out}
-              amount={""}
-              icon={{ color: "warning", component: <i className="ni ni-cart" /> }}
-              percentage={{ color: "success", count: "+5%", text: "than last month" }}
-            />
-          </Grid>
+          </Grid> */}
+          
           <Grid item xs={12} md={5} lg={2}>
             <DetailedStatisticsCard
               title="Stock-In"
               count={storeStatistics?.stock_in}
               amount={""}
-              icon={{ color: "warning", component: <i className="ni ni-cart" /> }}
-              percentage={{ color: "success", count: "+5%", text: "than last month" }}
+              icon={{ color: "warning",  component: <i className="ni ni-bold-down" /> }}
+              // percentage={{ color: "success", count: "+5%", text: "than last month" }}
+            />
+          </Grid>
+        
+          <Grid item xs={12} md={5} lg={2}>
+            <DetailedStatisticsCard
+              title="Stock-Out"
+              count={storeStatistics?.stock_out}
+              amount={""}
+              icon={{ color: "warning", component: <i className="ni ni-bold-up" /> }}
+              // percentage={{ color: "success", count: "+5%", text: "than last month" }}
+            />
+          </Grid>
+          
+          <Grid item xs={12} md={6} lg={2}>
+            <DetailedStatisticsCard
+              title="Stock-In-Hand"
+              count={storeStatistics?.stock_inhand}
+              amount={""}
+              icon={{ color: "success", component: <i className="ni ni-archive-2" /> }}
+              // percentage={{ color: "error", count: "", text: "" }}
+            />
+          </Grid>
+
+
+          
+          
+          
+
+          <Grid item xs={12} md={6} lg={2}>
+            <DetailedStatisticsCard
+              title="Damages"
+              count={storeStatistics?.number_of_damages}
+              amount={""}
+              icon={{ color: "error", component: <i className="ni ni-basket" /> }}
+              // percentage={{ color: "success", count: "+3%", text: "since last week" }}
             />
           </Grid>
         </Grid>

@@ -50,19 +50,14 @@ function Damages() {
     if (!isValid) {
       toast.error("Please enter all the required fields!!");
     } else {
-      console.log(damagesData);
-
       try {
         const response = await addDamage(damagesData);
-
-        console.log("response")
-        console.log(response)
         if (response.status == 201) {
           toast.success("Successfully Added");
           handleGetDamagesList();
           setShowAddForm(false);
         } else {
-          toast.error(res.data.result[Object.keys(res.data.result)[0]][0]);
+          toast.error(response.data.message);
         }
       } catch (error) {
         toast.error("Error Adding");
@@ -124,7 +119,8 @@ function Damages() {
     { name: "product", align: "left" },
     { name: "category", align: "left" },
     { name: "damages", align: "center" },
-    { name: "edit", align: "center" }  ];
+    // { name: "edit", align: "center" }
+    ];
 
   const rows = [];
 
@@ -164,17 +160,17 @@ function Damages() {
         </ArgonTypography>
       ),
 
-      edit: (
-        <Button
-          onClick={async () => {
-            setEditFormActive(true);
-            setShowAddForm(true);
-            setDamagesData(item);
-          }}
-        >
-          <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-ruler-pencil" />
-        </Button>
-      )
+      // edit: (
+      //   <Button
+      //     onClick={async () => {
+      //       setEditFormActive(true);
+      //       setShowAddForm(true);
+      //       setDamagesData(item);
+      //     }}
+      //   >
+      //     <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-ruler-pencil" />
+      //   </Button>
+      // )
     });
   });
 
@@ -192,7 +188,7 @@ function Damages() {
           <ArgonBox mb={3}>
             <Card>
               <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
-                <ArgonTypography variant="h6">Damages table</ArgonTypography>
+                <ArgonTypography variant="h6">Damages List</ArgonTypography>
                 <Button
                   onClick={() => {
                     setDamagesData({
@@ -225,9 +221,9 @@ function Damages() {
           <ArgonBox mb={3}>
             <Card>
               <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
-                <ArgonTypography variant="h6">Damages table</ArgonTypography>
+                <ArgonTypography variant="h6">Damages List</ArgonTypography>
                 <Button onClick={() => setShowAddForm(!showAddForm)}>
-                  <h4 style={{ paddingRight: 10 }}>Show Damages Table </h4>
+                  <h4 style={{ paddingRight: 10 }}>Show Damages List </h4>
                   <ArgonBox
                     component="i"
                     color="info"

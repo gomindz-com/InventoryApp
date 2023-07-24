@@ -23,10 +23,10 @@ const routes = [
 
   {
     type: "route",
-    name: "Home",
-    key: "home",
+    name: "Homes",
+    key: "home", 
     route: "/home",
-    icon: <ArgonBox component="i" color="primary" fontSize="14px" className="ni ni-tv-2" />,
+    icon: <i className="fa fa-home" aria-hidden="true"></i>,
     component: <Home />,
   },
   {
@@ -78,7 +78,7 @@ const routes = [
     key: "categories",
     route: "/categories",
     icon: (
-      <ArgonBox component="i" color="success" fontSize="14px" className="ni ni-bag-17" />
+      <ArgonBox component="i" color="success" fontSize="14px" className="ni ni-align-center" />
     ),
     component: <Categories />,
   },
@@ -88,7 +88,7 @@ const routes = [
     key: "damages",
     route: "/damages",
     icon: (
-      <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-cart" />
+      <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-basket" />
     ),
     component: <Damages />,
   },
@@ -118,7 +118,7 @@ const routes = [
     name: "Contact Us",
     key: "contact",
     route: "/contact-us",
-    icon: <ArgonBox component="i" color="primary" fontSize="14px" className="ni ni-tv-2" />,
+    icon: <ArgonBox component="i" color="primary" fontSize="14px" className="ni ni-collection" />,
     component: <ContactUs />,
   },
   {
@@ -136,7 +136,7 @@ const routes = [
     name: "Sign Up",
     key: "sign-up",
     route: "/authentication/sign-up",
-    icon: <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-collection" />,
+    icon: <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-badge " />,
     component: <SignUp />,
   }, 
 ];

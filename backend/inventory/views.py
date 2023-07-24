@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from store.models import Product, Supplier, Buyer, Order
 import datetime
+from django.contrib import admin
 
 
 @login_required(login_url='login')
@@ -23,6 +24,8 @@ def dashboard(request):
 
 
 def Welcome(request):
-    now = datetime.datetime.now() 
-    msg = f'Welcome to Gomindz Inv Backend. Today is {now}'
-    return HttpResponse(msg, content_type='text/plain')
+    # now = datetime.datetime.now() 
+
+    link = 'http://139.59.208.8:443/#/home'
+    msg = f"You need to sign-in from the homepage Click <a href='{link}'>here</a> to go to the dashboard."
+    return HttpResponse(msg, content_type='text/html')

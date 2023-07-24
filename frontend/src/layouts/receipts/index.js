@@ -17,7 +17,6 @@ import Table from "examples/Tables/Table";
 import ArgonInput from "components/ArgonInput";
 import ArgonButton from "components/ArgonButton";
 import { Button } from "@mui/material";
-import { getOrders } from "apiservices/orderService";
 import { AddOrderSchema } from "formValidation/addForm";
 import Select from "react-select";
 import { getProducts } from "apiservices/productService";
@@ -30,8 +29,7 @@ import Fade from "@mui/material/Fade";
 import Typography from "@mui/material/Typography";
 import { useReactToPrint } from "react-to-print";
 import { Navigate, useNavigate } from "react-router-dom";
-import { addOrder } from "apiservices/orderService";
-import { deleteOrder } from "apiservices/orderService";
+import { getOrders, addOrder, deleteOrder} from "apiservices/orderService";
 import "./index.css";
 
 
@@ -52,6 +50,7 @@ function Receipts() {
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
   const [screenloading, setScreenLoading] = useState(true);
   const [orderList, setOrderList] = useState([]);
+  const [currentOrderList, setCurrentOrderList] = useState([]);
   const [productList, setProductList] = useState([]);
   const [buyerList, setBuyerList] = useState([]);
   const [productOptions, setProductOptions] = useState(null);
@@ -59,15 +58,6 @@ function Receipts() {
   const [totalPrice, setTotalPrice] = useState(0);
   const [quantity, setQuantity] = useState(0);
 
-  const date = new Date();
-  let day = date.getDate();
-  let month = date.getMonth() + 1;
-  let year = date.getFullYear();
-  let hour = date.getHours();
-  let minute = date.getMinutes();
-  let second = date.getMinutes();
-  let currentDate = `${day}${month}${year}${hour}${minute}${second}`;
-  const uuid = currentDate;
 
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
 
@@ -104,7 +94,7 @@ function Receipts() {
     buyer: "",
     buyer_location: "",
     status: "pending",
-    receipt: uuid,
+    receipt: '',
     total_price: "",
     type: "",
     products: [],
@@ -114,7 +104,7 @@ function Receipts() {
     buyer: "",
     buyer_location: "",
     status: "pending",
-    receipt: uuid,
+    receipt: '',
     total_price: "",
     type: "",
     products: [],
@@ -147,7 +137,7 @@ function Receipts() {
     { name: "buyer_location", align: "center" },
     { name: "status", align: "center" },
     { name: "View & Print", align: "center" },
-    { name: "delete", align: "center" },
+    //{ name: "delete", align: "center" },
   ];
   const rows = [];
 
@@ -178,6 +168,8 @@ function Receipts() {
     
       if (res.data?.status === true) {
         setOrderList(res.data.orders);
+        setCurrentOrderList(res.data.orders);
+
       } else {
         setOrderList([]);
       }
@@ -327,6 +319,8 @@ function Receipts() {
           <ArgonBox component="i" color="red" fontSize="34px" className="ni ni-fat-remove" />
         </Button>
       ),
+      
+     
     });
   });
 
@@ -604,6 +598,18 @@ function Receipts() {
   });
 
   const handleSubmit = async (e) => {
+
+    const date = new Date();
+    let day = date.getDate();
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+    let hour = date.getHours();
+    let minute = date.getMinutes();
+    let second = date.getSeconds();
+    let currentDate = `${day}${month}${year}${hour}${minute}${second}`;
+
+    const uuid = currentDate;
+
     const user = JSON.parse(localStorage.getItem("user"));
 
     let resTopics = [
@@ -625,6 +631,7 @@ function Receipts() {
       ["total_price"]: ordertotalPrice,
       ["type"]: "receipt",
       ["status"]: "pending",
+      ["ref"]: uuid,
       ["userid"]: user.id,
     });
 
@@ -634,6 +641,7 @@ function Receipts() {
       ["total_price"]: ordertotalPrice,
       ["type"]: "receipt",
       ["status"]: "pending",
+      ["ref"]: uuid,
       ["userid"]: user.id,
     });
 
@@ -648,7 +656,7 @@ function Receipts() {
     } else {
 
       toast.success("Adding Receipt!!");
-      await addOrder(orderData)
+      await addOrder('receipt', orderData)
         .then((res) => {
 
           if (res.status == 201 ) {
@@ -661,7 +669,7 @@ function Receipts() {
               buyer: "",
               buyer_location: "",
               status: "pending",
-              ref: uuid,
+              ref: '',
               total_price: "",
               type: "receipt",
               products: [],
@@ -720,13 +728,34 @@ function Receipts() {
         </Fade>
       </Modal>
 
-      <DashboardNavbar />
+      <DashboardNavbar
+      
+      handleClick ={(e) => {
+        
+        const filteredOrderList = [];
+        orderList.map((obj) => {
+
+          if (e.target.value === '') {
+            setOrderList(currentOrderList)
+          }
+
+          else if(
+            obj.buyer.toLowerCase() === e.target.value.toLowerCase() ||
+            obj.receipt.toLowerCase() === e.target.value.toLowerCase()) {
+            filteredOrderList.push(obj);
+            setOrderList(filteredOrderList);
+          }
+        });
+      
+      }
+    }
+    />
       <ArgonBox py={3}>
         {showOrderTable && (
           <ArgonBox mb={35}>
             <Card>
               <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
-                <ArgonTypography variant="h6">Receipt table</ArgonTypography>
+                <ArgonTypography variant="h6">Receipt List</ArgonTypography>
 
                 <Button
                   onClick={() => {
@@ -734,7 +763,7 @@ function Receipts() {
                       buyer: "",
                       buyer_location: "",
                       status: "",
-                      ref: uuid,
+                      ref: '',
                       total_price: "",
                       type: "",
                       products: [],
@@ -775,14 +804,14 @@ function Receipts() {
             <ArgonBox mb={3} pb={20}>
               <Card>
                 <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
-                  <ArgonTypography variant="h6">Receipt table</ArgonTypography>
+                  <ArgonTypography variant="h6">Receipt</ArgonTypography>
                   <Button
                     onClick={() => {
                       setShowOrderTable(true);
                       setShowAddForm(false);
                     }}
                   >
-                    <h4 style={{ paddingRight: 10 }}>Show Receipt Table </h4>
+                    <h4 style={{ paddingRight: 10 }}>Receipt List </h4>
                     <ArgonBox
                       component="i"
                       color="info"
@@ -947,7 +976,7 @@ function Receipts() {
                     <ArgonInput
                       type="name"
                       name="ref"
-                      placeholder={`Receipt ID : ${uuid}`}
+                      placeholder={`Receipt ID : XxxxxxxxxxxxxX`}
                       readOnly={true}
                       size="large"
                       onChange={handleChange}
@@ -986,7 +1015,7 @@ function Receipts() {
                   }}
                   className="btn btn-secondary"
                 >
-                  <i className="icon-printer"></i> Show Receipt Table
+                  <i className="icon-printer"></i> Show Receipt List
                 </a>
               </div>
             </div>

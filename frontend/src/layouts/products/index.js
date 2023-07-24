@@ -36,6 +36,7 @@ function Products() {
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
   const [screenloading, setScreenLoading] = useState(true);
   const [productList, setProductList] = useState([]);
+  const [currentProductList, setCurrentProductList] = useState([]);
   const [categoryList, setCategoryList] = useState([]);
   const [categoryOptions, setCategoryOptions] = useState([]);
   const category_options = [];
@@ -191,8 +192,9 @@ function Products() {
       const res = await getProducts();
       if (res.data?.status) {
         setProductList(res.data.products);
+        setCurrentProductList(res.data.products)
       } else {
-        setProductList({});
+        setProductList([]);
       }
     } catch (error) {}
   };
@@ -228,7 +230,7 @@ function Products() {
 
   
 
-  productList.map(function (item, i) {
+  productList?.map(function (item, i) {
     rows.push({
       product: (
         <ArgonBox display="flex" alignItems="center" px={1} py={0.5}>
@@ -336,13 +338,34 @@ function Products() {
     <DashboardLayout>
       <ToastContainer />
 
-      <DashboardNavbar />
+      <DashboardNavbar 
+        handleClick ={(e) => {
+          
+          const filteredProductList = [];
+          productList?.map((obj) => {
+
+            if (e.target.value === '') {
+              setProductList(currentProductList)
+            }
+
+            else if(
+              obj.name.toLowerCase() === e.target.value.toLowerCase()  ||
+              obj.category.toLowerCase() === e.target.value.toLowerCase()
+            ) {
+              filteredProductList.push(obj);
+              setProductList(filteredProductList);
+            }
+          });
+        
+        }
+    }
+    />
       <ArgonBox py={3}>
         {!showAddProductForm ? (
           <ArgonBox mb={3}>
             <Card>
               <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
-                <ArgonTypography variant="h6">Products table</ArgonTypography>
+                <ArgonTypography variant="h6">Products</ArgonTypography>
                 <Button
                   onClick={() => {
                     setProductData({
@@ -381,9 +404,9 @@ function Products() {
           <ArgonBox mb={3}>
             <Card>
               <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
-                <ArgonTypography variant="h6">Products table</ArgonTypography>
+                <ArgonTypography variant="h6">Products List</ArgonTypography>
                 <Button onClick={() => setShowAddProductForm(!showAddProductForm)}>
-                  <h4 style={{ paddingRight: 10 }}>Show Product Table </h4>
+                  <h4 style={{ paddingRight: 10 }}>Show Product List </h4>
                   <ArgonBox
                     component="i"
                     color="info"

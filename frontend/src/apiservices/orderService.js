@@ -27,9 +27,9 @@ export const getOrderCount = async () => {
 };
 
 
-export const addOrder = async (productData) => {
+export const addOrder = async (type, productData) => {
   const data = await axiosConfig
-    .post(`/store/orders`, productData)
+    .post(`/store/orders?type=${type}`, productData)
     .then((response) => {
       return response;
     })
@@ -43,6 +43,20 @@ export const addOrder = async (productData) => {
 export const editOrder = async (id, updateData) => {
 
   const data = await axiosConfig
+    .patch(`/store/orders/${id}`, updateData)
+    .then((response) => {
+      return response;
+    })
+    .catch((err) => {
+      return err.response;
+    });
+  return data;
+};
+
+
+export const updateOrder = async (id, updateData) => {
+
+  const data = await axiosConfig
     .put(`/store/orders/${id}`, updateData)
     .then((response) => {
       return response;
@@ -52,6 +66,7 @@ export const editOrder = async (id, updateData) => {
     });
   return data;
 };
+
 
 
 export const deleteOrder = async (id) => {

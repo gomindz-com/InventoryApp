@@ -1,16 +1,24 @@
-import { StyleSheet, Text, View, TouchableOpacity, Alert } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
 import React, { useState } from "react";
 import { COLORS } from "../../constants/Theme";
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import CustomText from "../../components/CustomText";
-import CustomDatePicker from "../../components/CustomDatePicker";
 import CustomInput from "../../components/CustomInput";
-import InputComponent from "../../components/InputComponent";
+import CustomCard from "../../components/CustomCard";
+import CustomDatePickerFine from "../../components/CustomDatePicker";
+import CustomDropdownCore from "../../components/CustomDropdownCore";
 
-// const { params } = route;
-// const inputValues = params?.inputValues || [];
-// console.log(inputValues);
+const options = [
+  { label: "Product IN", value: "IN" },
+  { label: "Product OUT", value: "OUT" },
+];
 
 const AddNewTransact = () => {
   const navigation = useNavigation();
@@ -25,9 +33,14 @@ const AddNewTransact = () => {
   const [quantity, setQuantity] = useState("");
   const [remark, setRemark] = useState("");
   const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedValue, setSelectedValue] = useState(null);
 
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
+  // const handleDateChange = (date) => {
+  //   setSelectedDate(date);
+  // };
+
+  const handleValueChange = (value) => {
+    setSelectedValue(value);
   };
 
   const handleSubmit = () => {
@@ -50,7 +63,10 @@ const AddNewTransact = () => {
   };
 
   return (
-    <View>
+    // <>
+    //   <CustomText>Hello</CustomText>
+    // </>
+    <View style={styles.mainContainer}>
       <View style={styles.top}>
         <View style={styles.topButton}>
           <TouchableOpacity onPress={goBackScreen}>
@@ -64,42 +80,75 @@ const AddNewTransact = () => {
 
         <CustomText style={styles.textTitle}>Add New Transaction</CustomText>
       </View>
-      <View style={styles.inputesStylesConatiner}>
+
+      <CustomCard
+        style={{ marginHorizontal: 30, alignSelf: "center", width: "100%" }}
+      >
+        <ScrollView>
+          <CustomDatePickerFine />
+
+          <CustomInput
+            value={product}
+            onChangeText={setProduct}
+            mt={10}
+            placeholder={"Product"}
+            bg="#f5faf8"
+            bw={0}
+          />
+
+          <CustomInput
+            value={productType}
+            onChangeText={setProductType}
+            mt={10}
+            placeholder={"Product Type"}
+            bg="#f5faf8"
+            bw={0}
+          />
+
+          <CustomInput
+            value={currentStock}
+            onChangeText={setCurrentStock}
+            mt={10}
+            placeholder={"Current Stock"}
+            bg="#f5faf8"
+            bw={0}
+          />
+
+          <CustomInput
+            value={quantity}
+            onChangeText={setQuantity}
+            mt={10}
+            placeholder={"Quantity"}
+            bg="#f5faf8"
+            bw={0}
+          />
+
+          <CustomInput
+            value={remark}
+            onChangeText={setRemark}
+            mt={10}
+            placeholder={"remark"}
+            bg="#f5faf8"
+            bw={0}
+          />
+          <CustomDropdownCore
+            options={options}
+            selectedValue={selectedValue}
+            onValueChange={handleValueChange}
+          />
+        </ScrollView>
+      </CustomCard>
+
+      {/* <View style={styles.inputesStylesConatiner}>
         <CustomDatePicker
           selectedDate={selectedDate}
           onDateChange={handleDateChange}
         />
-        <CustomInput
-          value={product}
-          onChangeText={setProduct}
-          mt={10}
-          placeholder={"Product"}
-        />
-        <CustomInput
-          value={productType}
-          onChangeText={setProductType}
-          mt={10}
-          placeholder={"Product Type"}
-        />
-        <CustomInput
-          value={currentStock}
-          onChangeText={setCurrentStock}
-          mt={10}
-          placeholder={"Current Stock"}
-        />
-        <CustomInput
-          value={quantity}
-          onChangeText={setQuantity}
-          mt={10}
-          placeholder={"Quantity"}
-        />
-        <CustomInput
-          value={remark}
-          onChangeText={setRemark}
-          mt={10}
-          placeholder={"Remark"}
-        />
       </View>
+
+      <View style={{ top: -50 }}>
+        <DropdownSelect />
+      </View> */}
     </View>
   );
 };
@@ -125,5 +174,9 @@ const styles = StyleSheet.create({
   },
   inputesStylesConatiner: {
     marginHorizontal: 10,
+  },
+  mainContainer: {
+    backgroundColor: COLORS.green,
+    flex: 1,
   },
 });

@@ -1,4 +1,10 @@
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  FlatList,
+} from "react-native";
 import React, { useState } from "react";
 import CustomCard from "../../components/CustomCard";
 import { COLORS } from "../../constants/Theme";
@@ -19,6 +25,7 @@ const ProductData = [
     quantity: "55",
     remark: "slay",
     date: "22/44/2033",
+    status: "IN",
   },
   {
     id: 2,
@@ -28,11 +35,124 @@ const ProductData = [
     quantity: "45",
     remark: "sley",
     date: "22/64/2033",
+    status: "Out",
+  },
+  {
+    id: 3,
+    product: "Chikend",
+    productType: "Fruite",
+    currentStock: "55",
+    quantity: "45",
+    remark: "sley",
+    date: "22/64/2033",
+    status: "IN",
+  },
+
+  {
+    id: 4,
+    product: "Alip",
+    productType: "Fruite",
+    currentStock: "55",
+    quantity: "45",
+    remark: "sley",
+    date: "22/64/2033",
+    status: "OUT",
+  },
+
+  {
+    id: 5,
+    product: "Bread",
+    productType: "Fruite",
+    currentStock: "55",
+    quantity: "45",
+    remark: "sley",
+    date: "22/64/2033",
+    status: "IN",
+  },
+
+  {
+    id: 5,
+    product: "Milk",
+    productType: "Fruite",
+    currentStock: "55",
+    quantity: "45",
+    remark: "sley",
+    date: "22/64/2033",
+    status: "OUT",
+  },
+  {
+    id: 6,
+    product: "Mango",
+    productType: "Fruite",
+    currentStock: "55",
+    quantity: "45",
+    remark: "sley",
+    date: "22/64/2033",
+    status: "IN",
+  },
+  {
+    id: 7,
+    product: "Jimbo",
+    productType: "Fruite",
+    currentStock: "55",
+    quantity: "45",
+    remark: "sley",
+    date: "22/64/2033",
+    status: "OUT",
+  },
+  {
+    id: 8,
+    product: "Tomato",
+    productType: "Fruite",
+    currentStock: "55",
+    quantity: "45",
+    remark: "sley",
+    date: "22/64/2033",
+    status: "IN",
+  },
+  {
+    id: 9,
+    product: "Mango",
+    productType: "Fruite",
+    currentStock: "55",
+    quantity: "45",
+    remark: "sley",
+    date: "22/64/2033",
+    status: "OUT",
+  },
+  {
+    id: 10,
+    product: "Water",
+    productType: "Fruite",
+    currentStock: "55",
+    quantity: "45",
+    remark: "sley",
+    date: "22/64/2033",
+    status: "OUT",
+  },
+  {
+    id: 11,
+    product: "Water",
+    productType: "Fruite",
+    currentStock: "55",
+    quantity: "45",
+    remark: "sley",
+    date: "22/64/2033",
+    status: "OUT",
+  },
+  {
+    id: 12,
+    product: "Bannana",
+    productType: "Fruite",
+    currentStock: "55",
+    quantity: "45",
+    remark: "sley",
+    date: "22/64/2033",
+    status: "IN",
   },
 ];
 
 const HomeScreen = ({ route }) => {
-  // const route = useRoute();
   const { params } = route;
   const inputValues = params?.inputValues || [];
   console.log(inputValues);
@@ -45,44 +165,11 @@ const HomeScreen = ({ route }) => {
   };
 
   const AddNewTansact = () => {
-    navigation.navigate("NewTransact");
+    navigation.navigate("AddNewTransact");
   };
 
   const SettingScreen = () => {
     navigation.navigate("Setting");
-  };
-
-  
-
-  const Card = ({ item }) => {
-    const { product, productType, currentStock, quantity, remark, date } = item;
-
-    return (
-      <TouchableOpacity style={styles.card}>
-        <View style={styles.avatarContainer}>
-          <View style={styles.avatar}>
-            <CustomText style={styles.textIn}>IN</CustomText>
-          </View>
-        </View>
-        <View style={styles.contentContainer}>
-          <View>
-            <Text style={styles.subtitle}>Product: {product}</Text>
-            <Text style={styles.subtitle}>productType: {productType}</Text>
-            <Text style={styles.subtitle}>currentStock: {currentStock}</Text>
-          </View>
-          <View
-            style={{
-              marginLeft: 20,
-            }}
-          >
-            <Text style={styles.subtitle}>quantity: {quantity}</Text>
-
-            <Text style={styles.subtitle}>remark: {remark}</Text>
-            <Text style={styles.subtitle}>Date: {date}</Text>
-          </View>
-        </View>
-      </TouchableOpacity>
-    );
   };
 
   return (
@@ -96,7 +183,10 @@ const HomeScreen = ({ route }) => {
             marginHorizontal: 10,
           }}
         >
-          <TouchableOpacity onPress={SettingScreen} style={{ flexDirection: "row" }}>
+          <TouchableOpacity
+            onPress={SettingScreen}
+            style={{ flexDirection: "row" }}
+          >
             <Feather name="settings" size={30} color="#fff" />
             <CustomText
               style={{
@@ -140,12 +230,11 @@ const HomeScreen = ({ route }) => {
               length={100}
             />
           </View>
-          {/* ButtonContainer */}
 
           <View style={styles.leftButtonContainer}>
             <View style={styles.pieChate}>
               <View style={styles.buttonIn}></View>
-              <CustomText style={{ left: 5, top: 4 }}>630 In</CustomText>
+              <CustomText style={{ left: 5, top: 4 }}>100 Out</CustomText>
             </View>
 
             <View style={styles.pieChate}>
@@ -155,7 +244,7 @@ const HomeScreen = ({ route }) => {
 
             <View style={styles.pieChate}>
               <View style={styles.buttonInHand}></View>
-              <CustomText style={{ left: 5, top: 15 }}>630 In</CustomText>
+              <CustomText style={{ left: 5, top: 15 }}>530 In-Hand</CustomText>
             </View>
           </View>
         </View>
@@ -166,52 +255,41 @@ const HomeScreen = ({ route }) => {
         </CustomText>
       </View>
 
-      {/* Transactions */}
-      {ProductData.map((item) => (
-        <Card key={item.id} item={item} />
-      ))}
-
-      {/* <View>
-        <View style={{ marginHorizontal: 15 }}>
-          <View style={styles.transctContainer}>
-            <View style={{ left: 40 }}>
-              <CustomText style={{ fontWeight: "bold", left: 10 }}>
-                70
-              </CustomText>
-              <CustomText style={{ fontWeight: "bold" }}>Ice Cream</CustomText>
-            </View>
-
-            <View>
-              <CustomText>03/06/2023</CustomText>
-            </View>
-          </View>
-          <View style={styles.taranctIn}>
-            <CustomText style={{ color: "#fff" }}>OUT</CustomText>
-          </View>
-        </View>
-
-        <View style={{ top: -115 }}>
-          <View style={{ marginHorizontal: 15 }}>
-            <View style={styles.transctContainerIn}>
-              <View style={{ left: 40 }}>
-                <CustomText style={{ fontWeight: "bold", left: 10 }}>
-                  70
-                </CustomText>
-                <CustomText style={{ fontWeight: "bold" }}>
-                  Ice Cream
-                </CustomText>
+      <FlatList
+        data={ProductData}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            onPress={() => navigation.navigate("ProductDetail", { item })}
+          >
+            <View style={{ marginHorizontal: 15, marginTop: 10 }}>
+              <View style={styles.transctContainer}>
+                <View style={{ left: 40 }}>
+                  <CustomText style={{ fontWeight: "bold", left: 10 }}>
+                    {item.currentStock}
+                  </CustomText>
+                  <CustomText style={{ fontWeight: "bold" }}>
+                    {item.product}
+                  </CustomText>
+                </View>
+                <View>
+                  <CustomText>{item.date}</CustomText>
+                </View>
               </View>
-
-              <View>
-                <CustomText>03/06/2023</CustomText>
+              <View
+                style={[
+                  styles.taranctIn,
+                  item.status === "IN" ? { backgroundColor: "red" } : null,
+                ]}
+              >
+                <CustomText style={{ color: "#fff" }}>{item.status}</CustomText>
               </View>
             </View>
-            <View style={styles.taranctout}>
-              <CustomText style={{ color: "#fff" }}>IN</CustomText>
-            </View>
-          </View>
-        </View>
-      </View> */}
+          </TouchableOpacity>
+        )}
+        contentContainerStyle={{ paddingBottom: 200 }} // Add spacing at the bottom
+        keyboardShouldPersistTaps="always" // Ensure list items remain visible when keyboard is open
+      />
 
       <BottomSheet
         visible={bottomsheet}
@@ -291,7 +369,7 @@ const styles = StyleSheet.create({
   },
   transctContainer: {
     width: "100%",
-    height: "30%",
+    height: 50,
     borderColor: "black",
     borderWidth: 1,
     borderRadius: 10,
@@ -320,17 +398,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  taranctout: {
-    height: 40,
-    width: 40,
-    borderRadius: 10,
-    backgroundColor: "red",
-    position: "absolute",
-    left: -10,
-    top: 7,
-    alignItems: "center",
-    justifyContent: "center",
-  },
+
   buttomSheetContainer: {
     backgroundColor: "#fff",
     height: "40%",
@@ -352,14 +420,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     color: "#fff",
   },
-  card: {
-    flexDirection: "row",
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 10,
-    padding: 10,
-    marginBottom: 10,
-  },
+
   avatarContainer: {
     justifyContent: "center",
     alignItems: "center",
@@ -374,27 +435,5 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderWidth: 1,
     borderColor: "#70ff7e",
-  },
-  contentContainer: {
-    flex: 1,
-    flexDirection: "row",
-  },
-  row: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  title: {
-    fontWeight: "bold",
-    fontSize: 16,
-    marginBottom: 5,
-    width: "100%",
-  },
-  subtitle: {
-    flex: 1,
-    marginRight: 5,
-  },
-  textIn: {
-    fontWeight: "bold",
-    fontSize: 30,
   },
 });
