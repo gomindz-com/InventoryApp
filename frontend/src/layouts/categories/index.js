@@ -189,7 +189,7 @@ function Categories() {
           <ArgonBox mb={3}>
             <Card>
               <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
-                <ArgonTypography variant="h6">Categories table</ArgonTypography>
+                <ArgonTypography variant="h6">Categories List</ArgonTypography>
                 <Button onClick={() => {
 
                   const user = JSON.parse(localStorage.getItem("user"));
@@ -223,9 +223,9 @@ function Categories() {
           <ArgonBox mb={3}>
             <Card>
               <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
-                <ArgonTypography variant="h6">Categories table</ArgonTypography>
+                <ArgonTypography variant="h6">Categories List</ArgonTypography>
                 <Button onClick={() => setShowAddCategoryForm(!showAddCategoryForm)}>
-                  <h4 style={{ paddingRight: 10 }}>Show Category Table </h4>
+                  <h4 style={{ paddingRight: 10 }}>Show Category List </h4>
                   <ArgonBox
                     component="i"
                     color="info"

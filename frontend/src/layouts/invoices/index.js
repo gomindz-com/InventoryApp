@@ -33,9 +33,11 @@ import { useReactToPrint } from "react-to-print";
 import { Navigate } from "react-router-dom";
 import { getOrders, deleteOrder, addOrder, editOrder} from "apiservices/orderService";
 import { getProducts } from "apiservices/productService";
-
+import {v4 as uuidv4} from 'uuid';
 import { ToastContainer, toast } from "react-toastify";
 import "./index.css";
+import { item } from "examples/Sidenav/styles/sidenavItem";
+import { updateOrder } from "apiservices/orderService";
 
 
 function Invoices() {
@@ -47,13 +49,16 @@ function Invoices() {
 
   const [rememberMe, setRememberMe] = useState(false);
   const [showAddForm, setShowAddForm] = useState(false);
+  const [showEditForm, setShowEditForm] = useState(false);
   const [showOrderTable, setShowOrderTable] = useState(true);
 
   const [showPrintView, setShowPrintView] = useState(false);
 
   const [viewOrderActive, setViewOrderActive] = useState(true);
   const [screenloading, setScreenLoading] = useState(true);
+  
   const [orderList, setOrderList] = useState([]);
+  const [currentOrderList, setCurrentOrderList] = useState([]);
   const [productList, setProductList] = useState([]);
   const [productOptions, setProductOptions] = useState(null);
   const [productPrice, setProductPrice] = useState(0);
@@ -62,33 +67,25 @@ function Invoices() {
 
   const [selected, setSelected] = React.useState(false);
 
-
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
 
-  const date = new Date();
-  let day = date.getDate();
-  let month = date.getMonth() + 1;
-  let year = date.getFullYear();
-  let hour = date.getHours();
-  let minute = date.getMinutes();
-  let second = date.getMinutes();
-  let currentDate = `${day}${month}${year}${hour}${minute}${second}`;
+  const [openpayment, setOpenPayment] = React.useState(false);
 
-  const uuid = currentDate;
+  const [modalItem, setModalItem] = useState();
 
-  const [invoiceData, setInvoiceData] = useState({
-    buyer: "",
-    buyer_location: "",
-    status: "pending",
-    ref: uuid,
-    total_price: "",
-    type: "",
-    products: [],
-  });
+  const handleOpenPayment = (item) => {
+    
+    setOpenPayment(true);
+    setModalItem(item)
+    console.log(item);
 
+  }
+  const handleClosePayment = () => setOpenPayment(false);
+
+  
   const [ordertotalPrice, setOrderTotalPrice] = useState(0.0);
   const [theBuyer, setTheBuyer] = useState("");
   const [theBuyerLocation, setTheBuyerLocation] = useState("");
@@ -98,11 +95,17 @@ function Invoices() {
   const [firstProductPrice, setFirstProductPrice] = useState(null);
   const [firstProductTotalPrice, setFirstProductTotalPrice] = useState(null);
 
+
+  const [editData, setEditData] = useState({});
+
+  const [totalPriceEditData, setTotalPriceEditData] = useState(0);
+
+
   const [orderData, setOrderData] = useState({
     buyer: "",
     buyer_location: "",
     status: "pending",
-    receipt: uuid,
+    receipt: '',
     total_price: "",
     type: "",
     products: [],
@@ -118,12 +121,19 @@ function Invoices() {
     { name: "status", align: "center" },
     { name: "Approve As Receipt", align: "center" },
     { name: "View & Print", align: "center" },
+    { name: "edit", align: "center" },
     { name: "delete", align: "center" },
   ];
   const rows = [];
 
   const [idProductRow, setIdProductRow] = useState(0);
   const [productInputRow, setProductInputRow] = useState([]);
+
+
+  const [productEditRows, setProductEditRows] = useState([]);
+
+
+
 
   const [otherProducts, setOtherProducts] = useState([]);
   const [otherProductsQuantity, setOtherProductsQuantity] = useState([]);
@@ -152,7 +162,6 @@ function Invoices() {
   const handleGetOrderList = async () => {
     const user = JSON.parse(localStorage.getItem("user"));
 
-    toast.success("Fetching Invoices!!", { autoClose: 40 });
 
     setOrderList([]);
     setScreenLoading(true);
@@ -165,6 +174,7 @@ function Invoices() {
       
       if (res.data?.status === true) {
         setOrderList(res.data.orders);
+        setCurrentOrderList(res.data.orders);
       } else {
         setOrderList([]);
       }
@@ -201,13 +211,60 @@ function Invoices() {
     }
   };
 
-  const handleEdit = async (id) => {
+  const handleApproveAsReceipt = async (item) => {
 
-    const res = await editOrder(id, { type: "receipt" })
 
-    if(res.status == 200){
+    const newState = item.products.map((obj) => {
+      
+        return {
+          ...obj,
+          amount: obj.quantity
+        };
+      
+    });
+
+
+    // console.log("new state")
+    // console.log(newState)
+    // console.log(item.products)
+    // console.log(item.total_price)
+    
+
+    // return false;
+
+
+    const res = await editOrder(item.id, {
+      "products": newState,
+      "total_price": item.total_price,
+      "type": "receipt" 
+    })
+
+    console.log("Respond From Approve Order As Receipt")
+    console.log(res)
+
+    if(res.status == 201){
       toast.success("Invoice added as a Receipt Successfully"), { autoClose: 40 };
       handleGetOrderList();
+      handleClosePayment();
+    }
+    else {
+      toast.error("Invoice Could Not Be Updated");
+    }
+  };
+
+  const handleApprovePartPayment = async (item) => {
+
+    const res = await updateOrder(item.id, { 
+      "status": "approved"
+     })
+
+    console.log("Respond From Approve Part Payment")
+    console.log(res)
+
+    if(res.status == 200){
+      toast.success("Invoice Partly Approved paid"), { autoClose: 40 };
+      handleGetOrderList();
+      handleClosePayment();
     }
     else {
       toast.error("Invoice Could Not Be Updated");
@@ -227,7 +284,6 @@ function Invoices() {
     setTotalPrice(productPrice * e.target.value);
   };
 
-
   const handleDeleteInvoice = async (id) => {
     await deleteOrder(id)
       .then((res) => {
@@ -246,6 +302,18 @@ function Invoices() {
   };
 
   const handleSubmit = async (e) => {
+
+
+    const date = new Date();
+    let day = date.getDate();
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+    let hour = date.getHours();
+    let minute = date.getMinutes();
+    let second = date.getSeconds();
+    let currentDate = `${day}${month}${year}${hour}${minute}${second}`;
+
+    const uuid = currentDate;
 
     const user = JSON.parse(localStorage.getItem("user"));
     let resTopics = [
@@ -272,15 +340,7 @@ function Invoices() {
       ["total_price"]: ordertotalPrice,
       ["type"]: "invoice",
       ["status"]: "pending",
-      ["userid"]: user.id,
-    });
-
-    setInvoiceData({
-      ...orderData,
-      ["products"]: resTopics,
-      ["total_price"]: ordertotalPrice,
-      ["type"]: "invoice",
-      ["status"]: "pending",
+      ["ref"]: uuid,
       ["userid"]: user.id,
     });
 
@@ -288,15 +348,23 @@ function Invoices() {
   };
 
   const handleComfirm = async () => {
+
+    console.log("Invoice Data Sent To Api")
+    console.log(orderData)
+
     const isValid = await AddOrderSchema.isValid(orderData);
     if (!isValid) {
       toast.error("Please enter all the required fields!!");
     } else {
       toast.success("Adding Invoice!!", { autoClose: 80 });
-      await addOrder(orderData)
+      await addOrder("invoice", orderData)
         .then((res) => {
-          if (res.data?.status == true) {
-            toast.success(" Successfully Added", { autoClose: 40 });
+
+          console.log("Adding Invoice Api Response ---")
+          console.log(res.status)
+
+          if (res.status == 201) {
+            
             setFirstProductId("");
             setIdProductRow(0);
             setProductInputRow([]);
@@ -304,7 +372,7 @@ function Invoices() {
               buyer: "",
               buyer_location: "",
               status: "pending",
-              ref: uuid,
+              ref: '',
               total_price: "",
               type: "invoice",
               products: [],
@@ -327,6 +395,37 @@ function Invoices() {
     }
   };
 
+  const handleEditOrderInvoice = async (id) => {
+
+    console.log("Edit Order Data")
+    console.log(editData)
+    console.log(productEditRows)
+    console.log(totalPriceEditData)
+    
+    toast.success("Editing Invoice!!", { autoClose: 80 });
+    await editOrder(id, {
+      "products": productEditRows,
+      "total_price": totalPriceEditData,
+      "type": "invoice" 
+    })
+      .then((res) => {
+        console.log("Edit Invoice Respond")
+        console.log(res)
+
+        if (res.data?.status == true) {
+          toast.success(" Successfully Editing", { autoClose: 40 });
+          handleGetOrderList();
+        } else {
+          toast.error(res.data.message);
+          setOpen(false);
+        }
+      })
+      .catch((err) => {
+        setOpen(false);
+      });
+    
+  };
+
   useEffect(() => {
     handleGetOrderList();
     handleGetProductList();
@@ -339,7 +438,7 @@ function Invoices() {
         <ArgonBox display="flex" alignItems="center" px={3} py={0.5}>
           <ArgonBox display="flex" flexDirection="column">
             <ArgonTypography variant="button" fontWeight="medium">
-              {item.id}
+              {item.receipt}
             </ArgonTypography>
           </ArgonBox>
         </ArgonBox>
@@ -386,7 +485,7 @@ function Invoices() {
 
       status: (
         <ArgonTypography variant="caption" color="secondary" fontWeight="medium">
-          {item.status}
+          {item.status == 'approved' ? 'Partly Paid' : 'Pending Payment'}
         </ArgonTypography>
       ),
 
@@ -395,8 +494,9 @@ function Invoices() {
           value="check"
           selected={selected}
           onChange={() => {
-            setSelected(!selected);
-            handleEdit(item.id);
+            handleOpenPayment(item);
+            //setSelected(!selected);
+            //handleEdit(item.id);
           }}
         >
           <CheckIcon />
@@ -412,8 +512,16 @@ function Invoices() {
 
             setOrderData(item);
             setProductInputRow(item.products);
+
+            console.log(item.products)
             setOrderTotalPrice(0);
             setViewOrderActive(true);
+
+
+            console.log("Product Options")
+            console.log(productOptions)
+            console.log("Product Items")
+            console.log(item.products)
 
             setOrderTotalPrice(item.total_price);
             setTheBuyer(item.buyer);
@@ -424,6 +532,40 @@ function Invoices() {
           }}
         >
           <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-bold-down" />
+        </Button>
+      ),
+      edit: (
+        <Button
+          onClick={async () => {
+
+
+            console.log("Current Edit Products Input Rows : ");
+            i = 0;
+            setEditData(item)
+            setTotalPriceEditData(item.total_price)
+            
+            const updateState = item.products.map((obj) => {
+              console.log("Current Edit Products Input Rows : ");
+              return {
+                ...obj,
+                row: i++,
+                amount: obj.quantity,
+                price: obj.price * obj.quantity,
+                productprice: obj.price
+              };
+            });
+
+            setProductEditRows(updateState);
+
+            console.log("updateState")
+            console.log(updateState)
+            setShowOrderTable(false)
+            setViewOrderActive(false)
+            setShowAddForm(false);
+            setShowEditForm(true);
+          }}
+        >
+          <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-ruler-pencil" />
         </Button>
       ),
       delete: (
@@ -704,6 +846,346 @@ function Invoices() {
   });
   
 
+
+  const renderEditColumns = productEditRows.map((product, key) => {
+
+    const handleChangeOtherProduct = async (selectedOption) => {
+      if (otherProducts[row] == undefined) {
+        setOtherProducts((current) => [
+          ...current,
+          {
+            id: selectedOption.id,
+            row: row,
+            amount: 1,
+            productprice: selectedOption.price,
+            price: selectedOption.price,
+          },
+        ]);
+
+        const newState = productInputRow.map((obj) => {
+          if (obj.row == row) {
+            return {
+              ...obj,
+              amount: productInputRow[row].amount + 1,
+              productprice: selectedOption.price,
+              price: selectedOption.price,
+            };
+          } else {
+            return { ...obj };
+          }
+        });
+
+        setProductInputRow(newState);
+        setOrderTotalPrice(parseFloat(ordertotalPrice) + parseFloat(selectedOption.price));
+      } else {
+        const currentprice = productInputRow[row].price;
+
+        const newState1 = productInputRow.map((obj) => {
+          if (obj.row == row) {
+            return { ...obj, price: productInputRow[row].amount * selectedOption.price };
+          } else {
+            return { ...obj };
+          }
+        });
+
+        setProductInputRow(newState1);
+
+        const newState = otherProducts.map((obj) => {
+          if (obj.row == row) {
+            return { ...obj, id: selectedOption.id, price: selectedOption.price };
+          } else {
+            return { ...obj };
+          }
+        });
+
+        setOtherProducts(newState);
+
+        setOrderTotalPrice(
+          parseFloat(ordertotalPrice) -
+            currentprice +
+            parseFloat(productInputRow[row].amount * selectedOption.price)
+        );
+      }
+    };
+    let indexx;
+
+    productOptions.forEach(function (arrayItem, i) {
+
+      var x = arrayItem.value;
+      
+      if(x == productEditRows[key]?.name){
+        indexx = i
+      }
+    });
+
+
+    
+    
+    return (
+      <ArgonBox key={key} mb={2} mx={5} display="flex">
+        <div style={{ flex: 5, paddingRight: 10 }}>
+          <Select
+            name="product"
+            placeholder="Products"
+            defaultValue={productOptions[indexx]}
+            options={productOptions}
+            onChange={async (selectedOption) => {
+
+              console.log("Selecting A Product For Edit Products Row ")
+              console.log(selectedOption)
+              console.log("Current Total Price")
+              console.log(totalPriceEditData)
+              console.log("Current Row Price")
+              console.log(productEditRows[key]?.price)
+
+
+              if (isNaN(productEditRows[key]?.price)) {
+                setTotalPriceEditData(
+                  parseFloat(totalPriceEditData) + parseFloat(selectedOption.price)
+                );
+              } else {
+                setTotalPriceEditData(
+
+                  parseFloat(totalPriceEditData) +
+                    parseFloat(productEditRows[key]?.price) +
+                    parseFloat(selectedOption.price)
+                );
+              }
+              
+              const ProductUpdate = productEditRows.map((obj) => {
+                console.log(obj)
+                if (obj.row == key) {
+                  console.log('key')
+                  console.log(key)
+                  return {
+                    ...obj,
+                    amount: 1,
+                    id:selectedOption.id,
+                    productprice: selectedOption.price,
+                    price: selectedOption.price,
+                  };
+                } else {
+                  return { ...obj };
+                }
+              });
+
+              setProductEditRows(ProductUpdate);
+
+            }}
+          />
+        </div>
+        <div style={{ flex: 3, paddingRight: 10 }}>
+          <div style={{ display: "flex" }}>
+            <ArgonInput
+              style={{ flex: 5 }}
+              type="text"
+              placeholder="Amount"
+              value={productEditRows[key]?.amount}
+              size="large"
+              onChange={async (e) => {
+                const result = e.target.value.replace(/\D/g, "");
+
+                console.log('Edit Products Input Row :', key)
+                console.log("Input Value : ", result)
+                console.log("Current Edit Products Input Rows State : ")
+                console.log(productEditRows)
+
+              
+                
+                // const updateOnOtherProducts = productEditRows.map((obj) => {
+
+                //   console.log('obj')
+                //   console.log(obj)
+
+                //   if(obj.hasOwnProperty('productprice')){
+
+                //     console.log("hasssss  jsdkvsdf")
+                //   }
+
+                //   else{
+
+
+                //     console.log("has noooot")
+
+                //     const ProductUpdate = productEditRows.map((obj) => {
+
+                //       console.log(obj)
+                //       if (obj.row == key) {
+                //         console.log('key')
+                //         console.log(key)
+                //         return {
+                //           ...obj,
+                //           amount: 1,
+                //           productprice: obj.price,
+                //           price: obj.price,
+                //         };
+                //       } else {
+                //         return { ...obj };
+                //       }
+                //     });
+      
+                //     setProductEditRows(ProductUpdate);
+
+                    
+                //   }
+
+
+
+
+                //   if (obj.key == key) {
+                //     return { ...obj, amount: parseInt(result), price:parseInt(result)  };
+                //   } else {
+                //     return { ...obj };
+                //   }
+                // });
+                // setProductEditRows(updateOnOtherProducts);
+
+                const AmountValueUpdate = productEditRows.map((obj) => {
+
+                  console.log("fdgdf")
+                  console.log(obj.row)
+
+                   
+                  if (obj.row == 0) {
+
+                    setTotalPriceEditData( parseFloat((result * obj.productprice)));
+
+                    return {
+                      ...obj,
+                      amount: result,
+                      price: result * obj.productprice,
+                    };
+                  } 
+
+                 else if (obj.row == key) {
+
+                    setTotalPriceEditData( parseFloat(productEditRows[key].price) + parseFloat((result * obj.productprice)));
+
+                    return {
+                      ...obj,
+                      amount: result,
+                      price: result * obj.productprice,
+                    };
+                  } else {
+
+
+
+                    return { ...obj };
+                  }
+                });
+
+                setProductEditRows(AmountValueUpdate);
+
+                return false;
+              }}
+            />
+          </div>
+        </div>
+        <div style={{ flex: 3 }}>
+          <ArgonInput
+            type="name"
+            name="price"
+            value={productEditRows[key]?.price}
+            placeholder="Price"
+            size="large"
+            onChange={handleChangeAmount}
+          />
+        </div>
+        <div style={{ alignSelf: "center", flex: 1 }}>
+          <Button
+            onClick={async () => {
+
+              console.log('productEditRows[key]')
+              console.log(productEditRows[key])
+              
+              if (productEditRows[0].amount > 0 && productEditRows[key + 1] == undefined && productEditRows[key].price != undefined) {
+                let idp = productEditRows.length;
+
+                setProductEditRows((current) => [...current, { row: idp, amount: 0 }]);
+                setIdProductRow(idp + 1);
+
+
+
+              } else {
+                toast.error("Please Choose a Product!!", {autoClose: 80});
+              }
+            }}
+          >
+            Add
+          </Button>
+        </div>
+        <div style={{ alignSelf: "center", flex: 1 }}>
+          <Button
+            onClick={async () => {
+
+              console.log('productEditRows.length')
+              console.log(productEditRows.length)
+              console.log(productEditRows)
+              console.log(productEditRows[key +1 ]?.row)
+
+              if(productEditRows.length <= 1 ){
+                toast.error("An invoice must always contain at least one Entry", {autoClose: 100});
+              }
+
+
+              else if (productEditRows[key +1 ]?.price == undefined && productEditRows[key +1 ]?.row == 0 ) {
+                toast.error("An invoice must always contain at least one Entry", {autoClose: 100});
+              }
+
+              else{
+
+
+              console.log("dfj,asdvsakvskv")
+                console.log(productEditRows[key]?.price)
+
+                if (productEditRows[key]?.price != undefined) {
+                  setTotalPriceEditData(parseFloat(totalPriceEditData) - productEditRows[key]?.price);
+                }
+  
+                const newProductInputRow = [];
+                const newProductInputRowUpdated = [];
+  
+                let i = 0;
+                let j = 0;
+                productEditRows.map((obj) => {
+                  if (obj.row == i && obj.row != key) {
+                    newProductInputRow.push({
+                      row: i,
+                      amount: obj.amount,
+                      productprice: obj.price,
+                      price: obj.price,
+                    });
+                  }
+                  i = i + 1;
+                });
+  
+                newProductInputRow.map((obj) => {
+                  newProductInputRowUpdated.push({
+                    row: j,
+                    amount: obj.amount,
+                    productprice: obj.price,
+                    price: obj.price,
+                  });
+                  j = j + 1;
+                });
+  
+                setProductEditRows(newProductInputRowUpdated);
+  
+
+                
+              }
+              
+              
+
+            }}
+          >
+            Remove
+          </Button>
+        </div>
+      </ArgonBox>
+    );
+  });
+
   return (
     <DashboardLayout>
       {user == null && <Navigate to="/authentication/sign-in" replace={true} />}
@@ -733,13 +1215,69 @@ function Invoices() {
         </Fade>
       </Modal>
 
-      <DashboardNavbar />
+
+
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        open={openpayment}
+        
+        onClose={handleClosePayment}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openpayment}>
+          <Box sx={style}>
+            <Typography id="transition-modal-title" variant="h6" component="h2">
+              Payment
+            </Typography>
+            <Typography id="transition-modal-description" sx={{ mt: 2 }}></Typography>
+            <Button style={{ marginLeft: -11 }} onClick={() => setOpenPayment(false)}>
+              Cancel
+            </Button>
+            <Button onClick={() => handleApprovePartPayment(modalItem)}>
+              Part Payment
+            </Button>
+            <Button onClick={() => handleApproveAsReceipt(modalItem)}>
+              Full Payment
+            </Button>
+          </Box>
+        </Fade>
+      </Modal>
+
+      <DashboardNavbar 
+
+        handleClick ={(e) => {
+        
+          const filteredOrderList = [];
+          orderList.map((obj) => {
+
+            if (e.target.value === '') {
+              setOrderList(currentOrderList);
+            }
+
+            else if(
+              obj.buyer.toLowerCase() === e.target.value.toLowerCase() ||
+              obj.receipt.toLowerCase() === e.target.value.toLowerCase()
+              ) {
+              filteredOrderList.push(obj);
+              setOrderList(filteredOrderList);
+            }
+          });
+        
+        }
+      }
+      
+      />
       <ArgonBox py={3}>
         {showOrderTable && (
           <ArgonBox mb={35}>
             <Card>
               <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
-                <ArgonTypography variant="h6">Invoice table</ArgonTypography>
+                <ArgonTypography variant="h6">Invoice List</ArgonTypography>
 
                 <Button
                   onClick={() => {
@@ -747,7 +1285,7 @@ function Invoices() {
                       buyer: "",
                       buyer_location: "",
                       status: "",
-                      ref: uuid,
+                      ref: '',
                       total_price: "",
                       type: "",
                       products: [],
@@ -788,14 +1326,14 @@ function Invoices() {
             <ArgonBox mb={3} pb={20}>
               <Card>
                 <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
-                  <ArgonTypography variant="h6">Invoice table</ArgonTypography>
+                  <ArgonTypography variant="h6">Invoice List</ArgonTypography>
                   <Button
                     onClick={() => {
                       setShowOrderTable(true);
                       setShowAddForm(false);
                     }}
                   >
-                    <h4 style={{ paddingRight: 10 }}>Show Invoice Table </h4>
+                    <h4 style={{ paddingRight: 10 }}>Show Invoice List </h4>
                     <ArgonBox
                       component="i"
                       color="info"
@@ -960,7 +1498,7 @@ function Invoices() {
                     <ArgonInput
                       type="name"
                       name="ref"
-                      placeholder={`Receipt ID : ${uuid}`}
+                      placeholder={`Receipt ID : XxxxxxxxxxX`}
                       readOnly={true}
                       size="large"
                       onChange={handleChange}
@@ -984,6 +1522,112 @@ function Invoices() {
             </ArgonBox>
           </>
         )}
+
+
+
+        
+
+        {showEditForm && (
+          <>
+            <ArgonBox mb={3} pb={20}>
+              <Card>
+                <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
+                  <ArgonTypography variant="h6">Edit Invoice</ArgonTypography>
+                  <Button
+                    onClick={() => {
+                      setShowOrderTable(true);
+                      setShowAddForm(false);
+                      setShowEditForm(false)
+                    }}
+                  >
+                    <h4 style={{ paddingRight: 10 }}>Show Invoice List </h4>
+                    <ArgonBox
+                      component="i"
+                      color="info"
+                      fontSize="14px"
+                      className="ni ni-bold-right"
+                    />
+                  </Button>
+                </ArgonBox>
+                <ArgonBox
+                  sx={{
+                    "& .MuiTableRow-root:not(:last-child)": {
+                      "& td": {
+                        borderBottom: ({ borders: { borderWidth, borderColor } }) =>
+                          `${borderWidth[1]} solid ${borderColor}`,
+                      },
+                    },
+                  }}
+                >
+                  
+
+                   {renderEditColumns} 
+
+                  <ArgonBox mb={2} mx={5}>
+                    <ArgonInput
+                      type="name"
+                      name="buyer"
+                      value={editData.buyer}
+                      placeholder="Buyer"
+                      size="large"
+                      onChange={handleChange}
+                    />
+                  </ArgonBox>
+
+                  <ArgonBox mb={2} mx={5}>
+                    <ArgonInput
+                      type="name"
+                      name="buyer_location"
+                      value={editData.buyer_location}
+                      placeholder="Buyer Location"
+                      size="large"
+                      onChange={handleChange}
+                    />
+                  </ArgonBox>
+
+
+                  <ArgonBox mb={2} mx={5}>
+                    <ArgonInput
+                      type="name"
+                      name="total_price"
+                      value={`Total Price : ${totalPriceEditData}`}
+                      placeholder={`Total Price : ${Math.round(totalPriceEditData * 100) / 100}`}
+                      size="large"
+                    />
+                  </ArgonBox>
+                  <ArgonBox mb={2} mx={5}>
+                    <ArgonInput
+                      type="name"
+                      name="ref"
+                      placeholder={`Receipt ID : ${editData.receipt}`}
+                      readOnly={true}
+                      size="large"
+                      onChange={handleChange}
+                    />
+                  </ArgonBox>
+
+                  <ArgonBox mb={"20%"} display="flex" mx={5}>
+                    <ArgonButton
+                      onClick={async () => {            
+                        handleEditOrderInvoice(editData.id)
+                      }}
+                      color="info"
+                      size="large"
+                      fullWidth
+                    >
+                     Edit Invoice
+                    </ArgonButton>
+                  </ArgonBox>
+                </ArgonBox>
+              </Card>
+            </ArgonBox>
+          </>
+        )}
+
+
+
+
+      
       </ArgonBox>
 
       {showPrintView && (
@@ -999,7 +1643,7 @@ function Invoices() {
                   }}
                   className="btn btn-secondary"
                 >
-                  <i className="icon-printer"></i> Show Invoice Table
+                  <i className="icon-printer"></i> Show Invoice List
                 </a>
               </div>
             </div>
@@ -1087,7 +1731,7 @@ function Invoices() {
                               <tbody>
                                 {productInputRow?.map((row, i) => {
                                   return (
-                                    <tr key={row}>
+                                    <tr key={i}>
                                       <td>
                                         {row.name}
                                         <p className="m-0 text-muted">{row.label}</p>

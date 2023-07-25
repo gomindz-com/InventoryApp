@@ -31,6 +31,7 @@ export const COLORS = {
   dark: "#333",
   link: "#AD40AF",
   green: "#337037",
+  
 };
 
 export const IMAGES = {
