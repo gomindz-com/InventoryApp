@@ -38,7 +38,7 @@ const CustomInput = ({
   px = 5,
   tt,
   py = 0,
-  editable = true, // Add editable prop with default value as true
+  editable = false, // Add editable prop with default value as true
   ...rest
 }) => {
   const { colors } = useTheme();

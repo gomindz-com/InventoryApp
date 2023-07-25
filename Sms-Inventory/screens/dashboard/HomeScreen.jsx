@@ -200,7 +200,7 @@ const HomeScreen = ({ route }) => {
             </CustomText>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={togoleButtomSheet}>
+          <TouchableOpacity onPress={AddNewTansact}>
             <Feather name="more-vertical" size={30} color="#fff" />
           </TouchableOpacity>
         </View>
@@ -291,7 +291,7 @@ const HomeScreen = ({ route }) => {
         keyboardShouldPersistTaps="always" // Ensure list items remain visible when keyboard is open
       />
 
-      <BottomSheet
+      {/* <BottomSheet
         visible={bottomsheet}
         onBackButtonPress={togoleButtomSheet}
         onBackdropPress={togoleButtomSheet}
@@ -325,7 +325,7 @@ const HomeScreen = ({ route }) => {
             />
           </View>
         </View>
-      </BottomSheet>
+      </BottomSheet> */}
     </View>
   );
 };
