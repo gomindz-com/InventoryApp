@@ -117,7 +117,7 @@ const AddNewTransact = () => {
           <CustomInput mt={10} placeholder={"remark"} bg="#f5faf8" bw={0} />
 
           <ModalDropdown
-            defaultValue={"Hello"}
+            defaultValue={"Select Status"}
             animated={true}
             dropdownTextStyle={{ fontSize: 20, fontWeight: "bold" }}
             dropdownStyle={{ height: 100 }}

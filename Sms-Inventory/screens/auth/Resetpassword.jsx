@@ -114,7 +114,7 @@ import {
         
 
         <TouchableOpacity
-          onPress={() => {}}
+          onPress={HomeScreen}
           style={{
             backgroundColor: "#337037",
             padding: 15,
