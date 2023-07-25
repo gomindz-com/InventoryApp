@@ -13,7 +13,10 @@ import CustomText from "../../components/CustomText";
 import CustomInput from "../../components/CustomInput";
 import CustomCard from "../../components/CustomCard";
 import CustomDatePickerFine from "../../components/CustomDatePicker";
-import CustomDropdownCore from "../../components/CustomDropdownCore";
+import SelectDropdown from "react-native-select-dropdown";
+import ModalDropdown from "react-native-modal-dropdown";
+
+const countries = ["Product In", "Product Out"];
 
 const options = [
   { label: "Product IN", value: "IN" },
@@ -44,22 +47,23 @@ const AddNewTransact = () => {
   };
 
   const handleSubmit = () => {
-    setCurrentStock("");
-    setProduct("");
-    setQuantity("");
-    setRemark("");
-    setProductType("");
+    // setCurrentStock("");
+    // setProduct("");
+    // setQuantity("");
+    // setRemark("");
+    // setProductType("");
 
-    const inputValues = [
-      selectedDate,
-      product,
-      productType,
-      currentStock,
-      quantity,
-      remark,
-    ];
-    console.log(inputValues);
-    navigation.navigate("Home", { inputValues: inputValues });
+    // const inputValues = [
+    //   selectedDate,
+    //   product,
+    //   productType,
+    //   currentStock,
+    //   quantity,
+    //   remark,
+    // ];
+    // console.log(inputValues);
+    // { inputValues: inputValues }
+    navigation.navigate("Home");
   };
 
   return (
@@ -82,23 +86,19 @@ const AddNewTransact = () => {
       </View>
 
       <CustomCard
-        style={{ marginHorizontal: 30, alignSelf: "center", width: "100%" }}
+        style={{
+          marginHorizontal: 30,
+          alignSelf: "center",
+          width: "95%",
+          height: "65%",
+        }}
       >
-        <ScrollView>
+        <ScrollView showsVerticalScrollIndicator={false}>
           <CustomDatePickerFine />
 
-          <CustomInput
-            value={product}
-            onChangeText={setProduct}
-            mt={10}
-            placeholder={"Product"}
-            bg="#f5faf8"
-            bw={0}
-          />
+          <CustomInput mt={10} placeholder={"Product"} bg="#f5faf8" bw={0} />
 
           <CustomInput
-            value={productType}
-            onChangeText={setProductType}
             mt={10}
             placeholder={"Product Type"}
             bg="#f5faf8"
@@ -106,49 +106,51 @@ const AddNewTransact = () => {
           />
 
           <CustomInput
-            value={currentStock}
-            onChangeText={setCurrentStock}
             mt={10}
             placeholder={"Current Stock"}
             bg="#f5faf8"
             bw={0}
           />
 
-          <CustomInput
-            value={quantity}
-            onChangeText={setQuantity}
-            mt={10}
-            placeholder={"Quantity"}
-            bg="#f5faf8"
-            bw={0}
+          <CustomInput mt={10} placeholder={"Quantity"} bg="#f5faf8" bw={0} />
+
+          <CustomInput mt={10} placeholder={"remark"} bg="#f5faf8" bw={0} />
+
+          <ModalDropdown
+            defaultValue={"Hello"}
+            animated={true}
+            dropdownTextStyle={{ fontSize: 20, fontWeight: "bold" }}
+            dropdownStyle={{ height: 100 }}
+            isFullWidth={true}
+            textStyle={{ fontSize: 20, fontWeight: "bold" }}
+            style={{
+              marginTop: 10,
+              height: 50,
+              width: "100%",
+              backgroundColor: "#f5faf8",
+              justifyContent: "center",
+              borderRadius: 10,
+              elevation: 12,
+            }}
+            options={["Product In", "Product Out"]}
           />
 
-          <CustomInput
-            value={remark}
-            onChangeText={setRemark}
-            mt={10}
-            placeholder={"remark"}
-            bg="#f5faf8"
-            bw={0}
-          />
-          <CustomDropdownCore
-            options={options}
-            selectedValue={selectedValue}
-            onValueChange={handleValueChange}
-          />
+          {/* <SelectDropdown
+            data={countries}
+            onSelect={(selectedItem, index) => {}}
+            buttonTextAfterSelection={(selectedItem, index) => {
+              // text represented after item is selected
+              // if data array is an array of objects then return selectedItem.property to render after item is selected
+              return selectedItem;
+            }}
+            rowTextForSelection={(item, index) => {
+              // text represented for each item in dropdown
+              // if data array is an array of objects then return item.property to represent item in dropdown
+              return item;
+            }}
+          /> */}
         </ScrollView>
       </CustomCard>
-
-      {/* <View style={styles.inputesStylesConatiner}>
-        <CustomDatePicker
-          selectedDate={selectedDate}
-          onDateChange={handleDateChange}
-        />
-      </View>
-
-      <View style={{ top: -50 }}>
-        <DropdownSelect />
-      </View> */}
     </View>
   );
 };
