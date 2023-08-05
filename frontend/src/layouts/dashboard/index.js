@@ -34,6 +34,10 @@ import { getOrderCount } from "apiservices/orderService";
 
 // pro
 function Default() {
+
+  const userProfileInfo = useSelector((state) => state.user.value);
+
+  
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
   const { size } = typography;
   const [storeStatistics, setStoreStatistics] = useState({});
@@ -109,7 +113,6 @@ function Default() {
   return (
     <DashboardLayout>
       {user == null && <Navigate to="/authentication/sign-in" replace={true} />}
-      <ToastContainer />
       <DashboardNavbar />
       <ArgonBox py={3}>
         <Grid container spacing={3} mb={3}>
@@ -123,11 +126,8 @@ function Default() {
               }
               amount={""}
               icon={{ color: "error", component: <i className="ni ni-money-coins" /> }}
-              // percentage={{ color: "success", count: "+3%", text: "since last week" }}
             />
           </Grid>
-
-
           <Grid item xs={12} md={4} lg={2}>
             <DetailedStatisticsCard
               title="Cash Pending"
@@ -138,24 +138,8 @@ function Default() {
               }
               amount={""}
               icon={{ color: "error", component: <i className="ni ni-world" /> }}
-              // percentage={{ color: "success", count: "+3%", text: "since last week" }}
             />
           </Grid>
-
-
-          {/* <Grid item xs={12} md={5} lg={2}>
-            <DetailedStatisticsCard
-              title="Cash Pending"
-              count={
-                storeStatistics?.cash_pending == undefined
-                  ? "D" + 0
-                  : "D" + storeStatistics?.cash_pending
-              }
-              amount={""}
-              icon={{ color: "info", component: <i className="ni ni-money-coins" /> }}
-              // percentage={{ color: "success", count: "+55%", text: "" }}
-            />
-          </Grid> */}
           
           <Grid item xs={12} md={5} lg={2}>
             <DetailedStatisticsCard
@@ -163,7 +147,6 @@ function Default() {
               count={storeStatistics?.stock_in}
               amount={""}
               icon={{ color: "warning",  component: <i className="ni ni-bold-down" /> }}
-              // percentage={{ color: "success", count: "+5%", text: "than last month" }}
             />
           </Grid>
         
@@ -173,7 +156,6 @@ function Default() {
               count={storeStatistics?.stock_out}
               amount={""}
               icon={{ color: "warning", component: <i className="ni ni-bold-up" /> }}
-              // percentage={{ color: "success", count: "+5%", text: "than last month" }}
             />
           </Grid>
           
@@ -183,7 +165,6 @@ function Default() {
               count={storeStatistics?.stock_inhand}
               amount={""}
               icon={{ color: "success", component: <i className="ni ni-archive-2" /> }}
-              // percentage={{ color: "error", count: "", text: "" }}
             />
           </Grid>
 

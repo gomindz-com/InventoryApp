@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 // react-router-dom components
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // @mui material components
 import Switch from "@mui/material/Switch";
@@ -17,21 +17,32 @@ import IllustrationLayout from "layouts/authentication/components/IllustrationLa
 
 import { UserSchema } from "../../../formValidation/addForm";
 import { loginUser } from "apiservices/authService";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { Navigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "Redux/slices/User";
 
 function Illustration() {
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate()
   const [rememberMe, setRememberMe] = useState(false);
-  const handleSetRememberMe = () => {};
+
+  const userProfileInfo = useSelector((state) => state.user.value);
+
+  const handleSetRememberMe = () => {
+    setRememberMe(!rememberMe)
+    setUserData(currentState => ({
+      ...currentState,
+      isChecked: !rememberMe
+   }))
+  };
   const [user, setUser] = useState(null);
   const [userData, setUserData] = useState({
     email: "",
     password: "",
+    isChecked: false
   });
-
-  useEffect(() => {
-    localStorage.clear();
-  }, []);
 
   const handleChange = (e) => {
     setUserData({ ...userData, [e.target.name]: e.target.value });
@@ -48,14 +59,24 @@ function Illustration() {
   };
 
   const handleSubmit = async () => {
+
+    const { email, password, isChecked } = userData;
+    if (isChecked && email !== "") {
+      localStorage.setItem("email", email);
+      localStorage.setItem("password", password);
+      localStorage.setItem("checkbox", isChecked);
+    }
+
     await loginUser(userData)
       .then(async (res) => {
-        console.log("object");
-        console.log(res.data);
         if (res.status == 200) {
           localStorage.setItem("token", res.data?.token);
           localStorage.setItem("user", JSON.stringify(res.data.user));
           setUser(res.data.user);
+          dispatch(login(res.data.user));
+          toast.success("Login Successful");
+          navigate('/dashboard')
+
         } else {
           toast.error("Incorrect Credentials");
         }
@@ -65,25 +86,34 @@ function Illustration() {
       });
   };
 
+
+  useEffect(() => {
+    if (localStorage.isChecked && localStorage.email !== "") {
+      setUserData({
+        isChecked: true,
+        email: localStorage.username,
+        password: localStorage.password
+      });
+    }
+  }, []);
+
   return (
     <IllustrationLayout
       title="Sign In"
       description="Enter your email and password to sign in"
       illustration={{
-        image:
-          "https://us.123rf.com/450wm/kostsov/kostsov1906/kostsov190600026/126080344-modern-showcase-with-empty-space-on-pedestal-on-blue-background-3d-rendering-.jpg?ver=6",
-        title: '"Our Inventory App Is The One"',
+        image: "https://us.123rf.com/450wm/kostsov/kostsov1906/kostsov190600026/126080344-modern-showcase-with-empty-space-on-pedestal-on-blue-background-3d-rendering-.jpg?ver=6",
+        title: "Our Inventory App Is The One",
         description: "The more difficult management looks, the more easy we make it for you.",
       }}
     >
-      {user && <Navigate to="/home" replace={true} />}
-      <ToastContainer />
       <ArgonBox component="form" role="form">
         <ArgonBox mb={2}>
           <ArgonInput
             name="email"
             type="email"
             placeholder="Email"
+            value={userData.email}
             size="large"
             onChange={handleChange}
           />
@@ -94,11 +124,12 @@ function Illustration() {
             type="password"
             placeholder="Password"
             size="large"
+            value={userData.password}
             onChange={handleChange}
           />
         </ArgonBox>
         <ArgonBox display="flex" alignItems="center">
-          <Switch checked={rememberMe} onChange={handleSetRememberMe} />
+          <Switch checked={userData.isChecked} onChange={handleSetRememberMe} />
           <ArgonTypography
             variant="button"
             fontWeight="regular"

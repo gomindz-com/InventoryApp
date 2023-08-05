@@ -9,10 +9,8 @@ import React, { useState } from "react";
 import { Feather } from "@expo/vector-icons";
 
 const Dropdown = ({ data = [], value = { id: null }, onSelect = () => {} }) => {
-  console.log("selected value", value);
   const [showOption, setShowOption] = useState(false);
 
-  console.log(data);
 
   const onSelectedItem = (val) => {
     setShowOption(false);

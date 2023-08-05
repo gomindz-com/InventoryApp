@@ -242,7 +242,6 @@ function Suppliers() {
 {user == null && <Navigate to="/authentication/sign-in" replace={true} />}
 
 
-      <ToastContainer />
       <DashboardNavbar />
       <ArgonBox py={3}>
         {!showAddForm ? (

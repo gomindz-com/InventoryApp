@@ -39,6 +39,7 @@ import brandDark from "assets/images/logo-ct-dark.png";
 // Icon Fonts
 import "assets/css/nucleo-icons.css";
 import "assets/css/nucleo-svg.css";
+import { useSelector } from "react-redux";
 
 export default function App() {
   const [controller, dispatch] = useArgonController();
@@ -50,6 +51,22 @@ export default function App() {
 
   const token = localStorage.getItem("token");
 
+  const userProfileInfo = useSelector((state) => state.user.value);
+
+  console.log("userp")
+  console.log(userProfileInfo)
+
+  const handleCheckUserAuthenticated = async () => {
+
+    if(window.location.pathname != '/'){
+      
+    }
+          
+    }
+
+  useEffect(() => {
+      handleCheckUserAuthenticated()
+  }, []);
 
   // Cache for the rtl
   useMemo(() => {
@@ -89,16 +106,16 @@ export default function App() {
   useEffect(() => {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
-  }, [pathname]);
+  }, [pathname,userProfileInfo]);
 
   const getRoutes = (allRoutes) =>
     allRoutes.map((route) => {
-      if (route.collapse) {
-        return getRoutes(route.collapse);
+      if (route?.collapse) {
+        return getRoutes(route?.collapse);
       }
 
-      if (route.route) {
-        return <Route exact path={route.route} element={route.component} key={route.key} />;
+      if (route?.route) {
+        return <Route exact path={route?.route} element={route?.component} key={route?.key} />;
       }
 
       return null;
@@ -128,7 +145,13 @@ export default function App() {
     </ArgonBox>
   );
 
-  return direction === "rtl" ? (
+  return direction === "rtl" ? 
+
+
+
+  
+  
+  (
     <CacheProvider value={rtlCache}>
       <ThemeProvider theme={darkMode ? themeDarkRTL : themeRTL}>
         <CssBaseline />
@@ -148,12 +171,14 @@ export default function App() {
         )}
         {layout === "vr" && <Configurator />}
         <Routes>
-          {getRoutes(routes)}
+          {getRoutes(routes )}
           <Route path="*" element={<Navigate to="/home" />} />
         </Routes>
       </ThemeProvider>
     </CacheProvider>
   ) : (
+
+    
     <ThemeProvider theme={darkMode ? themeDark : theme}>
       <CssBaseline />
       {layout === "dashboard" && (
@@ -175,8 +200,8 @@ export default function App() {
 
       <Routes>
 
-        {getRoutes(routes)}
-        { token ? <Route path="/" element={<Navigate to="/home" />} />:
+      {getRoutes( routes )}
+              { token ? <Route path="/" element={<Navigate to="/home" />} />:
                 <Route path="/" element={<Navigate to="/authenticate/sign-in" />} /> }
                 
         <Route path="*" element={<Navigate to="/home" />} />

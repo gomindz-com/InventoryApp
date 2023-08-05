@@ -136,7 +136,8 @@ const routes = [
     name: "Sign Up",
     key: "sign-up",
     route: "/authentication/sign-up",
-    icon: <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-badge " />,
+    icon: 
+    <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-badge " />,
     component: <SignUp />,
   }, 
 ];

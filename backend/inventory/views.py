@@ -26,6 +26,7 @@ def dashboard(request):
 def Welcome(request):
     # now = datetime.datetime.now() 
 
-    link = 'http://139.59.208.8:443/#/home'
+    link = 'http://localhost:3000/#/home'
+    # link = 'http://139.59.208.8:443/#/home'
     msg = f"You need to sign-in from the homepage Click <a href='{link}'>here</a> to go to the dashboard."
     return HttpResponse(msg, content_type='text/html')

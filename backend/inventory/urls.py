@@ -8,12 +8,10 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 urlpatterns = [
-    path('', Welcome, name='welcome'),
-    path('admin/', admin.site.urls),
+    path('go-inv-admin/', admin.site.urls),
     path('api/auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('api/customer/', include(('users.urls', 'users'), namespace='users')),
     path('api/store/', include(('store.urls', 'store'), namespace='store')),
-
     path('api/mobile/', include(('mobile.urls', 'mobile'), namespace='mobile')),
 ]
 

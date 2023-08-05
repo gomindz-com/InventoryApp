@@ -84,7 +84,6 @@ function Overview() {
         backgroundPositionY: "50%",
       }}
     >
-      <ToastContainer />
       <Header />
       <ArgonBox mt={5} mb={3}>
         {!editFormActive ? (
@@ -102,17 +101,17 @@ function Overview() {
                 }}
                 social={[
                   {
-                    link: "https://www.facebook.com/gomindz/",
+                    link: "",
                     icon: <FacebookIcon />,
                     color: "facebook",
                   },
                   {
-                    link: "https://twitter.com/gomindz",
+                    link: "",
                     icon: <TwitterIcon />,
                     color: "twitter",
                   },
                   {
-                    link: "https://www.instagram.com/gomindz/",
+                    link: "",
                     icon: <InstagramIcon />,
                     color: "instagram",
                   },

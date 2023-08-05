@@ -206,8 +206,6 @@ function Products() {
     try {
       const res = await getCategories();
 
-      console.log("rrrrr")
-      console.log(res.data.categories)
       if(res.status = 200){
         res.data?.categories.map((item) => {
           category_options.push({
@@ -336,7 +334,6 @@ function Products() {
 
   return (
     <DashboardLayout>
-      <ToastContainer />
 
       <DashboardNavbar 
         handleClick ={(e) => {

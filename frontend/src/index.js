@@ -14,17 +14,23 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 
 // react-perfect-scrollbar styles
 import "react-perfect-scrollbar/dist/css/styles.css";
+import { ToastContainer, toast } from "react-toastify";
+import { Provider } from "react-redux";
+import {store} from "./Redux/store";
 
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <HashRouter>
+  <Provider store={store}>
+  <BrowserRouter>
     <ArgonControllerProvider>
       <PerfectScrollbar>
+      <ToastContainer />
         <App />
       </PerfectScrollbar>
     </ArgonControllerProvider>
-  </HashRouter>
+  </BrowserRouter>
+  </Provider>
 );
 
 

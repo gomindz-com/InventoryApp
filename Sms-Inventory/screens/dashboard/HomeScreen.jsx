@@ -145,7 +145,7 @@ const ProductData = [
     product: "Bannana",
     productType: "Fruite",
     currentStock: "55",
-    quantity: "45",
+    quantity: "45",ne
     remark: "sley",
     date: "22/64/2033",
     status: "IN",
@@ -155,7 +155,6 @@ const ProductData = [
 const HomeScreen = ({ route }) => {
   const { params } = route;
   const inputValues = params?.inputValues || [];
-  console.log(inputValues);
   const navigation = useNavigation();
   const [bottomsheet, setButtomsheet] = useState(false);
   const [productDataValue, setProductDataValue] = useState(inputValues);

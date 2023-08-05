@@ -16,7 +16,6 @@ import CustomButton from "../../components/CustomButton";
 const DeatailScreen = ({ route }) => {
   const { params } = route;
   const productData = params.item;
-  console.log(productData);
 
   const navigation = useNavigation();
 
