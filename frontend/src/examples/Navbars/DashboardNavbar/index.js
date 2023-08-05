@@ -178,8 +178,8 @@ function DashboardNavbar({ absolute, light, isMini, handleClick, handleKeyDown, 
         {isMini ? null : (
           <ArgonBox sx={(theme) => navbarRow(theme, { isMini })}>
             <ArgonBox pr={1}>
-              <ArgonInput
-                placeholder="Type here..."
+              {/* <ArgonInput
+                placeholder="Type hwwere..."
                 onChange={handleClick}
                 onKeyDown={handleKeyDown}
                 startAdornment={
@@ -187,7 +187,7 @@ function DashboardNavbar({ absolute, light, isMini, handleClick, handleKeyDown, 
                     search
                   </Icon>
                 }
-              />
+              /> */}
             </ArgonBox>
             <ArgonBox color={light ? "white" : "inherit"}>
               <IconButton

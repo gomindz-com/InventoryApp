@@ -47,22 +47,7 @@ const AddNewTransact = () => {
   };
 
   const handleSubmit = () => {
-    // setCurrentStock("");
-    // setProduct("");
-    // setQuantity("");
-    // setRemark("");
-    // setProductType("");
 
-    // const inputValues = [
-    //   selectedDate,
-    //   product,
-    //   productType,
-    //   currentStock,
-    //   quantity,
-    //   remark,
-    // ];
-    // console.log(inputValues);
-    // { inputValues: inputValues }
     navigation.navigate("Home");
   };
 

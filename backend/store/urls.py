@@ -29,11 +29,6 @@ urlpatterns = [
      path('orders/<int:pk>', OrderRetreiveUpdateDeleteView.as_view(), name='detaildeleteorders'),
      path('storestatistics', StoreStatisticsView.as_view(), name='liststorestatistics'),
      path('damages', DamagesListCreateView.as_view(), name='listcreatedamages'),
-     
-
-
-
-    
     
     path('ordercount/', orderCounts),
     path('buyercount/', buyerCounts),

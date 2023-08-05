@@ -110,8 +110,8 @@ function ContactUs() {
           </ArgonBox>
 
           <ArgonBox mt={4} mb={1}>
-            <ArgonButton onClick={handleSubmit} variant="gradient" color="dark" fullWidth>
-              Send Message
+            <ArgonButton onClick={()=>{}} variant="gradient" color="dark" fullWidth>
+              Send Message - Feature Update
             </ArgonButton>
           </ArgonBox>
         </ArgonBox>

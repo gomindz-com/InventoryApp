@@ -85,7 +85,6 @@ function Cover() {
       imgPosition="top"
       button={{ color: "dark", variant: "gradient" }}
     >
-      <ToastContainer />
 
       <Card>
         <ArgonBox p={3} mb={1} textAlign="center">

@@ -44,7 +44,7 @@ import { useArgonController, setMiniSidenav } from "context";
 
 function Sidenav({ color, brand, brandName, routes, ...rest }) {
   const [controller, dispatch] = useArgonController();
-  const { miniSidenav, darkSidenav, layout } = controller;
+  const { miniSidenav, darkSidenav, layout } = controller || {};;
   const location = useLocation();
   const { pathname } = location;
   const itemName = pathname.split("/").slice(1)[0];

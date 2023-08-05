@@ -182,7 +182,6 @@ function Categories() {
 
   return (
     <DashboardLayout>
-      <ToastContainer />
       <DashboardNavbar />
       <ArgonBox py={3}>
         {!showAddCategoryForm ? (

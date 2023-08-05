@@ -702,7 +702,6 @@ function Receipts() {
   return (
     <DashboardLayout>
       {user == null && <Navigate to="/authentication/sign-in" replace={true} />}
-      <ToastContainer />
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"

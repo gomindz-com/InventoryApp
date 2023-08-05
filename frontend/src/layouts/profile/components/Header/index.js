@@ -56,7 +56,6 @@ function Header() {
             }
           } catch {
             toast.error("Upload Error");
-            console.log("dddd")
 
           }
         }
@@ -71,13 +70,11 @@ function Header() {
   const navigate = useNavigate();
   
   return (
-
     <> 
     {user == null && <Navigate to="/authentication/sign-in" replace={true} />}
 
     <ArgonBox position="relative">
 
-      <ToastContainer />
 
       <DashboardNavbar absolute light />
       <ArgonBox height="220px" />
@@ -103,16 +100,16 @@ function Header() {
           <Grid item>
             <ArgonBox height="100%" mt={0.5} lineHeight={1}>
               <ArgonTypography variant="h5" fontWeight="medium">
-                {user?.name}
+                
               </ArgonTypography>
               <ArgonTypography variant="button" color="text" fontWeight="medium">
-                Admin
+                {user?.company_name}
               </ArgonTypography>
             </ArgonBox>
           </Grid>
           <Grid item xs={8} md={5} lg={4} sx={{ ml: "auto" }}>
             <AppBar position="static">
-              <ArgonBox mb={2} mx={5}>
+              {/* <ArgonBox mb={2} mx={5}>
                 <ArgonInput
                   type="file"
                   name="image"
@@ -121,13 +118,13 @@ function Header() {
                   size="large"
                   onChange={(e) => setProfile(e.target.files[0])}
                 />
-              </ArgonBox>
+              </ArgonBox> */}
 
-              <ArgonBox mb={2} mx={5}>
+              {/* <ArgonBox mb={2} mx={5}>
                 <ArgonButton onClick={() => updateCustomer()} color="info" size="large" fullWidth>
                   Update Company Profile
                 </ArgonButton>
-              </ArgonBox>
+              </ArgonBox> */}
             </AppBar>
           </Grid>
         </Grid>

@@ -80,7 +80,6 @@ function Invoices() {
     
     setOpenPayment(true);
     setModalItem(item)
-    console.log(item);
 
   }
   const handleClosePayment = () => setOpenPayment(false);
@@ -224,23 +223,12 @@ function Invoices() {
     });
 
 
-    // console.log("new state")
-    // console.log(newState)
-    // console.log(item.products)
-    // console.log(item.total_price)
-    
-
-    // return false;
-
-
     const res = await editOrder(item.id, {
       "products": newState,
       "total_price": item.total_price,
       "type": "receipt" 
     })
 
-    console.log("Respond From Approve Order As Receipt")
-    console.log(res)
 
     if(res.status == 201){
       toast.success("Invoice added as a Receipt Successfully"), { autoClose: 40 };
@@ -258,8 +246,6 @@ function Invoices() {
       "status": "approved"
      })
 
-    console.log("Respond From Approve Part Payment")
-    console.log(res)
 
     if(res.status == 200){
       toast.success("Invoice Partly Approved paid"), { autoClose: 40 };
@@ -288,7 +274,6 @@ function Invoices() {
     await deleteOrder(id)
       .then((res) => {
 
-        console.log(res)
         if (res.status == 204) {
           toast.success("Successfully Deleted")
           handleGetOrderList();
@@ -349,8 +334,6 @@ function Invoices() {
 
   const handleComfirm = async () => {
 
-    console.log("Invoice Data Sent To Api")
-    console.log(orderData)
 
     const isValid = await AddOrderSchema.isValid(orderData);
     if (!isValid) {
@@ -360,9 +343,7 @@ function Invoices() {
       await addOrder("invoice", orderData)
         .then((res) => {
 
-          console.log("Adding Invoice Api Response ---")
-          console.log(res.status)
-
+          
           if (res.status == 201) {
             
             setFirstProductId("");
@@ -397,10 +378,6 @@ function Invoices() {
 
   const handleEditOrderInvoice = async (id) => {
 
-    console.log("Edit Order Data")
-    console.log(editData)
-    console.log(productEditRows)
-    console.log(totalPriceEditData)
     
     toast.success("Editing Invoice!!", { autoClose: 80 });
     await editOrder(id, {
@@ -409,8 +386,6 @@ function Invoices() {
       "type": "invoice" 
     })
       .then((res) => {
-        console.log("Edit Invoice Respond")
-        console.log(res)
 
         if (res.data?.status == true) {
           toast.success(" Successfully Editing", { autoClose: 40 });
@@ -513,22 +488,15 @@ function Invoices() {
             setOrderData(item);
             setProductInputRow(item.products);
 
-            console.log(item.products)
             setOrderTotalPrice(0);
             setViewOrderActive(true);
 
 
-            console.log("Product Options")
-            console.log(productOptions)
-            console.log("Product Items")
-            console.log(item.products)
-
-            setOrderTotalPrice(item.total_price);
+           setOrderTotalPrice(item.total_price);
             setTheBuyer(item.buyer);
             setTheBuyerLocation(item.buyer_location);
             setTheReceipt(item.ref);
 
-            //setIdProductRow(0 + 1);
           }}
         >
           <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-bold-down" />
@@ -539,13 +507,11 @@ function Invoices() {
           onClick={async () => {
 
 
-            console.log("Current Edit Products Input Rows : ");
             i = 0;
             setEditData(item)
             setTotalPriceEditData(item.total_price)
             
             const updateState = item.products.map((obj) => {
-              console.log("Current Edit Products Input Rows : ");
               return {
                 ...obj,
                 row: i++,
@@ -557,8 +523,7 @@ function Invoices() {
 
             setProductEditRows(updateState);
 
-            console.log("updateState")
-            console.log(updateState)
+        
             setShowOrderTable(false)
             setViewOrderActive(false)
             setShowAddForm(false);
@@ -931,13 +896,6 @@ function Invoices() {
             options={productOptions}
             onChange={async (selectedOption) => {
 
-              console.log("Selecting A Product For Edit Products Row ")
-              console.log(selectedOption)
-              console.log("Current Total Price")
-              console.log(totalPriceEditData)
-              console.log("Current Row Price")
-              console.log(productEditRows[key]?.price)
-
 
               if (isNaN(productEditRows[key]?.price)) {
                 setTotalPriceEditData(
@@ -953,10 +911,8 @@ function Invoices() {
               }
               
               const ProductUpdate = productEditRows.map((obj) => {
-                console.log(obj)
                 if (obj.row == key) {
-                  console.log('key')
-                  console.log(key)
+                  
                   return {
                     ...obj,
                     amount: 1,
@@ -985,65 +941,10 @@ function Invoices() {
               onChange={async (e) => {
                 const result = e.target.value.replace(/\D/g, "");
 
-                console.log('Edit Products Input Row :', key)
-                console.log("Input Value : ", result)
-                console.log("Current Edit Products Input Rows State : ")
-                console.log(productEditRows)
-
               
                 
-                // const updateOnOtherProducts = productEditRows.map((obj) => {
-
-                //   console.log('obj')
-                //   console.log(obj)
-
-                //   if(obj.hasOwnProperty('productprice')){
-
-                //     console.log("hasssss  jsdkvsdf")
-                //   }
-
-                //   else{
-
-
-                //     console.log("has noooot")
-
-                //     const ProductUpdate = productEditRows.map((obj) => {
-
-                //       console.log(obj)
-                //       if (obj.row == key) {
-                //         console.log('key')
-                //         console.log(key)
-                //         return {
-                //           ...obj,
-                //           amount: 1,
-                //           productprice: obj.price,
-                //           price: obj.price,
-                //         };
-                //       } else {
-                //         return { ...obj };
-                //       }
-                //     });
-      
-                //     setProductEditRows(ProductUpdate);
-
-                    
-                //   }
-
-
-
-
-                //   if (obj.key == key) {
-                //     return { ...obj, amount: parseInt(result), price:parseInt(result)  };
-                //   } else {
-                //     return { ...obj };
-                //   }
-                // });
-                // setProductEditRows(updateOnOtherProducts);
-
+               
                 const AmountValueUpdate = productEditRows.map((obj) => {
-
-                  console.log("fdgdf")
-                  console.log(obj.row)
 
                    
                   if (obj.row == 0) {
@@ -1095,9 +996,7 @@ function Invoices() {
           <Button
             onClick={async () => {
 
-              console.log('productEditRows[key]')
-              console.log(productEditRows[key])
-              
+          
               if (productEditRows[0].amount > 0 && productEditRows[key + 1] == undefined && productEditRows[key].price != undefined) {
                 let idp = productEditRows.length;
 
@@ -1118,11 +1017,7 @@ function Invoices() {
           <Button
             onClick={async () => {
 
-              console.log('productEditRows.length')
-              console.log(productEditRows.length)
-              console.log(productEditRows)
-              console.log(productEditRows[key +1 ]?.row)
-
+            
               if(productEditRows.length <= 1 ){
                 toast.error("An invoice must always contain at least one Entry", {autoClose: 100});
               }
@@ -1135,9 +1030,7 @@ function Invoices() {
               else{
 
 
-              console.log("dfj,asdvsakvskv")
-                console.log(productEditRows[key]?.price)
-
+             
                 if (productEditRows[key]?.price != undefined) {
                   setTotalPriceEditData(parseFloat(totalPriceEditData) - productEditRows[key]?.price);
                 }
@@ -1189,7 +1082,6 @@ function Invoices() {
   return (
     <DashboardLayout>
       {user == null && <Navigate to="/authentication/sign-in" replace={true} />}
-      <ToastContainer />
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"

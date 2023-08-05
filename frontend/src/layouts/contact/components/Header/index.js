@@ -130,9 +130,6 @@ function Header() {
 
   return (
     <ArgonBox position="relative">
-
-      <ToastContainer />
-
       <DashboardNavbar absolute light />
       <ArgonBox height="220px" />
       <Card

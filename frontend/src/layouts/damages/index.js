@@ -72,8 +72,6 @@ function Damages() {
     try {
       await getDamages()
         .then((res) => {
-          console.log("resddd")
-          console.log(res)
           if (res.status == 200) {
             setDamagesList(res.data.damages);
           } else {
@@ -95,8 +93,6 @@ function Damages() {
     setProductList([]);
     try {
       const res = await getProducts();
-
-      console.log(res);
       if (res.status == 200) {
         res.data?.products.map((item) => {
           product_options.push({
@@ -181,7 +177,6 @@ function Damages() {
 
   return (
     <DashboardLayout>
-      <ToastContainer />
       <DashboardNavbar />
       <ArgonBox py={3}>
         {!showAddForm ? (
