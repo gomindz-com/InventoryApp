@@ -34,7 +34,7 @@ const categoriesListData = [
   {
     color: "dark",
     icon: <i className="ni ni-tag" style={{ fontSize: "12px" }} />,
-    name: "Coffie",
+    name: "Coffee",
     description: (
       <>
         123 closed,{" "}

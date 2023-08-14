@@ -124,7 +124,7 @@ function Slider() {
                 Our products are available at all times
               </ArgonTypography>
               <ArgonTypography variant="body2" color="white">
-                Coffie available at a very cheap price
+                Coffee available at a very cheap price
               </ArgonTypography>
             </ArgonBox>
           </ArgonBox>
