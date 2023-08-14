@@ -1,16 +1,16 @@
 {
-  "name": "argon-dashboard-mui",
+  "name": "gomindz-dashboard-inv",
   "version": "3.0.0",
-  "author": "Creative Tim",
-  "license": "SEE LICENSE IN <https://www.creative-tim.com/license>",
-  "description": "React version of Argon Dashboard 2 by Creative Tim",
-  "homepage": "https://gomindz-com.github.io/inventoryapp/frontend",
+  "author": "Gomindz",
+  "license": "SEE LICENSE IN <https://www.gomindz.com/license>",
+  "description": "Gomindz",
+  "homepage": "http://139.59.208.8:443/",
   "bugs": {
-    "url": "https://github.com/creativetimofficial/argon-dashboard-material-ui/issues"
+    "url": "https://github.com/gomindz-com/InventoryApp/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/creativetimofficial/argon-dashboard-material-ui.git"
+    "url": "git+https://github.com/gomindz-com/InventoryApp.git"
   },
   "engines": {
     "node": "14 || 15 || 16",

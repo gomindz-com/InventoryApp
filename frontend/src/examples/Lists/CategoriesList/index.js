@@ -1,17 +1,4 @@
-/**
-=========================================================
-* Argon Dashboard 2 MUI - v3.0.0
-=========================================================
 
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-material-ui
-* Copyright 2022 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
 
 // react-router-dom components
 import { Link } from "react-router-dom";
@@ -77,7 +64,7 @@ function CategoriesList({ title, categories }) {
           component={Link}
           variant="button"
           color={color}
-          to={route}
+          to={'/categories'}
           sx={{
             lineHeight: 0,
             transition: "all 0.2s cubic-bezier(.34,1.61,.7,1.3)",
