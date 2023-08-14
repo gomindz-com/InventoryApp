@@ -53,9 +53,6 @@ export default function App() {
 
   const userProfileInfo = useSelector((state) => state.user.value);
 
-  console.log("userp")
-  console.log(userProfileInfo)
-
   const handleCheckUserAuthenticated = async () => {
 
     if(window.location.pathname != '/'){
@@ -201,7 +198,7 @@ export default function App() {
       <Routes>
 
       {getRoutes( routes )}
-              { token ? <Route path="/" element={<Navigate to="/home" />} />:
+              { token ? <Route path="/" element={<Navigate to="/dashboard" />} />:
                 <Route path="/" element={<Navigate to="/authenticate/sign-in" />} /> }
                 
         <Route path="*" element={<Navigate to="/home" />} />

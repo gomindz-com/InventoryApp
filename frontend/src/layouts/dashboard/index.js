@@ -30,6 +30,7 @@ import { ToastContainer } from "react-toastify";
 import { Navigate } from "react-router-dom";
 import { getStoreStatistics } from "apiservices/storeStatisticsService";
 import { getOrderCount } from "apiservices/orderService";
+import { useSelector } from "react-redux";
 
 
 // pro
@@ -144,7 +145,11 @@ function Default() {
           <Grid item xs={12} md={5} lg={2}>
             <DetailedStatisticsCard
               title="Stock-In"
-              count={storeStatistics?.stock_in}
+              count={
+                storeStatistics?.stock_in == undefined 
+                ? 0
+                : storeStatistics?.stock_in
+              }
               amount={""}
               icon={{ color: "warning",  component: <i className="ni ni-bold-down" /> }}
             />
@@ -153,7 +158,12 @@ function Default() {
           <Grid item xs={12} md={5} lg={2}>
             <DetailedStatisticsCard
               title="Stock-Out"
-              count={storeStatistics?.stock_out}
+              count={
+                storeStatistics?.stock_out == undefined 
+                ? 0
+                : storeStatistics?.stock_out
+            
+              }
               amount={""}
               icon={{ color: "warning", component: <i className="ni ni-bold-up" /> }}
             />
@@ -162,7 +172,12 @@ function Default() {
           <Grid item xs={12} md={6} lg={2}>
             <DetailedStatisticsCard
               title="Stock-In-Hand"
-              count={storeStatistics?.stock_inhand}
+              count={
+                storeStatistics?.stock_inhand == undefined 
+                ? 0
+                : storeStatistics?.stock_inhand
+            
+              }
               amount={""}
               icon={{ color: "success", component: <i className="ni ni-archive-2" /> }}
             />
@@ -176,7 +191,12 @@ function Default() {
           <Grid item xs={12} md={6} lg={2}>
             <DetailedStatisticsCard
               title="Damages"
-              count={storeStatistics?.number_of_damages}
+              count={
+                storeStatistics?.number_of_damages == undefined 
+                ? 0
+                : storeStatistics?.number_of_damages
+            
+              }
               amount={""}
               icon={{ color: "error", component: <i className="ni ni-basket" /> }}
               // percentage={{ color: "success", count: "+3%", text: "since last week" }}
