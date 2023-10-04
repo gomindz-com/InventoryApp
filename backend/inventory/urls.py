@@ -13,6 +13,7 @@ urlpatterns = [
     path('api/customer/', include(('users.urls', 'users'), namespace='users')),
     path('api/store/', include(('store.urls', 'store'), namespace='store')),
     path('api/mobile/', include(('mobile.urls', 'mobile'), namespace='mobile')),
+    path('', admin.site.urls),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
