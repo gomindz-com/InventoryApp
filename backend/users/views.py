@@ -24,7 +24,7 @@ class RegisterUser(generics.CreateAPIView):
         self.perform_create(serializer)
         response = {
             "status": True,
-            "message": "Customer Successfully Registered",
+            "message": "User Successfully Registered",
                     }                
         return Response(data=response, status=status.HTTP_201_CREATED)
 
