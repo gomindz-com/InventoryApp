@@ -1,16 +1,16 @@
 from rest_framework import serializers
-from .models import Product, Damages, TransactionProducts, Transaction
+from .models import mProduct, Damages, TransactionProducts, Transaction
 
 
 
 
-class ProductSerializer(serializers.ModelSerializer):
+class mProductSerializer(serializers.ModelSerializer):
     owner = serializers.PrimaryKeyRelatedField(
         read_only=True,
     )
 
     class Meta:
-        model = Product
+        model = mProduct
         fields = ('id', 'name','stock', 'description_color', 'buy_rate', 'owner')
 
 
@@ -18,7 +18,7 @@ class TransactionSerializer(serializers.ModelSerializer):
     products = serializers.SlugRelatedField(
                 read_only=False,
                 slug_field="name",
-                queryset=Product.objects.all()
+                queryset=mProduct.objects.all()
                 )   
     owner = serializers.PrimaryKeyRelatedField(
         read_only=True,
@@ -40,7 +40,7 @@ class DamagesSerializer(serializers.ModelSerializer):
     product = serializers.SlugRelatedField(
                 read_only=False,
                 slug_field="name",
-                queryset=Product.objects.all()
+                queryset=mProduct.objects.all()
                 )
 
     owner = serializers.PrimaryKeyRelatedField(

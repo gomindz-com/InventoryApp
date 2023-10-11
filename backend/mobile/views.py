@@ -13,8 +13,8 @@ from rest_framework import status
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework import generics
 
-from .models import Product,TransactionProducts, Damages,Transaction
-from .serializers import ProductSerializer, DamagesSerializer,TransactionSerializer
+from .models import mProduct,TransactionProducts, Damages,Transaction
+from .serializers import mProductSerializer, DamagesSerializer,TransactionSerializer
 
 
 # FORM DATA FOR PRODUCT IMAGE
@@ -43,16 +43,16 @@ def twilio(request):
 # LIST ALL CUSTOMER PRODUCTS / CREATE A PRODUCT
 class MobileProductListCreateView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
-    serializer_class = ProductSerializer
-    queryset = Product.objects.all()
+    serializer_class = mProductSerializer
+    queryset = mProduct.objects.all()
 
     def get_queryset(self):
         user = self.request.user
-        return Product.objects.filter(owner=user)
+        return mProduct.objects.filter(owner=user)
 
     def get(self, request, *args, **kwargs):
         user = self.request.user
-        queryset = Product.objects.filter(owner=user)
+        queryset = mProduct.objects.filter(owner=user)
         serializer = self.get_serializer(queryset, many=True)
         response = {
                     "status": True,
@@ -79,12 +79,12 @@ class MobileProductListCreateView(generics.ListCreateAPIView):
 # LIST DETAIL OF ONE PRODUCT / UPDATE / DELETE
 class ProductRetreiveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]
-    serializer_class = ProductSerializer
-    queryset = Product.objects.all()
+    serializer_class = mProductSerializer
+    queryset = mProduct.objects.all()
 
     def get_queryset(self):
         user = self.request.user
-        return Product.objects.filter(owner=user)
+        return mProduct.objects.filter(owner=user)
 
         
 
@@ -103,6 +103,10 @@ class TransactionListCreateAPIView(generics.ListCreateAPIView):
     queryset = Transaction.objects.all()
     serializer_class = TransactionSerializer
 
+    def get_queryset(self):
+        user = self.request.user
+        return Transaction.objects.filter(owner=user)
+
     def perform_create(self, serializer):
         transaction = serializer.save()
         productstock = transaction.products
@@ -115,6 +119,12 @@ class TransactionListCreateAPIView(generics.ListCreateAPIView):
             productstock.stock -= transaction.quantity
             productstock.save()
             transaction.current_stock = productstock.stock
+
+        # response = {
+        #             "status": True,
+        #             "message": "transaction added"
+        #             } 
+        # return Response(data=response, status=status.HTTP_201_CREATED)
 
 
 
@@ -160,7 +170,7 @@ class DamagesListCreateView(generics.ListCreateAPIView):
 #API to get products on low stock
 @api_view(['GET'])
 def lowstockproduct(request):
-    product = Product.objects.filter()
+    product = mProduct.objects.filter()
     low_stock_products = []
     for item in product.iterator():
         if item.stock <= 5:  
@@ -183,10 +193,11 @@ class StoreStatisticsView(generics.ListAPIView):
 
     def get(self, request, *args, **kwargs):
         user = self.request.user
-        total_stock_in = Transaction.objects.filter(owner=user).filter(type='in').aggregate(TOTAL=Sum('quantity'))['TOTAL']
-        total_stock_out = Transaction.objects.filter(owner=user).filter(type='out').aggregate(TOTAL=Sum('quantity'))['TOTAL']
+        total_stock_in = int(Transaction.objects.filter(owner=user).filter(type='in').aggregate(TOTAL=Sum('quantity'))['TOTAL'])
+        total_stock_out = int(Transaction.objects.filter(owner=user).filter(type='out').aggregate(TOTAL=Sum('quantity'))['TOTAL'])
 
         total_stock_in_hand = total_stock_in - total_stock_out
+
 
         response = {
                     "status": True,
@@ -198,4 +209,3 @@ class StoreStatisticsView(generics.ListAPIView):
                     }
                 }
         return Response(response)
-        

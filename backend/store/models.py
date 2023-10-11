@@ -131,12 +131,3 @@ class Delivery(models.Model):
     def __str__(self):
         return self.courier_name
 
-
-class mobileProduct(models.Model):
-    name = models.CharField(max_length=120, unique=True)
-    description = models.CharField(max_length=120, default='')
-    price = models.DecimalField(max_digits=120, decimal_places=2)
-    created_date = models.DateField(auto_now_add=True)
-  
-    def __str__(self):
-        return self.name
