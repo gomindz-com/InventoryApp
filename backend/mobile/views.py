@@ -120,11 +120,16 @@ class TransactionListCreateAPIView(generics.ListCreateAPIView):
             productstock.save()
             transaction.current_stock = productstock.stock
 
-        # response = {
-        #             "status": True,
-        #             "message": "transaction added"
-        #             } 
-        # return Response(data=response, status=status.HTTP_201_CREATED)
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        response = {
+            "status": True,
+            "message": "",
+            "product": serializer.data
+
+                    }       
+        return Response(data=response, status=status.HTTP_201_CREATED)
 
 
 
