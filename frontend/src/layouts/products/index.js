@@ -26,7 +26,7 @@ import Select from "react-select";
 import { deleteProduct } from "apiservices/productService";
 import { getCategories } from "apiservices/categoryService";
 import { editProduct } from "apiservices/productService";
-
+import DateTimePicker from "components/datePicker";
 import axios from "axios";
 import { baseUrl } from "apiservices/baseURL";
 
@@ -42,8 +42,7 @@ function Products() {
   const category_options = [];
   const [editFormActive, setEditFormActive] = useState(false);
   const [productImage, setProductImage] = useState(null);
-
-
+  const [selectedDate, setSelectedDate] = useState(null);
 
   const columns = [
     { name: "product", align: "left" },
@@ -78,6 +77,10 @@ function Products() {
       id: 1,
     },
   ];
+
+  const handleChangedata = (date) => {
+    setSelectedDate(date);
+  };
 
   const handleSubmit = async (e) => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -125,7 +128,6 @@ function Products() {
     }
   };
 
-
   const handleChange = (e) => {
     if ([e.target.name] == "image") {
       setProductImage({
@@ -147,7 +149,6 @@ function Products() {
       ["category"]: selectedOption.value,
     });
   };
-
 
   const handleEdit = async (e) => {
     delete productData.image;
@@ -172,7 +173,6 @@ function Products() {
     }
   };
 
-
   const handleDeleteProduct = async (id) => {
     await deleteProduct(id)
       .then((res) => {
@@ -184,7 +184,6 @@ function Products() {
       .catch((err) => {});
   };
 
-
   const handleGetProductList = async () => {
     const user = JSON.parse(localStorage.getItem("user"));
     setProductList([]);
@@ -192,13 +191,13 @@ function Products() {
       const res = await getProducts();
       if (res.data?.status) {
         setProductList(res.data.products);
-        setCurrentProductList(res.data.products)
+        setCurrentProductList(res.data.products);
       } else {
         setProductList([]);
       }
     } catch (error) {}
   };
-  
+
   const handleGetCategoryList = async () => {
     setCategoryList([]);
     setScreenLoading(true);
@@ -206,7 +205,7 @@ function Products() {
     try {
       const res = await getCategories();
 
-      if(res.status = 200){
+      if ((res.status = 200)) {
         res.data?.categories.map((item) => {
           category_options.push({
             value: item.name,
@@ -215,30 +214,19 @@ function Products() {
           });
         });
 
-        setCategoryOptions(category_options)
-      }
-      else {
+        setCategoryOptions(category_options);
+      } else {
         setCategoryList([]);
       }
-    } 
-    catch (error) {
-
-    }
+    } catch (error) {}
   };
-
-  
 
   productList?.map(function (item, i) {
     rows.push({
       product: (
         <ArgonBox display="flex" alignItems="center" px={1} py={0.5}>
           <ArgonBox mr={2}>
-            <ArgonAvatar
-              src={logoSpotify}
-              alt={"name"}
-              size="sm"
-              variant="rounded"
-            />
+            <ArgonAvatar src={logoSpotify} alt={"name"} size="sm" variant="rounded" />
           </ArgonBox>
           <ArgonBox display="flex" flexDirection="column">
             <ArgonTypography variant="button" fontWeight="medium">
@@ -326,7 +314,6 @@ function Products() {
     });
   });
 
-  
   useEffect(() => {
     handleGetProductList();
     handleGetCategoryList();
@@ -334,29 +321,22 @@ function Products() {
 
   return (
     <DashboardLayout>
-
-      <DashboardNavbar 
-        handleClick ={(e) => {
-          
+      <DashboardNavbar
+        handleClick={(e) => {
           const filteredProductList = [];
           productList?.map((obj) => {
-
-            if (e.target.value === '') {
-              setProductList(currentProductList)
-            }
-
-            else if(
-              obj.name.toLowerCase() === e.target.value.toLowerCase()  ||
+            if (e.target.value === "") {
+              setProductList(currentProductList);
+            } else if (
+              obj.name.toLowerCase() === e.target.value.toLowerCase() ||
               obj.category.toLowerCase() === e.target.value.toLowerCase()
             ) {
               filteredProductList.push(obj);
               setProductList(filteredProductList);
             }
           });
-        
-        }
-    }
-    />
+        }}
+      />
       <ArgonBox py={3}>
         {!showAddProductForm ? (
           <ArgonBox mb={3}>
@@ -422,6 +402,18 @@ function Products() {
                   },
                 }}
               >
+                <ArgonBox mb={2} mx={5}>
+                  <DateTimePicker
+                    fullWidth
+                    inputProps={{
+                      style: {
+                        padding: "140px", // Adjust padding as needed
+                        fontSize: "16px", // Adjust font size as needed
+                      },
+                    }}
+                  />
+                </ArgonBox>
+
                 <ArgonBox mb={2} mx={5}>
                   <ArgonInput
                     type="title"

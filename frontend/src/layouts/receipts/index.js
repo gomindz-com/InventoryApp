@@ -29,12 +29,10 @@ import Fade from "@mui/material/Fade";
 import Typography from "@mui/material/Typography";
 import { useReactToPrint } from "react-to-print";
 import { Navigate, useNavigate } from "react-router-dom";
-import { getOrders, addOrder, deleteOrder} from "apiservices/orderService";
+import { getOrders, addOrder, deleteOrder } from "apiservices/orderService";
 import "./index.css";
 
-
 function Receipts() {
-
   const product_options = [];
 
   const [value, setValue] = useState("");
@@ -58,16 +56,14 @@ function Receipts() {
   const [totalPrice, setTotalPrice] = useState(0);
   const [quantity, setQuantity] = useState(0);
 
-
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
 
   const componentRef = useRef();
 
   const handleGetProductList = async () => {
-
     setProductList([]);
     try {
-      const res = await getProducts()
+      const res = await getProducts();
       if (res.data?.status == true) {
         res.data?.products.map((item) => {
           product_options.push({
@@ -79,22 +75,17 @@ function Receipts() {
         });
 
         setProductOptions(product_options);
-      }
-
-      else {
+      } else {
         setProductList([]);
       }
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
-
 
   const [orderData, setOrderData] = useState({
     buyer: "",
     buyer_location: "",
     status: "pending",
-    receipt: '',
+    receipt: "",
     total_price: "",
     type: "",
     products: [],
@@ -104,7 +95,7 @@ function Receipts() {
     buyer: "",
     buyer_location: "",
     status: "pending",
-    receipt: '',
+    receipt: "",
     total_price: "",
     type: "",
     products: [],
@@ -141,7 +132,6 @@ function Receipts() {
   ];
   const rows = [];
 
-
   const ComponentToPrint = React.forwardRef((props, ref) => {
     return <div ref={ref}>My cool content here!</div>;
   });
@@ -161,33 +151,25 @@ function Receipts() {
   };
 
   const handleGetReceiptList = async () => {
-
     setOrderList([]);
     try {
-      const res = await getOrders('receipt');
-    
+      const res = await getOrders("receipt");
+
       if (res.data?.status === true) {
         setOrderList(res.data.orders);
         setCurrentOrderList(res.data.orders);
-
       } else {
         setOrderList([]);
       }
-      
     } catch (error) {
       toast.error("Receipt Could Not Be Retrieved");
     }
-
-    
   };
-
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
 
-  
-  
   const handleChangeProduct = async (selectedOption) => {
     setFirstProductId(selectedOption.id);
     setFirstProductPrice(selectedOption.price);
@@ -207,7 +189,6 @@ function Receipts() {
   };
 
   const handleChangeAmount = async (e) => {
-    
     setOrderData({
       ...orderData,
       ["amount"]: e.target.value,
@@ -216,24 +197,17 @@ function Receipts() {
     setTotalPrice(productPrice * e.target.value);
   };
 
-
   const handleDeleteReceipt = async (id) => {
-
     try {
       const res = await deleteOrder(id);
-      if(res.status == 204){
+      if (res.status == 204) {
         toast.success("Deleted Success");
         await handleGetReceiptList();
       }
     } catch (error) {
       toast.error("Error ");
     }
-    
-
-   
   };
-
-  
 
   orderList.map(function (item, i) {
     rows.push({
@@ -319,12 +293,9 @@ function Receipts() {
           <ArgonBox component="i" color="red" fontSize="34px" className="ni ni-fat-remove" />
         </Button>
       ),
-      
-     
     });
   });
 
-  
   const renderColumns = productInputRow.map(({ row, amount }, key) => {
     const handleChangeOtherProduct = async (selectedOption) => {
       if (otherProducts[row] == undefined) {
@@ -391,8 +362,7 @@ function Receipts() {
 
         //
       }
-
-      };
+    };
 
     return (
       <ArgonBox key={row} mb={2} mx={5} display="flex">
@@ -403,7 +373,6 @@ function Receipts() {
             defaultValue={productOptions[productInputRow[row]?.id]}
             options={productOptions}
             onChange={async (selectedOption) => {
-             
               const currentordertotalPrice = isNaN(ordertotalPrice)
                 ? 0 + firstProductTotalPrice
                 : ordertotalPrice;
@@ -435,8 +404,6 @@ function Receipts() {
               setProductInputRow(ProductUpdate);
               setValue1(ProductUpdate);
 
-             
-
               if (isNaN(productInputRow[row]?.price)) {
                 setOrderTotalPrice(
                   parseFloat(currentordertotalPrice) + parseFloat(selectedOption.price)
@@ -461,7 +428,7 @@ function Receipts() {
               size="large"
               onChange={async (e) => {
                 const result = e.target.value.replace(/\D/g, "");
-                
+
                 const updateOnOtherProducts = otherProducts.map((obj) => {
                   if (obj.row == row) {
                     return { ...obj, amount: parseInt(result) };
@@ -515,7 +482,7 @@ function Receipts() {
                 setProductInputRow((current) => [...current, { row: idp, amount: 0 }]);
                 setIdProductRow(idp + 1);
               } else {
-                toast.error("Please Choose a Product!!", {autoClose: 80});
+                toast.error("Please Choose a Product!!", { autoClose: 80 });
               }
             }}
           >
@@ -598,7 +565,6 @@ function Receipts() {
   });
 
   const handleSubmit = async (e) => {
-
     const date = new Date();
     let day = date.getDate();
     let month = date.getMonth() + 1;
@@ -654,12 +620,10 @@ function Receipts() {
     if (!isValid) {
       toast.error("Please enter all the required fields!!");
     } else {
-
       toast.success("Adding Receipt!!");
-      await addOrder('receipt', orderData)
+      await addOrder("receipt", orderData)
         .then((res) => {
-
-          if (res.status == 201 ) {
+          if (res.status == 201) {
             toast.success("Successfully Added");
 
             setFirstProductId("");
@@ -669,12 +633,12 @@ function Receipts() {
               buyer: "",
               buyer_location: "",
               status: "pending",
-              ref: '',
+              ref: "",
               total_price: "",
               type: "receipt",
               products: [],
             });
- 
+
             setQuantity(0);
             setShowAddForm(false);
             setShowOrderTable(true);
@@ -691,13 +655,10 @@ function Receipts() {
     }
   };
 
-
   useEffect(() => {
     handleGetReceiptList();
     handleGetProductList();
   }, []);
-
-  
 
   return (
     <DashboardLayout>
@@ -728,27 +689,21 @@ function Receipts() {
       </Modal>
 
       <DashboardNavbar
-      
-      handleClick ={(e) => {
-        
-        const filteredOrderList = [];
-        orderList.map((obj) => {
-
-          if (e.target.value === '') {
-            setOrderList(currentOrderList)
-          }
-
-          else if(
-            obj.buyer.toLowerCase() === e.target.value.toLowerCase() ||
-            obj.receipt.toLowerCase() === e.target.value.toLowerCase()) {
-            filteredOrderList.push(obj);
-            setOrderList(filteredOrderList);
-          }
-        });
-      
-      }
-    }
-    />
+        handleClick={(e) => {
+          const filteredOrderList = [];
+          orderList.map((obj) => {
+            if (e.target.value === "") {
+              setOrderList(currentOrderList);
+            } else if (
+              obj.buyer.toLowerCase() === e.target.value.toLowerCase() ||
+              obj.receipt.toLowerCase() === e.target.value.toLowerCase()
+            ) {
+              filteredOrderList.push(obj);
+              setOrderList(filteredOrderList);
+            }
+          });
+        }}
+      />
       <ArgonBox py={3}>
         {showOrderTable && (
           <ArgonBox mb={35}>
@@ -762,7 +717,7 @@ function Receipts() {
                       buyer: "",
                       buyer_location: "",
                       status: "",
-                      ref: '',
+                      ref: "",
                       total_price: "",
                       type: "",
                       products: [],
@@ -876,7 +831,7 @@ function Receipts() {
                               }
 
                               if (firstProductId === "") {
-                                toast.error("Please Choose a Product!!", {autoClose: 80});
+                                toast.error("Please Choose a Product!!", { autoClose: 80 });
                               } else {
                                 const result = event.target.value.replace(/\D/g, "");
                                 setValue(result);
@@ -916,7 +871,7 @@ function Receipts() {
                           onClick={
                             firstProductId == ""
                               ? async () => {
-                                  toast.error("Please Choose a Product!!", {autoClose: 80});
+                                  toast.error("Please Choose a Product!!", { autoClose: 80 });
                                 }
                               : async () => {
                                   if (productInputRow.length == 0) {
@@ -960,7 +915,6 @@ function Receipts() {
                       onChange={handleChange}
                     />
                   </ArgonBox>
-
 
                   <ArgonBox mb={2} mx={5}>
                     <ArgonInput
@@ -1057,7 +1011,37 @@ function Receipts() {
                           style={{ justifyContent: "flex-end" }}
                           className="col-lg-6 col-md-6 col-sm-6"
                         >
+                          <br />
                           <address style={{ textAlign: "end" }} className="text-right">
+                            {/* <a
+                              onClick={() => {
+                                setShowPrintView(false);
+                                setShowAddForm(false);
+                                setShowOrderTable(true);
+                              }}
+                              className="btn btn-secondary"
+                              style={{ justifyContent: "flex-end" }}
+                            >
+                              <i className="icon-printer"></i> Back
+                            </a> */}
+
+                            <Button
+                              onClick={() => {
+                                setShowPrintView(false);
+                                setShowAddForm(false);
+                                setShowOrderTable(true);
+                              }}
+                            >
+                              <h5 style={{ paddingRight: 10 }}>Back </h5>
+                              <ArgonBox
+                                component="i"
+                                color="info"
+                                fontSize="20px"
+                                className="ni ni-bold-right"
+                              />
+                            </Button>
+
+                            <br />
                             {user?.company_name}
                             <br />
                             {user?.city}
@@ -1117,7 +1101,6 @@ function Receipts() {
                                 <tr>
                                   <td>&nbsp;</td>
                                   <td colSpan={2}>
-                                   
                                     <h5 className="text-success">
                                       <strong>Grand Total</strong>
                                     </h5>

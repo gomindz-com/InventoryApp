@@ -1,10 +1,9 @@
 import { baseUrl } from "./baseURL";
 import axiosConfig from "./axios-config";
 
-
 export const loginUser = async (userData) => {
   const data = await axiosConfig
-    .post(`/customer/login`, userData)
+    .post(`/users/login`, userData)
     .then(async (response) => {
       return response;
     })
@@ -14,11 +13,9 @@ export const loginUser = async (userData) => {
   return data;
 };
 
-
-
 export const registerUser = async (userData) => {
   const data = await axiosConfig
-    .post(`/customer/register`, userData)
+    .post(`/users/register`, userData)
     .then((response) => {
       return response;
     })

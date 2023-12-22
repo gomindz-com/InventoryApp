@@ -1,0 +1,10 @@
+/* styles.css */
+.custom-datepicker-wrapper .custom-datepicker {
+  grid-column: 5/10;
+  grid-row: 2/4;
+  background: cornflowerblue;
+}
+
+.custom-datepicker-wrapper .custom-datepicker input {
+  border: none;
+}
