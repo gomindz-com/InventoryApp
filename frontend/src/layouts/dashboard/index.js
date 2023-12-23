@@ -133,9 +133,9 @@ function Default() {
             <DetailedStatisticsCard
               title="Cash Pending"
               count={
-                storeStatistics?.cash_inhand == undefined
+                storeStatistics?.cash_pending == undefined
                   ? "D" + 0
-                  : "D" + storeStatistics?.cash_inhand
+                  : "D" + storeStatistics?.cash_pending
               }
               amount={""}
               icon={{ color: "error", component: <i className="ni ni-world" /> }}
