@@ -6,6 +6,7 @@ from .views import (
      OrderListCreateView, OrderRetreiveUpdateDeleteView,
      DamagesListCreateView,
      StoreStatisticsView,
+     ProductReportView,
 
 
      productCounts, buyerCounts, deliveryCounts, supplierCounts, orderCounts,
@@ -29,7 +30,8 @@ urlpatterns = [
      path('orders/<int:pk>', OrderRetreiveUpdateDeleteView.as_view(), name='detaildeleteorders'),
      path('storestatistics', StoreStatisticsView.as_view(), name='liststorestatistics'),
      path('damages', DamagesListCreateView.as_view(), name='listcreatedamages'),
-    
+    path('report', ProductReportView.as_view(), name='product_report'),
+
     path('ordercount/', orderCounts),
     path('buyercount/', buyerCounts),
     path('suppliercount/', supplierCounts),

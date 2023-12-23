@@ -33,19 +33,12 @@ class Product(models.Model):
     owner = models.ForeignKey('users.CustomUser', related_name='%(class)s_products', on_delete=models.CASCADE,  default=1)
     category = models.ForeignKey('Category', on_delete=models.CASCADE, default='')
     created_date = models.DateField(auto_now_add=True)
+    expiry_date = models.DateField(_('Expiry Date'), null=True, blank=True)
+
 
 
     def __str__(self):
         return self.name
-
-
-class Damages(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    category = models.CharField(max_length=220)
-    damages = models.PositiveIntegerField(default=0) 
-    created_date = models.DateField(auto_now_add=True)
-    owner = models.ForeignKey('users.CustomUser', related_name='damages', on_delete=models.CASCADE, default='')
-
 
 
 
@@ -84,7 +77,12 @@ class OrderProducts(models.Model):
 
 
 
-
+class Damages(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    category = models.CharField(max_length=220)
+    damages = models.PositiveIntegerField(default=0) 
+    created_date = models.DateField(auto_now_add=True)
+    owner = models.ForeignKey('users.CustomUser', related_name='damages', on_delete=models.CASCADE, default='')
 
 
 class Supplier(models.Model):
