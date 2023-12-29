@@ -956,7 +956,7 @@ function Receipts() {
       </ArgonBox>
 
       {showPrintView && (
-        <div className="container">
+        <div className="container card">
           <div className="row gutters">
             <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6">
               <div style={{ justifyContent: "flex-start" }} className="custom-actions-btns mb-2">
