@@ -50,11 +50,11 @@ def twilio(request):
 class CategoryListCreateView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = CategorySerializer
-    queryset = Category.objects.all()
+    # queryset = Category.objects.all()
 
-    def get_queryset(self):
-        user = self.request.user
-        return Category.objects.filter(owner=user)
+    # def get_queryset(self):
+    #     user = self.request.user
+    #     return Category.objects.filter(owner=user)
 
     def get(self, request, *args, **kwargs):
         user = self.request.user
@@ -62,7 +62,7 @@ class CategoryListCreateView(generics.ListCreateAPIView):
         serializer = self.get_serializer(queryset, many=True)
         response = {
                     "status": True,
-                    "message": "",
+                    "message": "Valid request",
                     "categories" : serializer.data
 
                 }
@@ -70,13 +70,17 @@ class CategoryListCreateView(generics.ListCreateAPIView):
         
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        response = {
-            "status": True,
-            "message": "Category Successfully Added",
-                    }                
-        return Response(data=response, status=status.HTTP_201_CREATED)
+        if serializer.is_valid():
+            self.perform_create(serializer)
+            return Response(
+                data={"status": True, "message": "Category Successfully Added"},
+                status=status.HTTP_201_CREATED,
+            )
+        else:
+            return Response(
+                data={"status": False, "message": "Invalid data"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
@@ -1057,104 +1061,66 @@ def lowstockproduct(request):
     return JsonResponse(status=200, data={'status': 'true', 'message': 'success', 'result': low_stock_products})       
 
 
-
 class ProductReportView(APIView):
     def get(self, request, *args, **kwargs):
-        # Create a new workbook and add a worksheet
-        wb = Workbook()
-        ws = wb.active
-        ws.title = "Product Report"
-
-        # Add headers to the worksheet
-        headers = ["Name", "Category", "Stock In", "Stock Out", "Stock In Hand", "Expiry Date"]
-        for col_num, header in enumerate(headers, 1):
-            col_letter = get_column_letter(col_num)
-            ws[f"{col_letter}1"] = header
-            ws[f"{col_letter}1"].alignment = Alignment(horizontal='center')
-
         # Retrieve product information
         products = Product.objects.all()
 
-        # Populate the worksheet with product data
-        for row_num, product in enumerate(products, 2):
-            ws.cell(row=row_num, column=1, value=product.name)
-            ws.cell(row=row_num, column=2, value=product.category.name if product.category else "")
-            ws.cell(row=row_num, column=3, value=product.stock)
-            ws.cell(row=row_num, column=4, value=self.get_stock_out(product))
-            ws.cell(row=row_num, column=5, value=product.stock - self.get_stock_out(product))
-            ws.cell(row=row_num, column=6, value=product.expiry_date.strftime('%Y-%m-%d') if product.expiry_date else "")
+        # Prepare the data for each product
+        product_data = []
+        for product in products:
+            product_data.append({
+                "Name": product.name,
+                "Category": product.category.name if product.category else "",
+                "Stock In": product.stock,
+                "Stock Out": self.get_stock_out(product),
+                "Stock In Hand": product.stock - self.get_stock_out(product),
+                "Expiry Date": product.expiry_date.strftime('%Y-%m-%d') if product.expiry_date else ""
+            })
 
-        # Create a response with the Excel file
-        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        response['Content-Disposition'] = 'attachment; filename=product_report.xlsx'
-        wb.save(response)
-
-        return response
+        # Return the data as JSON
+        return JsonResponse(status=200, data={'status': 'true', 'message': 'success','result':product_data}) #safe=False)
 
     def get_stock_out(self, product):
         # Calculate stock out based on orders with type 'receipt'
         stock_out = product.orderproducts_set.filter(order__type='receipt').aggregate(Sum('quantity'))['quantity__sum']
         return stock_out if stock_out else 0
 
-# class ProductReportView(generics.GenericAPIView):
-#     permission_classes = [IsAuthenticated]
-#     # serializer_class = OrderSerializer
-#     serializer_class = ProductSerializer
-    
-
-#     def get_queryset(self):
-#         user = self.request.user
-#         return Order.objects.filter(owner=user)
-
+# class ProductReportView(APIView):
 #     def get(self, request, *args, **kwargs):
-#         # Retrieve product information from the database
-#         products = Product.objects.all()
-#         orderprOducts = OrderProducts.objects.all()
-
-#         # Serialize product data
-#         serializer = self.get_serializer(products, many=True)
-#         # orderprOductsserializer = self.get_serializer(orderprOducts, many=True)
-
-        
-        
-#         # Create a new Excel workbook and add a worksheet
-#         workbook = openpyxl.Workbook()
-#         worksheet = workbook.active
+#         # Create a new workbook and add a worksheet
+#         wb = Workbook()
+#         ws = wb.active
+#         ws.title = "Product Report"
 
 #         # Add headers to the worksheet
-#         headers = ['Name', 'Category', 'Stock In','Stock Out', 'Stock In Hand', 'Expiry Date']
-#         worksheet.append(headers)
-#         for product_data in serializer.data:
-#             product_id = product_data['id']
-#             product_name = product_data['name']
+#         headers = ["Name", "Category", "Stock In", "Stock Out", "Stock In Hand", "Expiry Date"]
+#         for col_num, header in enumerate(headers, 1):
+#             col_letter = get_column_letter(col_num)
+#             ws[f"{col_letter}1"] = header
+#             ws[f"{col_letter}1"].alignment = Alignment(horizontal='center')
 
-#             # Calculate stock_out based on associated order items
-#             stockIn = products.filter(name=product_name).aggregate(total_stock_out=Sum('stock'))['total_stock_out']
-#             stock_out = OrderProducts.objects.filter(id=product_id).aggregate(total_stock_out=Sum('quantity'))['total_stock_out']
-#             # stock_out = stock_out if stock_out else 0
-#             print(stock_out)
-#             print(stockIn)
+#         # Retrieve product information
+#         products = Product.objects.all()
 
-#         stock_in = stockIn
-#         stockOut = stock_out
-#         stock_inhand = stock_in - stock_out if stock_out else 0
-#         for product_data in serializer.data:
-
-#             row_data = [
-#                 product_data['name'],
-#                 product_data['category'],
-#                 str(stock_in),
-#                 str(stockOut),
-#                 str(stock_inhand),
-#                 str(product_data['expiry_date']) if product_data['expiry_date'] else 'N/A',
-#             ]
-#             worksheet.append(row_data)
-
-
+#         # Populate the worksheet with product data
+#         for row_num, product in enumerate(products, 2):
+#             ws.cell(row=row_num, column=1, value=product.name)
+#             ws.cell(row=row_num, column=2, value=product.category.name if product.category else "")
+#             ws.cell(row=row_num, column=3, value=product.stock)
+#             ws.cell(row=row_num, column=4, value=self.get_stock_out(product))
+#             ws.cell(row=row_num, column=5, value=product.stock - self.get_stock_out(product))
+#             ws.cell(row=row_num, column=6, value=product.expiry_date.strftime('%Y-%m-%d') if product.expiry_date else "")
 
 #         # Create a response with the Excel file
 #         response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
 #         response['Content-Disposition'] = 'attachment; filename=product_report.xlsx'
-#         workbook.save(response)
+#         wb.save(response)
 
 #         return response
+
+#     def get_stock_out(self, product):
+#         # Calculate stock out based on orders with type 'receipt'
+#         stock_out = product.orderproducts_set.filter(order__type='receipt').aggregate(Sum('quantity'))['quantity__sum']
+#         return stock_out if stock_out else 0
+
