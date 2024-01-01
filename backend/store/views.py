@@ -109,13 +109,6 @@ class CategoryRetreiveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
 
 
 
-
-
-
-
-
-
-
 # LIST ALL CUSTOMER PRODUCTS / CREATE A PRODUCT
 class ProductListCreateView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
@@ -182,14 +175,6 @@ class ProductRetreiveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
         return Response(data=response, status=status.HTTP_201_CREATED)
 
 
-
-
-
-
-
-
-
-
 # LIST ALL CUSTOMER PRODUCT CATEGORIES / CREATE A PRODUCT CATEGORY
 class DamagesListCreateView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
@@ -250,13 +235,6 @@ class DamagesListCreateView(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
-
-
-
-
-
-
-
 
 
 # LIST ALL CUSTOMER ORDERS [INVOICE/RECEIPT] / CREATE A CUSTOMER ORDER
@@ -383,8 +361,6 @@ class OrderListCreateView(generics.ListCreateAPIView):
         serializer.save(owner=self.request.user)
 
 
-
-
 # LIST DETAIL OF ONE PRODUCT / UPDATE / DELETE
 class OrderRetreiveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]
@@ -503,12 +479,6 @@ class StoreStatisticsView(generics.ListAPIView):
                     damagesnumber = damagesnumber + damage.damages
             
 
-                    
-                    
-        
-
-        
-
         number_of_damages = 0
         damages = Damages.objects.filter(owner=user)
         for item in damages.iterator():
@@ -574,16 +544,6 @@ class StoreStatisticsView(generics.ListAPIView):
                 }
         return Response(response)
         
-    
-
-
-
-
-
-
-
-
-
 
 
 # LIST ALL CUSTOMER ORDERS / CREATE A CUSTOMER ORDER
@@ -1085,42 +1045,4 @@ class ProductReportView(APIView):
         # Calculate stock out based on orders with type 'receipt'
         stock_out = product.orderproducts_set.filter(order__type='receipt').aggregate(Sum('quantity'))['quantity__sum']
         return stock_out if stock_out else 0
-
-# class ProductReportView(APIView):
-#     def get(self, request, *args, **kwargs):
-#         # Create a new workbook and add a worksheet
-#         wb = Workbook()
-#         ws = wb.active
-#         ws.title = "Product Report"
-
-#         # Add headers to the worksheet
-#         headers = ["Name", "Category", "Stock In", "Stock Out", "Stock In Hand", "Expiry Date"]
-#         for col_num, header in enumerate(headers, 1):
-#             col_letter = get_column_letter(col_num)
-#             ws[f"{col_letter}1"] = header
-#             ws[f"{col_letter}1"].alignment = Alignment(horizontal='center')
-
-#         # Retrieve product information
-#         products = Product.objects.all()
-
-#         # Populate the worksheet with product data
-#         for row_num, product in enumerate(products, 2):
-#             ws.cell(row=row_num, column=1, value=product.name)
-#             ws.cell(row=row_num, column=2, value=product.category.name if product.category else "")
-#             ws.cell(row=row_num, column=3, value=product.stock)
-#             ws.cell(row=row_num, column=4, value=self.get_stock_out(product))
-#             ws.cell(row=row_num, column=5, value=product.stock - self.get_stock_out(product))
-#             ws.cell(row=row_num, column=6, value=product.expiry_date.strftime('%Y-%m-%d') if product.expiry_date else "")
-
-#         # Create a response with the Excel file
-#         response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-#         response['Content-Disposition'] = 'attachment; filename=product_report.xlsx'
-#         wb.save(response)
-
-#         return response
-
-#     def get_stock_out(self, product):
-#         # Calculate stock out based on orders with type 'receipt'
-#         stock_out = product.orderproducts_set.filter(order__type='receipt').aggregate(Sum('quantity'))['quantity__sum']
-#         return stock_out if stock_out else 0
 
