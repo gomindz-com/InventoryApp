@@ -324,12 +324,9 @@ class OrderListCreateView(generics.ListCreateAPIView):
 
                 orderProduct = OrderProducts.objects.create(product_id=product['id'],  order_id=order.id, quantity=product['amount'])
 
-                print("dddd")
-                print(type)
 
                 if(type == 'receipt'):
                     theproduct = Product.objects.get(pk=product['id'])
-                    theproduct.stock = theproduct.stock - product['amount']
                     theproduct.save()
 
                 orderProduct.save()
