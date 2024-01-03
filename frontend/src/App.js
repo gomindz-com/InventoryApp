@@ -54,15 +54,12 @@ export default function App() {
   const userProfileInfo = useSelector((state) => state.user.value);
 
   const handleCheckUserAuthenticated = async () => {
-
-    if(window.location.pathname != '/'){
-      
+    if (window.location.pathname != "/") {
     }
-          
-    }
+  };
 
   useEffect(() => {
-      handleCheckUserAuthenticated()
+    handleCheckUserAuthenticated();
   }, []);
 
   // Cache for the rtl
@@ -103,7 +100,7 @@ export default function App() {
   useEffect(() => {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
-  }, [pathname,userProfileInfo]);
+  }, [pathname, userProfileInfo]);
 
   const getRoutes = (allRoutes) =>
     allRoutes.map((route) => {
@@ -142,13 +139,7 @@ export default function App() {
     </ArgonBox>
   );
 
-  return direction === "rtl" ? 
-
-
-
-  
-  
-  (
+  return direction === "rtl" ? (
     <CacheProvider value={rtlCache}>
       <ThemeProvider theme={darkMode ? themeDarkRTL : themeRTL}>
         <CssBaseline />
@@ -168,14 +159,12 @@ export default function App() {
         )}
         {layout === "vr" && <Configurator />}
         <Routes>
-          {getRoutes(routes )}
+          {getRoutes(routes)}
           <Route path="*" element={<Navigate to="/home" />} />
         </Routes>
       </ThemeProvider>
     </CacheProvider>
   ) : (
-
-    
     <ThemeProvider theme={darkMode ? themeDark : theme}>
       <CssBaseline />
       {layout === "dashboard" && (
@@ -183,7 +172,7 @@ export default function App() {
           <Sidenav
             color={sidenavColor}
             brand={darkSidenav || darkMode ? brand : brandDark}
-            brandName="Gomindz Inventory"
+            brandName="Gomindz Invegggntory"
             routes={routes}
             onMouseEnter={handleOnMouseEnter}
             onMouseLeave={handleOnMouseLeave}
@@ -194,13 +183,14 @@ export default function App() {
       )}
       {layout === "vr" && <Configurator />}
 
-
       <Routes>
+        {getRoutes(routes)}
+        {token ? (
+          <Route path="/" element={<Navigate to="/dashboard" />} />
+        ) : (
+          <Route path="/" element={<Navigate to="/authenticate/sign-in" />} />
+        )}
 
-      {getRoutes( routes )}
-              { token ? <Route path="/" element={<Navigate to="/dashboard" />} />:
-                <Route path="/" element={<Navigate to="/authenticate/sign-in" />} /> }
-                
         <Route path="*" element={<Navigate to="/home" />} />
       </Routes>
     </ThemeProvider>
