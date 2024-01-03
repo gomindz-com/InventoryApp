@@ -20,11 +20,10 @@ import Receipts from "layouts/receipts";
 import Damages from "layouts/damages";
 
 const routes = [
-
   {
     type: "route",
     name: "Home",
-    key: "home", 
+    key: "home",
     route: "/home",
     icon: <i className="fa fa-home" aria-hidden="true"></i>,
     component: <Home />,
@@ -43,33 +42,25 @@ const routes = [
     name: "Invoices",
     key: "invoices",
     route: "/invoices",
-    icon: (
-      <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-credit-card" />
-    ),
+    icon: <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-credit-card" />,
     component: <Invoices />,
   },
-
 
   {
     type: "route",
     name: "Receipts",
     key: "receipts",
     route: "/receipts",
-    icon: (
-      <ArgonBox component="i" color="dark" fontSize="14px" className="ni ni-delivery-fast" />
-    ),
+    icon: <ArgonBox component="i" color="dark" fontSize="14px" className="ni ni-delivery-fast" />,
     component: <Receipts />,
   },
-  
-  
+
   {
     type: "route",
     name: "Products",
     key: "products",
     route: "/products",
-    icon: (
-      <ArgonBox component="i" color="success" fontSize="14px" className="ni ni-bag-17" />
-    ),
+    icon: <ArgonBox component="i" color="success" fontSize="14px" className="ni ni-bag-17" />,
     component: <Products />,
   },
   {
@@ -77,9 +68,7 @@ const routes = [
     name: "Categories",
     key: "categories",
     route: "/categories",
-    icon: (
-      <ArgonBox component="i" color="success" fontSize="14px" className="ni ni-align-center" />
-    ),
+    icon: <ArgonBox component="i" color="success" fontSize="14px" className="ni ni-align-center" />,
     component: <Categories />,
   },
   {
@@ -87,22 +76,17 @@ const routes = [
     name: "Damages",
     key: "damages",
     route: "/damages",
-    icon: (
-      <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-basket" />
-    ),
+    icon: <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-basket" />,
     component: <Damages />,
   },
   {
     type: "route",
-    name: "Suppliers",
+    name: "Report",
     key: "suppliers",
     route: "/suppliers",
-    icon: (
-      <ArgonBox component="i" color="warning" fontSize="14px" className="ni ni-bus-front-12" />
-    ),
+    icon: <ArgonBox component="i" color="warning" fontSize="14px" className="ni ni-bus-front-12" />,
     component: <Suppliers />,
   },
- 
 
   { type: "title", title: "Account Pages", key: "account-pages" },
   {
@@ -126,17 +110,17 @@ const routes = [
     name: "",
     key: "sign-in",
     route: "/authentication/sign-in",
-    icon:  <></>,
+    icon: <></>,
     component: <SignIn />,
   },
-   {
+  {
     type: "route",
     name: "",
     key: "sign-up",
     route: "/authentication/sign-up",
     icon: <></>,
     component: <SignUp />,
-  }, 
+  },
 ];
 
 export default routes;
