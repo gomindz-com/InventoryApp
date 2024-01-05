@@ -23,7 +23,7 @@ class Product(models.Model):
         ('in_stock', 'In Stock'),
         ('out_of_stock', 'Out of Stock'),
     )
-    name = models.CharField(max_length=120, unique=True)
+    name = models.CharField(max_length=120)
     description_color = models.CharField(max_length=120, default='')
     price = models.DecimalField(max_digits=120, decimal_places=2)
     stock = models.PositiveIntegerField(default='')
@@ -38,7 +38,7 @@ class Product(models.Model):
 
 
     def __str__(self):
-        return self.name
+        return str(self.id)
 
 
 
