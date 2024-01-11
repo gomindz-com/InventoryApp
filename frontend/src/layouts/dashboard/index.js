@@ -32,20 +32,16 @@ import { getStoreStatistics } from "apiservices/storeStatisticsService";
 import { getOrderCount } from "apiservices/orderService";
 import { useSelector } from "react-redux";
 
-
 // pro
 function Default() {
-
   const userProfileInfo = useSelector((state) => state.user.value);
 
-  
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
   const { size } = typography;
   const [storeStatistics, setStoreStatistics] = useState({});
   const [orderCount, setOrderCount] = useState({});
   const [categoryStatList, setCategoryStatList] = useState([]);
   const categoriesListStatData = [];
-
 
   const handleGetStoreStatistics = async () => {
     setStoreStatistics({});
@@ -76,7 +72,6 @@ function Default() {
         .catch((err) => {});
     } catch (error) {}
   };
-
 
   categoryStatList.map(function (item, i) {
     categoriesListStatData.push({
@@ -117,7 +112,7 @@ function Default() {
       <DashboardNavbar />
       <ArgonBox py={3}>
         <Grid container spacing={3} mb={3}>
-        <Grid item xs={12} md={4} lg={2}>
+          <Grid item xs={12} md={4} lg={2}>
             <DetailedStatisticsCard
               title="Cash InHand"
               count={
@@ -141,61 +136,41 @@ function Default() {
               icon={{ color: "error", component: <i className="ni ni-world" /> }}
             />
           </Grid>
-          
+
           <Grid item xs={12} md={5} lg={2}>
             <DetailedStatisticsCard
               title="Stock-In"
-              count={
-                storeStatistics?.stock_in == undefined 
-                ? 0
-                : storeStatistics?.stock_in
-              }
+              count={storeStatistics?.stock_in == undefined ? 0 : storeStatistics?.stock_in}
               amount={""}
-              icon={{ color: "warning",  component: <i className="ni ni-bold-down" /> }}
+              icon={{ color: "warning", component: <i className="ni ni-bold-down" /> }}
             />
           </Grid>
-        
+
           <Grid item xs={12} md={5} lg={2}>
             <DetailedStatisticsCard
               title="Stock-Out"
-              count={
-                storeStatistics?.stock_out == undefined 
-                ? 0
-                : storeStatistics?.stock_out
-            
-              }
+              count={storeStatistics?.stock_out == undefined ? 0 : storeStatistics?.stock_out}
               amount={""}
               icon={{ color: "warning", component: <i className="ni ni-bold-up" /> }}
             />
           </Grid>
-          
+
           <Grid item xs={12} md={6} lg={2}>
             <DetailedStatisticsCard
               title="Stock-In-Hand"
-              count={
-                storeStatistics?.stock_inhand == undefined 
-                ? 0
-                : storeStatistics?.stock_inhand
-            
-              }
+              count={storeStatistics?.stock_inhand == undefined ? 0 : storeStatistics?.stock_inhand}
               amount={""}
               icon={{ color: "success", component: <i className="ni ni-archive-2" /> }}
             />
           </Grid>
 
-
-          
-          
-          
-
           <Grid item xs={12} md={6} lg={2}>
             <DetailedStatisticsCard
               title="Damages"
               count={
-                storeStatistics?.number_of_damages == undefined 
-                ? 0
-                : storeStatistics?.number_of_damages
-            
+                storeStatistics?.number_of_damages == undefined
+                  ? 0
+                  : storeStatistics?.number_of_damages
               }
               amount={""}
               icon={{ color: "error", component: <i className="ni ni-basket" /> }}
@@ -204,13 +179,13 @@ function Default() {
           </Grid>
         </Grid>
 
-        <Grid container spacing={3} mb={3}>
-          <Grid item xs={12} lg={7}>
+        <Grid container width="100%" mb={3}>
+          <Grid item xs={12}>
             <GradientLineChart
               title="Our Sales Overview"
               description={
                 <ArgonBox display="flex" alignItems="center">
-                  <ArgonBox fontSize={size.lg} color="success" mb={0.3} mr={0.5} lineHeight={0}>
+                  <ArgonBox fontSize={size.lg} color="success" mb={0.3} mr={0.5}>
                     <Icon sx={{ fontWeight: "bold" }}>arrow_upward</Icon>
                   </ArgonBox>
                   <ArgonTypography variant="button" color="text" fontWeight="medium">
@@ -224,10 +199,8 @@ function Default() {
               chart={gradientLineChartData}
             />
           </Grid>
-          <Grid item xs={12} lg={5}>
-            <Slider />
-          </Grid>
         </Grid>
+
         <Grid container spacing={3}>
           <Grid item xs={12} md={8}>
             <SalesTable title="Sales by Regions" rows={salesTableData} />

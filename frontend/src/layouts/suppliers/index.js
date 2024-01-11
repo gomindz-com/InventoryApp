@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Card from "@mui/material/Card";
-import { Button } from "@mui/material";
+import { Button, Select, MenuItem, FormControl, InputLabel } from "@mui/material";
 import ArgonBox from "components/ArgonBox";
 import ArgonTypography from "components/ArgonTypography";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
@@ -18,6 +18,7 @@ function Suppliers() {
   const [editFormActive, setEditFormActive] = useState(false);
   const [reportList, setReportList] = useState([]);
   const [rows, setRows] = useState([]);
+  const [selectedMonth, setSelectedMonth] = useState("All"); // Default to show all months
 
   const columns = [
     { name: "Name", align: "left" },
@@ -25,12 +26,12 @@ function Suppliers() {
     { name: "Stock In", align: "center" },
     { name: "Stock Out", align: "center" },
     { name: "Stock In Hand", align: "center" },
-    { name: "Expiry Date", align: "center" },
+    { name: "expiry_date", align: "center" },
   ];
 
   useEffect(() => {
     handleGetReport();
-  }, []);
+  }, [selectedMonth]); // Fetch data whenever the selected month changes
 
   const handleGetReport = async () => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -38,12 +39,21 @@ function Suppliers() {
     try {
       const res = await getRport();
       if (res.data?.status) {
-        setReportList(res.data.result);
-        setRows(res.data.result);
+        const filteredRows =
+          selectedMonth === "All"
+            ? res.data.result
+            : res.data.result.filter((item) => item.ExpiryDate.includes(selectedMonth));
+
+        setReportList(filteredRows);
+        setRows(filteredRows);
       } else {
         setReportList([]);
       }
     } catch (error) {}
+  };
+
+  const handleMonthChange = (event) => {
+    setSelectedMonth(event.target.value);
   };
 
   const [user] = useState(JSON.parse(localStorage.getItem("user")));
@@ -65,6 +75,19 @@ function Suppliers() {
           <Card>
             <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
               <ArgonTypography variant="h6">Inventory Report</ArgonTypography>
+              <FormControl style={{ width: "50%" }}>
+                <Select
+                  labelId="select-month-label"
+                  id="select-month"
+                  value={selectedMonth}
+                  onChange={handleMonthChange}
+                >
+                  <MenuItem value="All">Search Expiry Month</MenuItem>
+                  <MenuItem value="01">January</MenuItem>
+                  <MenuItem value="02">February</MenuItem>
+                  {/* Add other months */}
+                </Select>
+              </FormControl>
               <Button onClick={exportToExcel}>Export to Excel</Button>
             </ArgonBox>
             <ArgonBox>

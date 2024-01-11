@@ -1,5 +1,3 @@
-
-
 // react-router-dom components
 import { Link } from "react-router-dom";
 
@@ -64,7 +62,7 @@ function CategoriesList({ title, categories }) {
           component={Link}
           variant="button"
           color={color}
-          to={'/categories'}
+          to={"/suppliers"}
           sx={{
             lineHeight: 0,
             transition: "all 0.2s cubic-bezier(.34,1.61,.7,1.3)",

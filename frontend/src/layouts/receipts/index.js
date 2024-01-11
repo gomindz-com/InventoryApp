@@ -31,6 +31,7 @@ import { useReactToPrint } from "react-to-print";
 import { Navigate, useNavigate } from "react-router-dom";
 import { getOrders, addOrder, deleteOrder } from "apiservices/orderService";
 import "./index.css";
+import jsPDF from "jspdf";
 
 function Receipts() {
   const product_options = [];
@@ -169,6 +170,19 @@ function Receipts() {
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
+
+  const handleDownloadPDF = () => {
+    try {
+      const pdf = new jsPDF();
+      const content = componentRef.current;
+      pdf.fromHTML(content, 10, 10);
+
+      pdf.save("your_document.pdf");
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+      toast.error("Error generating PDF");
+    }
+  };
 
   const handleChangeProduct = async (selectedOption) => {
     setFirstProductId(selectedOption.id);
@@ -995,6 +1009,18 @@ function Receipts() {
             </div>
           </div>
 
+          <Button
+            style={{ alignSelf: "flex-end" }}
+            onClick={() => {
+              setShowPrintView(false);
+              setShowAddForm(false);
+              setShowOrderTable(true);
+            }}
+          >
+            <h5 style={{ paddingRight: 10 }}>Back </h5>
+            <ArgonBox component="i" color="info" fontSize="20px" className="ni ni-bold-right" />
+          </Button>
+
           <div style={{ marginTop: 20 }} ref={componentRef} className="row gutters">
             <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
               <div className="card">
@@ -1013,34 +1039,6 @@ function Receipts() {
                         >
                           <br />
                           <address style={{ textAlign: "end" }} className="text-right">
-                            {/* <a
-                              onClick={() => {
-                                setShowPrintView(false);
-                                setShowAddForm(false);
-                                setShowOrderTable(true);
-                              }}
-                              className="btn btn-secondary"
-                              style={{ justifyContent: "flex-end" }}
-                            >
-                              <i className="icon-printer"></i> Back
-                            </a> */}
-
-                            <Button
-                              onClick={() => {
-                                setShowPrintView(false);
-                                setShowAddForm(false);
-                                setShowOrderTable(true);
-                              }}
-                            >
-                              <h5 style={{ paddingRight: 10 }}>Back </h5>
-                              <ArgonBox
-                                component="i"
-                                color="info"
-                                fontSize="20px"
-                                className="ni ni-bold-right"
-                              />
-                            </Button>
-
                             <br />
                             {user?.company_name}
                             <br />
