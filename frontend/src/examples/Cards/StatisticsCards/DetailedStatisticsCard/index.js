@@ -68,11 +68,10 @@ function DetailedStaticsCard({ bgColor, title, count, amount, percentage, icon, 
                   variant="h5"
                   fontWeight="bold"
                   color={bgColor === "white" ? "dark" : "white"}
-                  
                 >
                   {count}
                 </ArgonTypography>
-                
+
                 <ArgonTypography
                   variant="h10"
                   fontSize={13}
@@ -123,7 +122,7 @@ function DetailedStaticsCard({ bgColor, title, count, amount, percentage, icon, 
             fontWeight="bold"
             color={percentage.color}
           >
-            {percentage.count}
+            {/* {percentage.count} */}
             <ArgonTypography
               variant="body2"
               fontWeight="regular"

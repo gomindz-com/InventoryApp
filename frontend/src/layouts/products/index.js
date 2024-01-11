@@ -26,7 +26,14 @@ import Select from "react-select";
 import { deleteProduct } from "apiservices/productService";
 import { getCategories } from "apiservices/categoryService";
 import { editProduct } from "apiservices/productService";
-import DateTimePicker from "components/datePicker";
+import { DatePickerComponent } from "@syncfusion/ej2-react-calendars";
+import Datetime from "react-datetime";
+import "react-datetime/css/react-datetime.css";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+
 import axios from "axios";
 import { baseUrl } from "apiservices/baseURL";
 
@@ -43,6 +50,11 @@ function Products() {
   const [editFormActive, setEditFormActive] = useState(false);
   const [productImage, setProductImage] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
+  const [startDate, setStartDate] = useState(new Date());
+
+  const datePickerStyle = {
+    width: "400px",
+  };
 
   const columns = [
     { name: "product", align: "left" },
@@ -63,6 +75,7 @@ function Products() {
     description_color: "",
     price: "",
     status: "in_stock",
+    expiry_date: "",
   });
 
   const status_options = [
@@ -80,6 +93,10 @@ function Products() {
 
   const handleChangedata = (date) => {
     setSelectedDate(date);
+  };
+
+  const handlePlaceholderText = () => {
+    return startDate ? startDate.toDateString() : "Choose expiry date";
   };
 
   const handleSubmit = async (e) => {
@@ -109,6 +126,8 @@ function Products() {
       formData.append("price", productData.price);
       formData.append("category", productData.category);
       formData.append("stock", productData.stock);
+      formData.append("expiry_date", productData.expiry_date);
+
       formData.append("image", productImage == null ? "" : productImage?.image[0]);
 
       axios
@@ -126,6 +145,10 @@ function Products() {
           toast.error(Object.values(err.response?.data)[0][0]);
         });
     }
+  };
+  const handleDateChange = (date) => {
+    // Handle the date change here
+    setSelectedDate(date);
   };
 
   const handleChange = (e) => {
@@ -219,6 +242,14 @@ function Products() {
         setCategoryList([]);
       }
     } catch (error) {}
+  };
+
+  const customStyle = {
+    height: 200,
+    width: 400,
+
+    borderWidth: 1,
+    borderColor: "red",
   };
 
   productList?.map(function (item, i) {
@@ -403,18 +434,6 @@ function Products() {
                 }}
               >
                 <ArgonBox mb={2} mx={5}>
-                  <DateTimePicker
-                    fullWidth
-                    inputProps={{
-                      style: {
-                        padding: "140px", // Adjust padding as needed
-                        fontSize: "16px", // Adjust font size as needed
-                      },
-                    }}
-                  />
-                </ArgonBox>
-
-                <ArgonBox mb={2} mx={5}>
                   <ArgonInput
                     type="title"
                     name="name"
@@ -487,6 +506,18 @@ function Products() {
                     size="large"
                     onChange={handleChange}
                   />
+                </ArgonBox>
+
+                <ArgonBox mb={2} mx={5}>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer components={["DatePicker"]}>
+                      <DatePicker
+                        label="Expiry  Date"
+                        value={productData.expiry_date} // Set the value prop
+                        onChange={handleDateChange}
+                      />
+                    </DemoContainer>
+                  </LocalizationProvider>
                 </ArgonBox>
 
                 <ArgonBox mb={2} mx={5}>
