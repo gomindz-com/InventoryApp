@@ -483,6 +483,9 @@ License - nucleoapp.com/license/
   content: "\ea4b";
 }
 
+.ni-settings-gear-65::before {
+  content: "\ea4c";
+}
 
 .ni-settings::before {
   content: "\ea4d";
