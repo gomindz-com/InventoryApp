@@ -30,9 +30,10 @@ import { DatePickerComponent } from "@syncfusion/ej2-react-calendars";
 import Datetime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import AdapterDayjs from "@mui/lab/AdapterDayjs";
+import { LocalizationProvider, DatePicker as MUIDatePicker } from "@mui/lab";
+import TextField from "@mui/material/TextField";
 
 import axios from "axios";
 import { baseUrl } from "apiservices/baseURL";
@@ -75,7 +76,7 @@ function Products() {
     description_color: "",
     price: "",
     status: "in_stock",
-    expiry_date: "",
+    expiry_date: "", // Set default date in the desired format
   });
 
   const status_options = [
@@ -90,10 +91,6 @@ function Products() {
       id: 1,
     },
   ];
-
-  const handleChangedata = (date) => {
-    setSelectedDate(date);
-  };
 
   const handlePlaceholderText = () => {
     return startDate ? startDate.toDateString() : "Choose expiry date";
@@ -146,9 +143,8 @@ function Products() {
         });
     }
   };
-  const handleDateChange = (date) => {
-    // Handle the date change here
-    setSelectedDate(date);
+  const handleDateChange = (event) => {
+    setProductData({ ...productData, expiry_date: event.target.value });
   };
 
   const handleChange = (e) => {
@@ -509,15 +505,13 @@ function Products() {
                 </ArgonBox>
 
                 <ArgonBox mb={2} mx={5}>
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DemoContainer components={["DatePicker"]}>
-                      <DatePicker
-                        label="Expiry  Date"
-                        value={productData.expiry_date} // Set the value prop
-                        onChange={handleDateChange}
-                      />
-                    </DemoContainer>
-                  </LocalizationProvider>
+                  <TextField
+                    label="Expiry Date"
+                    type="date"
+                    value={productData.expiry_date}
+                    onChange={handleDateChange}
+                    InputLabelProps={{ shrink: true }}
+                  />
                 </ArgonBox>
 
                 <ArgonBox mb={2} mx={5}>

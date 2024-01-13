@@ -130,3 +130,11 @@ body{margin-top:20px;
 .custom-actions-btns .btn {
     margin: .3rem 0 .3rem .3rem;
 }
+
+
+@media print {
+    .hide-on-print {
+      display: none;
+    }
+  }
+  

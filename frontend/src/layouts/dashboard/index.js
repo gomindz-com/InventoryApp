@@ -121,7 +121,7 @@ function Default() {
                   : "D" + storeStatistics?.cash_inhand
               }
               amount={""}
-              icon={{ color: "error", component: <i className="ni ni-money-coins" /> }}
+              icon={{ color: "error", component: <i className="ni ni-credit-card" /> }}
             />
           </Grid>
           <Grid item xs={12} md={4} lg={2}>
@@ -133,7 +133,7 @@ function Default() {
                   : "D" + storeStatistics?.cash_pending
               }
               amount={""}
-              icon={{ color: "error", component: <i className="ni ni-world" /> }}
+              icon={{ color: "error", component: <i className="ni ni-money-coins" /> }}
             />
           </Grid>
 
@@ -179,13 +179,13 @@ function Default() {
           </Grid>
         </Grid>
 
-        <Grid container width="100%" mb={3}>
-          <Grid item xs={12}>
+        <Grid container spacing={3} mb={3}>
+          <Grid item xs={12} lg={7}>
             <GradientLineChart
               title="Our Sales Overview"
               description={
                 <ArgonBox display="flex" alignItems="center">
-                  <ArgonBox fontSize={size.lg} color="success" mb={0.3} mr={0.5}>
+                  <ArgonBox fontSize={size.lg} color="success" mb={0.3} mr={0.5} lineHeight={0}>
                     <Icon sx={{ fontWeight: "bold" }}>arrow_upward</Icon>
                   </ArgonBox>
                   <ArgonTypography variant="button" color="text" fontWeight="medium">
@@ -198,6 +198,9 @@ function Default() {
               }
               chart={gradientLineChartData}
             />
+          </Grid>
+          <Grid item xs={12} lg={5}>
+            <Slider />
           </Grid>
         </Grid>
 

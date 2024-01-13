@@ -84,7 +84,7 @@ const routes = [
     name: "Report",
     key: "suppliers",
     route: "/suppliers",
-    icon: <ArgonBox component="i" color="warning" fontSize="14px" className="ni ni-bus-front-12" />,
+    icon: <ArgonBox component="i" color="warning" fontSize="14px" className="ni ni-collection" />,
     component: <Suppliers />,
   },
 
