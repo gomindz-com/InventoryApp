@@ -171,17 +171,12 @@ function Receipts() {
     content: () => componentRef.current,
   });
 
-  const handleDownloadPDF = () => {
-    try {
-      const pdf = new jsPDF();
-      const content = componentRef.current;
-      pdf.fromHTML(content, 10, 10);
+  const handleDownload = () => {
+    const pdfContent = componentRef.current;
 
-      pdf.save("your_document.pdf");
-    } catch (error) {
-      console.error("Error generating PDF:", error);
-      toast.error("Error generating PDF");
-    }
+    pdfContent.toBlob().then((blob) => {
+      saveAs(blob, "invoice.pdf");
+    });
   };
 
   const handleChangeProduct = async (selectedOption) => {
@@ -990,7 +985,7 @@ function Receipts() {
               <div className="custom-actions-btns mb-2">
                 <a
                   onClick={() => {
-                    handlePrint();
+                    handleDownload();
                   }}
                   className="btn btn-primary"
                 >

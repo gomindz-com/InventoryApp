@@ -18,7 +18,7 @@ function Suppliers() {
   const [editFormActive, setEditFormActive] = useState(false);
   const [reportList, setReportList] = useState([]);
   const [rows, setRows] = useState([]);
-  const [selectedMonth, setSelectedMonth] = useState("All"); // Default to show all months
+  const [selectedMonth, setSelectedMonth] = useState("All");
 
   const columns = [
     { name: "Name", align: "left" },
@@ -26,7 +26,7 @@ function Suppliers() {
     { name: "Stock In", align: "center" },
     { name: "Stock Out", align: "center" },
     { name: "Stock In Hand", align: "center" },
-    { name: "expiry_date", align: "center" },
+    { name: "Expiry Date", align: "center" },
   ];
 
   useEffect(() => {
@@ -34,22 +34,30 @@ function Suppliers() {
   }, [selectedMonth]); // Fetch data whenever the selected month changes
 
   const handleGetReport = async () => {
-    const user = JSON.parse(localStorage.getItem("user"));
     setReportList([]);
     try {
       const res = await getRport();
       if (res.data?.status) {
+        const currentDate = new Date();
+        const currentYear = currentDate.getFullYear();
+
         const filteredRows =
           selectedMonth === "All"
             ? res.data.result
-            : res.data.result.filter((item) => item.ExpiryDate.includes(selectedMonth));
+            : res.data.result.filter((item) => {
+                const itemYearMonth = item.ExpiryDate.substring(0, 7); // Extract YYYY-MM part
+                const selectedYearMonth = `${currentYear}-${selectedMonth.padStart(2, "0")}`;
+                return itemYearMonth === selectedYearMonth;
+              });
 
         setReportList(filteredRows);
         setRows(filteredRows);
       } else {
         setReportList([]);
       }
-    } catch (error) {}
+    } catch (error) {
+      console.error("Error fetching report:", error);
+    }
   };
 
   const handleMonthChange = (event) => {
@@ -82,10 +90,19 @@ function Suppliers() {
                   value={selectedMonth}
                   onChange={handleMonthChange}
                 >
-                  <MenuItem value="All">Search Expiry Month</MenuItem>
+                  <MenuItem value="All">All Months</MenuItem>
                   <MenuItem value="01">January</MenuItem>
                   <MenuItem value="02">February</MenuItem>
-                  {/* Add other months */}
+                  <MenuItem value="03">March</MenuItem>
+                  <MenuItem value="04">April</MenuItem>
+                  <MenuItem value="05">May</MenuItem>
+                  <MenuItem value="06">June</MenuItem>
+                  <MenuItem value="07">July</MenuItem>
+                  <MenuItem value="08">August</MenuItem>
+                  <MenuItem value="09">September</MenuItem>
+                  <MenuItem value="10">October</MenuItem>
+                  <MenuItem value="11">November</MenuItem>
+                  <MenuItem value="12">December</MenuItem>
                 </Select>
               </FormControl>
               <Button onClick={exportToExcel}>Export to Excel</Button>

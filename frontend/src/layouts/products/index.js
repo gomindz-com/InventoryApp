@@ -506,6 +506,7 @@ function Products() {
 
                 <ArgonBox mb={2} mx={5}>
                   <TextField
+                    style={{ width: "100%", paddingTop: "15px" }}
                     label="Expiry Date"
                     type="date"
                     value={productData.expiry_date}

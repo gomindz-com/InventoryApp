@@ -1445,6 +1445,18 @@ function Invoices() {
             </div>
           </div>
 
+          <Button
+            style={{ alignSelf: "flex-end" }}
+            onClick={() => {
+              setShowPrintView(false);
+              setShowAddForm(false);
+              setShowOrderTable(true);
+            }}
+          >
+            <h5 style={{ paddingRight: 10 }}>Back </h5>
+            <ArgonBox component="i" color="info" fontSize="20px" className="ni ni-bold-right" />
+          </Button>
+
           <div style={{ marginTop: 20 }} ref={componentRef} className="row gutters">
             <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
               <div className="card">
@@ -1462,22 +1474,6 @@ function Invoices() {
                           className="col-lg-6 col-md-6 col-sm-6"
                         >
                           <address style={{ textAlign: "end" }} className="text-right">
-                            <Button
-                              onClick={() => {
-                                setShowPrintView(false);
-                                setShowAddForm(false);
-                                setShowOrderTable(true);
-                              }}
-                            >
-                              <h5 style={{ paddingRight: 10 }}>Back </h5>
-                              <ArgonBox
-                                component="i"
-                                color="info"
-                                fontSize="20px"
-                                className="ni ni-bold-right"
-                              />
-                            </Button>
-                            <br />
                             {user?.company_name}
 
                             {user?.city}
