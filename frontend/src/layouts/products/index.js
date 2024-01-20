@@ -184,6 +184,7 @@ function Products() {
           } else if (res.status == 200) {
             toast.success("Successfully Updated", { autoClose: 80 });
             handleGetProductList();
+            setShowAddProductForm(!showAddProductForm);
           } else {
             toast.error("Error Updating", { autoClose: 80 });
           }
@@ -522,7 +523,7 @@ function Products() {
                     size="large"
                     fullWidth
                   >
-                    {editFormActive ? "Edit Product" : "Add Product"}
+                    {editFormActive ? "Save Product" : "Add Product"}
                   </ArgonButton>
                 </ArgonBox>
               </ArgonBox>

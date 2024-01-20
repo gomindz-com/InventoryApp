@@ -18,6 +18,7 @@ import Home from "layouts/home";
 import ContactUs from "layouts/contact";
 import Receipts from "layouts/receipts";
 import Damages from "layouts/damages";
+import ReceiptIcon from "@mui/icons-material/Receipt";
 
 const routes = [
   {
@@ -51,7 +52,7 @@ const routes = [
     name: "Receipts",
     key: "receipts",
     route: "/receipts",
-    icon: <ArgonBox component="i" color="dark" fontSize="14px" className="ni ni-delivery-fast" />,
+    icon: <ReceiptIcon />,
     component: <Receipts />,
   },
 

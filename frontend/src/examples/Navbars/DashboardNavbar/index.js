@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 
 // react-router components
@@ -45,15 +44,12 @@ import {
 import team2 from "assets/images/team-2.jpg";
 import logoSpotify from "assets/images/small-logos/logo-spotify.svg";
 import { Routes, Route, Navigate } from "react-router-dom";
-import { useNavigate } from 'react-router-dom';
-
-
+import { useNavigate } from "react-router-dom";
 
 function DashboardNavbar({ absolute, light, isMini, handleClick, handleKeyDown, data }) {
   const [navbarType, setNavbarType] = useState();
 
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
-
 
   const navigate = useNavigate();
 
@@ -63,7 +59,6 @@ function DashboardNavbar({ absolute, light, isMini, handleClick, handleKeyDown, 
   const route = useLocation().pathname.split("/").slice(1);
 
   const [token, setToken] = useState(localStorage.getItem("token"));
-
 
   useEffect(() => {
     // Setting the navbar type
@@ -95,7 +90,6 @@ function DashboardNavbar({ absolute, light, isMini, handleClick, handleKeyDown, 
   const handleConfiguratorOpen = () => setOpenConfigurator(dispatch, !openConfigurator);
   const handleOpenMenu = (event) => setOpenMenu(event.currentTarget);
   const handleCloseMenu = () => setOpenMenu(false);
-
 
   // Render the notifications menu
   const renderMenu = () => (
@@ -142,7 +136,6 @@ function DashboardNavbar({ absolute, light, isMini, handleClick, handleKeyDown, 
       color="inherit"
       sx={(theme) => navbar(theme, { transparentNavbar, absolute, light })}
     >
-
       {/* {token == null && <Navigate to="/authentication/sign-in" replace={true} />} */}
 
       <Toolbar sx={(theme) => navbarContainer(theme, { navbarType })}>
@@ -179,9 +172,8 @@ function DashboardNavbar({ absolute, light, isMini, handleClick, handleKeyDown, 
               <IconButton
                 sx={navbarIconButton}
                 size="small"
-                onClick={()=>{
-                  
-                  navigate('/profile');
+                onClick={() => {
+                  navigate("/profile");
                 }}
               >
                 <Icon
@@ -203,12 +195,11 @@ function DashboardNavbar({ absolute, light, isMini, handleClick, handleKeyDown, 
               <IconButton
                 sx={navbarIconButton}
                 size="small"
-                onClick={()=>{
-                  localStorage.removeItem("user")
+                onClick={() => {
+                  localStorage.removeItem("user");
                   localStorage.removeItem("token");
-                  navigate('/authentication/sign-in');
+                  navigate("/authentication/sign-in");
                 }}
-
               >
                 <Icon
                   sx={({ palette: { dark, white } }) => ({
@@ -226,8 +217,7 @@ function DashboardNavbar({ absolute, light, isMini, handleClick, handleKeyDown, 
                 </ArgonTypography>
               </IconButton>
 
-              
-              <IconButton
+              {/* <IconButton
                 size="small"
                 color={light && transparentNavbar ? "white" : "dark"}
                 sx={navbarIconButton}
@@ -237,7 +227,7 @@ function DashboardNavbar({ absolute, light, isMini, handleClick, handleKeyDown, 
                 onClick={handleOpenMenu}
               >
                 <Icon>notifications</Icon>
-              </IconButton>
+              </IconButton> */}
               {renderMenu()}
             </ArgonBox>
           </ArgonBox>

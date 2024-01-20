@@ -32,6 +32,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { getOrders, addOrder, deleteOrder } from "apiservices/orderService";
 import "./index.css";
 import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 
 function Receipts() {
   const product_options = [];
@@ -172,13 +173,33 @@ function Receipts() {
   });
 
   const handleDownload = () => {
-    const pdfContent = componentRef.current;
+    const componentNode = componentRef.current;
 
-    pdfContent.toBlob().then((blob) => {
-      saveAs(blob, "invoice.pdf");
-    });
+    if (componentNode) {
+      html2canvas(componentNode, {
+        width: componentNode.scrollWidth,
+        height: componentNode.scrollHeight,
+      }).then((canvas) => {
+        const imgData = canvas.toDataURL("image/png");
+        const pdf = new jsPDF();
+        pdf.addImage(imgData, "PNG", 2, 0);
+        pdf.save("component.pdf");
+      });
+    }
   };
 
+  // const handleDownload = () => {
+  //   const componentNode = componentRef.current;
+
+  //   if (componentNode) {
+  //     html2canvas(componentNode).then((canvas) => {
+  //       const imgData = canvas.toDataURL("image/png");
+  //       const pdf = new jsPDF();
+  //       pdf.addImage(imgData, "PNG", 0, 0);
+  //       pdf.save("component.pdf");
+  //     });
+  //   }
+  // };
   const handleChangeProduct = async (selectedOption) => {
     setFirstProductId(selectedOption.id);
     setFirstProductPrice(selectedOption.price);
@@ -985,6 +1006,7 @@ function Receipts() {
               <div className="custom-actions-btns mb-2">
                 <a
                   onClick={() => {
+                    toast.success("Loading Sucessful!!");
                     handleDownload();
                   }}
                   className="btn btn-primary"
