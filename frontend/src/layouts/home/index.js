@@ -4,7 +4,6 @@ import { useArgonController, setLayout } from "context";
 import "./styles.css";
 
 import "react-toastify/dist/ReactToastify.css";
-import { ToastContainer, toast } from "react-toastify";
 import { useLocation } from "react-router-dom";
 
 import { useNavigate } from "react-router-dom";
@@ -52,7 +51,7 @@ function Home() {
             className="navbar-toggler shadow-none ms-2"
             type="button"
             data-bs-toggle="collapse"
-            data-bs-target="#navigation"
+            data-bs-target="navigation"
             aria-controls="navigation"
             aria-expanded="false"
             aria-label="Toggle navigation"
