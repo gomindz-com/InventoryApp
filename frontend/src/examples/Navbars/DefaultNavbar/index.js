@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 
 // prop-types is a library for typechecking of props.
@@ -34,7 +33,6 @@ function DefaultNavbar({ brand, transparent, light, action }) {
 
   const openMobileNavbar = ({ currentTarget }) => setMobileNavbar(currentTarget.parentNode);
   const closeMobileNavbar = () => setMobileNavbar(false);
-
 
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
 
@@ -108,19 +106,16 @@ function DefaultNavbar({ brand, transparent, light, action }) {
               route="/authentication/sign-up"
               light={light}
             /> */}
-            {
-              user == null &&
-
-              
-              
+            {user == null && (
               <DefaultNavbarLink
-              icon="key"
-              name="sign in"
-              route="/authentication/sign-in"
-              light={light}
-            />}
+                icon="key"
+                name="sign in"
+                route="/authentication/sign-in"
+                light={light}
+              />
+            )}
           </ArgonBox>
-          
+
           <ArgonBox
             display={{ xs: "inline-block", lg: "none" }}
             lineHeight={0}
@@ -134,7 +129,7 @@ function DefaultNavbar({ brand, transparent, light, action }) {
           </ArgonBox>
         </ArgonBox>
       </ArgonBox>
-      {mobileView && <DefaultNavbarMobile  open={mobileNavbar} close={closeMobileNavbar} />}
+      {mobileView && <DefaultNavbarMobile open={mobileNavbar} close={closeMobileNavbar} />}
     </Container>
   );
 }

@@ -45,10 +45,21 @@ function Suppliers() {
           selectedMonth === "All"
             ? res.data.result
             : res.data.result.filter((item) => {
-                const itemYearMonth = item.ExpiryDate.substring(0, 7); // Extract YYYY-MM part
+                const itemExpiryDate = item["Expiry Date"]?.substring(0, 7); // Use optional chaining
                 const selectedYearMonth = `${currentYear}-${selectedMonth.padStart(2, "0")}`;
-                return itemYearMonth === selectedYearMonth;
+                return itemExpiryDate === selectedYearMonth;
               });
+
+        // const filteredRows =
+        //   selectedMonth === "All"
+        //     ? res.data.result
+        //     : res.data.result.filter((item) => {
+        //         const itemYearMonth = item.ExpiryDate?.substring(0, 7); // Use optional chaining to handle undefined
+        //         const selectedYearMonth = `${currentYear}-${selectedMonth.padStart(2, "0")}`;
+        //         return itemYearMonth === selectedYearMonth;
+        //       });
+
+        console.log("filteredRows:", filteredRows);
 
         setReportList(filteredRows);
         setRows(filteredRows);

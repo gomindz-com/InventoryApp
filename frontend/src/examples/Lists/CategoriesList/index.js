@@ -7,13 +7,14 @@ import PropTypes from "prop-types";
 // @mui material components
 import Card from "@mui/material/Card";
 import Icon from "@mui/material/Icon";
+import CategoryIcon from "@mui/icons-material/Category";
 
 // Argon Dashboard 2 MUI components
 import ArgonBox from "components/ArgonBox";
 import ArgonTypography from "components/ArgonTypography";
 
 function CategoriesList({ title, categories }) {
-  const renderItems = categories.map(({ color, icon, name, description, route }, key) => (
+  const renderItems = categories.map(({ color, name, description, route }, key) => (
     <ArgonBox
       key={name}
       component="li"
@@ -39,14 +40,16 @@ function CategoriesList({ title, categories }) {
           mr={2}
           variant="gradient"
         >
-          <Icon
-            sx={{
-              display: "grid",
-              placeItems: "center",
-            }}
-          >
-            {icon}
-          </Icon>
+          <CategoryIcon />
+
+          {/* <Icon
+              sx={{
+                display: "grid",
+                placeItems: "center",
+              }}
+            >
+              {icon}
+            </Icon> */}
         </ArgonBox>
         <ArgonBox display="flex" flexDirection="column">
           <ArgonTypography variant="button" color={color} fontWeight="medium" gutterBottom>

@@ -38,6 +38,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "./index.css";
 import { item } from "examples/Sidenav/styles/sidenavItem";
 import { updateOrder } from "apiservices/orderService";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 
 function Invoices() {
   const product_options = [];
@@ -131,6 +133,22 @@ function Invoices() {
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
+
+  const handleDownload = () => {
+    const componentNode = componentRef.current;
+
+    if (componentNode) {
+      html2canvas(componentNode, {
+        width: componentNode.scrollWidth,
+        height: componentNode.scrollHeight,
+      }).then((canvas) => {
+        const imgData = canvas.toDataURL("image/png");
+        const pdf = new jsPDF();
+        pdf.addImage(imgData, "PNG", 2, 0);
+        pdf.save("component.pdf");
+      });
+    }
+  };
 
   const style = {
     position: "absolute",
@@ -1426,7 +1444,7 @@ function Invoices() {
               <div className="custom-actions-btns mb-2">
                 <a
                   onClick={() => {
-                    handlePrint();
+                    handleDownload();
                   }}
                   className="btn btn-primary"
                 >
