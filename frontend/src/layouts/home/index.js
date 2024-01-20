@@ -6,7 +6,6 @@ import "./styles.css";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
 import { useLocation } from "react-router-dom";
-import "animate.css/animate.min.css";
 
 import { useNavigate } from "react-router-dom";
 

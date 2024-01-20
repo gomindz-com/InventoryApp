@@ -29,7 +29,7 @@
             disableNavLinkTabbing();
             disableNavFilterTabbing();
         }
-        main.classList.toggle('shifted', navSidebarIsOpen === 'true');
+        main.classList?.toggle('shifted', navSidebarIsOpen === 'true');
 
         toggleNavSidebar.addEventListener('click', function() {
             if (navSidebarIsOpen === 'true') {
@@ -42,7 +42,7 @@
                 enableNavFilterTabbing();
             }
             localStorage.setItem('django.admin.navSidebarIsOpen', navSidebarIsOpen);
-            main.classList.toggle('shifted');
+            main.classList?.toggle('shifted');
         });
     }
 
@@ -79,9 +79,9 @@
                 o.node.parentNode.parentNode.style.display = displayValue;
             }
             if (!filterValue || matches) {
-                event.target.classList.remove('no-results');
+                event.target.classList?.remove('no-results');
             } else {
-                event.target.classList.add('no-results');
+                event.target.classList?.add('no-results');
             }
             sessionStorage.setItem('django.admin.navSidebarFilterValue', filterValue);
         }
