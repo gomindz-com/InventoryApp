@@ -163,13 +163,12 @@ REST_FRAMEWORK = {
 # IsAuthenticatedOrReadOnly
 
 CORS_ALLOWED_ORIGINS = [
-    
     "http://localhost:3000",
-    "http://139.59.208.8:443"
+    "http://139.59.208.8:443",
+    "http://159.223.202.117",
 ]
 
 CORS_ORIGIN_WHITELIST = (
-
     'localhost:8080',
     'localhost:8081',
     'localhost',
@@ -178,6 +177,5 @@ CORS_ORIGIN_WHITELIST = (
 
 ALLOWED_HOSTS = ["*"]
 
-CORS_ALLOWED_ORIGINS = ["http://localhost:8080", "http://127.0.0.1:8080"]
 
 CSRF_TRUSTED_ORIGINS = ['http://localhost:8080']

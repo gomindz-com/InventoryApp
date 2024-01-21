@@ -109,7 +109,7 @@ function DefaultNavbar({ brand, transparent, light, action }) {
             {user == null && (
               <DefaultNavbarLink
                 icon="key"
-                name="sign in"
+                name="sign in User"
                 route="/authentication/sign-in"
                 light={light}
               />

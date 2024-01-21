@@ -1,4 +1,3 @@
-import { baseUrl } from "./baseURL";
 import axiosConfig from "./axios-config";
 
 export const loginUser = async (userData) => {
