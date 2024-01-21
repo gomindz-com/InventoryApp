@@ -53,6 +53,8 @@ function Products() {
   const [selectedDate, setSelectedDate] = useState(null);
   const [startDate, setStartDate] = useState(new Date());
 
+  console.log("hhhhh", productList);
+
   const datePickerStyle = {
     width: "400px",
   };

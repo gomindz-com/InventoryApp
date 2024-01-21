@@ -16,6 +16,7 @@ import DetailedStatisticsCard from "examples/Cards/StatisticsCards/DetailedStati
 import SalesTable from "examples/Tables/SalesTable";
 import CategoriesList from "examples/Lists/CategoriesList";
 import GradientLineChart from "examples/Charts/LineCharts/GradientLineChart";
+import ProductSlider from "./components/Slider";
 
 // Argon Dashboard 2 MUI base styles
 import typography from "assets/theme/base/typography";
@@ -31,6 +32,7 @@ import { Navigate } from "react-router-dom";
 import { getStoreStatistics } from "apiservices/storeStatisticsService";
 import { getOrderCount } from "apiservices/orderService";
 import { useSelector } from "react-redux";
+import { getProducts } from "apiservices/productService";
 
 // pro
 function Default() {
@@ -42,6 +44,9 @@ function Default() {
   const [orderCount, setOrderCount] = useState({});
   const [categoryStatList, setCategoryStatList] = useState([]);
   const categoriesListStatData = [];
+  const [productList, setProductList] = useState([]);
+  const [currentProductList, setCurrentProductList] = useState([]);
+  const [productImage, setProductImage] = useState(null);
 
   const handleGetStoreStatistics = async () => {
     setStoreStatistics({});
@@ -99,6 +104,21 @@ function Default() {
         data: orderCount.monthlyOrders,
       },
     ],
+  };
+
+  const handleGetProductList = async () => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    setProductList([]);
+    try {
+      const res = await getProducts();
+
+      if (res.data?.status) {
+        setProductList(res.data.products);
+        setCurrentProductList(res.data.products);
+      } else {
+        setProductList([]);
+      }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -200,7 +220,7 @@ function Default() {
             />
           </Grid>
           <Grid item xs={12} lg={5}>
-            <Slider />
+            <ProductSlider products={productList} />{" "}
           </Grid>
         </Grid>
 

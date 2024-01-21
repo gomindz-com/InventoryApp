@@ -45,7 +45,7 @@ function Suppliers() {
           selectedMonth === "All"
             ? res.data.result
             : res.data.result.filter((item) => {
-                const itemExpiryDate = item["Expiry Date"]?.substring(0, 7); // Use optional chaining
+                const itemExpiryDate = item["Expiry Date"]?.substring(0, 7);
                 const selectedYearMonth = `${currentYear}-${selectedMonth.padStart(2, "0")}`;
                 return itemExpiryDate === selectedYearMonth;
               });
@@ -59,7 +59,7 @@ function Suppliers() {
         //         return itemYearMonth === selectedYearMonth;
         //       });
 
-        console.log("filteredRows:", filteredRows);
+        // console.log("filteredRows:", filteredRows);
 
         setReportList(filteredRows);
         setRows(filteredRows);
