@@ -176,17 +176,33 @@ function Receipts() {
     const componentNode = componentRef.current;
 
     if (componentNode) {
-      html2canvas(componentNode, {
-        width: componentNode.scrollWidth,
-        height: componentNode.scrollHeight,
-      }).then((canvas) => {
+      html2canvas(componentNode).then((canvas) => {
         const imgData = canvas.toDataURL("image/png");
         const pdf = new jsPDF();
-        pdf.addImage(imgData, "PNG", 2, 0);
+        // Set canvas height and width to match component size
+        const imgWidth = 210;
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+        pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
         pdf.save("component.pdf");
       });
     }
   };
+
+  // const handleDownload = () => {
+  //   const componentNode = componentRef.current;
+
+  //   if (componentNode) {
+  //     html2canvas(componentNode, {
+  //       width: componentNode.scrollWidth,
+  //       height: componentNode.scrollHeight,
+  //     }).then((canvas) => {
+  //       const imgData = canvas.toDataURL("image/png");
+  //       const pdf = new jsPDF();
+  //       pdf.addImage(imgData, "PNG", 2, 0);
+  //       pdf.save("component.pdf");
+  //     });
+  //   }
+  // };
 
   // const handleDownload = () => {
   //   const componentNode = componentRef.current;

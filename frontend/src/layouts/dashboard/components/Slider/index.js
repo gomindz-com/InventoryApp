@@ -203,3 +203,113 @@ function Slider() {
 }
 
 export default Slider;
+
+// import React, { useRef, useState, useEffect } from "react";
+// import SwiperCore, { Autoplay, Navigation } from "swiper";
+// import { Swiper, SwiperSlide } from "swiper/react";
+// import "swiper/swiper-bundle.min.css";
+// import Card from "@mui/material/Card";
+// import ArgonBox from "components/ArgonBox";
+// import ArgonTypography from "components/ArgonTypography";
+// import { getProducts } from "apiservices/productService";
+
+// SwiperCore.use([Autoplay, Navigation]);
+
+// const ProductSlider = ({ products }) => {
+//   const navigationPrevRef = useRef(null);
+//   const navigationNextRef = useRef(null);
+//   const [productList, setProductList] = useState([]);
+//   console.log("let see  the ", productList);
+
+//   useEffect(() => {
+//     handleGetProductList();
+//   }, []);
+
+//   const handleGetProductList = async () => {
+//     try {
+//       const res = await getProducts();
+
+//       if (res.data?.status) {
+//         setProductList(res.data.products);
+//       } else {
+//         setProductList([]);
+//       }
+//     } catch (error) {
+//       console.error("Error fetching products:", error);
+//     }
+//   };
+
+//   const settings = {
+//     dots: true,
+//     infinite: true,
+//     speed: 500,
+//     slidesToShow: 1,
+//     slidesToScroll: 1,
+//   };
+
+//   return (
+//     <Card sx={{ position: "relative", display: "block", height: "100%", overflow: "hidden" }}>
+//       <Swiper
+//         onInit={({ params, navigation }) => {
+//           const { navigation: nav } = params;
+//           nav.prevEl = navigationPrevRef.current;
+//           nav.nextEl = navigationNextRef.current;
+//           navigation.init();
+//           navigation.update();
+//         }}
+//         autoplay={{ delay: 5000 }}
+//         speed={800}
+//         spaceBetween={0}
+//         slidesPerView={1}
+//         loop
+//         style={{ height: "100%" }}
+//       >
+//         {products.map((product) => (
+//           <SwiperSlide key={product.id}>
+//             <ArgonBox
+//               sx={{
+//                 position: "relative",
+//                 backgroundImage: `url(${product.image})`,
+//                 backgroundSize: "cover",
+//                 height: "100%",
+//               }}
+//             >
+//               <ArgonBox
+//                 position="absolute"
+//                 bottom={16}
+//                 ml={6}
+//                 py={2.5}
+//                 textAlign="left"
+//                 width="80%"
+//               >
+//                 <ArgonBox
+//                   display="flex"
+//                   justifyContent="center"
+//                   alignItems="center"
+//                   width="32px"
+//                   height="32px"
+//                   bgColor="white"
+//                   borderRadius="md"
+//                   textAlign="center"
+//                   mb={2}
+//                 >
+//                   <ArgonTypography variant="caption" color="dark" lineHeight={0}>
+//                     <ArgonBox component="i" color="dark" className="ni ni-camera-compact" />
+//                   </ArgonTypography>
+//                 </ArgonBox>
+//                 <ArgonTypography variant="h5" color="white" mb={0.5}>
+//                   {product.name}
+//                 </ArgonTypography>
+//                 <ArgonTypography variant="body2" color="white">
+//                   {product.description_color}
+//                 </ArgonTypography>
+//               </ArgonBox>
+//             </ArgonBox>
+//           </SwiperSlide>
+//         ))}
+//       </Swiper>
+//     </Card>
+//   );
+// };
+
+// export default ProductSlider;
