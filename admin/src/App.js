@@ -117,7 +117,7 @@ export default function App() {
       {layout === "dashboard" && (
         <Routes>
           {getRoutes(routes)}
-          <Route path="*" element={<Navigate to="/authenticate/sign-in" />} />
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       )}
       <>{configsButton}</>

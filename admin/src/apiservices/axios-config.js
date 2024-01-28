@@ -11,8 +11,8 @@ const axiosConfig = axios.create({
 });
 
 axiosConfig.interceptors.request.use(async function (config) {
-  let token = localStorage.getItem("token");
-  config.headers.Authorization = token ? `Bearer ${token}` : "";
+  let token = localStorage.getItem("adminToken");
+  config.headers.Authorization = token ? `Token ${token}` : "";
   return config;
 });
 

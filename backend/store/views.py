@@ -10,13 +10,7 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework import generics
-import openpyxl
-from openpyxl.utils import get_column_letter
-# from django.http import HttpResponse
 from rest_framework.views import APIView
-from openpyxl import Workbook
-from openpyxl.styles import Alignment
-
 from .models import Product,Category, Damages, OrderProducts, Supplier, Buyer, Order, Delivery
 from .serializers import ProductSerializer, CategorySerializer, DamagesSerializer, OrderSerializer
 
@@ -46,16 +40,14 @@ def twilio(request):
 
 
 
+
+
+
 # LIST ALL CUSTOMER PRODUCT CATEGORIES / CREATE A PRODUCT CATEGORY
 class CategoryListCreateView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = CategorySerializer
-    # queryset = Category.objects.all()
-
-    # def get_queryset(self):
-    #     user = self.request.user
-    #     return Category.objects.filter(owner=user)
-
+    
     def get(self, request, *args, **kwargs):
         user = self.request.user
         queryset = Category.objects.filter(owner=user)
@@ -142,10 +134,6 @@ class ProductListCreateView(generics.ListCreateAPIView):
                     }                
         return Response(data=response, status=status.HTTP_201_CREATED)
     
-    # def perform_create(self, serializer, expiry_date):
-    #     # Save the owner along with the expiry_date if provided
-    #     serializer.save(owner=self.request.user, expiry_date=expiry_date)
-
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
@@ -160,8 +148,6 @@ class ProductRetreiveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     def get_queryset(self):
         user = self.request.user
         return Product.objects.filter(owner=user)
-
-        
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -213,7 +199,6 @@ class DamagesListCreateView(generics.ListCreateAPIView):
                 return Response(data=response, status=status.HTTP_406_NOT_ACCEPTABLE)
             else:
                 serializer = ProductSerializer(iproduct, data = {'stock': iproduct.stock - int(data['damages'])}, partial=True)
-
                 damages = Damages.objects.create(owner=request.user, product=iproduct, category=data["category"], damages=data["damages"])
                 damages.save()
 

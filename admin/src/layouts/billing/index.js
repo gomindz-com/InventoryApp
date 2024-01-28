@@ -49,27 +49,20 @@ function Billing() {
                 </div>
               </div>
               <ul className="navbar-nav  justify-content-end">
-                <li className="nav-item d-flex align-items-center">
-                  <a
-                    className="btn btn-outline-primary btn-sm mb-0 me-3"
-                    href="https://www.creative-tim.com/builder/material?ref=navbar-dashboard"
-                  >
-                    Online Builder
-                  </a>
-                </li>
+                
                 <li className="nav-item d-flex align-items-center">
                   <button
                    style={{border: 0}}
                    onClick={()=>{
                     localStorage.removeItem("admin")
-                    localStorage.removeItem("admintoken");
+                    localStorage.removeItem("adminToken");
                     navigate('/authentication/sign-in');
                   }}
                     
                     className="nav-link text-body font-weight-bold px-0"
                   >
                     <i className="fa fa-user me-sm-1"></i>
-                    <span className="d-sm-inline d-none">Sign Out</span>
+                    <span className="d-sm-inline d-none">Sign Out [Admin]</span>
                   </button>
                 </li>
                 <li className="nav-item d-xl-none ps-3 d-flex align-items-center">

@@ -51,6 +51,6 @@ export const AddOrderSchema = Yup.object().shape({
 
 
 export const UserSchema = Yup.object().shape({
-    password: Yup.string().required("Required"),
     email: Yup.string().email("Email is required").required("Required"),
+    password: Yup.string().required("Required")
 });

@@ -2,8 +2,6 @@ from rest_framework import serializers
 from .models import mProduct, Damages, TransactionProducts, Transaction
 
 
-
-
 class mProductSerializer(serializers.ModelSerializer):
     owner = serializers.PrimaryKeyRelatedField(
         read_only=True,

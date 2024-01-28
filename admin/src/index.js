@@ -24,8 +24,6 @@ root.render(
         <App />
       </PerfectScrollbar>
     </ArgonControllerProvider>
-  </BrowserRouter>,
-  document.getElementById("root")
-);
+  </BrowserRouter>);
 
 

@@ -1,48 +1,47 @@
-/**
-=========================================================
-* Argon Dashboard 2 MUI - v3.0.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-material-ui
-* Copyright 2022 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
-// @mui material components
-import Card from "@mui/material/Card";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { getCustomers } from "apiservices/customerService";
+import { toggleActivateSubscriber } from "apiservices/subscribersService";
+import { getSubscribers } from "apiservices/subscribersService";
 import Aside from "examples/Aside";
 import Footer from "examples/Footer";
 import { useState, useEffect } from "react";
+import { FaToggleOff, FaToggleOn } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
-// Argon Dashboard 2 MUI components
-
-// Data
 
 function Tables() {
+
+  const navigate = useNavigate();
+
   const [showAside, setShowAside] = useState(true);
   const matches = useMediaQuery("(max-width: 1199.98px)");
-
   const [customersList, setCustomersList] = useState([]);
+  const [isToggled, setIsToggled] = useState(false);
+
+  const handleToggle = async (id, is_active) => {
+
+    setIsToggled((prevState) => !prevState);
+    try {
+      await toggleActivateSubscriber(id, is_active)
+        .then((res) => {
+          if (res.status == 200) {
+            handleGetSubscribersList();
+          } else {
+          }
+        })
+        .catch((err) => console.log("Error in Getting setCustomersList", err));
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
 
-   //START GET CUSTOMERS
-   const handleGetCustomersList = async () => {
+  const handleGetSubscribersList = async () => {
     setCustomersList([]);
     try {
-      await getCustomers()
+      await getSubscribers()
         .then((res) => {
-          console.log(res);
-          if (res.data?.status === "true") {
-            console.log("Customers List");
-            console.log(res.data.result);
-            setCustomersList(res.data.result);
+          if (res.data?.status) {
+            setCustomersList(res.data.subscribers);
           } else {
             setCustomersList([]);
           }
@@ -53,13 +52,10 @@ function Tables() {
     }
   };
   //END GET CUSTOMERS
-  
 
   useEffect(() => {
-    handleGetCustomersList();
+    handleGetSubscribersList();
   }, []);
-
-
 
   return (
     <>
@@ -94,26 +90,19 @@ function Tables() {
                   </div>
                 </div>
                 <ul className="navbar-nav  justify-content-end">
-                  <li className="nav-item d-flex align-items-center">
-                    <a
-                      className="btn btn-outline-primary btn-sm mb-0 me-3"
-                      href="https://www.creative-tim.com/builder/material?ref=navbar-dashboard"
-                    >
-                      Online Status
-                    </a>
-                  </li>
+                 
                   <li className="nav-item d-flex align-items-center">
                     <button
                       style={{ border: 0 }}
                       onClick={() => {
                         localStorage.removeItem("admin");
-                        localStorage.removeItem("admintoken");
+                        localStorage.removeItem("adminToken");
                         navigate("/authentication/sign-in");
                       }}
                       className="nav-link text-body font-weight-bold px-0"
                     >
                       <i className="fa fa-user me-sm-1"></i>
-                      <span className="d-sm-inline d-none">Sign Out</span>
+                      <span className="d-sm-inline d-none">Sign Out [Admin]</span>
                     </button>
                   </li>
                   <li className="nav-item d-xl-none ps-3 d-flex align-items-center">
@@ -233,7 +222,7 @@ function Tables() {
                 <div className="card my-4">
                   <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                     <div className="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-                      <h6 className="text-white text-capitalize ps-3">Customers table</h6>
+                      <h6 className="text-white text-capitalize ps-3">Subscribers table</h6>
                     </div>
                   </div>
                   <div className="card-body px-0 pb-2">
@@ -245,380 +234,94 @@ function Tables() {
                               Customer
                             </th>
                             <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                              Function
+                              Email
                             </th>
                             <th className="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                               Status
                             </th>
-                            <th className="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                              Registered
-                            </th>
+                            <th className="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"></th>
+                            <th className="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"></th>
                             <th className="text-secondary opacity-7"></th>
                           </tr>
                         </thead>
                         <tbody>
-
-                        {customersList.map(customer => {
+                          {customersList.map((subscriber) => {
                             return (
-                              <tr key={customer.id}>
-                              <td>
-                                <div className="d-flex px-2 py-1">
-                                  <div>
-                                    <img
-                                      src={require('../../assets/images/team-1.jpg')}
-                                      className="avatar avatar-sm me-3 border-radius-lg"
-                                      alt="user1"
-                                    />
+                              <tr key={subscriber.id}>
+                                <td>
+                                  <div className="d-flex px-2 py-1">
+                                    <div>
+                                      <img
+                                        src={require("../../assets/images/team-1.jpg")}
+                                        className="avatar avatar-sm me-3 border-radius-lg"
+                                        alt="user1"
+                                      />
+                                    </div>
+                                    <div className="d-flex flex-column justify-content-center">
+                                      <h6 className="mb-0 text-sm">
+                                        {subscriber.first_name ?? "NAN" + " " + subscriber.lastname}
+                                      </h6>
+                                      {/* <p className="text-xs text-secondary mb-0">
+                                    {subscriber.email}
+                                    </p> */}
+                                    </div>
                                   </div>
-                                  <div className="d-flex flex-column justify-content-center">
-                                    <h6 className="mb-0 text-sm">{customer.firstname+ ' ' + customer.lastname }</h6>
-                                    <p className="text-xs text-secondary mb-0">
-                                    {customer.email}
-                                    </p>
-                                  </div>
-                                </div>
-                              </td>
-                              <td>
-                                <p className="text-xs font-weight-bold mb-0">Manager</p>
-                                <p className="text-xs text-secondary mb-0">Organization</p>
-                              </td>
-                              <td className="align-middle text-center text-sm">
-                                <span className="badge badge-sm bg-gradient-success">Online</span>
-                              </td>
-                              <td className="align-middle text-center">
-                                <span className="text-secondary text-xs font-weight-bold">
-                                  {customer.date_joined.substring(0, 10)}
-                                </span>
-                              </td>
-                              <td className="align-middle">
-                                <a
-                                  href="javascript:;"
-                                  className="text-secondary font-weight-bold text-xs"
-                                  data-toggle="tooltip"
-                                  data-original-title="Edit user"
-                                >
-                                  Edit
-                                </a>
-                              </td>
-                            </tr>
+                                </td>
+                                <td>
+                                  <p className="text-xs font-weight-bold mb-0">
+                                    {subscriber.email}
+                                  </p>
+                                  {/* <p className="text-xs text-secondary mb-0">Organization</p> */}
+                                </td>
+                                <td className="align-middle text-center text-sm">
+                                  <span
+                                    className={
+                                      subscriber.is_active
+                                        ? "badge badge-sm bg-gradient-success"
+                                        : "badge badge-sm bg-gradient-danger"
+                                    }
+                                  >
+                                    {subscriber.is_active ? "Active" : "Inactive"}
+                                  </span>
+                                </td>
+                                <td className="align-middle text-center">
+                                  <span className="text-secondary text-xs font-weight-bold">
+                                    {/* {customer.date_joined.substring(0, 10)} */}
+                                  </span>
+                                </td>
+                                <td className="align-middle">
+                                  <a
+                                    href="javascript:;"
+                                    className="text-secondary font-weight-bold text-xs"
+                                    data-toggle="tooltip"
+                                    data-original-title="Edit user"
+                                  >
+                                    Edit {subscriber.status}
+                                  </a>
+                                </td>
+
+                                <td className="align-middle">
+                                  {subscriber.status}
+
+                                  <button
+                                    onClick={() => {
+                                      handleToggle(subscriber.id, subscriber.is_active);
+                                    }}
+                                    style={{
+                                      border: "0",
+                                      background: "transparent",
+                                    }}
+                                  >
+                                    {subscriber.is_active ? (
+                                      <FaToggleOn fontSize={30} />
+                                    ) : (
+                                      <FaToggleOff fontSize={30} />
+                                    )}
+                                  </button>
+                                </td>
+                              </tr>
                             );
                           })}
-                                             
-                          
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-12">
-                <div className="card my-4">
-                  <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-                    <div className="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-                      <h6 className="text-white text-capitalize ps-3">Projects table</h6>
-                    </div>
-                  </div>
-                  <div className="card-body px-0 pb-2">
-                    <div className="table-responsive p-0">
-                      <table className="table align-items-center justify-content-center mb-0">
-                        <thead>
-                          <tr>
-                            <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                              Project
-                            </th>
-                            <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                              Budget
-                            </th>
-                            <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                              Status
-                            </th>
-                            <th className="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2">
-                              Completion
-                            </th>
-                            <th></th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td>
-                              <div className="d-flex px-2">
-                                <div>
-                                  <img
-                                    src="../assets/img/small-logos/logo-asana.svg"
-                                    className="avatar avatar-sm rounded-circle me-2"
-                                    alt="spotify"
-                                  />
-                                </div>
-                                <div className="my-auto">
-                                  <h6 className="mb-0 text-sm">Asana</h6>
-                                </div>
-                              </div>
-                            </td>
-                            <td>
-                              <p className="text-sm font-weight-bold mb-0">$2,500</p>
-                            </td>
-                            <td>
-                              <span className="text-xs font-weight-bold">working</span>
-                            </td>
-                            <td className="align-middle text-center">
-                              <div className="d-flex align-items-center justify-content-center">
-                                <span className="me-2 text-xs font-weight-bold">60%</span>
-                                <div>
-                                  <div className="progress">
-                                    <div
-                                      className="progress-bar bg-gradient-info"
-                                      role="progressbar"
-                                      aria-valuenow="60"
-                                      aria-valuemin="0"
-                                      aria-valuemax="100"
-                                    ></div>
-                                  </div>
-                                </div>
-                              </div>
-                            </td>
-                            <td className="align-middle">
-                              <button className="btn btn-link text-secondary mb-0">
-                                <i className="fa fa-ellipsis-v text-xs"></i>
-                              </button>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>
-                              <div className="d-flex px-2">
-                                <div>
-                                  <img
-                                    src="../assets/img/small-logos/github.svg"
-                                    className="avatar avatar-sm rounded-circle me-2"
-                                    alt="invision"
-                                  />
-                                </div>
-                                <div className="my-auto">
-                                  <h6 className="mb-0 text-sm">Github</h6>
-                                </div>
-                              </div>
-                            </td>
-                            <td>
-                              <p className="text-sm font-weight-bold mb-0">$5,000</p>
-                            </td>
-                            <td>
-                              <span className="text-xs font-weight-bold">done</span>
-                            </td>
-                            <td className="align-middle text-center">
-                              <div className="d-flex align-items-center justify-content-center">
-                                <span className="me-2 text-xs font-weight-bold">100%</span>
-                                <div>
-                                  <div className="progress">
-                                    <div
-                                      className="progress-bar bg-gradient-success"
-                                      role="progressbar"
-                                      aria-valuenow="100"
-                                      aria-valuemin="0"
-                                      aria-valuemax="100"
-                                    ></div>
-                                  </div>
-                                </div>
-                              </div>
-                            </td>
-                            <td className="align-middle">
-                              <button
-                                className="btn btn-link text-secondary mb-0"
-                                aria-haspopup="true"
-                                aria-expanded="false"
-                              >
-                                <i className="fa fa-ellipsis-v text-xs"></i>
-                              </button>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>
-                              <div className="d-flex px-2">
-                                <div>
-                                  <img
-                                    src="../assets/img/small-logos/logo-atlassian.svg"
-                                    className="avatar avatar-sm rounded-circle me-2"
-                                    alt="jira"
-                                  />
-                                </div>
-                                <div className="my-auto">
-                                  <h6 className="mb-0 text-sm">Atlassian</h6>
-                                </div>
-                              </div>
-                            </td>
-                            <td>
-                              <p className="text-sm font-weight-bold mb-0">$3,400</p>
-                            </td>
-                            <td>
-                              <span className="text-xs font-weight-bold">canceled</span>
-                            </td>
-                            <td className="align-middle text-center">
-                              <div className="d-flex align-items-center justify-content-center">
-                                <span className="me-2 text-xs font-weight-bold">30%</span>
-                                <div>
-                                  <div className="progress">
-                                    <div
-                                      className="progress-bar bg-gradient-danger"
-                                      role="progressbar"
-                                      aria-valuenow="30"
-                                      aria-valuemin="0"
-                                      aria-valuemax="30"
-                                    ></div>
-                                  </div>
-                                </div>
-                              </div>
-                            </td>
-                            <td className="align-middle">
-                              <button
-                                className="btn btn-link text-secondary mb-0"
-                                aria-haspopup="true"
-                                aria-expanded="false"
-                              >
-                                <i className="fa fa-ellipsis-v text-xs"></i>
-                              </button>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>
-                              <div className="d-flex px-2">
-                                <div>
-                                  <img
-                                    src="../assets/img/small-logos/bootstrap.svg"
-                                    className="avatar avatar-sm rounded-circle me-2"
-                                    alt="webdev"
-                                  />
-                                </div>
-                                <div className="my-auto">
-                                  <h6 className="mb-0 text-sm">Bootstrap</h6>
-                                </div>
-                              </div>
-                            </td>
-                            <td>
-                              <p className="text-sm font-weight-bold mb-0">$14,000</p>
-                            </td>
-                            <td>
-                              <span className="text-xs font-weight-bold">working</span>
-                            </td>
-                            <td className="align-middle text-center">
-                              <div className="d-flex align-items-center justify-content-center">
-                                <span className="me-2 text-xs font-weight-bold">80%</span>
-                                <div>
-                                  <div className="progress">
-                                    <div
-                                      className="progress-bar bg-gradient-info"
-                                      role="progressbar"
-                                      aria-valuenow="80"
-                                      aria-valuemin="0"
-                                      aria-valuemax="80"
-                                    ></div>
-                                  </div>
-                                </div>
-                              </div>
-                            </td>
-                            <td className="align-middle">
-                              <button
-                                className="btn btn-link text-secondary mb-0"
-                                aria-haspopup="true"
-                                aria-expanded="false"
-                              >
-                                <i className="fa fa-ellipsis-v text-xs"></i>
-                              </button>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>
-                              <div className="d-flex px-2">
-                                <div>
-                                  <img
-                                    src="../assets/img/small-logos/logo-slack.svg"
-                                    className="avatar avatar-sm rounded-circle me-2"
-                                    alt="slack"
-                                  />
-                                </div>
-                                <div className="my-auto">
-                                  <h6 className="mb-0 text-sm">Slack</h6>
-                                </div>
-                              </div>
-                            </td>
-                            <td>
-                              <p className="text-sm font-weight-bold mb-0">$1,000</p>
-                            </td>
-                            <td>
-                              <span className="text-xs font-weight-bold">canceled</span>
-                            </td>
-                            <td className="align-middle text-center">
-                              <div className="d-flex align-items-center justify-content-center">
-                                <span className="me-2 text-xs font-weight-bold">0%</span>
-                                <div>
-                                  <div className="progress">
-                                    <div
-                                      className="progress-bar bg-gradient-success"
-                                      role="progressbar"
-                                      aria-valuenow="0"
-                                      aria-valuemin="0"
-                                      aria-valuemax="0"
-                                    ></div>
-                                  </div>
-                                </div>
-                              </div>
-                            </td>
-                            <td className="align-middle">
-                              <button
-                                className="btn btn-link text-secondary mb-0"
-                                aria-haspopup="true"
-                                aria-expanded="false"
-                              >
-                                <i className="fa fa-ellipsis-v text-xs"></i>
-                              </button>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>
-                              <div className="d-flex px-2">
-                                <div>
-                                  <img
-                                    src="../assets/img/small-logos/devto.svg"
-                                    className="avatar avatar-sm rounded-circle me-2"
-                                    alt="xd"
-                                  />
-                                </div>
-                                <div className="my-auto">
-                                  <h6 className="mb-0 text-sm">Devto</h6>
-                                </div>
-                              </div>
-                            </td>
-                            <td>
-                              <p className="text-sm font-weight-bold mb-0">$2,300</p>
-                            </td>
-                            <td>
-                              <span className="text-xs font-weight-bold">done</span>
-                            </td>
-                            <td className="align-middle text-center">
-                              <div className="d-flex align-items-center justify-content-center">
-                                <span className="me-2 text-xs font-weight-bold">100%</span>
-                                <div>
-                                  <div className="progress">
-                                    <div
-                                      className="progress-bar bg-gradient-success"
-                                      role="progressbar"
-                                      aria-valuenow="100"
-                                      aria-valuemin="0"
-                                      aria-valuemax="100"
-                                    ></div>
-                                  </div>
-                                </div>
-                              </div>
-                            </td>
-                            <td className="align-middle">
-                              <button
-                                className="btn btn-link text-secondary mb-0"
-                                aria-haspopup="true"
-                                aria-expanded="false"
-                              >
-                                <i className="fa fa-ellipsis-v text-xs"></i>
-                              </button>
-                            </td>
-                          </tr>
                         </tbody>
                       </table>
                     </div>

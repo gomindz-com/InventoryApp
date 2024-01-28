@@ -7,8 +7,7 @@ from .views import (
      DamagesListCreateView,
      StoreStatisticsView,
      ProductReportView,
-
-
+     
      productCounts, buyerCounts, deliveryCounts, supplierCounts, orderCounts,
      total_stock, total_price,
      lowstockproduct,

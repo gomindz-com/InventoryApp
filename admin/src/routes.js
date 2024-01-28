@@ -30,7 +30,7 @@ const routes = [
   },
   {
     type: "route",
-    name: "Suppliers",
+    name: "Subscribers",
     key: "suppliers",
     route: "/customers",
     

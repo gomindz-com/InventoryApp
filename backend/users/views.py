@@ -2,11 +2,12 @@ from rest_framework import generics
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .serializers import RegisterSerializer, LoginSerializer, CustomUserSerializer, UpdateUserProfileSerializer, UpdatePasswordSerializer
+from .serializers import RegisterSerializer, LoginSerializer, CustomUserSerializer, UpdateUserProfileSerializer, UpdatePasswordSerializer, SubscriberSerializer, SubscriberUpdateSerializer
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.request import Request
 from django.contrib.auth import authenticate
 from .models import CustomUser
+from rest_framework.authtoken.models import Token
 
 
 import logging
@@ -55,6 +56,44 @@ class LoginUser(APIView):
                 "message": "Invalid User"
             }
             return Response(data=response, status=status.HTTP_401_UNAUTHORIZED)
+
+
+class AdminUser(APIView):
+    permission_classes = [AllowAny]
+    def post(self, request: Request):
+        serializer = LoginSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        email = request.data.get('email')
+        password = request.data.get('password')
+        user = authenticate(email=email, password=password)
+        if user is not None:
+            if user.is_staff:
+                serializer = CustomUserSerializer(user)
+                if not hasattr(user, 'auth_token'):
+                    Token.objects.create(user=user)
+                response = {
+                    "status": True,
+                    "message": "Admin Login Successful",
+                    "user": serializer.data,
+                    "token": user.auth_token.key
+                    
+                }
+                return Response(data=response, status=status.HTTP_200_OK)
+            else:
+                response = {
+                    "status": False,
+                    "message": "Invalid Admin"
+                }
+                return Response(data=response, status=status.HTTP_401_UNAUTHORIZED)
+
+        else:
+            response = {
+                "status": False,
+                "message": "Invalid Admin"
+            }
+            return Response(data=response, status=status.HTTP_401_UNAUTHORIZED)
+
+
 
 
 
@@ -145,3 +184,46 @@ class UserUpdatePasswordView(generics.UpdateAPIView):
                 }
         return Response(data=response)
    
+
+
+
+# LIST ALL SUBSCRIBERS
+class SubscribersListCreateView(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = SubscriberSerializer
+   
+
+    def get(self, request, *args, **kwargs):
+        queryset = CustomUser.objects.filter(is_staff=False)
+        serializer = self.get_serializer(queryset, many=True)
+        response = {
+                    "status": True,
+                    "message": "Valid request",
+                    "subscribers" : serializer.data
+
+                }
+        return Response(response)
+        
+
+
+# LIST DETAIL OF ONE CATEGORY / UPDATE / DELETE
+class SubscriberRetreiveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = SubscriberSerializer
+    queryset = CustomUser.objects.filter(is_staff=False)
+
+    def get_queryset(self):
+        return CustomUser.objects.all()
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        response = {
+            "status": True,
+            "message": "",
+            "subscriber": serializer.data
+
+                    }                
+        return Response(data=response, status=status.HTTP_201_CREATED)
+
+
