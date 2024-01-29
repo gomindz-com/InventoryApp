@@ -11,9 +11,9 @@ from rest_framework import status
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework import generics
 from rest_framework.views import APIView
-from .models import Product,Category, Damages, OrderProducts, Supplier, Buyer, Order, Delivery
-from .serializers import ProductSerializer, CategorySerializer, DamagesSerializer, OrderSerializer
-
+from .models import Product,Category, Damages, OrderProducts, Supplier, Buyer, Order, Delivery, StoreActivity
+from .serializers import ProductSerializer, CategorySerializer, DamagesSerializer, OrderSerializer, StoreActivitySerializer
+from users.models import CustomUser
 
 # FORM DATA FOR PRODUCT IMAGE
 parser_classes = [MultiPartParser, FormParser]
@@ -36,9 +36,6 @@ def twilio(request):
     )
     print(request.POST)
     return HttpResponse("Hello")
-
-
-
 
 
 
@@ -1028,3 +1025,41 @@ class ProductReportView(APIView):
         stock_out = product.orderproducts_set.filter(order__type='receipt').aggregate(Sum('quantity'))['quantity__sum']
         return stock_out if stock_out else 0
 
+
+
+
+# LIST ALL CUSTOMER PRODUCT CATEGORIES / CREATE A PRODUCT CATEGORY
+class StoreInfoListView(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = CategorySerializer
+    
+    def get(self, request, *args, **kwargs):
+        num_non_staff_users = CustomUser.objects.filter(is_staff=False).count()
+        response = {
+                    "status": True,
+                    "message": "Store Information",
+                    "info" : {
+                        "num_of_subscribers" : num_non_staff_users
+                    }
+
+                }
+        return Response(response)
+        
+
+# LIST ALL STORE ACTIVITY
+class StoreActivityListView(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = StoreActivitySerializer
+    
+    def get(self, request, *args, **kwargs):
+        user = self.request.user
+        queryset = StoreActivity.objects.all()
+        serializer = self.get_serializer(queryset, many=True)
+        response = {
+                    "status": True,
+                    "message": "Valid request",
+                    "activities" : serializer.data
+
+                }
+        return Response(response)
+        

@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-
+from users.models import CustomUser
 
 def upload_to(instance, filename):
     return 'products/{filename}'.format(filename=filename) 
@@ -128,4 +128,16 @@ class Delivery(models.Model):
 
     def __str__(self):
         return self.courier_name
+
+
+
+
+class StoreActivity(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    activity_type = models.CharField(max_length=100)
+    details = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.user.username} - {self.activity_type}'
 

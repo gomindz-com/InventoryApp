@@ -188,7 +188,7 @@ function Overview() {
               </div>
               <div className="col-auto my-auto">
                 <div className="h-100">
-                  <h5 className="mb-1">{admin.username}</h5>
+                  <h5 className="mb-1">{admin?.username}</h5>
                   <p className="mb-0 font-weight-normal text-sm">Go Inventory Admin</p>
                 </div>
               </div>

@@ -15,12 +15,17 @@ import {
 } from "chart.js";
 import { Line, Bubble } from "react-chartjs-2";
 import { faker } from "@faker-js/faker";
+import { getUserActivities } from "apiservices/activityService";
+import { getStoreInfo } from "../../apiservices/storeInfoService";
 
 function Default() {
   const navigate = useNavigate();
   const [showSearch, setShowSearch] = useState(false);
   const [showAside, setShowAside] = useState(true);
   const matches = useMediaQuery("(max-width: 1199.98px)");
+  const [activityList, setActivityList] = useState([]);
+  const [storeInfo, setStoreInfo] = useState({});
+
 
   ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -44,13 +49,13 @@ function Default() {
     datasets: [
       {
         label: "Dataset 1",
-        data: labels.map(() => faker.datatype.number({ min: -1000, max: 1000 })),
+        data: labels.map(() => faker.number.int({ min: -1000, max: 1000 })),
         borderColor: "rgb(255, 99, 132)",
         backgroundColor: "rgba(255, 99, 132, 0.5)",
       },
       {
         label: "Dataset 2",
-        data: labels.map(() => faker.datatype.number({ min: -1000, max: 1000 })),
+        data: labels.map(() => faker.number.int({ min: -1000, max: 1000 })),
         borderColor: "rgb(53, 162, 235)",
         backgroundColor: "rgba(53, 162, 235, 0.5)",
       },
@@ -70,23 +75,65 @@ function Default() {
       {
         label: "Red dataset",
         data: Array.from({ length: 50 }, () => ({
-          x: faker.datatype.number({ min: -100, max: 100 }),
-          y: faker.datatype.number({ min: -100, max: 100 }),
-          r: faker.datatype.number({ min: 5, max: 20 }),
+          x: faker.number.int({ min: -100, max: 100 }),
+          y: faker.number.int({ min: -100, max: 100 }),
+          r: faker.number.int({ min: 5, max: 20 }),
         })),
         backgroundColor: "white",
       },
       {
         label: "Blue dataset",
         data: Array.from({ length: 50 }, () => ({
-          x: faker.datatype.number({ min: -100, max: 100 }),
-          y: faker.datatype.number({ min: -100, max: 100 }),
-          r: faker.datatype.number({ min: 5, max: 20 }),
+          x: faker.number.int({ min: -100, max: 100 }),
+          y: faker.number.int({ min: -100, max: 100 }),
+          r: faker.number.int({ min: 5, max: 20 }),
         })),
         backgroundColor: "green",
       },
     ],
   };
+
+
+  const handleGetActivityList = async () => {
+    setActivityList([]);
+    try {
+      await getUserActivities()
+        .then((res) => {
+          if (res.data?.status) {
+            setActivityList(res.data.activities);
+          } else {
+            setActivityList([]);
+          }
+        })
+        .catch((err) => console.log("Error in Getting setCustomersList", err));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleGetStoreInfo = async () => {
+    setStoreInfo({});
+    try {
+      await getStoreInfo()
+        .then((res) => {
+          if (res.data?.status) {
+            setStoreInfo(res.data.info);
+          } else {
+            setStoreInfo({});
+          }
+        })
+        .catch((err) => console.log("Error in Getting setCustomersList", err));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
+  useEffect(() => {
+    handleGetActivityList();
+    handleGetStoreInfo();
+  }, []);
+
 
   return (
     <>
@@ -261,8 +308,8 @@ function Default() {
                       <i className="material-icons opacity-10">person</i>
                     </div>
                     <div className="text-end pt-1">
-                      <p className="text-sm mb-0 text-capitalize">Todays Users</p>
-                      <h4 className="mb-0">2,300</h4>
+                      <p className="text-sm mb-0 text-capitalize">Total Subscribers</p>
+                      <h4 className="mb-0">{storeInfo.num_of_subscribers}</h4>
                     </div>
                   </div>
                   <hr className="dark horizontal my-0" />
@@ -377,6 +424,93 @@ function Default() {
                     <div className="d-flex ">
                       <i className="material-icons text-sm my-auto me-1">schedule</i>
                       <p className="mb-0 text-sm">just updated</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="row">
+              <div className="col-12">
+                <div className="card my-4">
+                  <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                    <div className="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+                      <h6 className="text-white text-capitalize ps-3">User Activity table</h6>
+                    </div>
+                  </div>
+                  <div className="card-body px-0 pb-2">
+                    <div className="table-responsive p-0">
+                      <table className="table align-items-center justify-content-center mb-0">
+                        <thead>
+                          <tr>
+                            <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                              User
+                            </th>
+                            <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                              Activity
+                            </th>
+                            <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                              Details
+                            </th>
+                            <th className="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2">
+                              Timestamp
+                            </th>
+                            <th></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+
+
+                        {activityList.map((activity) => {
+                            return (
+                              <tr key={activity.id}>
+                            <td>
+                              <div className="d-flex px-2">
+                                <div>
+                                  {/* <img
+                                    src="../assets/img/small-logos/logo-asana.svg"
+                                    className="avatar avatar-sm rounded-circle me-2"
+                                    alt="spotify"
+                                  /> */}
+                                </div>
+                                <div className="my-auto">
+                                  <h6 className="mb-0 text-sm">{activity.email}</h6>
+                                </div>
+                              </div>
+                            </td>
+                            <td>
+                              <p className="text-sm font-weight-bold mb-0">{activity.activity_type}</p>
+                            </td>
+                            <td>
+                              <span className="text-xs font-weight-bold">{activity.details}</span>
+                            </td>
+                            <td className="align-middle text-center">
+                              <div className="d-flex align-items-center justify-content-center">
+                                <span className="me-2 text-xs font-weight-bold">{Date(activity.timestamp)}</span>
+                                {/* <div>
+                                  <div className="progress">
+                                    <div
+                                      className="progress-bar bg-gradient-info"
+                                      role="progressbar"
+                                      aria-valuenow="60"
+                                      aria-valuemin="0"
+                                      aria-valuemax="100"
+                                    ></div>
+                                  </div>
+                                </div> */}
+                              </div>
+                            </td>
+                            <td className="align-middle">
+                              {/* <button className="btn btn-link text-secondary mb-0">
+                                <i className="fa fa-ellipsis-v text-xs"></i>
+                              </button> */}
+                            </td>
+                          </tr>
+                            );
+                          })}
+                         
+                        </tbody>
+                      </table>
                     </div>
                   </div>
                 </div>
