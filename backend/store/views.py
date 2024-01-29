@@ -269,6 +269,7 @@ class OrderListCreateView(generics.ListCreateAPIView):
                     "status": item.status,
                     "receipt":  item.ref,
                     "type": item.type,
+                    "buyer_phone": item.buyer_phone,
                     "total_price":  price,
                 },
             )
