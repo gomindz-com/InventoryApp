@@ -26,7 +26,10 @@ function Suppliers() {
     { name: "Stock In", align: "center" },
     { name: "Stock Out", align: "center" },
     { name: "Stock In Hand", align: "center" },
+    { name: "Added Date", align: "center" },
+
     { name: "Expiry Date", align: "center" },
+
   ];
 
   useEffect(() => {
@@ -37,6 +40,7 @@ function Suppliers() {
     setReportList([]);
     try {
       const res = await getRport();
+      console.log("Here  we  come  with ", res)
       if (res.data?.status) {
         const currentDate = new Date();
         const currentYear = currentDate.getFullYear();
@@ -45,7 +49,7 @@ function Suppliers() {
           selectedMonth === "All"
             ? res.data.result
             : res.data.result.filter((item) => {
-                const itemExpiryDate = item["Expiry Date"]?.substring(0, 7);
+                const itemExpiryDate = item["Added Date"]?.substring(0, 7);
                 const selectedYearMonth = `${currentYear}-${selectedMonth.padStart(2, "0")}`;
                 return itemExpiryDate === selectedYearMonth;
               });

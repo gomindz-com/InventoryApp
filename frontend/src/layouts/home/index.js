@@ -16,6 +16,9 @@ import multipleUser from "../../assets/images/multipleUser.png";
 import notified from "../../assets/images/notified.png";
 import werehousing from "../../assets/images/werehousing.png";
 import { Swiper, SwiperSlide } from "swiper/react";
+import Switch from '@mui/material/Switch';
+
+
 
 import "swiper/swiper.min.css";
 import "swiper/components/navigation/navigation.min.css";
@@ -35,6 +38,28 @@ function Home() {
 
   const navigate = useNavigate();
   const { pathname } = useLocation();
+
+
+  // const [isDarkMode, setIsDarkMode] = useState(false);
+
+
+
+
+  // const toggleMode = () => {
+  //   setIsDarkMode(prevMode => !prevMode);
+  // };
+
+  const [isMonthSelected, setIsMonthSelected] = useState(true);
+
+  const toggleSelection = () => {
+    setIsMonthSelected(prevState => !prevState);
+  };
+
+
+  const label = { inputProps: { 'aria-label': 'Switch demo' } };
+
+
+ 
 
   useEffect(() => {
     setLayout(dispatch, "home");
@@ -413,6 +438,18 @@ function Home() {
                   <h3 className="text-black z-index-1 position-relative">Payment methods</h3>
                 </div>
               </div>
+               
+
+
+               <div>
+                <h4>Month</h4>
+                <Switch {...label} />
+
+               <h4>Year</h4>
+
+
+               </div>
+   
 
               <div className="row mt-4">
                 {/* first card */}
@@ -436,12 +473,16 @@ function Home() {
                         <small
                           className="align-top"
                           style={{ fontSize: "22px", lineHeight: "45px" }}
-                        ></small>
-                        Free
+                        >
+                          $
+                        </small>
+                        9.99
                         <small
                           className="align-bottom"
                           style={{ fontSize: "16px", lineHeight: "40px" }}
-                        ></small>
+                        >
+                          / Month
+                        </small>
                       </h1>
                       <a className="btn btn-info px-4 py-2" href="">
                         Subscribe

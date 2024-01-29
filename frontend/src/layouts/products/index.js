@@ -52,8 +52,10 @@ function Products() {
   const [productImage, setProductImage] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
   const [startDate, setStartDate] = useState(new Date());
+  const [searchQuery, setSearchQuery] = useState('');
 
-  console.log("hhhhh", productList);
+
+  // console.log("hhhhh", productList);
 
   const datePickerStyle = {
     width: "400px",
@@ -68,6 +70,13 @@ function Products() {
     { name: "edit", align: "center" },
     { name: "delete", align: "center" },
   ];
+
+  
+
+
+
+
+
 
   const rows = [];
 
@@ -126,6 +135,8 @@ function Products() {
       formData.append("category", productData.category);
       formData.append("stock", productData.stock);
       formData.append("expiry_date", productData.expiry_date);
+      formData.append("created_date", productData.created_date);
+
 
       formData.append("image", productImage == null ? "" : productImage?.image[0]);
 
@@ -220,6 +231,21 @@ function Products() {
     } catch (error) {}
   };
 
+
+  useEffect(() => {
+    handleGetProductList
+}, []); 
+
+const handleSearch = (event) => {
+  const query = event.target.value.toLowerCase();
+  setSearchQuery(query);
+  const filteredProducts = productList.filter(order =>
+      order.name && order.name.toLowerCase().includes(query)
+  );
+  setCurrentProductList(filteredProducts);
+};
+
+
   const handleGetCategoryList = async () => {
     setCategoryList([]);
     setScreenLoading(true);
@@ -251,7 +277,7 @@ function Products() {
     borderColor: "red",
   };
 
-  productList?.map(function (item, i) {
+  currentProductList?.map(function (item, i) {
     rows.push({
       product: (
         <ArgonBox display="flex" alignItems="center" px={1} py={0.5}>
@@ -373,6 +399,18 @@ function Products() {
             <Card>
               <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
                 <ArgonTypography variant="h6">Products</ArgonTypography>
+
+                <TextField
+                id="outlined-basic"
+                placeholder="Search"
+                style={{ width: "65%" }}
+                variant="outlined"
+                value={searchQuery}
+                onChange={handleSearch}
+            />
+
+
+
                 <Button
                   onClick={() => {
                     setProductData({
@@ -393,6 +431,12 @@ function Products() {
                   <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-fat-add" />
                 </Button>
               </ArgonBox>
+
+
+             
+
+
+
               <ArgonBox
                 sx={{
                   "& .MuiTableRow-root:not(:last-child)": {
@@ -495,6 +539,17 @@ function Products() {
                     onChange={handleChange}
                   />
                 </ArgonBox>
+
+                <ArgonBox mb={2} mx={5}>
+                  <ArgonInput
+                    type="name"
+                    name="description_color"
+                    value={productData.description_color}
+                    placeholder="Contact"
+                    size="large"
+                    onChange={handleChange}
+                  />
+                </ArgonBox>
                 <ArgonBox mb={2} mx={5}>
                   <ArgonInput
                     style={{ borderColor: isNaN(productData.price) && "red" }}
@@ -504,6 +559,17 @@ function Products() {
                     placeholder="Price"
                     size="large"
                     onChange={handleChange}
+                  />
+                </ArgonBox>
+
+                <ArgonBox mb={2} mx={5}>
+                  <TextField
+                    style={{ width: "100%", paddingTop: "15px" }}
+                    label="Added date"
+                    type="date"
+                    value={productData.created_date}
+                    onChange={handleDateChange}
+                    InputLabelProps={{ shrink: true }}
                   />
                 </ArgonBox>
 

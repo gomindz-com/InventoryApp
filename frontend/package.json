@@ -60,6 +60,7 @@
     "react-to-pdf": "^1.0.1",
     "react-to-print": "^2.14.7",
     "react-toastify": "^9.0.8",
+    "react-toggle-switch": "^3.0.4",
     "reactstrap": "^9.2.1",
     "styled-components": "^5.3.6",
     "stylis": "4.1.1",
