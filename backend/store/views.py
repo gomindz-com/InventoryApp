@@ -1032,7 +1032,8 @@ class ProductReportView(APIView):
                 "Stock In": product.stock,
                 "Stock Out": self.get_stock_out(product),
                 "Stock In Hand": product.stock - self.get_stock_out(product),
-                "Expiry Date": product.expiry_date.strftime('%Y-%m-%d') if product.expiry_date else ""
+                "Expiry Date": product.expiry_date.strftime('%Y-%m-%d') if product.expiry_date else "",
+                "Added Date": product.created_date
             })
 
         # Return the data as JSON

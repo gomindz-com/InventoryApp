@@ -8,7 +8,7 @@ def upload_to(instance, filename):
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=120, unique=True)
+    name = models.CharField(max_length=120)
     description = models.CharField(max_length=220)
     created_date = models.DateField(auto_now_add=True)
     owner = models.ForeignKey('users.CustomUser', related_name='categories', on_delete=models.CASCADE, default='')
