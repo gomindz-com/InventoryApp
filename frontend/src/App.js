@@ -33,8 +33,8 @@ import routes from "routes";
 import { useArgonController, setMiniSidenav, setOpenConfigurator } from "context";
 
 // Images
-import brand from "assets/images/logo-ct.png";
-import brandDark from "assets/images/logo-ct-dark.png";
+import brand from "assets/images/finalLogo.png";
+import brandDark from "assets/images/finalLogo.png";
 
 // Icon Fonts
 import "assets/css/nucleo-icons.css";
@@ -147,7 +147,7 @@ export default function App() {
           <Sidenav
             color={sidenavColor}
             brand={darkSidenav || darkMode ? brand : brandDark}
-            brandName="Gomindz Inventory"
+            brandName="Mega Store"
             routes={routes}
             onMouseEnter={handleOnMouseEnter}
             onMouseLeave={handleOnMouseLeave}

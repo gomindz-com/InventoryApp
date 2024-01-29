@@ -1,6 +1,7 @@
 // @mui material components
 import Card from "@mui/material/Card";
 
+
 import { useState, useEffect, useRef } from "react";
 
 // Argon Dashboard 2 MUI components
@@ -40,6 +41,9 @@ import { item } from "examples/Sidenav/styles/sidenavItem";
 import { updateOrder } from "apiservices/orderService";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
+import TextField from '@mui/material/TextField';
+import * as XLSX from "xlsx";
+
 
 function Invoices() {
   const product_options = [];
@@ -84,6 +88,8 @@ function Invoices() {
   const [ordertotalPrice, setOrderTotalPrice] = useState(0.0);
   const [theBuyer, setTheBuyer] = useState("");
   const [theBuyerLocation, setTheBuyerLocation] = useState("");
+  const [theBuyerPhone, setTheBuyerPhone] = useState("");
+
   const [theReceipt, setTheReceipt] = useState("");
 
   const [firstProductId, setFirstProductId] = useState("");
@@ -93,9 +99,12 @@ function Invoices() {
   const [editData, setEditData] = useState({});
 
   const [totalPriceEditData, setTotalPriceEditData] = useState(0);
+  const [searchQuery, setSearchQuery] = useState('');
+
 
   const [orderData, setOrderData] = useState({
     buyer: "",
+    buyer_phone: "",
     buyer_location: "",
     status: "pending",
     receipt: "",
@@ -110,6 +119,8 @@ function Invoices() {
     { name: "total price", align: "left" },
     { name: "buyer", align: "center" },
     { name: "buyer_location", align: "center" },
+    { name: "buyer_phone", align: "center" },
+
     { name: "status", align: "center" },
     { name: "Approve As Receipt", align: "center" },
     { name: "View & Print", align: "center" },
@@ -117,6 +128,14 @@ function Invoices() {
     { name: "delete", align: "center" },
   ];
   const rows = [];
+
+  const exportToExcel = () => {
+    const ws = XLSX.utils.json_to_sheet(currentOrderList);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Invoice Report");
+    XLSX.writeFile(wb, "invoice_report.xlsx");
+  };
+
 
   const [idProductRow, setIdProductRow] = useState(0);
   const [productInputRow, setProductInputRow] = useState([]);
@@ -185,6 +204,8 @@ function Invoices() {
 
     try {
       const res = await getOrders("invoice");
+      console.log("hellodgergre", res)
+
 
       if (res.data?.status === true) {
         setOrderList(res.data.orders);
@@ -196,6 +217,31 @@ function Invoices() {
       toast.error("Invoice Could Not Be Retrieved");
     }
   };
+
+
+  useEffect(() => {
+    handleGetOrderList();
+}, []);
+
+const handleSearch = (event) => {
+  const query = event.target.value.toLowerCase();
+  setSearchQuery(query);
+  const filteredOrders = orderList.filter(order =>
+      order.buyer.toLowerCase().includes(query) || 
+      order.receipt.includes(query) 
+  );
+  setCurrentOrderList(filteredOrders);
+};
+
+
+
+
+
+
+
+
+
+
 
   const handleGetProductList = async () => {
     setProductList([]);
@@ -340,6 +386,7 @@ function Invoices() {
             setOrderData({
               buyer: "",
               buyer_location: "",
+              buyer_phone: "",
               status: "pending",
               ref: "",
               total_price: "",
@@ -390,7 +437,7 @@ function Invoices() {
     handleGetProductList();
   }, []);
 
-  orderList.map(function (item, i) {
+  currentOrderList.map(function (item, i) {
     rows.push({
       id: (
         <ArgonBox display="flex" alignItems="center" px={3} py={0.5}>
@@ -418,6 +465,14 @@ function Invoices() {
         <ArgonBox display="flex" flexDirection="column">
           <ArgonTypography variant="caption" fontWeight="medium" color="text">
             D {item.total_price}
+          </ArgonTypography>
+          <ArgonTypography variant="caption" color="secondary"></ArgonTypography>
+        </ArgonBox>
+      ),
+      "buyer_phone": (
+        <ArgonBox display="flex" flexDirection="column">
+          <ArgonTypography variant="caption" fontWeight="medium" color="text">
+            D {item.buyer_phone}
           </ArgonTypography>
           <ArgonTypography variant="caption" color="secondary"></ArgonTypography>
         </ArgonBox>
@@ -476,6 +531,7 @@ function Invoices() {
 
             setOrderTotalPrice(item.total_price);
             setTheBuyer(item.buyer);
+            setTheBuyerPhone(item.buyer_phone)
             setTheBuyerLocation(item.buyer_location);
             setTheReceipt(item.ref);
           }}
@@ -1100,11 +1156,23 @@ function Invoices() {
               <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
                 <ArgonTypography variant="h6">Invoice List</ArgonTypography>
 
+                <TextField
+                id="outlined-basic"
+                placeholder="Search"
+                style={{ width: "65%" }}
+                variant="outlined"
+                value={searchQuery}
+                onChange={handleSearch}
+            />
+
+
+
                 <Button
                   onClick={() => {
                     setOrderData({
                       buyer: "",
                       buyer_location: "",
+                      buyer_phone: "",
                       status: "",
                       ref: "",
                       total_price: "",
@@ -1125,7 +1193,16 @@ function Invoices() {
                   <h4 style={{ paddingRight: 10 }}>Add Invoice </h4>
                   <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-fat-add" />
                 </Button>
+
               </ArgonBox>
+
+               <ArgonBox style={{alignSelf: "flex-end", marginRight: 25}}>
+               <Button onClick={exportToExcel} >
+                <h6 style={{ paddingRight: 10 }}>Export to  Excel</h6>
+                
+
+                </Button>
+               </ArgonBox>
               <ArgonBox
                 sx={{
                   "& .MuiTableRow-root:not(:last-child)": {
@@ -1294,6 +1371,21 @@ function Invoices() {
                     />
                   </ArgonBox>
 
+
+                  <ArgonBox mb={2} mx={5}>
+                    <ArgonInput
+                      type="name"
+                      name="buyer_phone"
+                      value={orderData.buyer_phone}
+                      placeholder="Buyer Phone  Number"
+                      size="large"
+                      onChange={handleChange}
+                    />
+                  </ArgonBox>
+
+
+                  
+
                   <ArgonBox mb={2} mx={5}>
                     <ArgonInput
                       type="name"
@@ -1393,6 +1485,17 @@ function Invoices() {
                       type="name"
                       name="buyer_location"
                       value={editData.buyer_location}
+                      placeholder="Buyer Location"
+                      size="large"
+                      onChange={handleChange}
+                    />
+                  </ArgonBox>
+
+                  <ArgonBox mb={2} mx={5}>
+                    <ArgonInput
+                      type="name"
+                      name="buyer_phone"
+                      value={editData.buyer_phone}
                       placeholder="Buyer Location"
                       size="large"
                       onChange={handleChange}
@@ -1522,6 +1625,8 @@ function Invoices() {
                               {theBuyer}
                               <br />
                               {theBuyerLocation}
+                              <br/>
+                              {theBuyerPhone}
                             </address>
                           </div>
                         </div>

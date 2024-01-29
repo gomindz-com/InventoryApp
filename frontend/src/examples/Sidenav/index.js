@@ -121,7 +121,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
         </ArgonBox>
         <ArgonBox component={NavLink} to="/" display="flex" alignItems="center">
           {brand && (
-            <ArgonBox component="img" src={brand} alt="Argon Logo" width="2rem" mr={0.25} />
+            <ArgonBox component="img" src={brand} alt="Argon Logo" width="4rem"  mr={1} />
           )}
           <ArgonBox
             width={!brandName && "100%"}

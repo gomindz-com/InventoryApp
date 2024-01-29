@@ -133,24 +133,25 @@ function Default() {
       <ArgonBox py={3}>
         <Grid container spacing={3} mb={3}>
           <Grid item xs={12} md={4} lg={2}>
-            <DetailedStatisticsCard
-              title="Cash InHand"
-              count={
-                storeStatistics?.cash_inhand == undefined
-                  ? "D" + 0
-                  : "D" + storeStatistics?.cash_inhand
-              }
-              amount={""}
-              icon={{ color: "error", component: <i className="ni ni-credit-card" /> }}
-            />
+          <DetailedStatisticsCard
+    title="Revenue"
+    count={
+        storeStatistics?.cash_inhand == undefined
+        ? "D" + 0
+        : "D" + storeStatistics?.cash_inhand.toLocaleString() // Formatting with commas
+    }
+    amount={""}
+    icon={{ color: "error", component: <i className="ni ni-credit-card" /> }}
+/>
+
           </Grid>
           <Grid item xs={12} md={4} lg={2}>
             <DetailedStatisticsCard
-              title="Cash Pending"
+              title="receivable"
               count={
                 storeStatistics?.cash_pending == undefined
                   ? "D" + 0
-                  : "D" + storeStatistics?.cash_pending
+                  : "D" + storeStatistics?.cash_pending.toLocaleString()
               }
               amount={""}
               icon={{ color: "error", component: <i className="ni ni-money-coins" /> }}
@@ -160,7 +161,7 @@ function Default() {
           <Grid item xs={12} md={5} lg={2}>
             <DetailedStatisticsCard
               title="Stock-In"
-              count={storeStatistics?.stock_in == undefined ? 0 : storeStatistics?.stock_in}
+              count={storeStatistics?.stock_in == undefined ? 0 : storeStatistics?.stock_in.toLocaleString()}
               amount={""}
               icon={{ color: "warning", component: <i className="ni ni-bold-down" /> }}
             />
@@ -169,7 +170,7 @@ function Default() {
           <Grid item xs={12} md={5} lg={2}>
             <DetailedStatisticsCard
               title="Stock-Out"
-              count={storeStatistics?.stock_out == undefined ? 0 : storeStatistics?.stock_out}
+              count={storeStatistics?.stock_out == undefined ? 0 : storeStatistics?.stock_out.toLocaleString()}
               amount={""}
               icon={{ color: "warning", component: <i className="ni ni-bold-up" /> }}
             />
@@ -178,7 +179,7 @@ function Default() {
           <Grid item xs={12} md={6} lg={2}>
             <DetailedStatisticsCard
               title="Stock-In-Hand"
-              count={storeStatistics?.stock_inhand == undefined ? 0 : storeStatistics?.stock_inhand}
+              count={storeStatistics?.stock_inhand == undefined ? 0 : storeStatistics?.stock_inhand.toLocaleString()}
               amount={""}
               icon={{ color: "success", component: <i className="ni ni-archive-2" /> }}
             />
@@ -190,7 +191,7 @@ function Default() {
               count={
                 storeStatistics?.number_of_damages == undefined
                   ? 0
-                  : storeStatistics?.number_of_damages
+                  : storeStatistics?.number_of_damages.toLocaleString()
               }
               amount={""}
               icon={{ color: "error", component: <i className="ni ni-basket" /> }}
