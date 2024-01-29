@@ -1006,7 +1006,7 @@ def lowstockproduct(request):
 class ProductReportView(APIView):
     def get(self, request, *args, **kwargs):
         # Retrieve product information
-        products = Product.objects.all()
+        products = Product.objects.filter(owner=request.user)
 
         # Prepare the data for each product
         product_data = []
