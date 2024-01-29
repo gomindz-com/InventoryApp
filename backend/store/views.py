@@ -303,7 +303,7 @@ class OrderListCreateView(generics.ListCreateAPIView):
         serializer.is_valid(raise_exception=True)
         data = request.data
         type = self.request.query_params.get('type')
-        order = Order.objects.create(owner=request.user, buyer=data["buyer"],buyer_location=data["buyer_location"] ,status=data["status"], ref=data["ref"], type=data["type"], total_price=data["total_price"])
+        order = Order.objects.create(owner=request.user, buyer=data["buyer"],buyer_location=data["buyer_location"], buyer_phone= data["buyer_phone"], status=data["status"], ref=data["ref"], type=data["type"], total_price=data["total_price"])
         order.save()
 
         try:

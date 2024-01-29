@@ -58,6 +58,7 @@ class Order(models.Model):
     )
     buyer = models.CharField(max_length=50, default='')
     buyer_location = models.CharField(max_length=50, default='')
+    buyer_phone = models.CharField(max_length=50, default='')
     status = models.CharField(max_length=20, choices=STATUS_CHOICE, default='')
     ref = models.CharField(max_length=50, default='')
     total_price = models.FloatField(default=0.00) 
