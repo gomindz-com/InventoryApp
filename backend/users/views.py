@@ -191,7 +191,6 @@ class UserUpdatePasswordView(generics.UpdateAPIView):
 class SubscribersListCreateView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = SubscriberSerializer
-   
 
     def get(self, request, *args, **kwargs):
         queryset = CustomUser.objects.filter(is_staff=False)
@@ -206,7 +205,7 @@ class SubscribersListCreateView(generics.ListCreateAPIView):
         
 
 
-# LIST DETAIL OF ONE CATEGORY / UPDATE / DELETE
+# LIST DETAIL OF ONE SUBSCRIBER / UPDATE / DELETE
 class SubscriberRetreiveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = SubscriberSerializer
