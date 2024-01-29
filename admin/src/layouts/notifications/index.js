@@ -4,12 +4,35 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import Aside from "examples/Aside";
 import Footer from "examples/Footer";
 import "react-toastify/dist/ReactToastify.css";
-
+import { getStoreActivities } from "apiservices/activityService";
 
 function Notifications() {
   const navigate = useNavigate();
   const [showAside, setShowAside] = useState(true);
   const matches = useMediaQuery("(max-width: 1199.98px)");
+  const [activityList, setActivityList] = useState([]);
+
+  const handleGetActivityList = async () => {
+    setActivityList([]);
+    try {
+      await getStoreActivities()
+        .then((res) => {
+          if (res.data?.status) {
+            setActivityList(res.data.activities);
+          } else {
+            setActivityList([]);
+          }
+        })
+        .catch((err) => console.log("Error in Getting Activity List", err));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  //END GET CUSTOMERS
+
+  useEffect(() => {
+    handleGetActivityList();
+  }, []);
 
   return (
     <>
@@ -44,7 +67,6 @@ function Notifications() {
                   </div>
                 </div>
                 <ul className="navbar-nav  justify-content-end">
-                 
                   <li className="nav-item d-flex align-items-center">
                     <button
                       style={{ border: 0 }}
@@ -164,7 +186,7 @@ function Notifications() {
                     <h5 className="mb-0">Alerts</h5>
                   </div>
                   <div className="card-body p-3 pb-0">
-                    <div className="alert alert-primary alert-dismissible text-white" role="alert">
+                    {/* <div className="alert alert-primary alert-dismissible text-white" role="alert">
                       <span className="text-sm">
                         A simple primary alert with{" "}
                         <a href="javascript:;" className="alert-link text-white">
@@ -200,8 +222,36 @@ function Notifications() {
                       >
                         <span aria-hidden="true">&times;</span>
                       </button>
-                    </div>
-                    <div className="alert alert-success alert-dismissible text-white" role="alert">
+                    </div> */}
+
+                    {activityList.map((activity) => {
+                      return (
+                        <div
+                          key={activity.id}
+                          className="alert alert-success alert-dismissible text-white"
+                          role="alert"
+                        >
+                          <span className="text-sm" >
+                            {activity.details}{" "}
+                            <a href="javascript:;" className="alert-link text-white">
+                              {activity.activity_type}
+                            </a>{" by "} {activity.username}
+                            . {Date(activity.timestamp)}
+                            
+                          </span>
+                          <button
+                            type="button"
+                            className="btn-close text-lg py-3 opacity-10"
+                            data-bs-dismiss="alert"
+                            aria-label="Close"
+                          >
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                      );
+                    })}
+
+                    {/* <div className="alert alert-success alert-dismissible text-white" role="alert">
                       <span className="text-sm">
                         A simple success alert with{" "}
                         <a href="javascript:;" className="alert-link text-white">
@@ -302,22 +352,15 @@ function Notifications() {
                       >
                         <span aria-hidden="true">&times;</span>
                       </button>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
                 <div className="card mt-4">
                   <div className="card-header p-3">
                     <h5 className="mb-0">Notifications</h5>
                     <p className="text-sm mb-0">
-                      Notifications on this page use Toasts from Bootstrap. Read more details{" "}
-                      <a
-                        href="https://getbootstrap.com/docs/5.0/components/toasts/"
-                        target="
-          "
-                      >
-                        here
-                      </a>
-                      .
+                      Notifications Flag
+                      
                     </p>
                   </div>
                   <div className="card-body p-3">

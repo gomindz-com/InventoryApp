@@ -2,11 +2,11 @@ from rest_framework import generics
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .serializers import RegisterSerializer, LoginSerializer, CustomUserSerializer, UpdateUserProfileSerializer, UpdatePasswordSerializer, SubscriberSerializer, SubscriberUpdateSerializer
+from .serializers import RegisterSerializer, LoginSerializer, CustomUserSerializer, UpdateUserProfileSerializer, UpdatePasswordSerializer, SubscriberSerializer, SubscriberUpdateSerializer, UserActivitySerializer
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.request import Request
 from django.contrib.auth import authenticate
-from .models import CustomUser
+from .models import CustomUser, UserActivity
 from rest_framework.authtoken.models import Token
 
 
@@ -26,7 +26,7 @@ class RegisterUser(generics.CreateAPIView):
         response = {
             "status": True,
             "message": "User Successfully Registered",
-                    }                
+                }                
         return Response(data=response, status=status.HTTP_201_CREATED)
 
     
@@ -227,3 +227,24 @@ class SubscriberRetreiveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
         return Response(data=response, status=status.HTTP_201_CREATED)
 
 
+
+
+
+# LIST ALL USER ACTIVITY
+class UserActivityListView(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = UserActivitySerializer
+    
+    def get(self, request, *args, **kwargs):
+        user = self.request.user
+        queryset = UserActivity.objects.all()
+        serializer = self.get_serializer(queryset, many=True)
+        response = {
+                    "status": True,
+                    "message": "Valid request",
+                    "activities" : serializer.data
+
+                }
+        return Response(response)
+        
+    

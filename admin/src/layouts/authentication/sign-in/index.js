@@ -18,10 +18,8 @@ function Illustration() {
 
     const isValid = await UserSchema.isValid(userData);
     if (!isValid) {
-      console.log(userData);
       toast.error("Please enter all the required fields!!");
     } else {
-      console.log(userData);
       await loginUser(userData)
         .then((res) => {
           if (res.data) {
@@ -30,7 +28,6 @@ function Illustration() {
             localStorage.setItem("adminToken", res.data.token);
             localStorage.setItem("admin", JSON.stringify(res.data.user));
           } else {
-            console.log(res);
             toast.error("Authnentication Failed", { draggable: false });
           }
         })

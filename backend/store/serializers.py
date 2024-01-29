@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Product, Category, Damages, Delivery, OrderProducts, Supplier, Buyer, Order, Delivery
+from .models import Product, Category, Damages, Delivery, OrderProducts, Supplier, Buyer, Order, Delivery, StoreActivity
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -96,3 +96,13 @@ class DeliveriesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Delivery
         fields = ['id', 'reference', 'order', 'courier_name','status', 'reciept']
+
+
+class StoreActivitySerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(source='user.email', read_only=True)
+    username = serializers.CharField(source='user.username', read_only=True)
+
+    class Meta:
+        model = StoreActivity
+        fields = [ 'id', 'email', 'username', 'activity_type', 'details', 'timestamp']
+
