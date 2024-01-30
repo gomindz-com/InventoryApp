@@ -12,17 +12,14 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import Table from "examples/Tables/Table";
-
 import ArgonInput from "components/ArgonInput";
 import ArgonButton from "components/ArgonButton";
 import { Button } from "@mui/material";
 import logoSpotify from "assets/images/small-logos/logo-spotify.svg";
 import { AddCategorySchema } from "formValidation/addForm";
-import { ToastContainer, toast } from "react-toastify";
-import { addCategory } from "apiservices/categoryService";
-import { deleteCategory } from "apiservices/categoryService";
-import { getCategories } from "apiservices/categoryService";
-import { editCategoriee } from "apiservices/categoryService";
+import { toast } from "react-toastify";
+import { addCategory,deleteCategory,getCategories,editCategoriee } from "apiservices/categoryService";
+
 
 function Categories() {
   const [showAddCategoryForm, setShowAddCategoryForm] = useState(false);

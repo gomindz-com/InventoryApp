@@ -73,7 +73,7 @@ function Illustration() {
           localStorage.setItem("user", JSON.stringify(res.data.user));
           setUser(res.data.user);
           dispatch(login(res.data.user));
-          toast.success("Login Successful");
+          toast.success("Login Successful", { draggable: false });
           navigate('/dashboard')
 
         } else {

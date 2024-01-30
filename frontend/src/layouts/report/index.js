@@ -7,15 +7,14 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import Table from "examples/Tables/Table";
-import { getSuppliers } from "apiservices/supplierService";
 import { Navigate } from "react-router-dom";
 import * as XLSX from "xlsx";
 import { getReport } from "apiservices/reportService";
 
 function Report() {
-  const [screenloading, setScreenLoading] = useState(true);
-  const [supplierList, setSupplierList] = useState([]);
-  const [editFormActive, setEditFormActive] = useState(false);
+
+  const [user] = useState(JSON.parse(localStorage.getItem("user")));
+  
   const [reportList, setReportList] = useState([]);
   const [rows, setRows] = useState([]);
   const [selectedMonth, setSelectedMonth] = useState("All");
@@ -29,10 +28,6 @@ function Report() {
     { name: "Added Date", align: "center" },
     { name: "Expiry Date", align: "center" },
   ];
-
-  useEffect(() => {
-    handleGetReport();
-  }, [selectedMonth]);
 
   const handleGetReport = async () => {
     setReportList([]);
@@ -64,14 +59,18 @@ function Report() {
     setSelectedMonth(event.target.value);
   };
 
-  const [user] = useState(JSON.parse(localStorage.getItem("user")));
-
   const exportToExcel = () => {
     const ws = XLSX.utils.json_to_sheet(reportList);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Inventory Report");
     XLSX.writeFile(wb, "inventory_report.xlsx");
   };
+
+
+  useEffect(() => {
+    handleGetReport();
+  }, [selectedMonth]);
+
 
   return (
     <DashboardLayout>

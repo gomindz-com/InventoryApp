@@ -15,10 +15,8 @@ import ArgonInput from "components/ArgonInput";
 import ArgonButton from "components/ArgonButton";
 import { Navigate, useNavigate } from "react-router-dom";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
-import { Card, Icon, Tooltip } from "@mui/material";
+import { Card } from "@mui/material";
 import ArgonAvatar from "components/ArgonAvatar";
-import ArgonTypography from "components/ArgonTypography";
-
 import './Contact.css'
 
 
@@ -150,7 +148,7 @@ function ContactUs() {
                   <ArgonBox mb={2}>
                     <div class="form-group">
                       <textarea
-                        class="custom-textarea"
+                        className="custom-textarea"
                         rows="5"
                         placeholder=" Enter Message here..."
                       ></textarea>
