@@ -89,8 +89,6 @@ function Overview() {
 
     try {
       const res = await updateSubscriberDetails(uploadData);
-
-      console.log(res)
       if (res.status == 200) {
         await getUserDetails().then((res) => {
           if (res.status == 200) {

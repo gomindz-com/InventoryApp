@@ -26,18 +26,12 @@ import Select from "react-select";
 import { deleteProduct } from "apiservices/productService";
 import { getCategories } from "apiservices/categoryService";
 import { addProduct, editProduct } from "apiservices/productService";
-import { DatePickerComponent } from "@syncfusion/ej2-react-calendars";
-import Datetime from "react-datetime";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import AdapterDayjs from "@mui/lab/AdapterDayjs";
 import TextField from "@mui/material/TextField";
 import "react-datetime/css/react-datetime.css";
 
 function Products() {
   const [rememberMe, setRememberMe] = useState(false);
   const [showAddProductForm, setShowAddProductForm] = useState(false);
-  const handleSetRememberMe = () => setRememberMe(!rememberMe);
   const [screenloading, setScreenLoading] = useState(true);
   const [productList, setProductList] = useState([]);
   const [currentProductList, setCurrentProductList] = useState([]);
@@ -46,13 +40,7 @@ function Products() {
   const category_options = [];
   const [editFormActive, setEditFormActive] = useState(false);
   const [productImage, setProductImage] = useState(null);
-  const [selectedDate, setSelectedDate] = useState(null);
-  const [startDate, setStartDate] = useState(new Date());
   const [searchQuery, setSearchQuery] = useState("");
-
-  const datePickerStyle = {
-    width: "400px",
-  };
 
   const columns = [
     { name: "product", align: "left" },
@@ -120,9 +108,6 @@ function Products() {
     }
   };
 
-  const handleDateChange = (event) => {
-    setProductData({ ...productData, expiry_date: event.target.value });
-  };
 
   const handleChange = (e) => {
     if ([e.target.name] == "image") {
@@ -132,6 +117,10 @@ function Products() {
     } else {
       setProductData({ ...productData, [e.target.name]: e.target.value });
     }
+  };
+
+  const handleDateChange = (event) => {
+    setProductData({ ...productData, expiry_date: event.target.value });
   };
 
   const handleChangeStatus = async (selectedOption) => {
@@ -195,9 +184,6 @@ function Products() {
     } catch (error) {}
   };
 
-  useEffect(() => {
-    handleGetProductList;
-  }, []);
 
   const handleSearch = (event) => {
     const query = event.target.value.toLowerCase();
@@ -328,6 +314,7 @@ function Products() {
     handleGetCategoryList();
   }, []);
 
+  
   return (
     <DashboardLayout>
       <DashboardNavbar
