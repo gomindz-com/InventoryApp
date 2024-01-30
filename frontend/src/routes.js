@@ -3,14 +3,13 @@ import Dashboard from "layouts/dashboard";
 import Tables from "layouts/tables";
 import Billing from "layouts/billing";
 import VirtualReality from "layouts/virtual-reality";
-import RTL from "layouts/rtl";
 import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
 
 // Argon Dashboard 2 MUI components
 import ArgonBox from "components/ArgonBox";
-import Suppliers from "layouts/suppliers";
+import Report from "layouts/report";
 import Products from "layouts/products";
 import Categories from "layouts/categories";
 import Invoices from "layouts/invoices";
@@ -83,10 +82,10 @@ const routes = [
   {
     type: "route",
     name: "Report",
-    key: "suppliers",
-    route: "/suppliers",
+    key: "report",
+    route: "/report",
     icon: <ArgonBox component="i" color="warning" fontSize="14px" className="ni ni-collection" />,
-    component: <Suppliers />,
+    component: <Report />,
   },
 
   { type: "title", title: "Account Pages", key: "account-pages" },

@@ -1,21 +1,18 @@
+import { useState, useEffect} from "react";
 import { Link } from "react-router-dom";
-
-// @mui material components
 import Card from "@mui/material/Card";
 import Checkbox from "@mui/material/Checkbox";
-
-// Argon Dashboard 2 MUI components
 import ArgonBox from "components/ArgonBox";
 import ArgonTypography from "components/ArgonTypography";
 import ArgonInput from "components/ArgonInput";
 import ArgonButton from "components/ArgonButton";
-import { useState } from "react";
 
 // Authentication layout components
 import CoverLayout from "layouts/authentication/components/CoverLayout";
+
 import { registerUser } from "apiservices/authService";
 import { RegisterUserSchema } from "../../../formValidation/addForm";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { Grid } from "@mui/material";
 
@@ -76,6 +73,14 @@ function Cover() {
       });
   };
 
+
+  useEffect(() => {
+    localStorage.removeItem("admin");
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    localStorage.removeItem("userToken");
+    localStorage.removeItem("adminToken");
+  }, []);
 
   return (
     <CoverLayout

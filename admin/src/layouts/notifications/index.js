@@ -5,6 +5,8 @@ import Aside from "examples/Aside";
 import Footer from "examples/Footer";
 import "react-toastify/dist/ReactToastify.css";
 import { getStoreActivities } from "apiservices/activityService";
+import Spinner from "components/Spinner";
+
 
 function Notifications() {
   const navigate = useNavigate();
@@ -192,7 +194,7 @@ function Notifications() {
                   </div>
                     {
                       loading ?
-                      <p>Loading</p>
+                      <Spinner />
                       :
                       <div className="card-body p-3 pb-0">
                       {/* <div className="alert alert-primary alert-dismissible text-white" role="alert">
@@ -365,7 +367,7 @@ function Notifications() {
                       </div>
                     }
                 </div>
-                <div className="card mt-4">
+                {/* <div className="card mt-4">
                   <div className="card-header p-3">
                     <h5 className="mb-0">Notifications</h5>
                     <p className="text-sm mb-0">
@@ -413,7 +415,7 @@ function Notifications() {
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
             <div className="position-fixed bottom-1 end-1 z-index-2">

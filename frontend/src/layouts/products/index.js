@@ -21,22 +21,18 @@ import { Button } from "@mui/material";
 import { getProducts } from "apiservices/productService";
 import logoSpotify from "assets/images/small-logos/logo-spotify.svg";
 import { AddProductSchema } from "formValidation/addForm";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import Select from "react-select";
 import { deleteProduct } from "apiservices/productService";
 import { getCategories } from "apiservices/categoryService";
-import { editProduct } from "apiservices/productService";
+import { addProduct, editProduct } from "apiservices/productService";
 import { DatePickerComponent } from "@syncfusion/ej2-react-calendars";
 import Datetime from "react-datetime";
-import "react-datetime/css/react-datetime.css";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import AdapterDayjs from "@mui/lab/AdapterDayjs";
-import { LocalizationProvider, DatePicker as MUIDatePicker } from "@mui/lab";
 import TextField from "@mui/material/TextField";
-
-import axios from "axios";
-import { baseUrl } from "apiservices/baseURL";
+import "react-datetime/css/react-datetime.css";
 
 function Products() {
   const [rememberMe, setRememberMe] = useState(false);
@@ -52,10 +48,7 @@ function Products() {
   const [productImage, setProductImage] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
   const [startDate, setStartDate] = useState(new Date());
-  const [searchQuery, setSearchQuery] = useState('');
-
-
-  // console.log("hhhhh", productList);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const datePickerStyle = {
     width: "400px",
@@ -71,13 +64,6 @@ function Products() {
     { name: "delete", align: "center" },
   ];
 
-  
-
-
-
-
-
-
   const rows = [];
 
   const [productData, setProductData] = useState({
@@ -87,7 +73,7 @@ function Products() {
     description_color: "",
     price: "",
     status: "in_stock",
-    expiry_date: "", // Set default date in the desired format
+    expiry_date: "",
   });
 
   const status_options = [
@@ -103,59 +89,37 @@ function Products() {
     },
   ];
 
-  const handlePlaceholderText = () => {
-    return startDate ? startDate.toDateString() : "Choose expiry date";
-  };
-
-  const handleSubmit = async (e) => {
+  const handleAddProduct = async () => {
     const user = JSON.parse(localStorage.getItem("user"));
     const isValid = await AddProductSchema.isValid(productData);
     if (!isValid) {
       toast.error("Please enter all the required fields!!");
-    } else {
-      let token = localStorage.getItem("token");
+      return;
+    }
 
-      const config = {
-        headers: {
-          "Content-Type": "multipart/formdata",
-          "Access-Control-Allow-Origin": "http://localhost:3000",
-          "Access-Control-Allow-Origin": "http://192.168.1.72:3000",
-          "Access-Control-Allow-Credentials": "true",
-          Authorization: token ? `Token ${token}` : "",
-        },
-      };
-      const url = `${baseUrl}store/products`;
-      let formData = new FormData();
+    const uploadData = new FormData();
+    uploadData.append("image", productImage == null ? "" : productImage?.image[0]);
+    uploadData.append("name", productData.name);
+    uploadData.append("userid", user.id);
+    uploadData.append("description_color", productData.description_color);
+    uploadData.append("status", productData.status);
+    uploadData.append("price", productData.price);
+    uploadData.append("category", productData.category);
+    uploadData.append("stock", productData.stock);
+    uploadData.append("expiry_date", productData.expiry_date);
 
-      formData.append("name", productData.name);
-      formData.append("userid", user.id);
-      formData.append("description_color", productData.description_color);
-      formData.append("status", productData.status);
-      formData.append("price", productData.price);
-      formData.append("category", productData.category);
-      formData.append("stock", productData.stock);
-      formData.append("expiry_date", productData.expiry_date);
-      formData.append("created_date", productData.created_date);
-
-
-      formData.append("image", productImage == null ? "" : productImage?.image[0]);
-
-      axios
-        .post(url, formData, config)
-        .then((res) => {
-          if (res.status == 201) {
-            toast.success("Successfully Added ");
-            handleGetProductList();
-            setShowAddProductForm(false);
-          } else {
-            toast.error(res.data.result[Object.keys(res.data.result)[0]][0]);
-          }
-        })
-        .catch((err) => {
-          toast.error(Object.values(err.response?.data)[0][0]);
-        });
+    try {
+      const res = await addProduct(uploadData);
+      if (res.status == 201) {
+        toast.success("Update Successful");
+        handleGetProductList();
+        setShowAddProductForm(false);
+      }
+    } catch (error) {
+      toast.error("Could Not Be Updated");
     }
   };
+
   const handleDateChange = (event) => {
     setProductData({ ...productData, expiry_date: event.target.value });
   };
@@ -231,20 +195,18 @@ function Products() {
     } catch (error) {}
   };
 
-
   useEffect(() => {
-    handleGetProductList
-}, []); 
+    handleGetProductList;
+  }, []);
 
-const handleSearch = (event) => {
-  const query = event.target.value.toLowerCase();
-  setSearchQuery(query);
-  const filteredProducts = productList.filter(order =>
-      order.name && order.name.toLowerCase().includes(query)
-  );
-  setCurrentProductList(filteredProducts);
-};
-
+  const handleSearch = (event) => {
+    const query = event.target.value.toLowerCase();
+    setSearchQuery(query);
+    const filteredProducts = productList.filter(
+      (order) => order.name && order.name.toLowerCase().includes(query)
+    );
+    setCurrentProductList(filteredProducts);
+  };
 
   const handleGetCategoryList = async () => {
     setCategoryList([]);
@@ -252,7 +214,6 @@ const handleSearch = (event) => {
 
     try {
       const res = await getCategories();
-
       if ((res.status = 200)) {
         res.data?.categories.map((item) => {
           category_options.push({
@@ -267,14 +228,6 @@ const handleSearch = (event) => {
         setCategoryList([]);
       }
     } catch (error) {}
-  };
-
-  const customStyle = {
-    height: 200,
-    width: 400,
-
-    borderWidth: 1,
-    borderColor: "red",
   };
 
   currentProductList?.map(function (item, i) {
@@ -401,15 +354,13 @@ const handleSearch = (event) => {
                 <ArgonTypography variant="h6">Products</ArgonTypography>
 
                 <TextField
-                id="outlined-basic"
-                placeholder="Search"
-                style={{ width: "65%" }}
-                variant="outlined"
-                value={searchQuery}
-                onChange={handleSearch}
-            />
-
-
+                  id="outlined-basic"
+                  placeholder="Search"
+                  style={{ width: "65%" }}
+                  variant="outlined"
+                  value={searchQuery}
+                  onChange={handleSearch}
+                />
 
                 <Button
                   onClick={() => {
@@ -431,11 +382,6 @@ const handleSearch = (event) => {
                   <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-fat-add" />
                 </Button>
               </ArgonBox>
-
-
-             
-
-
 
               <ArgonBox
                 sx={{
@@ -562,7 +508,7 @@ const handleSearch = (event) => {
                   />
                 </ArgonBox>
 
-                <ArgonBox mb={2} mx={5}>
+                {/* <ArgonBox mb={2} mx={5}>
                   <TextField
                     style={{ width: "100%", paddingTop: "15px" }}
                     label="Added date"
@@ -571,7 +517,7 @@ const handleSearch = (event) => {
                     onChange={handleDateChange}
                     InputLabelProps={{ shrink: true }}
                   />
-                </ArgonBox>
+                </ArgonBox> */}
 
                 <ArgonBox mb={2} mx={5}>
                   <TextField
@@ -586,7 +532,7 @@ const handleSearch = (event) => {
 
                 <ArgonBox mb={2} mx={5}>
                   <ArgonButton
-                    onClick={editFormActive ? handleEdit : handleSubmit}
+                    onClick={editFormActive ? handleEdit : handleAddProduct}
                     color="info"
                     size="large"
                     fullWidth
