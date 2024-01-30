@@ -1,7 +1,6 @@
 // @mui material components
 import Card from "@mui/material/Card";
 
-
 import { useState, useEffect, useRef } from "react";
 
 // Argon Dashboard 2 MUI components
@@ -36,14 +35,13 @@ import { getOrders, deleteOrder, addOrder, editOrder } from "apiservices/orderSe
 import { getProducts } from "apiservices/productService";
 import { v4 as uuidv4 } from "uuid";
 import { ToastContainer, toast } from "react-toastify";
-import "./index.css";
 import { item } from "examples/Sidenav/styles/sidenavItem";
 import { updateOrder } from "apiservices/orderService";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
-import TextField from '@mui/material/TextField';
+import TextField from "@mui/material/TextField";
 import * as XLSX from "xlsx";
-
+import "./index.css";
 
 function Invoices() {
   const product_options = [];
@@ -99,8 +97,7 @@ function Invoices() {
   const [editData, setEditData] = useState({});
 
   const [totalPriceEditData, setTotalPriceEditData] = useState(0);
-  const [searchQuery, setSearchQuery] = useState('');
-
+  const [searchQuery, setSearchQuery] = useState("");
 
   const [orderData, setOrderData] = useState({
     buyer: "",
@@ -135,7 +132,6 @@ function Invoices() {
     XLSX.utils.book_append_sheet(wb, ws, "Invoice Report");
     XLSX.writeFile(wb, "invoice_report.xlsx");
   };
-
 
   const [idProductRow, setIdProductRow] = useState(0);
   const [productInputRow, setProductInputRow] = useState([]);
@@ -204,9 +200,6 @@ function Invoices() {
 
     try {
       const res = await getOrders("invoice");
-      console.log("hellodgergre", res)
-
-
       if (res.data?.status === true) {
         setOrderList(res.data.orders);
         setCurrentOrderList(res.data.orders);
@@ -218,30 +211,18 @@ function Invoices() {
     }
   };
 
-
   useEffect(() => {
     handleGetOrderList();
-}, []);
+  }, []);
 
-const handleSearch = (event) => {
-  const query = event.target.value.toLowerCase();
-  setSearchQuery(query);
-  const filteredOrders = orderList.filter(order =>
-      order.buyer.toLowerCase().includes(query) || 
-      order.receipt.includes(query) 
-  );
-  setCurrentOrderList(filteredOrders);
-};
-
-
-
-
-
-
-
-
-
-
+  const handleSearch = (event) => {
+    const query = event.target.value.toLowerCase();
+    setSearchQuery(query);
+    const filteredOrders = orderList.filter(
+      (order) => order.buyer.toLowerCase().includes(query) || order.receipt.includes(query)
+    );
+    setCurrentOrderList(filteredOrders);
+  };
 
   const handleGetProductList = async () => {
     setProductList([]);
@@ -469,7 +450,7 @@ const handleSearch = (event) => {
           <ArgonTypography variant="caption" color="secondary"></ArgonTypography>
         </ArgonBox>
       ),
-      "buyer_phone": (
+      buyer_phone: (
         <ArgonBox display="flex" flexDirection="column">
           <ArgonTypography variant="caption" fontWeight="medium" color="text">
             D {item.buyer_phone}
@@ -531,7 +512,7 @@ const handleSearch = (event) => {
 
             setOrderTotalPrice(item.total_price);
             setTheBuyer(item.buyer);
-            setTheBuyerPhone(item.buyer_phone)
+            setTheBuyerPhone(item.buyer_phone);
             setTheBuyerLocation(item.buyer_location);
             setTheReceipt(item.ref);
           }}
@@ -1157,15 +1138,13 @@ const handleSearch = (event) => {
                 <ArgonTypography variant="h6">Invoice List</ArgonTypography>
 
                 <TextField
-                id="outlined-basic"
-                placeholder="Search"
-                style={{ width: "65%" }}
-                variant="outlined"
-                value={searchQuery}
-                onChange={handleSearch}
-            />
-
-
+                  id="outlined-basic"
+                  placeholder="Search"
+                  style={{ width: "65%" }}
+                  variant="outlined"
+                  value={searchQuery}
+                  onChange={handleSearch}
+                />
 
                 <Button
                   onClick={() => {
@@ -1193,16 +1172,13 @@ const handleSearch = (event) => {
                   <h4 style={{ paddingRight: 10 }}>Add Invoice </h4>
                   <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-fat-add" />
                 </Button>
-
               </ArgonBox>
 
-               <ArgonBox style={{alignSelf: "flex-end", marginRight: 25}}>
-               <Button onClick={exportToExcel} >
-                <h6 style={{ paddingRight: 10 }}>Export to  Excel</h6>
-                
-
+              <ArgonBox style={{ alignSelf: "flex-end", marginRight: 25 }}>
+                <Button onClick={exportToExcel}>
+                  <h6 style={{ paddingRight: 10 }}>Export to Excel</h6>
                 </Button>
-               </ArgonBox>
+              </ArgonBox>
               <ArgonBox
                 sx={{
                   "& .MuiTableRow-root:not(:last-child)": {
@@ -1371,7 +1347,6 @@ const handleSearch = (event) => {
                     />
                   </ArgonBox>
 
-
                   <ArgonBox mb={2} mx={5}>
                     <ArgonInput
                       type="name"
@@ -1382,9 +1357,6 @@ const handleSearch = (event) => {
                       onChange={handleChange}
                     />
                   </ArgonBox>
-
-
-                  
 
                   <ArgonBox mb={2} mx={5}>
                     <ArgonInput
@@ -1625,7 +1597,7 @@ const handleSearch = (event) => {
                               {theBuyer}
                               <br />
                               {theBuyerLocation}
-                              <br/>
+                              <br />
                               {theBuyerPhone}
                             </address>
                           </div>

@@ -17,15 +17,16 @@ import { Line, Bubble } from "react-chartjs-2";
 import { faker } from "@faker-js/faker";
 import { getUserActivities } from "apiservices/activityService";
 import { getStoreInfo } from "../../apiservices/storeInfoService";
+import Spinner from "components/Spinner";
 
 function Default() {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
   const [showSearch, setShowSearch] = useState(false);
   const [showAside, setShowAside] = useState(true);
   const matches = useMediaQuery("(max-width: 1199.98px)");
   const [activityList, setActivityList] = useState([]);
   const [storeInfo, setStoreInfo] = useState({});
-
 
   ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -93,7 +94,6 @@ function Default() {
     ],
   };
 
-
   const handleGetActivityList = async () => {
     setActivityList([]);
     try {
@@ -101,8 +101,10 @@ function Default() {
         .then((res) => {
           if (res.data?.status) {
             setActivityList(res.data.activities);
+            setLoading(false);
           } else {
             setActivityList([]);
+            setLoading(false);
           }
         })
         .catch((err) => console.log("Error in Getting setCustomersList", err));
@@ -128,12 +130,10 @@ function Default() {
     }
   };
 
-
   useEffect(() => {
     handleGetActivityList();
     handleGetStoreInfo();
   }, []);
-
 
   return (
     <>
@@ -309,7 +309,9 @@ function Default() {
                     </div>
                     <div className="text-end pt-1">
                       <p className="text-sm mb-0 text-capitalize">Total Subscribers</p>
-                      <h4 className="mb-0">{storeInfo.num_of_subscribers}</h4>
+                      <h4 className="mb-0">
+                        {loading ? <Spinner /> : storeInfo.num_of_subscribers}
+                      </h4>
                     </div>
                   </div>
                   <hr className="dark horizontal my-0" />
@@ -459,35 +461,39 @@ function Default() {
                           </tr>
                         </thead>
                         <tbody>
-
-
-                        {activityList.map((activity) => {
+                          {activityList.map((activity) => {
                             return (
                               <tr key={activity.id}>
-                            <td>
-                              <div className="d-flex px-2">
-                                <div>
-                                  {/* <img
+                                <td>
+                                  <div className="d-flex px-2">
+                                    <div>
+                                      {/* <img
                                     src="../assets/img/small-logos/logo-asana.svg"
                                     className="avatar avatar-sm rounded-circle me-2"
                                     alt="spotify"
                                   /> */}
-                                </div>
-                                <div className="my-auto">
-                                  <h6 className="mb-0 text-sm">{activity.email}</h6>
-                                </div>
-                              </div>
-                            </td>
-                            <td>
-                              <p className="text-sm font-weight-bold mb-0">{activity.activity_type}</p>
-                            </td>
-                            <td>
-                              <span className="text-xs font-weight-bold">{activity.details}</span>
-                            </td>
-                            <td className="align-middle text-center">
-                              <div className="d-flex align-items-center justify-content-center">
-                                <span className="me-2 text-xs font-weight-bold">{Date(activity.timestamp)}</span>
-                                {/* <div>
+                                    </div>
+                                    <div className="my-auto">
+                                      <h6 className="mb-0 text-sm">{activity.email}</h6>
+                                    </div>
+                                  </div>
+                                </td>
+                                <td>
+                                  <p className="text-sm font-weight-bold mb-0">
+                                    {activity.activity_type}
+                                  </p>
+                                </td>
+                                <td>
+                                  <span className="text-xs font-weight-bold">
+                                    {activity.details}
+                                  </span>
+                                </td>
+                                <td className="align-middle text-center">
+                                  <div className="d-flex align-items-center justify-content-center">
+                                    <span className="me-2 text-xs font-weight-bold">
+                                      {Date(activity.timestamp)}
+                                    </span>
+                                    {/* <div>
                                   <div className="progress">
                                     <div
                                       className="progress-bar bg-gradient-info"
@@ -498,17 +504,16 @@ function Default() {
                                     ></div>
                                   </div>
                                 </div> */}
-                              </div>
-                            </td>
-                            <td className="align-middle">
-                              {/* <button className="btn btn-link text-secondary mb-0">
+                                  </div>
+                                </td>
+                                <td className="align-middle">
+                                  {/* <button className="btn btn-link text-secondary mb-0">
                                 <i className="fa fa-ellipsis-v text-xs"></i>
                               </button> */}
-                            </td>
-                          </tr>
+                                </td>
+                              </tr>
                             );
                           })}
-                         
                         </tbody>
                       </table>
                     </div>

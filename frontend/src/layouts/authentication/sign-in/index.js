@@ -59,7 +59,6 @@ function Illustration() {
   };
 
   const handleSubmit = async () => {
-
     const { email, password, isChecked } = userData;
     if (isChecked && email !== "") {
       localStorage.setItem("email", email);
@@ -88,6 +87,13 @@ function Illustration() {
 
 
   useEffect(() => {
+
+    localStorage.removeItem("admin");
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    localStorage.removeItem("userToken");
+    localStorage.removeItem("adminToken");
+
     if (localStorage.isChecked && localStorage.email !== "") {
       setUserData({
         isChecked: true,

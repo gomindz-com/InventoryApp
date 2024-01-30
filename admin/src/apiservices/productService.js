@@ -31,13 +31,9 @@ export const addProduct = async (productData) => {
   const data = await axiosConfig
     .post(`/products/`, productData)
     .then((response) => {
-      console.log("Api Response")
-      console.log(response)
       return response;
     })
     .catch((err) => {
-      console.log("Api Error")
-      console.log(err.response.data.result);
       return err.response;
     });
 
@@ -49,12 +45,9 @@ export const deleteProduct = async (id) => {
   const data = await axiosConfig
     .delete(`/products/${id}`)
     .then((response) => {
-      console.log("Api Response")
-      console.log(response)
       return response;
     })
     .catch((err) => {
-      console.log(err.response.data.result);
       return err.response;
     });
 

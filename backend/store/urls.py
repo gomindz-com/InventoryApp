@@ -2,7 +2,7 @@ from django.urls import path
 from .views import ( 
      twilio, 
      CategoryListCreateView, CategoryRetreiveUpdateDeleteView,
-     ProductListCreateView, ProductRetreiveUpdateDeleteView,
+     ProductListCreateView, ProductRetreiveUpdateDeleteView, ProductImagesListView,
      OrderListCreateView, OrderRetreiveUpdateDeleteView,
      DamagesListCreateView,
      StoreStatisticsView,
@@ -27,6 +27,7 @@ urlpatterns = [
      path('categories/<int:pk>', CategoryRetreiveUpdateDeleteView.as_view(), name='detailupdatedeletecategories'),
      path('products', ProductListCreateView.as_view(), name='listcreateproducts'),
      path('products/<int:pk>', ProductRetreiveUpdateDeleteView.as_view(), name='detailupdatedeleteproducts'),
+     path('products-images', ProductImagesListView.as_view(), name='ProductImagesListView'),
      path('orders', OrderListCreateView.as_view(), name='listcreateorders'),
      path('orders/<int:pk>', OrderRetreiveUpdateDeleteView.as_view(), name='detaildeleteorders'),
      path('storestatistics', StoreStatisticsView.as_view(), name='liststorestatistics'),

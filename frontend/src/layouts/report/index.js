@@ -10,9 +10,9 @@ import Table from "examples/Tables/Table";
 import { getSuppliers } from "apiservices/supplierService";
 import { Navigate } from "react-router-dom";
 import * as XLSX from "xlsx";
-import { getRport } from "apiservices/reportService";
+import { getReport } from "apiservices/reportService";
 
-function Suppliers() {
+function Report() {
   const [screenloading, setScreenLoading] = useState(true);
   const [supplierList, setSupplierList] = useState([]);
   const [editFormActive, setEditFormActive] = useState(false);
@@ -27,20 +27,17 @@ function Suppliers() {
     { name: "Stock Out", align: "center" },
     { name: "Stock In Hand", align: "center" },
     { name: "Added Date", align: "center" },
-
     { name: "Expiry Date", align: "center" },
-
   ];
 
   useEffect(() => {
     handleGetReport();
-  }, [selectedMonth]); // Fetch data whenever the selected month changes
+  }, [selectedMonth]);
 
   const handleGetReport = async () => {
     setReportList([]);
     try {
-      const res = await getRport();
-      console.log("Here  we  come  with ", res)
+      const res = await getReport();
       if (res.data?.status) {
         const currentDate = new Date();
         const currentYear = currentDate.getFullYear();
@@ -53,18 +50,6 @@ function Suppliers() {
                 const selectedYearMonth = `${currentYear}-${selectedMonth.padStart(2, "0")}`;
                 return itemExpiryDate === selectedYearMonth;
               });
-
-        // const filteredRows =
-        //   selectedMonth === "All"
-        //     ? res.data.result
-        //     : res.data.result.filter((item) => {
-        //         const itemYearMonth = item.ExpiryDate?.substring(0, 7); // Use optional chaining to handle undefined
-        //         const selectedYearMonth = `${currentYear}-${selectedMonth.padStart(2, "0")}`;
-        //         return itemYearMonth === selectedYearMonth;
-        //       });
-
-        // console.log("filteredRows:", filteredRows);
-
         setReportList(filteredRows);
         setRows(filteredRows);
       } else {
@@ -122,7 +107,7 @@ function Suppliers() {
               </FormControl>
               <Button onClick={exportToExcel}>Export to Excel</Button>
             </ArgonBox>
-            <ArgonBox>
+            <ArgonBox pl={1}>
               <Table columns={columns} rows={rows} />
             </ArgonBox>
           </Card>
@@ -133,4 +118,4 @@ function Suppliers() {
   );
 }
 
-export default Suppliers;
+export default Report;

@@ -1,6 +1,6 @@
 import axiosConfig from "./axios-config";
 
-export const getRport = async (type) => {
+export const getReport = async (type) => {
   const data = await axiosConfig
     .get(`/store/report`)
     .then((response) => {
