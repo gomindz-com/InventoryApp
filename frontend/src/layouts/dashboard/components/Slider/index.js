@@ -83,7 +83,7 @@ function Slider(productsImages) {
         
 
 
-        {productsImages.products.map((image) => {
+        {productsImages?.products?.map((image) => {
           return (
             <SwiperSlide key={image}>
             <ArgonBox
