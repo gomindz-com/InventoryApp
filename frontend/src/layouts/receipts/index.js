@@ -322,7 +322,7 @@ const handleSearch = (event) => {
       "total price": (
         <ArgonBox display="flex" flexDirection="column">
           <ArgonTypography variant="caption" fontWeight="medium" color="text">
-            D {item.total_price}
+            GMD {item.total_price}
           </ArgonTypography>
           <ArgonTypography variant="caption" color="secondary"></ArgonTypography>
         </ArgonBox>
@@ -1166,7 +1166,7 @@ const handleSearch = (event) => {
                       <div className="row gutters">
                         <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6">
                           <a href="index.html" className="invoice-logo">
-                            GoMindz Inventory
+                            Mega Store
                           </a>
                         </div>
                         <div

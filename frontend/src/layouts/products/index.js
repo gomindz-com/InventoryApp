@@ -35,6 +35,14 @@ import AdapterDayjs from "@mui/lab/AdapterDayjs";
 import { LocalizationProvider, DatePicker as MUIDatePicker } from "@mui/lab";
 import TextField from "@mui/material/TextField";
 
+// import Button from '@material-ui/core/Button';
+// import Modal from '@material-ui/core/Modal';
+// import Typography from '@material-ui/core/Typography';
+
+import Modal from "@mui/material/Modal";
+import Fade from "@mui/material/Fade";
+import Typography from "@mui/material/Typography";
+
 import axios from "axios";
 import { baseUrl } from "apiservices/baseURL";
 
@@ -73,9 +81,21 @@ function Products() {
 
   
 
+  const [modalOpen, setModalOpen] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState(null);
 
+  const toggleModal = () => {
+    setModalOpen(!modalOpen);
+  };
 
-
+   
+  const handleDeleteConfirmation = async () => {
+    if (itemToDelete) {
+      await  handleDeleteProduct(item.id);
+      setItemToDelete(null);
+    }
+    toggleModal();
+  };
 
 
   const rows = [];
@@ -361,13 +381,16 @@ const handleSearch = (event) => {
       delete: (
         <Button
           onClick={async () => {
-            handleDeleteProduct(item.id);
-          }}
+            console.log("Here  we  go  guys")
+            setItemToDelete(item);
+            toggleModal();          }}
         >
           <ArgonBox component="i" color="red" fontSize="34px" className="ni ni-fat-remove" />
         </Button>
       ),
     });
+     
+    
   });
 
   useEffect(() => {
@@ -377,6 +400,19 @@ const handleSearch = (event) => {
 
   return (
     <DashboardLayout>
+
+
+<Modal open={modalOpen} onClose={toggleModal}>
+    <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', background: 'white', padding: '20px', borderRadius: '8px' }}>
+      <Typography variant="h6">Confirm Deletion</Typography>
+      <Typography>Are you sure you want to delete this item?</Typography>
+      <Button variant="contained" color="primary" onClick={handleDeleteConfirmation}>Delete</Button>
+      <Button variant="contained" onClick={toggleModal}>Cancel</Button>
+    </div>
+  </Modal>
+
+
+      
       <DashboardNavbar
         handleClick={(e) => {
           const filteredProductList = [];
@@ -540,7 +576,7 @@ const handleSearch = (event) => {
                   />
                 </ArgonBox>
 
-                <ArgonBox mb={2} mx={5}>
+                {/* <ArgonBox mb={2} mx={5}>
                   <ArgonInput
                     type="name"
                     name="description_color"
@@ -549,20 +585,20 @@ const handleSearch = (event) => {
                     size="large"
                     onChange={handleChange}
                   />
-                </ArgonBox>
+                </ArgonBox> */}
                 <ArgonBox mb={2} mx={5}>
                   <ArgonInput
                     style={{ borderColor: isNaN(productData.price) && "red" }}
                     type="name"
                     name="price"
                     value={productData.price}
-                    placeholder="Price"
+                    placeholder="unit Price"
                     size="large"
                     onChange={handleChange}
                   />
                 </ArgonBox>
 
-                <ArgonBox mb={2} mx={5}>
+                {/* <ArgonBox mb={2} mx={5}>
                   <TextField
                     style={{ width: "100%", paddingTop: "15px" }}
                     label="Added date"
@@ -571,7 +607,7 @@ const handleSearch = (event) => {
                     onChange={handleDateChange}
                     InputLabelProps={{ shrink: true }}
                   />
-                </ArgonBox>
+                </ArgonBox> */}
 
                 <ArgonBox mb={2} mx={5}>
                   <TextField
