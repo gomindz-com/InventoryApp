@@ -41,7 +41,9 @@ import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import TextField from "@mui/material/TextField";
 import * as XLSX from "xlsx";
+// import {  Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import "./index.css";
+
 
 function Invoices() {
   const product_options = [];
@@ -76,6 +78,22 @@ function Invoices() {
   const [openpayment, setOpenPayment] = React.useState(false);
 
   const [modalItem, setModalItem] = useState();
+
+  const [modalOpen, setModalOpen] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState(null);
+
+
+  const toggleModal = () => {
+    setModalOpen(!modalOpen);
+  };
+
+  const handleDeleteConfirmation = async () => {
+    if (itemToDelete) {
+      await handleDeleteInvoice(itemToDelete.id);
+      setItemToDelete(null);
+    }
+    toggleModal();
+  };
 
   const handleOpenPayment = (item) => {
     setOpenPayment(true);
@@ -445,7 +463,7 @@ function Invoices() {
       "total price": (
         <ArgonBox display="flex" flexDirection="column">
           <ArgonTypography variant="caption" fontWeight="medium" color="text">
-            D {item.total_price}
+            GMD {item.total_price}
           </ArgonTypography>
           <ArgonTypography variant="caption" color="secondary"></ArgonTypography>
         </ArgonBox>
@@ -453,7 +471,7 @@ function Invoices() {
       buyer_phone: (
         <ArgonBox display="flex" flexDirection="column">
           <ArgonTypography variant="caption" fontWeight="medium" color="text">
-            D {item.buyer_phone}
+            {item.buyer_phone}
           </ArgonTypography>
           <ArgonTypography variant="caption" color="secondary"></ArgonTypography>
         </ArgonBox>
@@ -550,9 +568,10 @@ function Invoices() {
       ),
       delete: (
         <Button
-          onClick={async () => {
-            handleDeleteInvoice(item.id);
-          }}
+        onClick={() => {
+          setItemToDelete(item);
+          toggleModal();
+        }}
         >
           <ArgonBox component="i" color="red" fontSize="34px" className="ni ni-fat-remove" />
         </Button>
@@ -1114,6 +1133,16 @@ function Invoices() {
         </Fade>
       </Modal>
 
+
+      <Modal open={modalOpen} onClose={toggleModal}>
+        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', background: 'white', padding: '20px', borderRadius: '8px' }}>
+          <Typography variant="h6">Confirm Deletion</Typography>
+          <Typography>Are you sure you want to delete this item?</Typography>
+          <Button  onClick={handleDeleteConfirmation}>Delete</Button>
+          <Button  onClick={toggleModal}>Cancel</Button>
+        </div>
+      </Modal>
+
       <DashboardNavbar
         handleClick={(e) => {
           const filteredOrderList = [];
@@ -1574,7 +1603,7 @@ function Invoices() {
                       <div className="row gutters">
                         <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6">
                           <a href="index.html" className="invoice-logo">
-                            GoMindz Inventory
+                            Mega  Store
                           </a>
                         </div>
                         <div

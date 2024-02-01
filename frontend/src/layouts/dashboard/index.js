@@ -156,8 +156,8 @@ function Default() {
     title="Revenue"
     count={
         storeStatistics?.cash_inhand == undefined
-        ? "D" + 0
-        : "D" + storeStatistics?.cash_inhand.toLocaleString() 
+        ? "GMD" + 0
+        : "GMD" + storeStatistics?.cash_inhand.toLocaleString() // Formatting with commas
     }
     amount={""}
     icon={{ color: "error", component: <i className="ni ni-credit-card" /> }}
@@ -169,8 +169,8 @@ function Default() {
               title="receivable"
               count={
                 storeStatistics?.cash_pending == undefined
-                  ? "D" + 0
-                  : "D" + storeStatistics?.cash_pending.toLocaleString()
+                  ? "GMD" + 0
+                  : "GMD" + storeStatistics?.cash_pending.toLocaleString()
               }
               amount={""}
               icon={{ color: "error", component: <i className="ni ni-money-coins" /> }}
