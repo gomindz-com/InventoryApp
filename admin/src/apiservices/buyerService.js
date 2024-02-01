@@ -19,13 +19,9 @@ export const editBuyer = async (buyerId, buyerData) => {
   const data = await axiosConfig
     .put(`/buyers/${buyerId}`, buyerData)
     .then((response) => {
-      console.log("Api Response")
-      console.log(response)
       return response;
     })
     .catch((err) => {
-      console.log("Api Error")
-      console.log(err.response.data.result);
       return err.response;
     });
 
@@ -54,13 +50,9 @@ export const addBuyer = async (buyerData) => {
   const data = await axiosConfig
     .post(`/buyers/`, buyerData)
     .then((response) => {
-      console.log("Api Response")
-      console.log(response)
       return response;
     })
     .catch((err) => {
-      console.log("Api Error")
-      console.log(err.response.data.result);
       return err.response;
     });
 
@@ -72,13 +64,9 @@ export const deleteBuyer = async (id) => {
   const data = await axiosConfig
     .delete(`/buyers/${id}`)
     .then((response) => {
-      console.log("Api Response")
-      console.log(response)
       return response;
     })
     .catch((err) => {
-      console.log("Api Error")
-      console.log(err.response.data.result);
       return err.response;
     });
 

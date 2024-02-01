@@ -32,7 +32,7 @@ import { Navigate } from "react-router-dom";
 import { getStoreStatistics } from "apiservices/storeStatisticsService";
 import { getOrderCount } from "apiservices/orderService";
 import { useSelector } from "react-redux";
-import { getProducts } from "apiservices/productService";
+import { getProducts, getProductsImages } from "apiservices/productService";
 
 // pro
 function Default() {
@@ -47,6 +47,7 @@ function Default() {
   const [productList, setProductList] = useState([]);
   const [currentProductList, setCurrentProductList] = useState([]);
   const [productImage, setProductImage] = useState(null);
+  const [productImages, setProductImages] = useState([]);
 
   const handleGetStoreStatistics = async () => {
     setStoreStatistics({});
@@ -72,6 +73,23 @@ function Default() {
             setOrderCount(res.data.result);
           } else {
             setOrderCount({});
+          }
+        })
+        .catch((err) => {});
+    } catch (error) {}
+  };
+
+
+
+  const handleGetProductsImages = async () => {
+    setOrderCount({});
+    try {
+      await getProductsImages()
+        .then((res) => {
+          if (res.status == 200) {
+            setProductImages(res.data.images);
+          } else {
+            setProductImages({});
           }
         })
         .catch((err) => {});
@@ -124,6 +142,7 @@ function Default() {
   useEffect(() => {
     user != null && handleGetStoreStatistics();
     user != null && handleGetOrderCount();
+    user != null && handleGetProductsImages();
   }, []);
 
   return (
@@ -221,7 +240,7 @@ function Default() {
             />
           </Grid>
           <Grid item xs={12} lg={5}>
-            <ProductSlider products={productList} />{" "}
+            <ProductSlider products={productImages} />{" "}
           </Grid>
         </Grid>
 

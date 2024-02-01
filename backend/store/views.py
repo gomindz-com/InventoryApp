@@ -158,6 +158,23 @@ class ProductRetreiveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
         return Response(data=response, status=status.HTTP_201_CREATED)
 
 
+class ProductImagesListView(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]    
+
+    def get(self, request, *args, **kwargs):
+        user = self.request.user
+        product_images = Product.objects.filter(owner=user).values_list('image', flat=True)
+        response = {
+                    "status": True,
+                    "message": "Success",
+                    "images" : product_images
+
+                }
+        return Response(response)
+        
+
+
+
 # LIST ALL CUSTOMER PRODUCT CATEGORIES / CREATE A PRODUCT CATEGORY
 class DamagesListCreateView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]

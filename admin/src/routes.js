@@ -31,7 +31,7 @@ const routes = [
   {
     type: "route",
     name: "Subscribers",
-    key: "suppliers",
+    key: "subscribers",
     route: "/customers",
     
     component: <Tables />,

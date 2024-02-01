@@ -7,15 +7,14 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import Table from "examples/Tables/Table";
-import { getSuppliers } from "apiservices/supplierService";
 import { Navigate } from "react-router-dom";
 import * as XLSX from "xlsx";
-import { getRport } from "apiservices/reportService";
+import { getReport } from "apiservices/reportService";
 
-function Suppliers() {
-  const [screenloading, setScreenLoading] = useState(true);
-  const [supplierList, setSupplierList] = useState([]);
-  const [editFormActive, setEditFormActive] = useState(false);
+function Report() {
+
+  const [user] = useState(JSON.parse(localStorage.getItem("user")));
+  
   const [reportList, setReportList] = useState([]);
   const [rows, setRows] = useState([]);
   const [selectedMonth, setSelectedMonth] = useState("All");
@@ -27,20 +26,13 @@ function Suppliers() {
     { name: "Stock Out", align: "center" },
     { name: "Stock In Hand", align: "center" },
     { name: "Added Date", align: "center" },
-
     { name: "Expiry Date", align: "center" },
-
   ];
-
-  useEffect(() => {
-    handleGetReport();
-  }, [selectedMonth]); // Fetch data whenever the selected month changes
 
   const handleGetReport = async () => {
     setReportList([]);
     try {
-      const res = await getRport();
-      console.log("Here  we  come  with ", res)
+      const res = await getReport();
       if (res.data?.status) {
         const currentDate = new Date();
         const currentYear = currentDate.getFullYear();
@@ -53,18 +45,6 @@ function Suppliers() {
                 const selectedYearMonth = `${currentYear}-${selectedMonth.padStart(2, "0")}`;
                 return itemExpiryDate === selectedYearMonth;
               });
-
-        // const filteredRows =
-        //   selectedMonth === "All"
-        //     ? res.data.result
-        //     : res.data.result.filter((item) => {
-        //         const itemYearMonth = item.ExpiryDate?.substring(0, 7); // Use optional chaining to handle undefined
-        //         const selectedYearMonth = `${currentYear}-${selectedMonth.padStart(2, "0")}`;
-        //         return itemYearMonth === selectedYearMonth;
-        //       });
-
-        // console.log("filteredRows:", filteredRows);
-
         setReportList(filteredRows);
         setRows(filteredRows);
       } else {
@@ -79,14 +59,18 @@ function Suppliers() {
     setSelectedMonth(event.target.value);
   };
 
-  const [user] = useState(JSON.parse(localStorage.getItem("user")));
-
   const exportToExcel = () => {
     const ws = XLSX.utils.json_to_sheet(reportList);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Inventory Report");
     XLSX.writeFile(wb, "inventory_report.xlsx");
   };
+
+
+  useEffect(() => {
+    handleGetReport();
+  }, [selectedMonth]);
+
 
   return (
     <DashboardLayout>
@@ -122,7 +106,7 @@ function Suppliers() {
               </FormControl>
               <Button onClick={exportToExcel}>Export to Excel</Button>
             </ArgonBox>
-            <ArgonBox>
+            <ArgonBox pl={1}>
               <Table columns={columns} rows={rows} />
             </ArgonBox>
           </Card>
@@ -133,4 +117,4 @@ function Suppliers() {
   );
 }
 
-export default Suppliers;
+export default Report;

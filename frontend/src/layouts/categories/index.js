@@ -12,17 +12,14 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import Table from "examples/Tables/Table";
-
 import ArgonInput from "components/ArgonInput";
 import ArgonButton from "components/ArgonButton";
 import { Button } from "@mui/material";
 import logoSpotify from "assets/images/small-logos/logo-spotify.svg";
 import { AddCategorySchema } from "formValidation/addForm";
-import { ToastContainer, toast } from "react-toastify";
-import { addCategory } from "apiservices/categoryService";
-import { deleteCategory } from "apiservices/categoryService";
-import { getCategories } from "apiservices/categoryService";
-import { editCategoriee } from "apiservices/categoryService";
+import { toast } from "react-toastify";
+import { addCategory,deleteCategory,getCategories,editCategoriee } from "apiservices/categoryService";
+
 
 function Categories() {
   const [showAddCategoryForm, setShowAddCategoryForm] = useState(false);
@@ -35,34 +32,30 @@ function Categories() {
   const [categoryData, setCategoryData] = useState({
     name: "",
     description: "",
-    userid: user.id
+    userid: user.id,
   });
 
   const handleSubmit = async (e) => {
-    
     const isValid = await AddCategorySchema.isValid(categoryData);
     if (!isValid) {
       toast.error("Please enter all the required fields!!");
     } else {
       await addCategory(categoryData)
         .then((res) => {
-          if (res.status == 201 ) {
+          if (res.status == 201) {
             toast.success(" Successfully Added ");
             handleGetCategoryList();
-            setShowAddCategoryForm(false)
+            setShowAddCategoryForm(false);
           } else {
             toast.error("Category Could Not Be Added");
           }
         })
-        .catch((err) => {
-          
-        });
+        .catch((err) => {});
     }
   };
 
   const handleEdit = async (e) => {
-
-    setCategoryData({ ...categoryData, userid: user.id});
+    setCategoryData({ ...categoryData, userid: user.id });
 
     const isValid = await AddCategorySchema.isValid(categoryData);
     if (!isValid) {
@@ -70,58 +63,48 @@ function Categories() {
     } else {
       await editCategoriee(categoryData.id, categoryData)
         .then((res) => {
-          if (res.status == 200 ) {
+          if (res.status == 200) {
             toast.success("category Updated Successfully");
-            handleGetCategoryList()
+            handleGetCategoryList();
           } else {
             toast.error("category Could Not Be Updated");
           }
         })
-        .catch((err) => {
-        });
+        .catch((err) => {});
     }
   };
-
 
   const handleChange = (e) => {
     setCategoryData({ ...categoryData, [e.target.name]: e.target.value });
   };
 
-
   const handleDeleteCategory = async (id) => {
     await deleteCategory(id)
       .then((res) => {
-        if (res.status == 204 ) {
+        if (res.status == 204) {
           handleGetCategoryList();
         } else {
         }
       })
-      .catch((err) => {
-
-      });
+      .catch((err) => {});
   };
 
-  
   const handleGetCategoryList = async () => {
-
-    toast.success("Fetching Categories!!", { autoClose: 2000 }); 
+    toast.success("Fetching Categories!!", { autoClose: 2000 });
     setCategoryList([]);
     setScreenLoading(true);
 
     try {
       await getCategories()
         .then((res) => {
-           if (res.data.status === true) {
+          if (res.data.status === true) {
             setCategoryList(res.data.categories);
           } else {
             setCategoryList([]);
           }
         })
-        .catch((err) => {
-
-        });
-    } catch (error) {
-    }
+        .catch((err) => {});
+    } catch (error) {}
   };
 
   const columns = [
@@ -150,15 +133,13 @@ function Categories() {
         </ArgonBox>
       ),
 
-      edit: ( 
+      edit: (
         <Button
           onClick={async () => {
-            setEditFormActive(true)
+            setEditFormActive(true);
 
-            setShowAddCategoryForm(true)
-            setCategoryData(item)
-
-
+            setShowAddCategoryForm(true);
+            setCategoryData(item);
           }}
         >
           <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-ruler-pencil" />
@@ -189,17 +170,17 @@ function Categories() {
             <Card>
               <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
                 <ArgonTypography variant="h6">Categories List</ArgonTypography>
-                <Button onClick={() => {
-
-                  const user = JSON.parse(localStorage.getItem("user"));
-                  setCategoryData({
-                    name: "",
-                    description: "",
-                    userid: user.id
-
-                  })
-                  setShowAddCategoryForm(!showAddCategoryForm)
-                }}>
+                <Button
+                  onClick={() => {
+                    const user = JSON.parse(localStorage.getItem("user"));
+                    setCategoryData({
+                      name: "",
+                      description: "",
+                      userid: user.id,
+                    });
+                    setShowAddCategoryForm(!showAddCategoryForm);
+                  }}
+                >
                   <h4 style={{ paddingRight: 10 }}>Add Category </h4>
                   <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-fat-add" />
                 </Button>
@@ -265,7 +246,12 @@ function Categories() {
                   />
                 </ArgonBox>
                 <ArgonBox mb={2} mx={5}>
-                  <ArgonButton onClick={editFormActive ? handleEdit : handleSubmit} color="info" size="large" fullWidth>
+                  <ArgonButton
+                    onClick={editFormActive ? handleEdit : handleSubmit}
+                    color="info"
+                    size="large"
+                    fullWidth
+                  >
                     {editFormActive ? "Edit Category" : "Add Category"}
                   </ArgonButton>
                 </ArgonBox>

@@ -14,14 +14,30 @@ import Footer from "examples/Footer";
 import ArgonInput from "components/ArgonInput";
 import ArgonButton from "components/ArgonButton";
 import { Navigate, useNavigate } from "react-router-dom";
-import Header from "layouts/profile/components/Header";
+import DashboardNavbar from "examples/Navbars/DashboardNavbar";
+import { Card } from "@mui/material";
+import ArgonAvatar from "components/ArgonAvatar";
+import './Contact.css'
 
-const bgImage =
-  "https://raw.githubusercontent.com/creativetimofficial/public-assets/master/argon-dashboard-pro/assets/img/profile-layout-header.jpg";
 
 function ContactUs() {
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
+  const bgImage =
+    "https://raw.githubusercontent.com/creativetimofficial/public-assets/master/argon-dashboard-pro/assets/img/profile-layout-header.jpg";
+
   const navigate = useNavigate();
+
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
+  const [userData, setUserData] = useState({
+    first_name: user.first_name,
+    last_name: user.last_name ?? "",
+    contact: user.contact ?? "",
+    city: user.city ?? "",
+  });
+  const baseImageUrl = process.env.REACT_APP_BASE_IMAGE_URL;
+
+  const handleChange = (e) => {
+    setUserData({ ...userData, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = async (e) => {
     const isValid = await RegisterUserSchema.isValid(userData);
@@ -47,11 +63,6 @@ function ContactUs() {
     }
   };
 
-  const handleChange = (e) => {
-    setUserData({ ...userData, [e.target.name]: e.target.value });
-  };
-
-
   return (
     <DashboardLayout
       sx={{
@@ -65,56 +76,95 @@ function ContactUs() {
     >
       {user == null && <Navigate to="/authentication/sign-in" replace={true} />}
 
-      <Header />
-
-      <ArgonBox pt={2} pb={3} px={3}>
-        <ArgonBox component="form" role="form">
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={12}>
-              <ArgonBox mb={2}>
-                <ArgonInput
-                  name="firstname"
-                  type="text"
-                  placeholder="Full Name"
-                  size="large"
-                  onChange={handleChange}
-                />
-              </ArgonBox>
+      <ArgonBox position="relative">
+        <DashboardNavbar absolute light />
+        <ArgonBox height="220px" />
+        <Card
+          sx={{
+            py: 2,
+            px: 2,
+            boxShadow: ({ boxShadows: { md } }) => md,
+          }}
+        >
+          <Grid container spacing={1} alignItems="center">
+            <Grid item>
+              <ArgonAvatar
+                src={`${baseImageUrl}${user?.profile}`}
+                alt="profile-image"
+                variant="rounded"
+                size="xl"
+                shadow="sm"
+              />
             </Grid>
-          </Grid>
 
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={12}>
-              <ArgonBox mb={2}>
-                <ArgonInput
-                  name="email"
-                  type="email"
-                  placeholder="Email"
-                  size="large"
-                  autoComplete="off"
-                  onChange={handleChange}
-                />
+            <Grid item xs={8} md={1} lg={4} sx={{ ml: "auto" }}></Grid>
+          </Grid>
+        </Card>
+      </ArgonBox>
+
+      <ArgonBox mt={5} mb={3}>
+        <Grid container spacing={3}>
+          <Grid item xs={12} md={12} xl={12}>
+            <Card sx={{ height: "100%" }}>
+              <ArgonBox
+                display="flex"
+                justifyContent="space-between"
+                alignItems="center"
+              ></ArgonBox>
+
+              <ArgonBox pt={2} pb={3} px={3}>
+                <ArgonBox component="form" role="form">
+                  <Grid container spacing={3}>
+                    <Grid item xs={12} md={12}>
+                      <ArgonBox mb={2}>
+                        <ArgonInput
+                          name="first_name"
+                          type="text"
+                          placeholder="Frist Name"
+                          value={userData?.first_name}
+                          size="large"
+                          onChange={handleChange}
+                        />
+                      </ArgonBox>
+                    </Grid>
+                  </Grid>
+
+                  <Grid container spacing={3}>
+                    <Grid item xs={12} md={12}>
+                      <ArgonBox mb={2}>
+                        <ArgonInput
+                          name="contact"
+                          type="mobile"
+                          placeholder="Mobile"
+                          value={userData?.contact}
+                          size="large"
+                          autoComplete="off"
+                          onChange={handleChange}
+                        />
+                      </ArgonBox>
+                    </Grid>
+                  </Grid>
+
+                  <ArgonBox mb={2}>
+                    <div class="form-group">
+                      <textarea
+                        className="custom-textarea"
+                        rows="5"
+                        placeholder=" Enter Message here..."
+                      ></textarea>
+                    </div>
+                  </ArgonBox>
+
+                  <ArgonBox mt={4} mb={1}>
+                    <ArgonButton onClick={() => {}} variant="contained" color="info">
+                      Send
+                    </ArgonButton>
+                  </ArgonBox>
+                </ArgonBox>
               </ArgonBox>
-            </Grid>
+            </Card>
           </Grid>
-
-          <ArgonBox mb={2}>
-            <ArgonInput
-              name="region"
-              type="textarea"
-              placeholder="How can we help you?"
-              size="large"
-              autoComplete="off"
-              onChange={handleChange}
-            />
-          </ArgonBox>
-
-          <ArgonBox mt={4} mb={1}>
-            <ArgonButton onClick={()=>{}} variant="gradient" color="dark" fullWidth>
-              Send Message - Feature Update
-            </ArgonButton>
-          </ArgonBox>
-        </ArgonBox>
+        </Grid>
       </ArgonBox>
 
       <Footer />

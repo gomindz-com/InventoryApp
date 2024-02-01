@@ -59,7 +59,6 @@ function Illustration() {
   };
 
   const handleSubmit = async () => {
-
     const { email, password, isChecked } = userData;
     if (isChecked && email !== "") {
       localStorage.setItem("email", email);
@@ -74,7 +73,7 @@ function Illustration() {
           localStorage.setItem("user", JSON.stringify(res.data.user));
           setUser(res.data.user);
           dispatch(login(res.data.user));
-          toast.success("Login Successful");
+          toast.success("Login Successful", { draggable: false });
           navigate('/dashboard')
 
         } else {
@@ -88,6 +87,13 @@ function Illustration() {
 
 
   useEffect(() => {
+
+    localStorage.removeItem("admin");
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    localStorage.removeItem("userToken");
+    localStorage.removeItem("adminToken");
+
     if (localStorage.isChecked && localStorage.email !== "") {
       setUserData({
         isChecked: true,

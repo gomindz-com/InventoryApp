@@ -115,7 +115,6 @@ function Damages() {
     { name: "product", align: "left" },
     { name: "category", align: "left" },
     { name: "damages", align: "center" },
-    // { name: "edit", align: "center" }
     ];
 
   const rows = [];
@@ -155,18 +154,6 @@ function Damages() {
         > {item.damages}
         </ArgonTypography>
       ),
-
-      // edit: (
-      //   <Button
-      //     onClick={async () => {
-      //       setEditFormActive(true);
-      //       setShowAddForm(true);
-      //       setDamagesData(item);
-      //     }}
-      //   >
-      //     <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-ruler-pencil" />
-      //   </Button>
-      // )
     });
   });
 

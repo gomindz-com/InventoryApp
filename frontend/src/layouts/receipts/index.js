@@ -20,7 +20,7 @@ import { Button } from "@mui/material";
 import { AddOrderSchema } from "formValidation/addForm";
 import Select from "react-select";
 import { getProducts } from "apiservices/productService";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 
 import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
@@ -35,8 +35,6 @@ import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import TextField from '@mui/material/TextField';
 import * as XLSX from "xlsx";
-
-
 
 
 function Receipts() {
@@ -178,8 +176,6 @@ function Receipts() {
     setOrderList([]);
     try {
       const res = await getOrders("receipt");
-      console.log("sheeeeeeee",  res)
-
       if (res.data?.status === true) {
         setOrderList(res.data.orders);
         setCurrentOrderList(res.data.orders);
@@ -718,10 +714,8 @@ const handleSearch = (event) => {
       toast.success("Adding Receipt!!");
       await addOrder("receipt", orderData)
         .then((res) => {
-          console.log("Hello  here  we  come", res)
           if (res.status == 201) {
             toast.success("Successfully Added");
-
             setFirstProductId("");
             setIdProductRow(0);
             setProductInputRow([]);
