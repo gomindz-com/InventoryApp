@@ -74,7 +74,8 @@ function Products() {
    
   const handleDeleteConfirmation = async () => {
     if (itemToDelete) {
-      await  handleDeleteProduct(item.id);
+      // Assuming itemToDelete is the correct variable to use
+      await handleDeleteProduct(itemToDelete.id);
       setItemToDelete(null);
     }
     toggleModal();
@@ -356,8 +357,8 @@ function Products() {
     <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', background: 'white', padding: '20px', borderRadius: '8px' }}>
       <Typography variant="h6">Confirm Deletion</Typography>
       <Typography>Are you sure you want to delete this item?</Typography>
-      <Button variant="contained" color="primary" onClick={handleDeleteConfirmation}>Delete</Button>
-      <Button variant="contained" onClick={toggleModal}>Cancel</Button>
+      <Button  onClick={handleDeleteConfirmation}>Delete</Button>
+      <Button  onClick={toggleModal}>Cancel</Button>
     </div>
   </Modal>
 

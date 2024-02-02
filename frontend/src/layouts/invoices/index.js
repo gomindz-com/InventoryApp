@@ -144,13 +144,21 @@ function Invoices() {
   ];
   const rows = [];
 
+  const rowss = currentOrderList.map(order => ({
+    id: order.id,
+    product: order.products.map(product => product.name).join(", "),
+    'total price': order.total_price,
+    buyer_phone: order.buyer_phone,
+    buyer: order.buyer,
+    buyer_location: order.buyer_location,
+  }));
+  
   const exportToExcel = () => {
-    const ws = XLSX.utils.json_to_sheet(currentOrderList);
+    const ws = XLSX.utils.json_to_sheet(rowss, { header: columns.map(column => column.name) });
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Invoice Report");
     XLSX.writeFile(wb, "invoice_report.xlsx");
   };
-
   const [idProductRow, setIdProductRow] = useState(0);
   const [productInputRow, setProductInputRow] = useState([]);
 
