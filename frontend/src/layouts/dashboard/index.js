@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 
 // @mui material components
 import Grid from "@mui/material/Grid";
@@ -24,19 +25,18 @@ import typography from "assets/theme/base/typography";
 // Data
 import salesTableData from "layouts/dashboard/data/salesTableData";
 
-import { Navigate } from "react-router-dom";
 import { getStoreStatistics } from "apiservices/storeStatisticsService";
 import { getOrderCount } from "apiservices/orderService";
-import { useSelector } from "react-redux";
-import { getProducts, getProductsImages } from "apiservices/productService";
+import { getProductsImages } from "apiservices/productService";
+
 import Spinner from "components/Spinner";
 
-// pro
+
 function Default() {
   const userProfileInfo = useSelector((state) => state.user.value);
   const [loading, setLoading] = useState(true);
 
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
+  const user = useState(JSON.parse(localStorage.getItem("user")));
   const { size } = typography;
   const [storeStatistics, setStoreStatistics] = useState({});
   const [orderCount, setOrderCount] = useState({});
@@ -67,8 +67,8 @@ function Default() {
       {
         label: "Order Number",
         color: "info",
-        // data: orderCount.monthlyOrders,
-        data: [10, 20, 202, 23, 12, 12, 12, 12, 12, 12, 122, 76],
+        data: orderCount.monthlyOrders,
+        // data: [10, 20, 202, 23, 12, 12, 12, 12, 12, 12, 122, 76],
       },
     ],
   };

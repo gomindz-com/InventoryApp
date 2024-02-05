@@ -75,7 +75,7 @@ function Products() {
     description_color: "",
     price: "",
     status: "in_stock",
-    expiry_date: "",
+    
   });
 
   const status_options = [
@@ -110,7 +110,10 @@ function Products() {
     uploadData.append("price", productData.price);
     uploadData.append("category", productData.category);
     uploadData.append("stock", productData.stock);
-    uploadData.append("expiry_date", productData.expiry_date);
+
+    if(productData?.expiry_date != null){
+      uploadData.append("expiry_date", productData?.expiry_date );
+    }
 
     try {
       const res = await addProduct(uploadData);
@@ -323,7 +326,6 @@ function Products() {
       delete: (
         <Button
           onClick={() => {
-            console.log(item)
             setModalItem(item);
             toggleModal()
           }}

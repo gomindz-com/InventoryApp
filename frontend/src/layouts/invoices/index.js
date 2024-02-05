@@ -26,7 +26,7 @@ import * as XLSX from "xlsx";
 import Select from "react-select";
 import TextField from "@mui/material/TextField";
 import { AddOrderSchema } from "formValidation/addForm";
-import { getOrders, deleteOrder, addOrder, editOrder, updateOrder } from "apiservices/orderService";
+import { getOrders, deleteOrder, addOrder, updateOrder } from "apiservices/orderService";
 import { getProducts } from "apiservices/productService";
 
 import { toast } from "react-toastify";
@@ -115,6 +115,8 @@ function Invoices() {
   const [productEditRows, setProductEditRows] = useState([]);
 
   const [otherProducts, setOtherProducts] = useState([]);
+
+  const [partPaymentAmount, setPartPaymentAmount] = useState(null);
 
 
 
@@ -205,7 +207,7 @@ function Invoices() {
     });
 
     const res = await updateOrder(modalItem.id, {
-      
+      status: "approved",
       products: newState,
       total_price: modalItem.total_price,
       type: "receipt",
@@ -222,20 +224,26 @@ function Invoices() {
 
   // APPROVE PART PAYMENT
   const handleApprovePartPayment = async () => {
-    const newState = modalItem.products.map((obj) => {
+
+    if(partPaymentAmount == null){
+      toast.error("Amount Undefined");
+      return
+    }   
+    const productsUpdatedWithAmountField = modalItem.products.map((obj) => {
       return {
         ...obj,
         amount: obj.quantity,
       };
+    });    
+
+    const res = await updateOrder(modalItem.id, {
+      products: productsUpdatedWithAmountField,
+      status: "incomplete",
+      price_paid: partPaymentAmount,
+      type: modalItem.type
     });
 
-    const res = await editOrder(modalItem.id, {
-      status: "incomplete",
-      price_paid: modalItem.price_paid,
-      total_price: modalItem.total_price,
-      type: modalItem.type,
-    });
-    if (res.status == 200) {
+    if (res.status == 201) {
       toast.success("Invoice Approved : Incomplete Payment"), { autoClose: 40 };
       handleGetOrderList();
       toggleModalPartPayment();
@@ -1151,10 +1159,7 @@ function Invoices() {
             placeholder="Amount"
             size="large"
             onChange={(e)=>{
-              setModalItem({
-                ...modalItem,
-                price_paid: e.target.value
-              });
+              setPartPaymentAmount(e.target.value)
             }}
           />
 

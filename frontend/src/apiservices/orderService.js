@@ -40,22 +40,7 @@ export const addOrder = async (type, productData) => {
 };
 
 
-export const editOrder = async (id, updateData) => {
-
-  const data = await axiosConfig
-    .put(`/store/orders/${id}`, updateData)
-    .then((response) => {
-      return response;
-    })
-    .catch((err) => {
-      return err.response;
-    });
-  return data;
-};
-
-
 export const updateOrder = async (id, updateData) => {
-
   const data = await axiosConfig
     .patch(`/store/orders/${id}`, updateData)
     .then((response) => {
