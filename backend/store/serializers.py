@@ -36,7 +36,7 @@ class OrderSerializer(serializers.ModelSerializer):
     )
     class Meta:
         model = Order
-        fields = ('id', 'products', 'buyer', 'buyer_location', 'type', 'status', 'ref', 'total_price', 'owner', 'buyer_phone')
+        fields = ('id', 'products', 'buyer', 'buyer_location', 'type', 'status', 'ref', 'total_price', 'price_paid', 'owner', 'buyer_phone')
         depth = 1
 
 

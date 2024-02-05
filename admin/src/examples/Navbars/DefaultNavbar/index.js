@@ -147,7 +147,7 @@ function DefaultNavbar({ brand, transparent, light, action }) {
 
 // Declaring default props for DefaultNavbar
 DefaultNavbar.defaultProps = {
-  brand: "Gomindz Inventory",
+  brand: "MegaStore",
   transparent: false,
   light: false,
   action: false,

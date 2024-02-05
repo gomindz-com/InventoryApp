@@ -1,20 +1,18 @@
 import React, { useState, useEffect } from "react";
 import Card from "@mui/material/Card";
-import { Button, Select, MenuItem, FormControl, InputLabel } from "@mui/material";
+import { Button, Select, MenuItem, FormControl } from "@mui/material";
 import ArgonBox from "components/ArgonBox";
 import ArgonTypography from "components/ArgonTypography";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import Table from "examples/Tables/Table";
-import { Navigate } from "react-router-dom";
 import * as XLSX from "xlsx";
 import { getReport } from "apiservices/reportService";
 
 function Report() {
-
   const [user] = useState(JSON.parse(localStorage.getItem("user")));
-  
+
   const [reportList, setReportList] = useState([]);
   const [rows, setRows] = useState([]);
   const [selectedMonth, setSelectedMonth] = useState("All");
@@ -66,16 +64,12 @@ function Report() {
     XLSX.writeFile(wb, "inventory_report.xlsx");
   };
 
-
   useEffect(() => {
     handleGetReport();
   }, [selectedMonth]);
 
-
   return (
     <DashboardLayout>
-      {user == null && <Navigate to="/authentication/sign-in" replace={true} />}
-
       <DashboardNavbar />
       <ArgonBox py={3}>
         <ArgonBox mb={3}>

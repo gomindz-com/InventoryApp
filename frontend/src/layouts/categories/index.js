@@ -22,12 +22,13 @@ import { addCategory,deleteCategory,getCategories,editCategoriee } from "apiserv
 
 
 function Categories() {
+
+  const user = JSON.parse(localStorage.getItem("user"));
+
   const [showAddCategoryForm, setShowAddCategoryForm] = useState(false);
   const [screenloading, setScreenLoading] = useState(true);
   const [categoryList, setCategoryList] = useState([]);
   const [editFormActive, setEditFormActive] = useState(false);
-
-  const user = JSON.parse(localStorage.getItem("user"));
 
   const [categoryData, setCategoryData] = useState({
     name: "",
