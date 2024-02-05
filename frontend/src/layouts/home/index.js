@@ -890,7 +890,7 @@ function Home() {
               <div className="text-center">
                 <p className="text-dark my-4 text-sm font-weight-normal">
                   All rights reserved. Copyright © <script>{new Date().getFullYear()}</script>{" "}
-                  Mega Store App <a href="https://www.gomindz.com">Mega Store</a>.
+                  MegaStore App <a href="https://www.gomindz.com"></a>.
                 </p>
               </div>
             </div>

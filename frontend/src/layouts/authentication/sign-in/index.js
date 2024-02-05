@@ -18,30 +18,28 @@ import IllustrationLayout from "layouts/authentication/components/IllustrationLa
 import { UserSchema } from "../../../formValidation/addForm";
 import { loginUser } from "apiservices/authService";
 import { toast } from "react-toastify";
-import { Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "Redux/slices/User";
 
 function Illustration() {
-
   const dispatch = useDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [rememberMe, setRememberMe] = useState(false);
 
   const userProfileInfo = useSelector((state) => state.user.value);
 
   const handleSetRememberMe = () => {
-    setRememberMe(!rememberMe)
-    setUserData(currentState => ({
+    setRememberMe(!rememberMe);
+    setUserData((currentState) => ({
       ...currentState,
-      isChecked: !rememberMe
-   }))
+      isChecked: !rememberMe,
+    }));
   };
   const [user, setUser] = useState(null);
   const [userData, setUserData] = useState({
     email: "",
     password: "",
-    isChecked: false
+    isChecked: false,
   });
 
   const handleChange = (e) => {
@@ -74,8 +72,9 @@ function Illustration() {
           setUser(res.data.user);
           dispatch(login(res.data.user));
           toast.success("Login Successful", { draggable: false });
-          navigate('/dashboard')
-
+          navigate("/dashboard");
+        } else if (res.status == 0) {
+          toast.error("Contact Ssytem Administration: Server Error", { draggable: false });
         } else {
           toast.error("Incorrect Credentials");
         }
@@ -85,9 +84,7 @@ function Illustration() {
       });
   };
 
-
   useEffect(() => {
-
     localStorage.removeItem("admin");
     localStorage.removeItem("user");
     localStorage.removeItem("token");
@@ -98,7 +95,7 @@ function Illustration() {
       setUserData({
         isChecked: true,
         email: localStorage.username,
-        password: localStorage.password
+        password: localStorage.password,
       });
     }
   }, []);
@@ -108,7 +105,8 @@ function Illustration() {
       title="Sign In"
       description="Enter your email and password to sign in to Gomindz"
       illustration={{
-        image: "https://us.123rf.com/450wm/kostsov/kostsov1906/kostsov190600026/126080344-modern-showcase-with-empty-space-on-pedestal-on-blue-background-3d-rendering-.jpg?ver=6",
+        image:
+          "https://us.123rf.com/450wm/kostsov/kostsov1906/kostsov190600026/126080344-modern-showcase-with-empty-space-on-pedestal-on-blue-background-3d-rendering-.jpg?ver=6",
         title: "Our Inventory App Is The One",
         description: "The more difficult management looks, the more easy we make it for you.",
       }}

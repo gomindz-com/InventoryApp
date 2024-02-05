@@ -97,7 +97,6 @@ class CategoryRetreiveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
         return Response(data=response, status=status.HTTP_201_CREATED)
 
 
-
 # LIST ALL CUSTOMER PRODUCTS / CREATE A PRODUCT
 class ProductListCreateView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
@@ -121,7 +120,6 @@ class ProductListCreateView(generics.ListCreateAPIView):
         return Response(response)
         
     def create(self, request, *args, **kwargs):
-
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
@@ -135,7 +133,6 @@ class ProductListCreateView(generics.ListCreateAPIView):
         serializer.save(owner=self.request.user)
 
     
-
 # LIST DETAIL OF ONE PRODUCT / UPDATE / DELETE
 class ProductRetreiveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]
@@ -164,16 +161,16 @@ class ProductImagesListView(generics.ListAPIView):
     def get(self, request, *args, **kwargs):
         user = self.request.user
         product_images = Product.objects.filter(owner=user).values_list('image', flat=True)
+        images = list(product_images)
+        images.append('products/inventory.jpg')
         response = {
                     "status": True,
                     "message": "Success",
-                    "images" : product_images
+                    "images" : images
 
                 }
         return Response(response)
         
-
-
 
 # LIST ALL CUSTOMER PRODUCT CATEGORIES / CREATE A PRODUCT CATEGORY
 class DamagesListCreateView(generics.ListCreateAPIView):
@@ -285,6 +282,7 @@ class OrderListCreateView(generics.ListCreateAPIView):
                     "type": item.type,
                     "buyer_phone": item.buyer_phone,
                     "total_price":  price,
+                    "price_paid":  item.price_paid,
                 },
             )
 
@@ -379,7 +377,7 @@ class OrderRetreiveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
         return Response(data=response, status=status.HTTP_201_CREATED)
 
 
-    def patch(self, request,  *args, **kwargs):
+    def put(self, request,  *args, **kwargs):
                 
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
@@ -387,57 +385,71 @@ class OrderRetreiveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
         # self.perform_update(serializer)
-
-        instance.total_price = data['total_price']
-        instance.type = data['type']
-        instance.save()
-
-        productOrders = OrderProducts.objects.filter(order_id=instance.id)
-
-        for productsOrdersItem in productOrders.iterator():
-            productsOrdersItem.delete()
-
-        try:
-            for product in data['products']:
-                iproductstock = Product.objects.get(pk=product['id']).stock
-                
-                
-                
-                if (iproductstock - int(product['amount']) < 0):
-                    
-                    if(data['type'] == 'invoice'):
-                        response = {
-                                    "status": True,
-                                    "message": "Product Is Out Of Stock Error",
-                                }                
-                        return Response(data=response, status=status.HTTP_406_NOT_ACCEPTABLE)
-
-                orderProduct = OrderProducts.objects.create(product_id=product['id'],  order_id=instance.id, quantity=product['amount'])
-
-                if(data['type'] == 'receipt'):
-                    theproduct = Product.objects.get(pk=product['id'])
-                    theproduct.stock = theproduct.stock - int(product['amount'])
-                    theproduct.save()
-        
-        except Product.DoesNotExist:
+        if(instance.total_price >= (float(instance.price_paid) + float(data['price_paid']))):
+            instance.type = data['type']
+            instance.price_paid = float(instance.price_paid) + float(data['price_paid'])
+            instance.save()
             response = {
                     "status": True,
-                    "message": "Product Does Not Exist",
-                    # "ssffs": data['type']
+                    "message": "Order Updated Successfully",
                     }                
-            return Response(data=response, status=status.HTTP_404_NOT_FOUND)
+            return Response(data=response, status=status.HTTP_200_OK)
+        else:
+            response = {
+                "status": False,
+                "message": "Price Irregularities",
+                "order": instance.id,
+                        }                
+            return Response(data=response, status=status.HTTP_400_BAD_REQUEST)
 
-            
-            
+    def patch(self, request,  *args, **kwargs):
+                    
+            partial = kwargs.pop('partial', False)
+            instance = self.get_object()
+            data = request.data
+            serializer = self.get_serializer(instance, data=request.data, partial=partial)
+            serializer.is_valid(raise_exception=True)
+            instance.total_price = data['total_price']
+            instance.type = data['type']
+            instance.save()
 
-        response = {
-            "status": True,
-            "message": "Updated Successfully",
-            "order": instance.id,
-            # "ssffs": data['type'] 
+            productOrders = OrderProducts.objects.filter(order_id=instance.id)
+
+            for productsOrdersItem in productOrders.iterator():
+                productsOrdersItem.delete()
+
+            try:
+                for product in data['products']:
+                    iproductstock = Product.objects.get(pk=product['id']).stock
+                    
+                    if (iproductstock - int(product['amount']) < 0):
+                        if(data['type'] == 'invoice'):
+                            response = {
+                                        "status": True,
+                                        "message": "Product Is Out Of Stock Error",
+                                    }                
+                            return Response(data=response, status=status.HTTP_406_NOT_ACCEPTABLE)
+
+                    orderProduct = OrderProducts.objects.create(product_id=product['id'],  order_id=instance.id, quantity=product['amount'])
+
+                    if(data['type'] == 'receipt'):
+                        theproduct = Product.objects.get(pk=product['id'])
+                        theproduct.stock = theproduct.stock - int(product['amount'])
+                        theproduct.save()
+            
+            except Product.DoesNotExist:
+                response = {
+                        "status": True,
+                        "message": "Product Does Not Exist",
+                        }                
+                return Response(data=response, status=status.HTTP_404_NOT_FOUND)
+
+            response = {
+                "status": True,
+                "message": "Updated Successfully",
+                "order": instance.id,
                     }                
-        return Response(data=response, status=status.HTTP_201_CREATED)
-
+            return Response(data=response, status=status.HTTP_201_CREATED)
 
 
 
