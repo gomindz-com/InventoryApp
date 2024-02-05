@@ -45,9 +45,10 @@ class Product(models.Model):
 class Order(models.Model):
     STATUS_CHOICE = (
         ('pending', 'Pending'),
-        ('decline', 'Decline'),
+        ('declined', 'Declined'),
         ('approved', 'Approved'),
         ('processing', 'Processing'),
+        ('incomplete', 'Incomplete'),
         ('complete', 'Complete'),
         ('bulk', 'Bulk'),
     )
@@ -61,6 +62,7 @@ class Order(models.Model):
     buyer_phone = models.CharField(max_length=50, default='')
     status = models.CharField(max_length=20, choices=STATUS_CHOICE, default='')
     ref = models.CharField(max_length=50, default='')
+    price_paid = models.FloatField(default=0.00) 
     total_price = models.FloatField(default=0.00) 
     products = models.ManyToManyField(Product, through='OrderProducts')
     type=models.CharField(max_length=20, choices=TYPE_CHOICE, default='')

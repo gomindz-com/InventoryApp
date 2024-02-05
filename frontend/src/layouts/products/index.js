@@ -1,6 +1,3 @@
-// @mui material components
-import Card from "@mui/material/Card";
-
 import { useState, useEffect } from "react";
 
 // Argon Dashboard 2 MUI components
@@ -27,31 +24,25 @@ import { deleteProduct } from "apiservices/productService";
 import { getCategories } from "apiservices/categoryService";
 import { addProduct, editProduct } from "apiservices/productService";
 import TextField from "@mui/material/TextField";
-
-// import Button from '@material-ui/core/Button';
-// import Modal from '@material-ui/core/Modal';
-// import Typography from '@material-ui/core/Typography';
-
-import Modal from "@mui/material/Modal";
-import Fade from "@mui/material/Fade";
-import Typography from "@mui/material/Typography";
-import axios from "axios";
-import { baseUrl } from "apiservices/baseURL";
+import { Modal, Typography, Card, Divider } from "@mui/material";
+import Spinner from "components/Spinner";
 import "react-datetime/css/react-datetime.css";
 
 function Products() {
-  const [rememberMe, setRememberMe] = useState(false);
-  const [showAddProductForm, setShowAddProductForm] = useState(false);
-  const [screenloading, setScreenLoading] = useState(true);
-  const [productList, setProductList] = useState([]);
-  const [currentProductList, setCurrentProductList] = useState([]);
-  const [categoryList, setCategoryList] = useState([]);
-  const [categoryOptions, setCategoryOptions] = useState([]);
-  const category_options = [];
-  const [editFormActive, setEditFormActive] = useState(false);
-  const [productImage, setProductImage] = useState(null);
-  const [searchQuery, setSearchQuery] = useState("");
 
+  // USER
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  // MODAL VARIABLES
+  const [modalOpen, setModalOpen] = useState(false);
+  const toggleModal = () => {
+    setModalOpen(!modalOpen);
+  };
+
+  // MODAL ITEM
+  const [modalItem, setModalItem] = useState(null);
+
+  // TABLE ROWS AND COLUMNS UI
   const columns = [
     { name: "product", align: "left" },
     { name: "category", align: "left" },
@@ -62,29 +53,20 @@ function Products() {
     { name: "delete", align: "center" },
   ];
 
-  
-
-  const [modalOpen, setModalOpen] = useState(false);
-  const [itemToDelete, setItemToDelete] = useState(null);
-
-  const toggleModal = () => {
-    setModalOpen(!modalOpen);
-  };
-
-   
-  const handleDeleteConfirmation = async () => {
-    if (itemToDelete) {
-      // Assuming itemToDelete is the correct variable to use
-      await handleDeleteProduct(itemToDelete.id);
-      setItemToDelete(null);
-    }
-    toggleModal();
-  };
-
-
-
   const rows = [];
 
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // ADDING EDITING PRODUCTS
+  const [loading, setLoading] = useState(true);
+  const [showAddProductForm, setShowAddProductForm] = useState(false);
+  const [productList, setProductList] = useState([]);
+  const [currentProductList, setCurrentProductList] = useState([]);
+  const [categoryList, setCategoryList] = useState([]);
+  const [categoryOptions, setCategoryOptions] = useState([]);
+  const category_options = [];
+  const [editFormActive, setEditFormActive] = useState(false);
+  const [productImage, setProductImage] = useState(null);
   const [productData, setProductData] = useState({
     name: "",
     category: "",
@@ -92,7 +74,7 @@ function Products() {
     description_color: "",
     price: "",
     status: "in_stock",
-    expiry_date: "",
+    
   });
 
   const status_options = [
@@ -108,14 +90,16 @@ function Products() {
     },
   ];
 
+
+
   const handleAddProduct = async () => {
-    const user = JSON.parse(localStorage.getItem("user"));
     const isValid = await AddProductSchema.isValid(productData);
     if (!isValid) {
       toast.error("Please enter all the required fields!!");
       return;
     }
 
+    setLoading(true);
     const uploadData = new FormData();
     uploadData.append("image", productImage == null ? "" : productImage?.image[0]);
     uploadData.append("name", productData.name);
@@ -125,20 +109,27 @@ function Products() {
     uploadData.append("price", productData.price);
     uploadData.append("category", productData.category);
     uploadData.append("stock", productData.stock);
-    uploadData.append("expiry_date", productData.expiry_date);
+
+    if(productData?.expiry_date != null){
+      uploadData.append("expiry_date", productData?.expiry_date );
+    }
 
     try {
       const res = await addProduct(uploadData);
       if (res.status == 201) {
-        toast.success("Update Successful");
+        toast.success("Added Successfully");
         handleGetProductList();
         setShowAddProductForm(false);
+        setLoading(false);
+      } else {
+        toast.error("Image Size Issue");
+        setLoading(false);
       }
     } catch (error) {
       toast.error("Could Not Be Updated");
+      setLoading(false);
     }
   };
-
 
   const handleChange = (e) => {
     if ([e.target.name] == "image") {
@@ -190,12 +181,16 @@ function Products() {
     }
   };
 
-  const handleDeleteProduct = async (id) => {
-    await deleteProduct(id)
+  const handleDeleteProduct = async () => {
+    await deleteProduct(modalItem.id)
       .then((res) => {
         if (res.status == 204) {
           handleGetProductList();
+          toggleModal();
+
         } else {
+          toast.error("Error Deleting", { autoClose: 80 });
+
         }
       })
       .catch((err) => {});
@@ -209,12 +204,13 @@ function Products() {
       if (res.data?.status) {
         setProductList(res.data.products);
         setCurrentProductList(res.data.products);
+        setLoading(false);
       } else {
         setProductList([]);
+        setLoading(false);
       }
     } catch (error) {}
   };
-
 
   const handleSearch = (event) => {
     const query = event.target.value.toLowerCase();
@@ -227,8 +223,6 @@ function Products() {
 
   const handleGetCategoryList = async () => {
     setCategoryList([]);
-    setScreenLoading(true);
-
     try {
       const res = await getCategories();
       if ((res.status = 200)) {
@@ -330,17 +324,15 @@ function Products() {
       ),
       delete: (
         <Button
-          onClick={async () => {
-            console.log("Here  we  go  guys")
-            setItemToDelete(item);
-            toggleModal();          }}
+          onClick={() => {
+            setModalItem(item);
+            toggleModal()
+          }}
         >
           <ArgonBox component="i" color="red" fontSize="34px" className="ni ni-fat-remove" />
         </Button>
       ),
     });
-     
-    
   });
 
   useEffect(() => {
@@ -348,22 +340,44 @@ function Products() {
     handleGetCategoryList();
   }, []);
 
-  
   return (
     <DashboardLayout>
 
+      {/* MODALS */}
+      <Modal open={modalOpen} onClose={toggleModal}>
+        <div
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            background: "white",
+            padding: "20px",
+            borderRadius: "8px",
+          }}
+        >
+          <Typography variant="h6">COMFIRM DELETE</Typography>
+          <Divider />
+          <Typography>Are you sure you want to delete this item?</Typography>
+          <ArgonButton
+            style={{ marginRight: "15px", marginTop: "15px" }}
+            onClick={handleDeleteProduct}
+            color="info"
+            size="large"
+          >
+            Delete
+          </ArgonButton>
+          <ArgonButton
+            style={{ marginRight: "15px", marginTop: "15px" }}
+            onClick={toggleModal}
+            color="info"
+            size="large"
+          >
+            Cancel
+          </ArgonButton>
+        </div>
+      </Modal>
 
-<Modal open={modalOpen} onClose={toggleModal}>
-    <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', background: 'white', padding: '20px', borderRadius: '8px' }}>
-      <Typography variant="h6">Confirm Deletion</Typography>
-      <Typography>Are you sure you want to delete this item?</Typography>
-      <Button  onClick={handleDeleteConfirmation}>Delete</Button>
-      <Button  onClick={toggleModal}>Cancel</Button>
-    </div>
-  </Modal>
-
-
-      
       <DashboardNavbar
         handleClick={(e) => {
           const filteredProductList = [];
@@ -380,6 +394,7 @@ function Products() {
           });
         }}
       />
+
       <ArgonBox py={3}>
         {!showAddProductForm ? (
           <ArgonBox mb={3}>
@@ -417,21 +432,27 @@ function Products() {
                 </Button>
               </ArgonBox>
 
-              <ArgonBox
-                sx={{
-                  "& .MuiTableRow-root:not(:last-child)": {
-                    "& td": {
-                      borderBottom: ({ borders: { borderWidth, borderColor } }) =>
-                        `${borderWidth[1]} solid ${borderColor}`,
+              {loading ? (
+                <Spinner></Spinner>
+              ) : (
+                <ArgonBox
+                  sx={{
+                    "& .MuiTableRow-root:not(:last-child)": {
+                      "& td": {
+                        borderBottom: ({ borders: { borderWidth, borderColor } }) =>
+                          `${borderWidth[1]} solid ${borderColor}`,
+                      },
                     },
-                  },
-                }}
-              >
-                <Table columns={columns} rows={rows} />
-              </ArgonBox>
+                  }}
+                >
+                  <Table columns={columns} rows={rows} />
+                </ArgonBox>
+              )}
             </Card>
           </ArgonBox>
         ) : (
+
+          // ADD PRODUCT FORM
           <ArgonBox mb={3}>
             <Card>
               <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
@@ -446,139 +467,124 @@ function Products() {
                   />
                 </Button>
               </ArgonBox>
-              <ArgonBox
-                sx={{
-                  "& .MuiTableRow-root:not(:last-child)": {
-                    "& td": {
-                      borderBottom: ({ borders: { borderWidth, borderColor } }) =>
-                        `${borderWidth[1]} solid ${borderColor}`,
-                    },
-                  },
-                }}
-              >
-                <ArgonBox mb={2} mx={5}>
-                  <ArgonInput
-                    type="title"
-                    name="name"
-                    value={productData?.name}
-                    placeholder="Product Name"
-                    size="large"
-                    onChange={handleChange}
-                  />
-                </ArgonBox>
 
-                {!editFormActive && (
-                  <ArgonBox mb={2} mx={5}>
-                    <ArgonInput
-                      type="file"
-                      name="image"
-                      accept="image/*"
-                      placeholder="Image"
-                      size="large"
-                      onChange={handleChange}
-                    />
+              <>
+                {loading ? (
+                  <Spinner></Spinner>
+                ) : (
+                  <ArgonBox
+                    sx={{
+                      "& .MuiTableRow-root:not(:last-child)": {
+                        "& td": {
+                          borderBottom: ({ borders: { borderWidth, borderColor } }) =>
+                            `${borderWidth[1]} solid ${borderColor}`,
+                        },
+                      },
+                    }}
+                  >
+                    <ArgonBox mb={2} mx={5}>
+                      <ArgonInput
+                        type="title"
+                        name="name"
+                        value={productData?.name}
+                        placeholder="Product Name"
+                        size="large"
+                        onChange={handleChange}
+                      />
+                    </ArgonBox>
+
+                    {!editFormActive && (
+                      <ArgonBox mb={2} mx={5}>
+                        <ArgonInput
+                          type="file"
+                          name="image"
+                          accept="image/*"
+                          placeholder="Image"
+                          size="large"
+                          onChange={handleChange}
+                        />
+                      </ArgonBox>
+                    )}
+
+                    <ArgonBox mb={2} mx={5}>
+                      <Select
+                        name="category"
+                        placeholder="Category"
+                        options={categoryOptions}
+                        value={categoryOptions[productData?.category_id]}
+                        onChange={handleChangeCategory}
+                      />
+                    </ArgonBox>
+                    <ArgonBox mb={2} mx={5}>
+                      <ArgonInput
+                        type="name"
+                        name="stock"
+                        style={{ borderColor: isNaN(productData.stock) && "red" }}
+                        value={productData?.stock}
+                        placeholder="Stock"
+                        size="large"
+                        onChange={handleChange}
+                      />
+                    </ArgonBox>
+                    <ArgonBox mb={2} mx={5}>
+                      <Select
+                        name="status"
+                        placeholder="Status"
+                        value={productData?.stock > 0 ? status_options[0] : status_options[1]}
+                        options={status_options}
+                        onChange={handleChangeStatus}
+                      />
+                    </ArgonBox>
+                    <ArgonBox mb={2} mx={5}>
+                      <ArgonInput
+                        type="name"
+                        name="description_color"
+                        value={productData.description_color}
+                        placeholder="Description/Color"
+                        size="large"
+                        onChange={handleChange}
+                      />
+                    </ArgonBox>
+                    <ArgonBox mb={2} mx={5}>
+                      <ArgonInput
+                        style={{ borderColor: isNaN(productData.price) && "red" }}
+                        type="name"
+                        name="price"
+                        value={productData.price}
+                        placeholder="unit Price"
+                        size="large"
+                        onChange={handleChange}
+                      />
+                    </ArgonBox>
+                    <ArgonBox mb={2} mx={5}>
+                      <TextField
+                        style={{ width: "100%", paddingTop: "15px" }}
+                        label="Expiry Date"
+                        type="date"
+                        value={productData.expiry_date}
+                        onChange={handleDateChange}
+                        InputLabelProps={{ shrink: true }}
+                      />
+                    </ArgonBox>
+
+                    <ArgonBox mb={2} mx={5}>
+                      <ArgonButton
+                        onClick={editFormActive ? handleEdit : handleAddProduct}
+                        color="info"
+                        size="large"
+                        fullWidth
+                      >
+                        {editFormActive ? "Save Product" : "Add Product"}
+                      </ArgonButton>
+                    </ArgonBox>
                   </ArgonBox>
                 )}
-
-                <ArgonBox mb={2} mx={5}>
-                  <Select
-                    name="category"
-                    placeholder="Category"
-                    options={categoryOptions}
-                    value={categoryOptions[productData?.category_id]}
-                    onChange={handleChangeCategory}
-                  />
-                </ArgonBox>
-                <ArgonBox mb={2} mx={5}>
-                  <ArgonInput
-                    type="name"
-                    name="stock"
-                    style={{ borderColor: isNaN(productData.stock) && "red" }}
-                    value={productData?.stock}
-                    placeholder="Stock"
-                    size="large"
-                    onChange={handleChange}
-                  />
-                </ArgonBox>
-                <ArgonBox mb={2} mx={5}>
-                  <Select
-                    name="status"
-                    placeholder="Status"
-                    value={productData?.stock > 0 ? status_options[0] : status_options[1]}
-                    options={status_options}
-                    onChange={handleChangeStatus}
-                  />
-                </ArgonBox>
-                <ArgonBox mb={2} mx={5}>
-                  <ArgonInput
-                    type="name"
-                    name="description_color"
-                    value={productData.description_color}
-                    placeholder="Description/Color"
-                    size="large"
-                    onChange={handleChange}
-                  />
-                </ArgonBox>
-
-                {/* <ArgonBox mb={2} mx={5}>
-                  <ArgonInput
-                    type="name"
-                    name="description_color"
-                    value={productData.description_color}
-                    placeholder="Contact"
-                    size="large"
-                    onChange={handleChange}
-                  />
-                </ArgonBox> */}
-                <ArgonBox mb={2} mx={5}>
-                  <ArgonInput
-                    style={{ borderColor: isNaN(productData.price) && "red" }}
-                    type="name"
-                    name="price"
-                    value={productData.price}
-                    placeholder="unit Price"
-                    size="large"
-                    onChange={handleChange}
-                  />
-                </ArgonBox>
-
-                {/* <ArgonBox mb={2} mx={5}>
-                  <TextField
-                    style={{ width: "100%", paddingTop: "15px" }}
-                    label="Added date"
-                    type="date"
-                    value={productData.created_date}
-                    onChange={handleDateChange}
-                    InputLabelProps={{ shrink: true }}
-                  />
-                </ArgonBox> */}
-
-                <ArgonBox mb={2} mx={5}>
-                  <TextField
-                    style={{ width: "100%", paddingTop: "15px" }}
-                    label="Expiry Date"
-                    type="date"
-                    value={productData.expiry_date}
-                    onChange={handleDateChange}
-                    InputLabelProps={{ shrink: true }}
-                  />
-                </ArgonBox>
-
-                <ArgonBox mb={2} mx={5}>
-                  <ArgonButton
-                    onClick={editFormActive ? handleEdit : handleAddProduct}
-                    color="info"
-                    size="large"
-                    fullWidth
-                  >
-                    {editFormActive ? "Save Product" : "Add Product"}
-                  </ArgonButton>
-                </ArgonBox>
-              </ArgonBox>
+              </>
             </Card>
           </ArgonBox>
         )}
       </ArgonBox>
+
       <Footer />
     </DashboardLayout>
   );

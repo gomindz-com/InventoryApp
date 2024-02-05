@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 
 // @mui material components
 import Grid from "@mui/material/Grid";
@@ -21,33 +22,56 @@ import ProductSlider from "./components/Slider";
 // Argon Dashboard 2 MUI base styles
 import typography from "assets/theme/base/typography";
 
-// Dashboard layout components
-import Slider from "layouts/dashboard/components/Slider";
-
 // Data
 import salesTableData from "layouts/dashboard/data/salesTableData";
 
-import { ToastContainer } from "react-toastify";
-import { Navigate } from "react-router-dom";
 import { getStoreStatistics } from "apiservices/storeStatisticsService";
 import { getOrderCount } from "apiservices/orderService";
-import { useSelector } from "react-redux";
-import { getProducts, getProductsImages } from "apiservices/productService";
+import { getProductsImages } from "apiservices/productService";
 
-// pro
+import Spinner from "components/Spinner";
+
+
 function Default() {
   const userProfileInfo = useSelector((state) => state.user.value);
+  const [loading, setLoading] = useState(true);
 
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
+  const user = useState(JSON.parse(localStorage.getItem("user")));
   const { size } = typography;
   const [storeStatistics, setStoreStatistics] = useState({});
   const [orderCount, setOrderCount] = useState({});
   const [categoryStatList, setCategoryStatList] = useState([]);
   const categoriesListStatData = [];
-  const [productList, setProductList] = useState([]);
-  const [currentProductList, setCurrentProductList] = useState([]);
-  const [productImage, setProductImage] = useState(null);
-  const [productImages, setProductImages] = useState([]);
+  const [productImages, setProductImages] = useState({});
+
+  categoryStatList.map(function (item, i) {
+    categoriesListStatData.push({
+      color: "dark",
+      icon: <i className="ni ni-mobile-button" style={{ fontSize: "12px" }} />,
+      name: item.name,
+      description: (
+        <>
+          {item.stock} in stock,{" "}
+          <ArgonTypography variant="caption" color="text" fontWeight="medium">
+            {item.amount}+ sold
+          </ArgonTypography>
+        </>
+      ),
+      route: "/",
+    });
+  });
+
+  const gradientLineChartData = {
+    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+    datasets: [
+      {
+        label: "Order Number",
+        color: "info",
+        data: orderCount.monthlyOrders,
+        // data: [10, 20, 202, 23, 12, 12, 12, 12, 12, 12, 122, 76],
+      },
+    ],
+  };
 
   const handleGetStoreStatistics = async () => {
     setStoreStatistics({});
@@ -79,8 +103,6 @@ function Default() {
     } catch (error) {}
   };
 
-
-
   const handleGetProductsImages = async () => {
     setOrderCount({});
     try {
@@ -88,54 +110,13 @@ function Default() {
         .then((res) => {
           if (res.status == 200) {
             setProductImages(res.data.images);
+            setLoading(false)
           } else {
+            setLoading(false)
             setProductImages({});
           }
         })
         .catch((err) => {});
-    } catch (error) {}
-  };
-
-  categoryStatList.map(function (item, i) {
-    categoriesListStatData.push({
-      color: "dark",
-      icon: <i className="ni ni-mobile-button" style={{ fontSize: "12px" }} />,
-      name: item.name,
-      description: (
-        <>
-          {item.stock} in stock,{" "}
-          <ArgonTypography variant="caption" color="text" fontWeight="medium">
-            {item.amount}+ sold
-          </ArgonTypography>
-        </>
-      ),
-      route: "/",
-    });
-  });
-
-  const gradientLineChartData = {
-    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-    datasets: [
-      {
-        label: "Order Number",
-        color: "info",
-        data: orderCount.monthlyOrders,
-      },
-    ],
-  };
-
-  const handleGetProductList = async () => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    setProductList([]);
-    try {
-      const res = await getProducts();
-
-      if (res.data?.status) {
-        setProductList(res.data.products);
-        setCurrentProductList(res.data.products);
-      } else {
-        setProductList([]);
-      }
     } catch (error) {}
   };
 
@@ -147,112 +128,119 @@ function Default() {
 
   return (
     <DashboardLayout>
-      {user == null && <Navigate to="/authentication/sign-in" replace={true} />}
       <DashboardNavbar />
-      <ArgonBox py={3}>
-        <Grid container spacing={3} mb={3}>
-          <Grid item xs={12} md={4} lg={2}>
-          <DetailedStatisticsCard
-    title="Revenue"
-    count={
-        storeStatistics?.cash_inhand == undefined
-        ? "GMD" + 0
-        : "GMD" + storeStatistics?.cash_inhand.toLocaleString() // Formatting with commas
-    }
-    amount={""}
-    icon={{ color: "error", component: <i className="ni ni-credit-card" /> }}
-/>
+      {loading ? (
+        <Spinner></Spinner>
+      ) : (
+        <ArgonBox py={3}>
+          <Grid container spacing={3} mb={3}>
+            <Grid item xs={12} md={4} lg={2}>
+              <DetailedStatisticsCard
+                title="Revenue"
+                count={
+                  storeStatistics?.cash_inhand == undefined
+                    ? "GMD" + 0
+                    : "GMD" + storeStatistics?.cash_inhand.toLocaleString()
+                }
+                icon={{ color: "error", component: <i className="ni ni-credit-card" /> }}
+              />
+            </Grid>
+            <Grid item xs={12} md={4} lg={2}>
+              <DetailedStatisticsCard
+                title="receivable"
+                count={
+                  storeStatistics?.cash_pending == undefined
+                    ? "GMD" + 0
+                    : "GMD" + storeStatistics?.cash_pending.toLocaleString()
+                }
+                icon={{ color: "error", component: <i className="ni ni-money-coins" /> }}
+              />
+            </Grid>
 
-          </Grid>
-          <Grid item xs={12} md={4} lg={2}>
-            <DetailedStatisticsCard
-              title="receivable"
-              count={
-                storeStatistics?.cash_pending == undefined
-                  ? "GMD" + 0
-                  : "GMD" + storeStatistics?.cash_pending.toLocaleString()
-              }
-              amount={""}
-              icon={{ color: "error", component: <i className="ni ni-money-coins" /> }}
-            />
+            <Grid item xs={12} md={5} lg={2}>
+              <DetailedStatisticsCard
+                title="Stock-In"
+                count={
+                  storeStatistics?.stock_in == undefined
+                    ? 0
+                    : storeStatistics?.stock_in.toLocaleString()
+                }
+                icon={{ color: "warning", component: <i className="ni ni-bold-down" /> }}
+              />
+            </Grid>
+
+            <Grid item xs={12} md={5} lg={2}>
+              <DetailedStatisticsCard
+                title="Stock-Out"
+                count={
+                  storeStatistics?.stock_out == undefined
+                    ? 0
+                    : storeStatistics?.stock_out.toLocaleString()
+                }
+                icon={{ color: "warning", component: <i className="ni ni-bold-up" /> }}
+              />
+            </Grid>
+
+            <Grid item xs={12} md={6} lg={2}>
+              <DetailedStatisticsCard
+                title="Stock-In-Hand"
+                count={
+                  storeStatistics?.stock_inhand == undefined
+                    ? 0
+                    : storeStatistics?.stock_inhand.toLocaleString()
+                }
+                icon={{ color: "success", component: <i className="ni ni-archive-2" /> }}
+              />
+            </Grid>
+
+            <Grid item xs={12} md={6} lg={2}>
+              <DetailedStatisticsCard
+                title="Damages"
+                count={
+                  storeStatistics?.number_of_damages == undefined
+                    ? 0
+                    : storeStatistics?.number_of_damages.toLocaleString()
+                }
+                icon={{ color: "error", component: <i className="ni ni-basket" /> }}
+              />
+            </Grid>
           </Grid>
 
-          <Grid item xs={12} md={5} lg={2}>
-            <DetailedStatisticsCard
-              title="Stock-In"
-              count={storeStatistics?.stock_in == undefined ? 0 : storeStatistics?.stock_in.toLocaleString()}
-              amount={""}
-              icon={{ color: "warning", component: <i className="ni ni-bold-down" /> }}
-            />
-          </Grid>
-
-          <Grid item xs={12} md={5} lg={2}>
-            <DetailedStatisticsCard
-              title="Stock-Out"
-              count={storeStatistics?.stock_out == undefined ? 0 : storeStatistics?.stock_out.toLocaleString()}
-              amount={""}
-              icon={{ color: "warning", component: <i className="ni ni-bold-up" /> }}
-            />
-          </Grid>
-
-          <Grid item xs={12} md={6} lg={2}>
-            <DetailedStatisticsCard
-              title="Stock-In-Hand"
-              count={storeStatistics?.stock_inhand == undefined ? 0 : storeStatistics?.stock_inhand.toLocaleString()}
-              amount={""}
-              icon={{ color: "success", component: <i className="ni ni-archive-2" /> }}
-            />
-          </Grid>
-
-          <Grid item xs={12} md={6} lg={2}>
-            <DetailedStatisticsCard
-              title="Damages"
-              count={
-                storeStatistics?.number_of_damages == undefined
-                  ? 0
-                  : storeStatistics?.number_of_damages.toLocaleString()
-              }
-              amount={""}
-              icon={{ color: "error", component: <i className="ni ni-basket" /> }}
-              // percentage={{ color: "success", count: "+3%", text: "since last week" }}
-            />
-          </Grid>
-        </Grid>
-
-        <Grid container spacing={3} mb={3}>
-          <Grid item xs={12} lg={7}>
-            <GradientLineChart
-              title="Our Sales Overview"
-              description={
-                <ArgonBox display="flex" alignItems="center">
-                  <ArgonBox fontSize={size.lg} color="success" mb={0.3} mr={0.5} lineHeight={0}>
-                    <Icon sx={{ fontWeight: "bold" }}>arrow_upward</Icon>
-                  </ArgonBox>
-                  <ArgonTypography variant="button" color="text" fontWeight="medium">
-                    {orderCount?.percentageIncrement}% more{" "}
-                    <ArgonTypography variant="button" color="text" fontWeight="regular">
-                      in {new Date().getFullYear()}
+          <Grid container spacing={3} mb={3}>
+            <Grid item xs={12} lg={7}>
+              <GradientLineChart
+                title="Our Sales Overview"
+                description={
+                  <ArgonBox display="flex" alignItems="center">
+                    <ArgonBox fontSize={size.lg} color="success" mb={0.3} mr={0.5} lineHeight={0}>
+                      <Icon sx={{ fontWeight: "bold" }}>arrow_upward</Icon>
+                    </ArgonBox>
+                    <ArgonTypography variant="button" color="text" fontWeight="medium">
+                      {orderCount?.percentageIncrement}% more{" "}
+                      <ArgonTypography variant="button" color="text" fontWeight="regular">
+                        in {new Date().getFullYear()}
+                      </ArgonTypography>
                     </ArgonTypography>
-                  </ArgonTypography>
-                </ArgonBox>
-              }
-              chart={gradientLineChartData}
-            />
+                  </ArgonBox>
+                }
+                chart={gradientLineChartData}
+              />
+            </Grid>
+            <Grid item xs={12} lg={5}>
+              <ProductSlider products={productImages} />{" "}
+            </Grid>
           </Grid>
-          <Grid item xs={12} lg={5}>
-            <ProductSlider products={productImages} />{" "}
-          </Grid>
-        </Grid>
 
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={8}>
-            <SalesTable title="Sales by Regions" rows={salesTableData} />
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={8}>
+              <SalesTable title="Sales by Regions" rows={salesTableData} />
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <CategoriesList title="categories of products" categories={categoriesListStatData} />
+            </Grid>
           </Grid>
-          <Grid item xs={12} md={4}>
-            <CategoriesList title="categories of products" categories={categoriesListStatData} />
-          </Grid>
-        </Grid>
-      </ArgonBox>
+        </ArgonBox>
+      )}
 
       <Footer />
     </DashboardLayout>

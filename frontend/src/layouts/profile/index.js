@@ -19,14 +19,12 @@ import AppBar from "@mui/material/AppBar";
 import { Button, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
 import { getUserDetails, updateSubscriberDetails } from "apiservices/userService";
 
-
 function Overview() {
-
   const bgImage =
-  "https://raw.githubusercontent.com/creativetimofficial/public-assets/master/argon-dashboard-pro/assets/img/profile-layout-header.jpg";
+    "https://raw.githubusercontent.com/creativetimofficial/public-assets/master/argon-dashboard-pro/assets/img/profile-layout-header.jpg";
 
   const baseImageUrl = process.env.REACT_APP_BASE_IMAGE_URL;
-  
+
   const [open, setOpen] = useState(false);
   const [profilePicture, setProfilePicture] = useState(null);
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
@@ -34,11 +32,10 @@ function Overview() {
 
   const [userData, setUserData] = useState({
     first_name: user.first_name,
-    last_name: user.last_name ?? '',
-    contact: user.contact ?? '',
-    city: user.city ?? '',
+    last_name: user.last_name ?? "",
+    contact: user.contact ?? "",
+    city: user.city ?? "",
   });
-  
 
   const handleOpen = () => {
     setOpen(true);
@@ -47,11 +44,10 @@ function Overview() {
     setOpen(false);
   };
 
-
   const handleFileChange = (event) => {
     setProfilePicture(event.target.files[0]);
-    setOpen(true)
-    };
+    setOpen(true);
+  };
 
   const handleChange = (e) => {
     setUserData({ ...userData, [e.target.name]: e.target.value });
@@ -80,12 +76,11 @@ function Overview() {
   };
 
   const handleUpdateSubscriber = async () => {
-
     const uploadData = new FormData();
     uploadData.append("first_name", userData.first_name);
     uploadData.append("last_name", userData.last_name);
     uploadData.append("contact", userData.contact);
-    uploadData.append("city", userData.city)
+    uploadData.append("city", userData.city);
 
     try {
       const res = await updateSubscriberDetails(uploadData);
@@ -111,12 +106,12 @@ function Overview() {
         <DialogTitle>Company Profile</DialogTitle>
         <DialogContent>
           {profilePicture && (
-              <img
-                src={URL.createObjectURL(profilePicture)}
-                alt="Profile"
-                style={{ maxWidth: "100%", maxHeight: "300px" }}
-              />
-            )}
+            <img
+              src={URL.createObjectURL(profilePicture)}
+              alt="Profile"
+              style={{ maxWidth: "100%", maxHeight: "300px" }}
+            />
+          )}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleUpdateSubscriberProfile} color="primary">
@@ -128,7 +123,6 @@ function Overview() {
         </DialogActions>
       </Dialog>
 
-
       <DashboardLayout
         sx={{
           backgroundImage: ({ functions: { rgba, linearGradient }, palette: { gradients } }) =>
@@ -138,7 +132,7 @@ function Overview() {
             )}, url(${bgImage})`,
           backgroundPositionY: "50%",
         }}
-     >
+      >
         <ArgonBox position="relative">
           <DashboardNavbar absolute light />
           <ArgonBox height="220px" />
@@ -149,8 +143,7 @@ function Overview() {
               boxShadow: ({ boxShadows: { md } }) => md,
             }}
           >
-
-             <Grid container spacing={3} alignItems="center">
+            <Grid container spacing={3} alignItems="center">
               <Grid item>
                 <ArgonAvatar
                   src={`${baseImageUrl}${user?.profile}`}
@@ -160,7 +153,7 @@ function Overview() {
                   shadow="sm"
                 />
               </Grid>
-              
+
               <Grid item xs={8} md={5} lg={4} sx={{ ml: "auto" }}>
                 <AppBar position="static">
                   <input
@@ -169,7 +162,6 @@ function Overview() {
                     id="profile-picture-upload"
                     type="file"
                     onChange={handleFileChange}
-                    
                   />
                   <label htmlFor="profile-picture-upload">
                     <ArgonButton
@@ -181,7 +173,6 @@ function Overview() {
                       Update Profile Picture
                     </ArgonButton>
                   </label>
-                  
                 </AppBar>
               </Grid>
             </Grid>
@@ -303,8 +294,14 @@ function Overview() {
                   </ArgonBox>
 
                   <ArgonBox mt={4} mb={1}>
-                    <ArgonButton onClick={handleUpdateSubscriber} variant="gradient" color="dark" fullWidth>
-                      Update
+                    <ArgonButton
+                      color="info"
+                      size="large"
+                      onClick={handleUpdateSubscriber}
+                      variant="gradient"
+                      fullWidth
+                    >
+                      Submit
                     </ArgonButton>
                   </ArgonBox>
                 </ArgonBox>

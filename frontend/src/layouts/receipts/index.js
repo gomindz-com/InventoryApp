@@ -235,34 +235,6 @@ const handleSearch = (event) => {
     }
   };
 
-  // const handleDownload = () => {
-  //   const componentNode = componentRef.current;
-
-  //   if (componentNode) {
-  //     html2canvas(componentNode, {
-  //       width: componentNode.scrollWidth,
-  //       height: componentNode.scrollHeight,
-  //     }).then((canvas) => {
-  //       const imgData = canvas.toDataURL("image/png");
-  //       const pdf = new jsPDF();
-  //       pdf.addImage(imgData, "PNG", 2, 0);
-  //       pdf.save("component.pdf");
-  //     });
-  //   }
-  // };
-
-  // const handleDownload = () => {
-  //   const componentNode = componentRef.current;
-
-  //   if (componentNode) {
-  //     html2canvas(componentNode).then((canvas) => {
-  //       const imgData = canvas.toDataURL("image/png");
-  //       const pdf = new jsPDF();
-  //       pdf.addImage(imgData, "PNG", 0, 0);
-  //       pdf.save("component.pdf");
-  //     });
-  //   }
-  // };
   const handleChangeProduct = async (selectedOption) => {
     setFirstProductId(selectedOption.id);
     setFirstProductPrice(selectedOption.price);

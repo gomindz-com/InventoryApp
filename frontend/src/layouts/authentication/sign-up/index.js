@@ -1,15 +1,13 @@
 import { useState, useEffect} from "react";
 import { Link } from "react-router-dom";
+import CoverLayout from "layouts/authentication/components/CoverLayout";
+
 import Card from "@mui/material/Card";
 import Checkbox from "@mui/material/Checkbox";
 import ArgonBox from "components/ArgonBox";
 import ArgonTypography from "components/ArgonTypography";
 import ArgonInput from "components/ArgonInput";
 import ArgonButton from "components/ArgonButton";
-
-// Authentication layout components
-import CoverLayout from "layouts/authentication/components/CoverLayout";
-
 import { registerUser } from "apiservices/authService";
 import { RegisterUserSchema } from "../../../formValidation/addForm";
 import { toast } from "react-toastify";
@@ -17,6 +15,9 @@ import { useNavigate } from "react-router-dom";
 import { Grid } from "@mui/material";
 
 function Cover() {
+
+  const navigate = useNavigate();
+
   const [userData, setUserData] = useState({
     email: "",
     username: "",
@@ -32,15 +33,10 @@ function Cover() {
     region: "",
   });
 
-  const navigate = useNavigate();
-
-
   const handleChange = (e) => {
     setUserData({ ...userData, [e.target.name]: e.target.value });
   };
 
-
-  
   const handleValidateSubmit = async (e) => {
     RegisterUserSchema.validate(userData, { abortEarly: false })
       .then(async () => {
