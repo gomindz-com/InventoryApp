@@ -52,11 +52,10 @@ function Products() {
     { name: "edit", align: "center" },
     { name: "delete", align: "center" },
   ];
+
   const rows = [];
 
-
   const [searchQuery, setSearchQuery] = useState("");
-
 
   // ADDING EDITING PRODUCTS
   const [loading, setLoading] = useState(true);

@@ -109,6 +109,40 @@ function Invoices() {
     products: [],
   });
 
+
+  const columns = [
+    { name: "id", align: "left" },
+    { name: "product", align: "left" },
+    { name: "total price", align: "left" },
+    { name: "buyer", align: "center" },
+    { name: "buyer_location", align: "center" },
+    { name: "buyer_phone", align: "center" },
+
+    { name: "status", align: "center" },
+    { name: "Approve As Receipt", align: "center" },
+    { name: "View & Print", align: "center" },
+    { name: "edit", align: "center" },
+    { name: "delete", align: "center" },
+  ];
+  const rows = [];
+
+  const rowss = currentOrderList.map(order => ({
+    id: order.id,
+    product: order.products.map(product => product.name).join(", "),
+    'total price': order.total_price,
+    buyer_phone: order.buyer_phone,
+    buyer: order.buyer,
+    buyer_location: order.buyer_location,
+  }));
+  
+  const exportToExcel = () => {
+    const ws = XLSX.utils.json_to_sheet(rowss, { header: columns.map(column => column.name) });
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Invoice Report");
+    XLSX.writeFile(wb, "invoice_report.xlsx");
+  };
+
+
   const [idProductRow, setIdProductRow] = useState(0);
   const [productInputRow, setProductInputRow] = useState([]);
 
