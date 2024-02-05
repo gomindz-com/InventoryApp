@@ -74,7 +74,7 @@ function Illustration() {
           toast.success("Login Successful", { draggable: false });
           navigate("/dashboard");
         } else if (res.status == 0) {
-          toast.error("Contact Ssytem Administration: Server Error", { draggable: false });
+          toast.error("Contact Sytem Administration: Server Error", { draggable: false });
         } else {
           toast.error("Incorrect Credentials");
         }
