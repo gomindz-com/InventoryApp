@@ -24,3 +24,17 @@ export const registerUser = async (userData) => {
 
   return data;
 };
+
+
+export const updatePassword = async (userData) => {
+  const data = await axiosConfig
+    .put(`/users/update-user-password`, userData)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+
+  return data;
+};

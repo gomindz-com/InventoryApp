@@ -1,3 +1,4 @@
+from django.conf import settings
 from twilio.rest import Client
 from django.http import JsonResponse
 from django.http import HttpResponse
@@ -21,18 +22,18 @@ parser_classes = [MultiPartParser, FormParser]
 # TWILIO
 account_sid = '12334'
 authToken = '14456'
-client = Client(account_sid, authToken)
+client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
 
 
 @csrf_exempt
 def twilio(request):
     # message = request.POST["message"]
     client.messages.create(
-        from_='whatsapp:+14155238886',
+        from_='+16592700879',
         body="Hi",
         # media_url='https://www.aims.ca/site/media/aims/2.pdf',
         # media_url='https://91d7-197-255-199-14.eu.ngrok.io/static/images/gooo.pdf',
-        to='whatsapp:+2207677435',
+        to='+2207677435',
     )
     print(request.POST)
     return HttpResponse("Hello")
@@ -383,9 +384,15 @@ class OrderRetreiveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
 
         # PART PAYMENT
         if 'price_paid' in request.data:
-            if (instance.total_price >= (float(instance.price_paid) + float(data['price_paid']))):
+            if (instance.total_price > (float(instance.price_paid) + float(data['price_paid']))):
                 instance.price_paid = float(
                     instance.price_paid) + float(data['price_paid'])
+
+            elif (instance.total_price == (float(instance.price_paid) + float(data['price_paid']))):
+                instance.price_paid = float(
+                    instance.price_paid) + float(data['price_paid'])
+                instance.type = 'receipt'
+
             else:
                 response = {
                     "status": False,

@@ -30,7 +30,6 @@ import { getOrders, deleteOrder, addOrder, updateOrder } from "apiservices/order
 import { getProducts } from "apiservices/productService";
 
 import { toast } from "react-toastify";
-
 import "./index.css";
 
 function Invoices() {
@@ -456,7 +455,7 @@ function Invoices() {
         <ArgonBadge
           variant="gradient"
           badgeContent={"GMD " + (item.total_price - item.price_paid)}
-          color="success"
+          color="error"
           size="xs"
           container
         />
