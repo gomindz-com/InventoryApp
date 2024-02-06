@@ -34,7 +34,6 @@ import { toast } from "react-toastify";
 import "./index.css";
 
 function Invoices() {
-
   // USER
   const user = useState(JSON.parse(localStorage.getItem("user")));
 
@@ -62,14 +61,12 @@ function Invoices() {
   // MODAL ITEM
   const [modalItem, setModalItem] = useState(null);
 
-
   // TOGGLE VIEWS
   const [showAddForm, setShowAddForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
   const [showInvoiceTable, setshowInvoiceTable] = useState(true);
   const [showPrintView, setShowPrintView] = useState(false);
   const [viewOrderActive, setViewOrderActive] = useState(true);
-
 
   const product_options = [];
   const [value, setValue] = useState("");
@@ -109,39 +106,21 @@ function Invoices() {
     products: [],
   });
 
-
-  const columns = [
-    { name: "id", align: "left" },
-    { name: "product", align: "left" },
-    { name: "total price", align: "left" },
-    { name: "buyer", align: "center" },
-    { name: "buyer_location", align: "center" },
-    { name: "buyer_phone", align: "center" },
-
-    { name: "status", align: "center" },
-    { name: "Approve As Receipt", align: "center" },
-    { name: "View & Print", align: "center" },
-    { name: "edit", align: "center" },
-    { name: "delete", align: "center" },
-  ];
-  const rows = [];
-
-  const rowss = currentOrderList.map(order => ({
+  const rowss = currentOrderList.map((order) => ({
     id: order.id,
-    product: order.products.map(product => product.name).join(", "),
-    'total price': order.total_price,
+    product: order.products.map((product) => product.name).join(", "),
+    "total price": order.total_price,
     buyer_phone: order.buyer_phone,
     buyer: order.buyer,
     buyer_location: order.buyer_location,
   }));
-  
+
   const exportToExcel = () => {
-    const ws = XLSX.utils.json_to_sheet(rowss, { header: columns.map(column => column.name) });
+    const ws = XLSX.utils.json_to_sheet(rowss, { header: columns.map((column) => column.name) });
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Invoice Report");
     XLSX.writeFile(wb, "invoice_report.xlsx");
   };
-
 
   const [idProductRow, setIdProductRow] = useState(0);
   const [productInputRow, setProductInputRow] = useState([]);
@@ -151,8 +130,6 @@ function Invoices() {
   const [otherProducts, setOtherProducts] = useState([]);
 
   const [partPaymentAmount, setPartPaymentAmount] = useState(null);
-
-
 
   // DOWNLOAD AND PRINT
   const handlePrint = useReactToPrint({
@@ -173,14 +150,6 @@ function Invoices() {
       });
     }
   };
-
-  const exportToExcel = () => {
-    const ws = XLSX.utils.json_to_sheet(currentOrderList);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Invoice Report");
-    XLSX.writeFile(wb, "invoice_report.xlsx");
-  };  
-
 
   // SEARCH FUNCTIONALITY
   const handleSearch = (event) => {
@@ -258,23 +227,22 @@ function Invoices() {
 
   // APPROVE PART PAYMENT
   const handleApprovePartPayment = async () => {
-
-    if(partPaymentAmount == null){
+    if (partPaymentAmount == null) {
       toast.error("Amount Undefined");
-      return
-    }   
+      return;
+    }
     const productsUpdatedWithAmountField = modalItem.products.map((obj) => {
       return {
         ...obj,
         amount: obj.quantity,
       };
-    });    
+    });
 
     const res = await updateOrder(modalItem.id, {
       products: productsUpdatedWithAmountField,
       status: "incomplete",
       price_paid: partPaymentAmount,
-      type: modalItem.type
+      type: modalItem.type,
     });
 
     if (res.status == 201) {
@@ -484,13 +452,14 @@ function Invoices() {
           <ArgonTypography variant="caption" color="secondary"></ArgonTypography>
         </ArgonBox>
       ),
-      "balance": (
-        <ArgonBox display="flex" flexDirection="column">
-          <ArgonTypography variant="caption" fontWeight="medium" color="text">
-            GMD {item.total_price - item.price_paid ?? "NAN"}
-          </ArgonTypography>
-          <ArgonTypography variant="caption" color="secondary"></ArgonTypography>
-        </ArgonBox>
+      balance: (
+        <ArgonBadge
+          variant="gradient"
+          badgeContent={"GMD " + (item.total_price - item.price_paid)}
+          color="success"
+          size="xs"
+          container
+        />
       ),
       buyer: (
         <ArgonBadge
@@ -1192,8 +1161,8 @@ function Invoices() {
             type="number"
             placeholder="Amount"
             size="large"
-            onChange={(e)=>{
-              setPartPaymentAmount(e.target.value)
+            onChange={(e) => {
+              setPartPaymentAmount(e.target.value);
             }}
           />
 
@@ -1640,160 +1609,160 @@ function Invoices() {
           </ArgonBox>
         )}
       </ArgonBox>
-        {showPrintView && (
-          <div className="container card">
-            <div className="row gutters">
-              <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6">
-                <div style={{ justifyContent: "flex-start" }} className="custom-actions-btns mb-2">
-                  <a
-                    onClick={() => {
-                      setShowPrintView(false);
-                      setShowAddForm(false);
-                      setshowInvoiceTable(true);
-                    }}
-                    className="btn btn-secondary"
-                  >
-                    <i className="icon-printer"></i> Show Invoice List
-                  </a>
-                </div>
-              </div>
-              <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6">
-                <div className="custom-actions-btns mb-2">
-                  <a
-                    onClick={() => {
-                      handleDownload();
-                    }}
-                    className="btn btn-primary"
-                  >
-                    <i className="icon-download"></i> Download
-                  </a>
-                  <a
-                    onClick={() => {
-                      toast.success("Loading Printer!!");
-                      handlePrint();
-                    }}
-                    className="btn btn-secondary"
-                  >
-                    <i className="icon-printer"></i> Print
-                  </a>
-                </div>
+      {showPrintView && (
+        <div className="container card">
+          <div className="row gutters">
+            <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+              <div style={{ justifyContent: "flex-start" }} className="custom-actions-btns mb-2">
+                <a
+                  onClick={() => {
+                    setShowPrintView(false);
+                    setShowAddForm(false);
+                    setshowInvoiceTable(true);
+                  }}
+                  className="btn btn-secondary"
+                >
+                  <i className="icon-printer"></i> Show Invoice List
+                </a>
               </div>
             </div>
+            <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+              <div className="custom-actions-btns mb-2">
+                <a
+                  onClick={() => {
+                    handleDownload();
+                  }}
+                  className="btn btn-primary"
+                >
+                  <i className="icon-download"></i> Download
+                </a>
+                <a
+                  onClick={() => {
+                    toast.success("Loading Printer!!");
+                    handlePrint();
+                  }}
+                  className="btn btn-secondary"
+                >
+                  <i className="icon-printer"></i> Print
+                </a>
+              </div>
+            </div>
+          </div>
 
-            <Button
-              style={{ alignSelf: "flex-end" }}
-              onClick={() => {
-                setShowPrintView(false);
-                setShowAddForm(false);
-                setshowInvoiceTable(true);
-              }}
-            >
-              <h5 style={{ paddingRight: 10 }}>Back </h5>
-              <ArgonBox component="i" color="info" fontSize="20px" className="ni ni-bold-right" />
-            </Button>
+          <Button
+            style={{ alignSelf: "flex-end" }}
+            onClick={() => {
+              setShowPrintView(false);
+              setShowAddForm(false);
+              setshowInvoiceTable(true);
+            }}
+          >
+            <h5 style={{ paddingRight: 10 }}>Back </h5>
+            <ArgonBox component="i" color="info" fontSize="20px" className="ni ni-bold-right" />
+          </Button>
 
-            <div style={{ marginTop: 20 }} ref={componentRef} className="row gutters">
-              <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                <div className="card">
-                  <div className="card-body p-0">
-                    <div className="invoice-container">
-                      <div className="invoice-header">
-                        <div className="row gutters">
-                          <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6">
-                            <a href="index.html" className="invoice-logo">
-                              Mega Store
-                            </a>
-                          </div>
-                          <div
-                            style={{ justifyContent: "flex-end" }}
-                            className="col-lg-6 col-md-6 col-sm-6"
-                          >
-                            <address style={{ textAlign: "end" }} className="text-right">
-                              {user?.company_name}
+          <div style={{ marginTop: 20 }} ref={componentRef} className="row gutters">
+            <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+              <div className="card">
+                <div className="card-body p-0">
+                  <div className="invoice-container">
+                    <div className="invoice-header">
+                      <div className="row gutters">
+                        <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                          <a href="index.html" className="invoice-logo">
+                            Mega Store
+                          </a>
+                        </div>
+                        <div
+                          style={{ justifyContent: "flex-end" }}
+                          className="col-lg-6 col-md-6 col-sm-6"
+                        >
+                          <address style={{ textAlign: "end" }} className="text-right">
+                            {user?.company_name}
 
-                              {user?.city}
+                            {user?.city}
+                            <br />
+                            {user?.contact}
+                          </address>
+                        </div>
+                      </div>
+                      <div className="row gutters">
+                        <div className="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
+                          <div className="invoice-details">
+                            <address>
+                              {theBuyer}
                               <br />
-                              {user?.contact}
+                              {theBuyerLocation}
+                              <br />
+                              {theBuyerPhone}
                             </address>
                           </div>
                         </div>
-                        <div className="row gutters">
-                          <div className="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
-                            <div className="invoice-details">
-                              <address>
-                                {theBuyer}
-                                <br />
-                                {theBuyerLocation}
-                                <br />
-                                {theBuyerPhone}
-                              </address>
-                            </div>
-                          </div>
-                          <div className="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
-                            <div className="invoice-details">
-                              <div className="invoice-num">
-                                <div>Order Receipt - #{theReceipt}</div>
-                                <div>{new Date().toLocaleString() + ""}</div>
-                              </div>
+                        <div className="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
+                          <div className="invoice-details">
+                            <div className="invoice-num">
+                              <div>Order Receipt - #{theReceipt}</div>
+                              <div>{new Date().toLocaleString() + ""}</div>
                             </div>
                           </div>
                         </div>
                       </div>
-                      <div className="invoice-body">
-                        <div className="row gutters">
-                          <div className="col-lg-12 col-md-12 col-sm-12">
-                            <div className="table-responsive">
-                              <table className="table custom-table m-0">
-                                <thead>
-                                  <tr>
-                                    <th>Items</th>
-                                    <th>Unit Price</th>
-                                    <th>Quantity</th>
-                                    <th>Sub Total</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  {productInputRow?.map((row, i) => {
-                                    return (
-                                      <tr key={i}>
-                                        <td>
-                                          {row.name}
-                                          <p className="m-0 text-muted">{row.label}</p>
-                                        </td>
-                                        <td>D{row.price}</td>
-                                        <td>{row.quantity}</td>
-                                        <td>D{row.price * row.quantity}</td>
-                                      </tr>
-                                    );
-                                  })}
-
-                                  <tr>
-                                    <td>&nbsp;</td>
-                                    <td colSpan={2}>
-                                      <h5 className="text-success">
-                                        <strong>Grand Total</strong>
-                                      </h5>
-                                    </td>
-                                    <td>
-                                      <h5 className="text-success">
-                                        <strong>D{ordertotalPrice}</strong>
-                                      </h5>
-                                    </td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="invoice-footer">Thank you for your Business.</div>
                     </div>
+                    <div className="invoice-body">
+                      <div className="row gutters">
+                        <div className="col-lg-12 col-md-12 col-sm-12">
+                          <div className="table-responsive">
+                            <table className="table custom-table m-0">
+                              <thead>
+                                <tr>
+                                  <th>Items</th>
+                                  <th>Unit Price</th>
+                                  <th>Quantity</th>
+                                  <th>Sub Total</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {productInputRow?.map((row, i) => {
+                                  return (
+                                    <tr key={i}>
+                                      <td>
+                                        {row.name}
+                                        <p className="m-0 text-muted">{row.label}</p>
+                                      </td>
+                                      <td>D{row.price}</td>
+                                      <td>{row.quantity}</td>
+                                      <td>D{row.price * row.quantity}</td>
+                                    </tr>
+                                  );
+                                })}
+
+                                <tr>
+                                  <td>&nbsp;</td>
+                                  <td colSpan={2}>
+                                    <h5 className="text-success">
+                                      <strong>Grand Total</strong>
+                                    </h5>
+                                  </td>
+                                  <td>
+                                    <h5 className="text-success">
+                                      <strong>D{ordertotalPrice}</strong>
+                                    </h5>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="invoice-footer">Thank you for your Business.</div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        )}
+        </div>
+      )}
       <Footer />
     </DashboardLayout>
   );

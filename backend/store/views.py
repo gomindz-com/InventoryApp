@@ -558,8 +558,84 @@ class StoreStatisticsView(generics.ListAPIView):
         return Response(response)
 
 
-# LIST ALL CUSTOMER ORDERS / CREATE A CUSTOMER ORDER
 
+
+# LIST ALL ORDERS [INVOICE/RECEIPT] 
+class AdminOrderListView(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = OrderSerializer
+    queryset = Order.objects.all()
+
+    def get_queryset(self):
+        user = self.request.user
+        return Order.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        type = self.request.query_params.get('type')
+
+        if (type == None):
+            queryset = Order.objects.all()
+        else:
+            queryset = Order.objects.all().filter(type=type)
+
+        orderList = []
+        for item in queryset.iterator():
+            productList = []
+            price = 0
+            productOrders = OrderProducts.objects.filter(order_id=item.id)
+
+            for productsOrdersItem in productOrders.iterator():
+                iProduct = Product.objects.get(
+                    id=productsOrdersItem.product_id)
+                productList.append({
+                    "id": iProduct.id,
+                    "name": iProduct.name,
+                    "description_color": iProduct.description_color,
+                    "price": iProduct.price,
+                    "quantity": productsOrdersItem.quantity,
+                    "amount": iProduct.price * productsOrdersItem.quantity
+                })
+
+                price = price + (iProduct.price * productsOrdersItem.quantity)
+
+            orderList.append(
+                {
+                    "id": item.id,
+                    "buyer": item.buyer,
+                    "buyer_location": item.buyer_location,
+                    "products": productList,
+                    "status": item.status,
+                    "receipt":  item.ref,
+                    "type": item.type,
+                    "buyer_phone": item.buyer_phone,
+                    "total_price":  price,
+                    "price_paid":  item.price_paid,
+                    "owner": item.owner.email
+                },
+            )
+
+        response = {
+            "status": True,
+            "message": "",
+            "orders": orderList
+        }
+        return Response(response)
+
+
+
+# LIST DETAIL OF ONE PRODUCT / UPDATE / DELETE
+class AdminOrderDeleteView(generics.DestroyAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = OrderSerializer
+    queryset = Order.objects.all()
+
+
+    def delete(self, request, *args, **kwargs):
+        return super().delete(request, *args, **kwargs)
+
+
+
+# LIST ALL CUSTOMER ORDERS / CREATE A CUSTOMER ORDER
 @api_view(['GET', 'POST'])
 def order_list(request):
     if request.method == 'GET':

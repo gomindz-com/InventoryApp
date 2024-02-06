@@ -61,6 +61,19 @@ export default function Aside({ showAside, setShowAside, matches, activePage }) 
                 <span className="nav-link-text ms-1">Customers</span>
               </Link>
             </li>
+            <li className="nav-item">
+              <Link
+                className={`nav-link text-white ${
+                  location.pathname.includes("receipts") ? "active bg-gradient-primary" : ""
+                }`}
+                to="/receipts"
+              >
+                <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                  <i className="material-icons opacity-10">table_view</i>
+                </div>
+                <span className="nav-link-text ms-1">Receipts</span>
+              </Link>
+            </li>
             {/* <li className="nav-item">
               <Link
                 className={`nav-link text-white ${
