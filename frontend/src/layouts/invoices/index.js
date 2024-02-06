@@ -138,8 +138,11 @@ function Invoices() {
     "buyer",
     "buyer_location",
   ];
+
+  console.log('Hello')
   
   const rowToExcel = currentOrderList.map(order => {
+    
     const row = {};
     columnsToExport.forEach(column => {
       if (column === "product") {
@@ -153,6 +156,9 @@ function Invoices() {
     return row;
   });
   
+
+
+
   const exportToExcel = () => {
     const ws = XLSX.utils.json_to_sheet(rowToExcel, { header: columnsToExport });
     const wb = XLSX.utils.book_new();
