@@ -459,7 +459,7 @@ function Invoices() {
       "buyer phone": (
         <ArgonBox display="flex" flexDirection="column">
           <ArgonTypography variant="caption" fontWeight="medium" color="text">
-            {item.buyer_phone ?? "NAN"}
+            {item.buyer_phone ?? "NA"}
           </ArgonTypography>
           <ArgonTypography variant="caption" color="secondary"></ArgonTypography>
         </ArgonBox>
