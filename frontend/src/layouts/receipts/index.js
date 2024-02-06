@@ -148,22 +148,34 @@ function Receipts() {
   const rows = [];
   
   
-  const rowss = currentOrderList.map(order => ({
-    id: order.id,
-    product: order.products.map(product => product.name).join(", "), 
-    'total price': order.total_price, 
-    buyer_phone: order.buyer_phone,
-    buyer: order.buyer,
-    buyer_location: order.buyer_location,
-    // status: order.status,
-  }));
+  const columnsToExport = [
+    "id",
+    "product",
+    "total_price",
+    "buyer_phone",
+    "buyer",
+    "buyer_location",
+  ];
+  
+  const rowToExcel = currentOrderList.map(order => {
+    const row = {};
+    columnsToExport.forEach(column => {
+      if (column === "product") {
+        row[column] = order.products.map(product => product.name).join(", ");
+      } else {
+        row[column] = order[column];
+      }
+    });
+    return row;
+  });
   
   const exportToExcel = () => {
-    const ws = XLSX.utils.json_to_sheet(rowss, { header: columns.map(column => column.name) });
+    const ws = XLSX.utils.json_to_sheet(rowToExcel, { header: columnsToExport });
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Receipt Report");
-    XLSX.writeFile(wb, "Receipt_reports.xlsx");
+    XLSX.writeFile(wb, "Receipt_report.xlsx");
   };
+  
   
   const ComponentToPrint = React.forwardRef((props, ref) => {
     return <div ref={ref}>My cool content here!</div>;

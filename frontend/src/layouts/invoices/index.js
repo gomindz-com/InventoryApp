@@ -105,21 +105,66 @@ function Invoices() {
     products: [],
   });
 
-  const rowss = currentOrderList.map((order) => ({
-    id: order.id,
-    product: order.products.map((product) => product.name).join(", "),
-    "total price": order.total_price,
-    buyer_phone: order.buyer_phone,
-    buyer: order.buyer,
-    buyer_location: order.buyer_location,
-  }));
+
+
+  const columns = [
+    { name: "id", align: "left" },
+    { name: "product", align: "left" },
+    { name: "total price", align: "left" },
+    { name: "buyer", align: "center" },
+    { name: "buyer_location", align: "center" },
+    { name: "buyer_phone", align: "center" },
+
+    { name: "status", align: "center" },
+    { name: "Approve As Receipt", align: "center" },
+    { name: "View & Print", align: "center" },
+    { name: "edit", align: "center" },
+    { name: "delete", align: "center" },
+  ];
+  const rows = [];
+
+
+
+
+
+  const columnsToExport = [
+    "id",
+    "product",
+    "total price",
+    "buyer_phone",
+    "buyer",
+    "buyer_location",
+  ];
+
+  console.log('Hello')
+  
+  const rowToExcel = currentOrderList.map(order => {
+    
+    const row = {};
+    columnsToExport.forEach(column => {
+      if (column === "product") {
+        row[column] = order.products.map(product => product.name).join(", ");
+      } else if (column === "total price") {
+        row[column] = order.total_price;
+      } else {
+        row[column] = order[column];
+      }
+    });
+    return row;
+  });
+  
+
+
 
   const exportToExcel = () => {
-    const ws = XLSX.utils.json_to_sheet(rowss, { header: columns.map((column) => column.name) });
+    const ws = XLSX.utils.json_to_sheet(rowToExcel, { header: columnsToExport });
+
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Invoice Report");
     XLSX.writeFile(wb, "invoice_report.xlsx");
   };
+  
+ 
 
   const [idProductRow, setIdProductRow] = useState(0);
   const [productInputRow, setProductInputRow] = useState([]);
@@ -149,6 +194,7 @@ function Invoices() {
       });
     }
   };
+
 
   // SEARCH FUNCTIONALITY
   const handleSearch = (event) => {
@@ -386,22 +432,22 @@ function Invoices() {
 
   // TABLE ROWS AND COLUMNS UI
 
-  const columns = [
-    { name: "id", align: "left" },
-    { name: "product", align: "left" },
-    { name: "order price", align: "center" },
-    { name: "price paid", align: "center" },
-    { name: "balance", align: "center" },
-    { name: "buyer", align: "center" },
-    { name: "buyer phone", align: "center" },
-    { name: "status", align: "center" },
-    { name: "Make Part Payment", align: "center" },
-    { name: "Approve As Receipt", align: "center" },
-    { name: "View & Print", align: "center" },
-    { name: "edit", align: "center" },
-    { name: "delete", align: "center" },
-  ];
-  const rows = [];
+  // const columns = [
+  //   { name: "id", align: "left" },
+  //   { name: "product", align: "left" },
+  //   { name: "order price", align: "center" },
+  //   { name: "price paid", align: "center" },
+  //   { name: "balance", align: "center" },
+  //   { name: "buyer", align: "center" },
+  //   { name: "buyer phone", align: "center" },
+  //   { name: "status", align: "center" },
+  //   { name: "Make Part Payment", align: "center" },
+  //   { name: "Approve As Receipt", align: "center" },
+  //   { name: "View & Print", align: "center" },
+  //   { name: "edit", align: "center" },
+  //   { name: "delete", align: "center" },
+  // ];
+  // const rows = [];
 
   currentOrderList.map(function (item, i) {
     rows.push({
@@ -504,8 +550,6 @@ function Invoices() {
       "View & Print": (
         <Button
           onClick={async () => {
-
-            console.log(item)
             setShowPrintView(true);
             setShowAddForm(false);
             setshowInvoiceTable(false);
@@ -1755,7 +1799,9 @@ function Invoices() {
                                 </tr>
 
                                 <tr>
-                                  <td>&nbsp;</td>
+
+                                  <td style={{ borderRight: '0px' }}>&nbsp;</td>
+
                                   <td colSpan={2}>
                                     <h5 className="text-success">
                                       <strong>Balance</strong>
