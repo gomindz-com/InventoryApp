@@ -105,21 +105,6 @@ function Invoices() {
     products: [],
   });
 
-  const rowss = currentOrderList.map((order) => ({
-    id: order.id,
-    product: order.products.map((product) => product.name).join(", "),
-    "total price": order.total_price,
-    buyer_phone: order.buyer_phone,
-    buyer: order.buyer,
-    buyer_location: order.buyer_location,
-  }));
-
-  const exportToExcel = () => {
-    const ws = XLSX.utils.json_to_sheet(rowss, { header: columns.map((column) => column.name) });
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Invoice Report");
-    XLSX.writeFile(wb, "invoice_report.xlsx");
-  };
 
   const [idProductRow, setIdProductRow] = useState(0);
   const [productInputRow, setProductInputRow] = useState([]);
@@ -130,7 +115,7 @@ function Invoices() {
 
   const [partPaymentAmount, setPartPaymentAmount] = useState(null);
 
-  // DOWNLOAD AND PRINT
+  // DOWNLOAD AND PRINT AND EXPORT
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
@@ -148,6 +133,13 @@ function Invoices() {
         pdf.save("component.pdf");
       });
     }
+  };
+
+  const exportToExcel = () => {
+    const ws = XLSX.utils.json_to_sheet(reportRows, { header: reportColumns.map((column) => column.name) });
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Invoice Report");
+    XLSX.writeFile(wb, "invoice_report.xlsx");
   };
 
   // SEARCH FUNCTIONALITY
@@ -401,7 +393,28 @@ function Invoices() {
     { name: "edit", align: "center" },
     { name: "delete", align: "center" },
   ];
+  const reportColumns = [
+    { name: "ID", align: "left" },
+    { name: "Product(s)", align: "left" },
+    { name: "Order Price", align: "center" },
+    { name: "Price Paid", align: "center" },
+    { name: "Balance", align: "center" },
+    { name: "Buyer Name", align: "center" },
+    { name: "Buyer Phone", align: "center" },
+    { name: "Order Status", align: "center" }
+  ];
   const rows = [];
+
+  const reportRows = currentOrderList.map((order) => ({
+    "ID": order.id,
+    "Product(s)": order.products.map((product) => product.name).join(", "),
+    "Order Price": order.total_price,
+    "Price Paid": order.price_paid,
+    "Balance": order.total_price - order.price_paid,
+    "Buyer Name": order.buyer,
+    "Buyer Phone": order.buyer_phone,
+    "Order Status": order.status,
+  }));
 
   currentOrderList.map(function (item, i) {
     rows.push({
