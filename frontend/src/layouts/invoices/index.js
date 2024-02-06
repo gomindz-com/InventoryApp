@@ -550,7 +550,6 @@ function Invoices() {
       "View & Print": (
         <Button
           onClick={async () => {
-
             setShowPrintView(true);
             setShowAddForm(false);
             setshowInvoiceTable(false);
@@ -1800,7 +1799,9 @@ function Invoices() {
                                 </tr>
 
                                 <tr>
+
                                   <td style={{ borderRight: '0px' }}>&nbsp;</td>
+
                                   <td colSpan={2}>
                                     <h5 className="text-success">
                                       <strong>Balance</strong>
