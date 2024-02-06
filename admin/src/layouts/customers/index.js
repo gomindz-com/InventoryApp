@@ -306,12 +306,12 @@ function Tables() {
                                   data-toggle="tooltip"
                                   data-original-title="Edit user"
                                 >
-                                  Edit {subscriber.status}
+                                  {subscriber.status}
                                 </a>
                               </td>
 
                               <td className="align-middle">
-                                {subscriber.status}
+                                
 
                                 <button
                                   onClick={() => {

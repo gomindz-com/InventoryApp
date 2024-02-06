@@ -8,6 +8,7 @@ from rest_framework.request import Request
 from django.contrib.auth import authenticate
 from .models import CustomUser, UserActivity
 from rest_framework.authtoken.models import Token
+from django.contrib.auth.signals import user_logged_in
 
 
 import logging
@@ -40,6 +41,8 @@ class LoginUser(APIView):
         password = request.data.get('password')
         user = authenticate(email=email, password=password)
         if user is not None:
+            user_logged_in.send(sender=self.__class__, request=request, user=user)
+
             serializer = CustomUserSerializer(user)
             response = {
                 "status": True,

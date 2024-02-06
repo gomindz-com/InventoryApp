@@ -21,7 +21,7 @@ function Notifications() {
       await getStoreActivities()
         .then((res) => {
           if (res.data?.status) {
-            setActivityList(res.data.activities);
+            setActivityList(res.data.activities.reverse());
             setLoading(false);
 
           } else {
@@ -35,7 +35,7 @@ function Notifications() {
       console.log(error);
     }
   };
-  //END GET CUSTOMERS
+  
 
   useEffect(() => {
     handleGetActivityList();
@@ -247,7 +247,7 @@ function Notifications() {
                               <a href="javascript:;" className="alert-link text-white">
                                 {activity.activity_type}
                               </a>{" by "} {activity.username}
-                              . {Date(activity.timestamp)}
+                              . {activity.timestamp}
                               
                             </span>
                             <button

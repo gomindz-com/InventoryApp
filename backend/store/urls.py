@@ -10,6 +10,8 @@ from .views import (
      StoreInfoListView,
      StoreActivityListView,
 
+     AdminOrderListView, AdminOrderDeleteView,
+
      productCounts, buyerCounts, deliveryCounts, supplierCounts, orderCounts,
      total_stock, total_price,
      lowstockproduct,
@@ -35,6 +37,9 @@ urlpatterns = [
      path('report', ProductReportView.as_view(), name='product_report'),
      path('store-info', StoreInfoListView.as_view(), name='StoreInfoListView'),
      path('store-activity', StoreActivityListView.as_view(), name='StoreActivityListView'),
+
+     path('admin-orders', AdminOrderListView.as_view(), name='listallorders'),
+     path('admin-orders/<int:pk>', AdminOrderDeleteView.as_view(), name='deleteorder'),
 
 
      path('ordercount/', orderCounts),

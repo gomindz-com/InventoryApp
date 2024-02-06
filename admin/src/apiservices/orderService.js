@@ -1,9 +1,9 @@
 import { toast } from "react-toastify";
 import axiosConfig from "./axios-config";
 
-export const getOrders = async () => {
+export const getOrders = async (type) => {
   const data = await axiosConfig
-    .get(`/orders/`)
+    .get(`/store/admin-orders?type=${type}`)
     .then((response) => {
       return response;
     })
@@ -15,39 +15,11 @@ export const getOrders = async () => {
   return data;
 };
 
-
-export const getOrderCount = async () => {
-  const data = await axiosConfig
-    .get(`/ordercount/`)
-    .then((response) => {
-      return response;
-    })
-    .catch((err) => {
-      console.log(err);
-      toast.error(err);
-    });
-
-  return data;
-};
-
-
-export const addOrder = async (productData) => {
-  const data = await axiosConfig
-    .post(`/orders/`, productData)
-    .then((response) => {
-      return response;
-    })
-    .catch((err) => {
-      return err.response;
-    });
-
-  return data;
-};
 
 
 export const deleteOrder = async (id) => {
   const data = await axiosConfig
-    .delete(`/orders/${id}`)
+    .delete(`/store/admin-orders/${id}`)
     .then((response) => {
       return response;
     })
@@ -59,10 +31,9 @@ export const deleteOrder = async (id) => {
 };
 
 
-const orderService = {
+const receiptService = {
   getOrders,
-  addOrder,
   deleteOrder
 };
 
-export default orderService;
+export default receiptService;

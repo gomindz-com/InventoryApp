@@ -7,6 +7,7 @@ import Billing from "layouts/billing";
 import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
+import Receipts from "layouts/receipts";
 
 // Dashboard omponents
 
@@ -35,6 +36,14 @@ const routes = [
     route: "/customers",
     
     component: <Tables />,
+  },
+  {
+    type: "route",
+    name: "Receipts",
+    key: "receipts",
+    route: "/receipts",
+    
+    component: <Receipts />,
   },
   {
     type: "route",

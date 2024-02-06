@@ -1,3 +1,4 @@
+from django.conf import settings
 from twilio.rest import Client
 from django.http import JsonResponse
 from django.http import HttpResponse
@@ -21,18 +22,18 @@ parser_classes = [MultiPartParser, FormParser]
 # TWILIO
 account_sid = '12334'
 authToken = '14456'
-client = Client(account_sid, authToken)
+client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
 
 
 @csrf_exempt
 def twilio(request):
     # message = request.POST["message"]
     client.messages.create(
-        from_='whatsapp:+14155238886',
+        from_='+16592700879',
         body="Hi",
         # media_url='https://www.aims.ca/site/media/aims/2.pdf',
         # media_url='https://91d7-197-255-199-14.eu.ngrok.io/static/images/gooo.pdf',
-        to='whatsapp:+2207677435',
+        to='+2207677435',
     )
     print(request.POST)
     return HttpResponse("Hello")
@@ -383,9 +384,15 @@ class OrderRetreiveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
 
         # PART PAYMENT
         if 'price_paid' in request.data:
-            if (instance.total_price >= (float(instance.price_paid) + float(data['price_paid']))):
+            if (instance.total_price > (float(instance.price_paid) + float(data['price_paid']))):
                 instance.price_paid = float(
                     instance.price_paid) + float(data['price_paid'])
+
+            elif (instance.total_price == (float(instance.price_paid) + float(data['price_paid']))):
+                instance.price_paid = float(
+                    instance.price_paid) + float(data['price_paid'])
+                instance.type = 'receipt'
+
             else:
                 response = {
                     "status": False,
@@ -558,8 +565,84 @@ class StoreStatisticsView(generics.ListAPIView):
         return Response(response)
 
 
-# LIST ALL CUSTOMER ORDERS / CREATE A CUSTOMER ORDER
 
+
+# LIST ALL ORDERS [INVOICE/RECEIPT] 
+class AdminOrderListView(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = OrderSerializer
+    queryset = Order.objects.all()
+
+    def get_queryset(self):
+        user = self.request.user
+        return Order.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        type = self.request.query_params.get('type')
+
+        if (type == None):
+            queryset = Order.objects.all()
+        else:
+            queryset = Order.objects.all().filter(type=type)
+
+        orderList = []
+        for item in queryset.iterator():
+            productList = []
+            price = 0
+            productOrders = OrderProducts.objects.filter(order_id=item.id)
+
+            for productsOrdersItem in productOrders.iterator():
+                iProduct = Product.objects.get(
+                    id=productsOrdersItem.product_id)
+                productList.append({
+                    "id": iProduct.id,
+                    "name": iProduct.name,
+                    "description_color": iProduct.description_color,
+                    "price": iProduct.price,
+                    "quantity": productsOrdersItem.quantity,
+                    "amount": iProduct.price * productsOrdersItem.quantity
+                })
+
+                price = price + (iProduct.price * productsOrdersItem.quantity)
+
+            orderList.append(
+                {
+                    "id": item.id,
+                    "buyer": item.buyer,
+                    "buyer_location": item.buyer_location,
+                    "products": productList,
+                    "status": item.status,
+                    "receipt":  item.ref,
+                    "type": item.type,
+                    "buyer_phone": item.buyer_phone,
+                    "total_price":  price,
+                    "price_paid":  item.price_paid,
+                    "owner": item.owner.email
+                },
+            )
+
+        response = {
+            "status": True,
+            "message": "",
+            "orders": orderList
+        }
+        return Response(response)
+
+
+
+# LIST DETAIL OF ONE PRODUCT / UPDATE / DELETE
+class AdminOrderDeleteView(generics.DestroyAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = OrderSerializer
+    queryset = Order.objects.all()
+
+
+    def delete(self, request, *args, **kwargs):
+        return super().delete(request, *args, **kwargs)
+
+
+
+# LIST ALL CUSTOMER ORDERS / CREATE A CUSTOMER ORDER
 @api_view(['GET', 'POST'])
 def order_list(request):
     if request.method == 'GET':
