@@ -102,6 +102,9 @@ class StoreActivitySerializer(serializers.ModelSerializer):
     email = serializers.EmailField(source='user.email', read_only=True)
     username = serializers.CharField(source='user.username', read_only=True)
 
+    timestamp = serializers.DateTimeField(format='%d-%m-%Y %H:%M:%S')
+
+
     class Meta:
         model = StoreActivity
         fields = [ 'id', 'email', 'username', 'activity_type', 'details', 'timestamp']

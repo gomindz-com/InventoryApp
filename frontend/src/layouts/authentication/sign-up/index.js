@@ -37,6 +37,10 @@ function Cover() {
     setUserData({ ...userData, [e.target.name]: e.target.value });
   };
 
+  const handleChangeContact = (e) => {
+    setUserData({ ...userData, [e.target.name]: "+220" + e.target.value });
+  };
+
   const handleValidateSubmit = async (e) => {
     RegisterUserSchema.validate(userData, { abortEarly: false })
       .then(async () => {
@@ -188,15 +192,27 @@ function Cover() {
             </Grid>
 
             <Grid container spacing={3}>
-              <Grid item xs={12} md={6}>
+              <Grid item xs={12} md={2}>
+                <ArgonBox mb={2}>
+                  <ArgonInput
+                    name="country_code"
+                    type="text"
+                    placeholder="+221"
+                    size="large"
+                    autoComplete="off"
+                    value={"+220"}
+                  />
+                </ArgonBox>
+              </Grid>
+              <Grid item xs={12} md={4}>
                 <ArgonBox mb={2}>
                   <ArgonInput
                     name="contact"
-                    type="text"
+                    type="number"
                     placeholder="Contact Number"
                     size="large"
                     autoComplete="off"
-                    onChange={handleChange}
+                    onChange={handleChangeContact}
                   />
                 </ArgonBox>
               </Grid>

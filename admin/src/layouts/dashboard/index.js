@@ -100,7 +100,7 @@ function Default() {
       await getUserActivities()
         .then((res) => {
           if (res.data?.status) {
-            setActivityList(res.data.activities);
+            setActivityList(res.data.activities.reverse());
             setLoading(false);
           } else {
             setActivityList([]);
@@ -468,10 +468,10 @@ function Default() {
                                   <div className="d-flex px-2">
                                     <div>
                                       {/* <img
-                                    src="../assets/img/small-logos/logo-asana.svg"
-                                    className="avatar avatar-sm rounded-circle me-2"
-                                    alt="spotify"
-                                  /> */}
+                                        src="../assets/img/small-logos/logo-asana.svg"
+                                        className="avatar avatar-sm rounded-circle me-2"
+                                        alt="spotify"
+                                      /> */}
                                     </div>
                                     <div className="my-auto">
                                       <h6 className="mb-0 text-sm">{activity.email}</h6>
@@ -491,7 +491,7 @@ function Default() {
                                 <td className="align-middle text-center">
                                   <div className="d-flex align-items-center justify-content-center">
                                     <span className="me-2 text-xs font-weight-bold">
-                                      {Date(activity.timestamp)}
+                                      {activity.timestamp}
                                     </span>
                                     {/* <div>
                                   <div className="progress">
