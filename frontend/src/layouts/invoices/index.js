@@ -550,6 +550,7 @@ function Invoices() {
       "View & Print": (
         <Button
           onClick={async () => {
+
             setShowPrintView(true);
             setShowAddForm(false);
             setshowInvoiceTable(false);
@@ -1716,6 +1717,8 @@ function Invoices() {
                         <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6">
                           <a href="index.html" className="invoice-logo">
                             Mega Store
+
+                            
                           </a>
                         </div>
                         <div
@@ -1782,6 +1785,36 @@ function Invoices() {
                                 })}
 
                                 <tr>
+                                  <td style={{ borderRight: '0px' }}>&nbsp;</td>
+                                  <td colSpan={2} className=''>
+                                    <h5 className="text-success">
+                                      <strong>Price Paid</strong>
+                                    </h5>
+                                  </td>
+                                  <td>
+                                    <h5 className="text-success">
+                                      <strong>D{orderData.price_paid}</strong>
+                                    </h5>
+                                  </td>
+                                  
+                                </tr>
+
+                                <tr>
+                                  <td style={{ borderRight: '0px' }}>&nbsp;</td>
+                                  <td colSpan={2}>
+                                    <h5 className="text-success">
+                                      <strong>Balance</strong>
+                                    </h5>
+                                  </td>
+                                  <td>
+                                    <h5 className="text-success">
+                                      <strong>D{orderData.total_price - orderData.price_paid}</strong>
+                                    </h5>
+                                  </td>
+                                  
+                                </tr>
+
+                                <tr>
                                   <td>&nbsp;</td>
                                   <td colSpan={2}>
                                     <h5 className="text-success">
@@ -1794,6 +1827,7 @@ function Invoices() {
                                     </h5>
                                   </td>
                                 </tr>
+                                
                               </tbody>
                             </table>
                           </div>
