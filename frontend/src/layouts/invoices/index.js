@@ -105,7 +105,6 @@ function Invoices() {
     products: [],
   });
 
-
   const [idProductRow, setIdProductRow] = useState(0);
   const [productInputRow, setProductInputRow] = useState([]);
 
@@ -136,7 +135,9 @@ function Invoices() {
   };
 
   const exportToExcel = () => {
-    const ws = XLSX.utils.json_to_sheet(reportRows, { header: reportColumns.map((column) => column.name) });
+    const ws = XLSX.utils.json_to_sheet(reportRows, {
+      header: reportColumns.map((column) => column.name),
+    });
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Invoice Report");
     XLSX.writeFile(wb, "invoice_report.xlsx");
@@ -401,16 +402,16 @@ function Invoices() {
     { name: "Balance", align: "center" },
     { name: "Buyer Name", align: "center" },
     { name: "Buyer Phone", align: "center" },
-    { name: "Order Status", align: "center" }
+    { name: "Order Status", align: "center" },
   ];
   const rows = [];
 
   const reportRows = currentOrderList.map((order) => ({
-    "ID": order.id,
+    ID: order.id,
     "Product(s)": order.products.map((product) => product.name).join(", "),
     "Order Price": order.total_price,
     "Price Paid": order.price_paid,
-    "Balance": order.total_price - order.price_paid,
+    Balance: order.total_price - order.price_paid,
     "Buyer Name": order.buyer,
     "Buyer Phone": order.buyer_phone,
     "Order Status": order.status,
@@ -517,7 +518,6 @@ function Invoices() {
       "View & Print": (
         <Button
           onClick={async () => {
-
             setShowPrintView(true);
             setShowAddForm(false);
             setshowInvoiceTable(false);
@@ -532,7 +532,8 @@ function Invoices() {
             setTheBuyer(item.buyer);
             setTheBuyerPhone(item.buyer_phone);
             setTheBuyerLocation(item.buyer_location);
-            setTheReceipt(item.ref);
+            // setTheReceipt(item.ref);
+            setTheReceipt(item.receipt);
           }}
         >
           <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-bold-down" />
@@ -1684,8 +1685,6 @@ function Invoices() {
                         <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6">
                           <a href="index.html" className="invoice-logo">
                             Mega Store
-
-                            
                           </a>
                         </div>
                         <div
@@ -1752,8 +1751,8 @@ function Invoices() {
                                 })}
 
                                 <tr>
-                                  <td style={{ borderRight: '0px' }}>&nbsp;</td>
-                                  <td colSpan={2} className=''>
+                                  <td style={{ borderRight: "0px" }}>&nbsp;</td>
+                                  <td colSpan={2} style={{ borderLeft: "0px" }}>
                                     <h5 className="text-success">
                                       <strong>Price Paid</strong>
                                     </h5>
@@ -1763,22 +1762,22 @@ function Invoices() {
                                       <strong>D{orderData.price_paid}</strong>
                                     </h5>
                                   </td>
-                                  
                                 </tr>
 
                                 <tr>
-                                  <td>&nbsp;</td>
-                                  <td colSpan={2}>
+                                  <td style={{ borderRight: "0px" }}>&nbsp;</td>
+                                  <td style={{ borderLeft: "0px" }} colSpan={2}>
                                     <h5 className="text-success">
                                       <strong>Balance</strong>
                                     </h5>
                                   </td>
                                   <td>
                                     <h5 className="text-success">
-                                      <strong>D{orderData.total_price - orderData.price_paid}</strong>
+                                      <strong>
+                                        D{orderData.total_price - orderData.price_paid}
+                                      </strong>
                                     </h5>
                                   </td>
-                                  
                                 </tr>
 
                                 <tr>
@@ -1794,7 +1793,6 @@ function Invoices() {
                                     </h5>
                                   </td>
                                 </tr>
-                                
                               </tbody>
                             </table>
                           </div>

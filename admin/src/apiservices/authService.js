@@ -25,3 +25,20 @@ export const registerUser = async (userData) => {
 
   return data;
 };
+
+
+export const resetSubscriberPassword = async (email) => {
+  const data = await axiosConfig
+    .put(`/users/reset-user-password`, {
+      'email' : email,
+      'password' : 'password@123'
+    })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response.data.message;
+    });
+
+  return data;
+};

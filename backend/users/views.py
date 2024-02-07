@@ -2,7 +2,7 @@ from rest_framework import generics
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .serializers import RegisterSerializer, LoginSerializer, CustomUserSerializer, UpdateUserProfileSerializer, UpdatePasswordSerializer, SubscriberSerializer, SubscriberUpdateSerializer, UserActivitySerializer
+from .serializers import RegisterSerializer, LoginSerializer, CustomUserSerializer, UpdateUserProfileSerializer, UpdatePasswordSerializer, ResetPasswordSerializer,  SubscriberSerializer, SubscriberUpdateSerializer, UserActivitySerializer
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.request import Request
 from django.contrib.auth import authenticate
@@ -156,7 +156,7 @@ class UserUpdateView(generics.UpdateAPIView):
         return Response(data=response)
 
 
-       
+#UPDATE USER PASSWORD
 class UserUpdatePasswordView(generics.UpdateAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = UpdatePasswordSerializer
@@ -187,6 +187,24 @@ class UserUpdatePasswordView(generics.UpdateAPIView):
                 }
         return Response(data=response)
    
+
+# RESET SUBSCRIBER PASSWORD
+class UserResetPasswordView(generics.UpdateAPIView):
+    serializer_class = ResetPasswordSerializer
+    queryset = CustomUser.objects.all()
+
+    def update(self, request, *args, **kwargs):
+        serializer = ResetPasswordSerializer(data=request.data)
+        if serializer.is_valid():
+            email = serializer.validated_data['email']
+            password = serializer.validated_data['password']
+
+            user = CustomUser.objects.get(email=email)
+            user.set_password(password)
+            user.save()
+
+            return Response("Password updated successfully.", status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 
