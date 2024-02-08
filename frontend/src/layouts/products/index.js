@@ -101,17 +101,18 @@ function Products() {
 
     setLoading(true);
     const uploadData = new FormData();
-    uploadData.append("image", productImage == null ? "" : productImage?.image[0]);
     uploadData.append("name", productData.name);
-    uploadData.append("userid", user.id);
     uploadData.append("description_color", productData.description_color);
     uploadData.append("status", productData.status);
     uploadData.append("price", productData.price);
     uploadData.append("category", productData.category);
     uploadData.append("stock", productData.stock);
 
-    if(productData?.expiry_date != null){
+    if(productData?.expiry_date != null || undefined){
       uploadData.append("expiry_date", productData?.expiry_date );
+    }
+    if(productImage != null || undefined){
+      uploadData.append("image", productImage?.image[0]);
     }
 
     try {
@@ -121,12 +122,31 @@ function Products() {
         handleGetProductList();
         setShowAddProductForm(false);
         setLoading(false);
-      } else {
-        toast.error("Image Size Issue");
+        setProductData({
+          name: "",
+          category: "",
+          stock: "",
+          description_color: "",
+          price: "",
+          status: "in_stock",
+        })
+        setProductImage(null)
+      } 
+      
+      else if (res.status == 413) {
+        toast.error("The image entity is larger than limits defined by server");
+        setProductImage(null)
         setLoading(false);
+      } 
+      
+      else {
+        toast.error(res.data?.message ?? "Product Could Not Be Added");
+        setLoading(false);
+        setProductImage(null)
+
       }
     } catch (error) {
-      toast.error("Could Not Be Updated");
+      toast.error("Product Could Not Be Added");
       setLoading(false);
     }
   };
@@ -182,15 +202,17 @@ function Products() {
   };
 
   const handleDeleteProduct = async () => {
+
+    setLoading(true)
     await deleteProduct(modalItem.id)
       .then((res) => {
         if (res.status == 204) {
           handleGetProductList();
           toggleModal();
-
+          setLoading(false)
         } else {
           toast.error("Error Deleting", { autoClose: 80 });
-
+          setLoading(false)
         }
       })
       .catch((err) => {});
@@ -517,7 +539,7 @@ function Products() {
                     </ArgonBox>
                     <ArgonBox mb={2} mx={5}>
                       <ArgonInput
-                        type="name"
+                        type="number"
                         name="stock"
                         style={{ borderColor: isNaN(productData.stock) && "red" }}
                         value={productData?.stock}
@@ -548,7 +570,7 @@ function Products() {
                     <ArgonBox mb={2} mx={5}>
                       <ArgonInput
                         style={{ borderColor: isNaN(productData.price) && "red" }}
-                        type="name"
+                        type="number"
                         name="price"
                         value={productData.price}
                         placeholder="unit Price"
