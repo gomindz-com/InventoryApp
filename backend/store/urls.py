@@ -2,12 +2,15 @@ from django.urls import path
 from .views import ( 
      twilio, 
      CategoryListCreateView, CategoryRetreiveUpdateDeleteView,
-     ProductListCreateView, ProductRetreiveUpdateDeleteView,
+     ProductListCreateView, ProductRetreiveUpdateDeleteView, ProductImagesListView,
      OrderListCreateView, OrderRetreiveUpdateDeleteView,
      DamagesListCreateView,
      StoreStatisticsView,
      ProductReportView,
+     StoreInfoListView,
+     StoreActivityListView,
 
+     AdminOrderListView, AdminOrderDeleteView,
 
      productCounts, buyerCounts, deliveryCounts, supplierCounts, orderCounts,
      total_stock, total_price,
@@ -26,11 +29,18 @@ urlpatterns = [
      path('categories/<int:pk>', CategoryRetreiveUpdateDeleteView.as_view(), name='detailupdatedeletecategories'),
      path('products', ProductListCreateView.as_view(), name='listcreateproducts'),
      path('products/<int:pk>', ProductRetreiveUpdateDeleteView.as_view(), name='detailupdatedeleteproducts'),
+     path('products-images', ProductImagesListView.as_view(), name='ProductImagesListView'),
      path('orders', OrderListCreateView.as_view(), name='listcreateorders'),
      path('orders/<int:pk>', OrderRetreiveUpdateDeleteView.as_view(), name='detaildeleteorders'),
      path('storestatistics', StoreStatisticsView.as_view(), name='liststorestatistics'),
      path('damages', DamagesListCreateView.as_view(), name='listcreatedamages'),
      path('report', ProductReportView.as_view(), name='product_report'),
+     path('store-info', StoreInfoListView.as_view(), name='StoreInfoListView'),
+     path('store-activity', StoreActivityListView.as_view(), name='StoreActivityListView'),
+
+     path('admin-orders', AdminOrderListView.as_view(), name='listallorders'),
+     path('admin-orders/<int:pk>', AdminOrderDeleteView.as_view(), name='deleteorder'),
+
 
      path('ordercount/', orderCounts),
      path('buyercount/', buyerCounts),

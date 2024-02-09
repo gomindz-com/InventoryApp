@@ -1,9 +1,19 @@
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
-from .models import CustomUser
+from .models import CustomUser, UserActivity
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
 
+
+class SubscriberSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = [ 'id', 'email', 'username', 'password', 'first_name', 'last_name', 'profile', 'company_name', 'contact', 'postcode', 'city', 'is_active']
+
+
+class SubscriberUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
 
 
 class CustomUserSerializer(serializers.ModelSerializer):
@@ -115,7 +125,26 @@ class UpdatePasswordSerializer(serializers.ModelSerializer):
         return instance
 
 
+class   ResetPasswordSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField()
 
+    def validate_email(self, value):
+        if not CustomUser.objects.filter(email=value).exists():
+            raise serializers.ValidationError("User with this email does not exist.")
+        return value
+
+
+
+class UserActivitySerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(source='user.email', read_only=True)
+    username = serializers.CharField(source='user.username', read_only=True)
+
+    timestamp = serializers.DateTimeField(format='%d-%m-%Y %H:%M:%S')
+
+    class Meta:
+        model = UserActivity
+        fields = [ 'id', 'email', 'username', 'activity_type', 'details', 'timestamp']
 
 
 

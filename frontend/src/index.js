@@ -14,7 +14,7 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 
 // react-perfect-scrollbar styles
 import "react-perfect-scrollbar/dist/css/styles.css";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import { Provider } from "react-redux";
 import {store} from "./Redux/store";
 

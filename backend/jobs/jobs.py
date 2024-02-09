@@ -1,5 +1,13 @@
 from fpdf import FPDF, HTMLMixin
 import store
+import jinja2
+import pdfkit
+from datetime import datetime
+from twilio.rest import Client
+
+account_sid = '12334'
+authToken = '14456'
+client = Client(account_sid, authToken)
 
 class PDF(FPDF, HTMLMixin):
     pass
@@ -54,13 +62,7 @@ def create_pdffile():
 
 
 
-
-import jinja2
-import pdfkit
-from datetime import datetime
-
 def create_pdf2():
-
     client_name = "Frank Andrade"
     item1 = "TV"
     item2 = "Couch"
@@ -89,28 +91,13 @@ def create_pdf2():
     pdfkit.from_string(output_text, output_pdf, configuration=config, css='jobs/style.css')
 
 
-
-
-
-from twilio.rest import Client
-
-
-account_sid = '12334'
-authToken = '14456'
-
-client = Client(account_sid, authToken)
-
 def send_message():
-
     create_pdf2()
-
     client.messages.create(
         from_='whatsapp:+14155238886',
         body= "Hi",
         #media_url='https://www.aims.ca/site/media/aims/2.pdf',
         media_url='https://67c7-197-242-131-152.eu.ngrok.io/static/documents/DailyReport.pdf',
-        #to='whatsapp:+2207677435',
-        to='whatsapp:+2203258685',
-        #to='whatsapp:+2205260188',
+        to='whatsapp:+2203258685',        
     )
 

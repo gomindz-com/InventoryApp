@@ -11,6 +11,8 @@ import Icon from "@mui/material/Icon";
 // Argon Dashboard 2 MUI components
 import ArgonBox from "components/ArgonBox";
 
+import { Link, useNavigate } from "react-router-dom";
+
 // Argon Dashboard 2 MUI example components
 import Sidenav from "examples/Sidenav";
 import Configurator from "examples/Configurator";
@@ -33,13 +35,16 @@ import routes from "routes";
 import { useArgonController, setMiniSidenav, setOpenConfigurator } from "context";
 
 // Images
-import brand from "assets/images/logo-ct.png";
-import brandDark from "assets/images/logo-ct-dark.png";
+import brand from "assets/images/finalLogo.png";
+import brandDark from "assets/images/finalLogo.png";
 
 // Icon Fonts
 import "assets/css/nucleo-icons.css";
 import "assets/css/nucleo-svg.css";
 import { useSelector } from "react-redux";
+import { getUserDetails } from "apiservices/userService";
+
+import Spinner from "components/Spinner";
 
 export default function App() {
   const [controller, dispatch] = useArgonController();
@@ -47,15 +52,25 @@ export default function App() {
     controller;
   const [onMouseEnter, setOnMouseEnter] = useState(false);
   const [rtlCache, setRtlCache] = useState(null);
+  const [loading, setLoading] = useState(true);
   const { pathname } = useLocation();
+
+  const navigate = useNavigate();
 
   const token = localStorage.getItem("token");
 
   const userProfileInfo = useSelector((state) => state.user.value);
 
   const handleCheckUserAuthenticated = async () => {
-    if (window.location.pathname != "/") {
-    }
+    await getUserDetails().then((res) => {
+      if (res.status == 200) {
+        localStorage.setItem("user", JSON.stringify(res.data.user));
+        setLoading(false);
+      } else {
+        navigate("/authentication/sign-in");
+        setLoading(false);
+      }
+    });
   };
 
   useEffect(() => {
@@ -115,39 +130,18 @@ export default function App() {
       return null;
     });
 
-  return direction === "rtl" ? (
-    <CacheProvider value={rtlCache}>
-      <ThemeProvider theme={darkMode ? themeDarkRTL : themeRTL}>
-        <CssBaseline />
-        {layout === "dashboard" && (
-          <>
-            <Sidenav
-              color={sidenavColor}
-              brand={darkSidenav || darkMode ? brand : brandDark}
-              brandName="Gomindz Inventory"
-              routes={routes}
-              onMouseEnter={handleOnMouseEnter}
-              onMouseLeave={handleOnMouseLeave}
-            />
-            <Configurator />
-          </>
-        )}
-        {layout === "vr" && <Configurator />}
-        <Routes>
-          {getRoutes(routes)}
-          <Route path="*" element={<Navigate to="/home" />} />
-        </Routes>
-      </ThemeProvider>
-    </CacheProvider>
+  return loading ? (
+    <Spinner></Spinner>
   ) : (
     <ThemeProvider theme={darkMode ? themeDark : theme}>
       <CssBaseline />
+
       {layout === "dashboard" && (
         <>
           <Sidenav
             color={sidenavColor}
             brand={darkSidenav || darkMode ? brand : brandDark}
-            brandName="Gomindz Inventory"
+            brandName="Mega Store"
             routes={routes}
             onMouseEnter={handleOnMouseEnter}
             onMouseLeave={handleOnMouseLeave}
@@ -155,7 +149,6 @@ export default function App() {
           <Configurator />
         </>
       )}
-      {layout === "vr" && <Configurator />}
 
       <Routes>
         {getRoutes(routes)}

@@ -13,6 +13,7 @@ export const AddProductSchema = Yup.object().shape({
   description_color: Yup.string().required("Required"),
   price: Yup.number().required("Required"),
   status: Yup.string().required("Required"),
+  
 });
 
 

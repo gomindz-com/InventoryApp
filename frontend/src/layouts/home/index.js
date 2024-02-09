@@ -16,6 +16,9 @@ import multipleUser from "../../assets/images/multipleUser.png";
 import notified from "../../assets/images/notified.png";
 import werehousing from "../../assets/images/werehousing.png";
 import { Swiper, SwiperSlide } from "swiper/react";
+import Switch from '@mui/material/Switch';
+
+
 
 import "swiper/swiper.min.css";
 import "swiper/components/navigation/navigation.min.css";
@@ -36,6 +39,30 @@ function Home() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
+
+  // const [isDarkMode, setIsDarkMode] = useState(false);
+
+
+
+
+  // const toggleMode = () => {
+  //   setIsDarkMode(prevMode => !prevMode);
+  // };
+
+  // const [isMonthSelected, setIsMonthSelected] = useState(true);
+  const [isMonthly, setIsMonthly] = useState(true);
+
+
+  const handleSwitchToggle = () => {
+    setIsMonthly(!isMonthly);
+  };
+
+
+  const label = { inputProps: { 'aria-label': 'Switch demo' } };
+
+
+ 
+
   useEffect(() => {
     setLayout(dispatch, "home");
   }, [pathname]);
@@ -45,7 +72,7 @@ function Home() {
       <nav className="navbar navbar-expand-lg position-absolute top-0 z-index-3 w-100 shadow-none my-3  navbar-transparent ">
         <div className="container">
           <div className="navbar-brand title">
-            Go Inventory App
+            Mega Store
           </div>
           <button
             className="navbar-toggler shadow-none ms-2"
@@ -413,6 +440,15 @@ function Home() {
                   <h3 className="text-black z-index-1 position-relative">Payment methods</h3>
                 </div>
               </div>
+               
+
+
+              <div className="d-flex flex-row align-items-center">
+        <h4  style={{marginRight: 15}}  >Month</h4>
+        <Switch onChange={handleSwitchToggle} checked={isMonthly} />
+        <h4 style={{marginLeft: 20}} >Year</h4>
+      </div>
+   
 
               <div className="row mt-4">
                 {/* first card */}
@@ -436,12 +472,17 @@ function Home() {
                         <small
                           className="align-top"
                           style={{ fontSize: "22px", lineHeight: "45px" }}
-                        ></small>
-                        Free
+                        >
+                          $
+                        </small>
+                        {isMonthly ? 12.99 : 9.99}
                         <small
                           className="align-bottom"
                           style={{ fontSize: "16px", lineHeight: "40px" }}
-                        ></small>
+                        >
+                           {isMonthly ? "Year" : "Month"}
+
+                        </small>
                       </h1>
                       <a className="btn btn-info px-4 py-2" href="">
                         Subscribe
@@ -484,14 +525,14 @@ function Home() {
                           className="align-top"
                           style={{ fontSize: "22px", lineHeight: "45px" }}
                         >
-                          D
+                          $
                         </small>
-                        500
+                        {isMonthly ? 22.99 : 19.99}
                         <small
                           className="align-bottom"
                           style={{ fontSize: "16px", lineHeight: "40px" }}
                         >
-                          / Month
+                        {isMonthly ? "Year" : "Month"}
                         </small>
                       </h1>
                       <a className="btn btn-info px-4 py-2" href="">
@@ -543,14 +584,15 @@ function Home() {
                           className="align-top"
                           style={{ fontSize: "22px", lineHeight: "45px" }}
                         >
-                          D
+                          $
                         </small>
-                        2500
+                        {isMonthly ? 32.99 : 29.99}
+
                         <small
                           className="align-bottom"
                           style={{ fontSize: "16px", lineHeight: "40px" }}
                         >
-                          / Month
+                        {isMonthly ? "Year" : "Month"}
                         </small>
                       </h1>
                       <a className="btn btn-info px-4 py-2" href="">
@@ -593,106 +635,161 @@ function Home() {
                   <div className="row justify-content-start">
                     <div className="col-md-6 col-lg-4 mb-4">
                       <div className="card border-primary" style={{ width: "100%", height: "90%" }}>
-                        <div className="card-body text-primary">
-                          <h5 className="card-title">Stock Management</h5>
-                          <p className="card-text" style={{ color: "black" }}>
-                            Track and monitor quantity of products
-                          </p>
-                          <p className="card-text" style={{ color: "black" }}>
-                            Reconcile your purchase with current stock
-                          </p>
+                      <div className="card-body text-primary">
+  <h5 className="card-title">Stock Management</h5>
+  <ul style={{ color: "black" }}>
+    <li>
+      <p className="card-text">
+        Track and monitor quantity of products
+      </p>
+    </li>
+    <li>
+      <p className="card-text">
+        Reconcile your purchase with current stock
+      </p>
+    </li>
+    <li>
+      <p className="card-text">
+        Keep track of suppliers and products
+      </p>
+    </li>
+  </ul>
+</div>
 
-                          <p className="card-text" style={{ color: "black" }}>
-                            Keep track of suplliers and products .
-                          </p>
-                        </div>
                       </div>
                     </div>
                     <div className="col-md-6 col-lg-4 mb-4">
                       <div className="card border-primary" style={{ height: "90%", width: "100%" }}>
-                        <div className="card-body text-primary">
-                          <h5 className="card-title">Expiry Managment</h5>
-                          <p className="card-text" style={{ color: "black" }}>
-                            Keep track of and monitor expired/ expiring item in the stock .
-                          </p>
-                          <p className="card-text" style={{ color: "black" }}>
-                            pre notifications on items about to expire .
-                          </p>
-                          <p className="card-text" style={{ color: "black" }}>
-                            get report of all expired items in one click .
-                          </p>
-                        </div>
+                      <div className="card-body text-primary">
+  <h5 className="card-title">Expiry Management</h5>
+  <ul style={{ color: "black" }}>
+    <li>
+      <p className="card-text">
+        Keep track of and monitor expired/expiring items in the stock
+      </p>
+    </li>
+    <li>
+      <p className="card-text">
+        Pre-notifications on items about to expire
+      </p>
+    </li>
+    <li>
+      <p className="card-text">
+        Get a report of all expired items in one click
+      </p>
+    </li>
+  </ul>
+</div>
+
                       </div>
                     </div>
                     <div className="col-md-6 col-lg-4 mb-4">
                       <div className="card border-primary" style={{ height: "90%", width: "100%" }}>
-                        <div className="card-body text-primary">
-                          <h5 className="card-title">User friendly interface</h5>
-                          <p className="card-text" style={{ color: "black" }}>
-                            Comprehensive and mordern user friendly interface .
-                          </p>
-                          <p className="card-text" style={{ color: "black" }}>
-                            Paster service expriance .
-                          </p>
-                          <p className="card-text" style={{ color: "black" }}>
-                            Diffrent user themes: light mode or Dark mode.
-                          </p>
-                        </div>
+                      <div className="card-body text-primary">
+  <h5 className="card-title">User friendly interface</h5>
+  <ul style={{ color: "black" }}>
+    <li>
+      <p className="card-text">
+        Comprehensive and modern user-friendly interface
+      </p>
+    </li>
+    <li>
+      <p className="card-text">
+        Faster service experience
+      </p>
+    </li>
+    <li>
+      <p className="card-text">
+        Different user themes: light mode or Dark mode
+      </p>
+    </li>
+  </ul>
+</div>
+
                       </div>
                     </div>
                   </div>
                   <div className="row justify-content-start mt-4">
                     <div className="col-md-6 col-lg-4 mb-4">
                       <div className="card border-primary" style={{ height: "90%", width: "100%" }}>
-                        <div className="card-body text-primary">
-                          <h5 className="card-title">Sales management</h5>
-                          <p className="card-text" style={{ color: "black" }}>
-                            Calculate profite on diffrent products and categories in real time{" "}
-                          </p>
-                          <p className="card-text" style={{ color: "black" }}>
-                            Automatically update stock after each sale .
-                          </p>
-                          <p className="card-text" style={{ color: "black" }}>
-                            Notify on product shortage
-                          </p>
-                        </div>
+                      <div className="card-body text-primary">
+  <h5 className="card-title">Sales management</h5>
+  <ul style={{ color: "black" }}>
+    <li>
+      <p className="card-text">
+        Calculate profit on different products and categories in real time
+      </p>
+    </li>
+    <li>
+      <p className="card-text">
+        Automatically update stock after each sale
+      </p>
+    </li>
+    <li>
+      <p className="card-text">
+        Notify on product shortage
+      </p>
+    </li>
+  </ul>
+</div>
+
                       </div>
                     </div>
                     <div className="col-md-6 col-lg-4 mb-4">
                       <div className="card border-primary" style={{ height: "90%", width: "100%" }}>
-                        <div className="card-body text-primary">
-                          <h5 className="card-title">Reporting </h5>
-                          <p className="card-text" style={{ color: "black" }}>
-                            Sales and Stock report
-                          </p>
-                          <p className="card-text" style={{ color: "black" }}>
-                            Purchase and supply reports
-                          </p>
-                          <p className="card-text" style={{ color: "black" }}>
-                            Debtors and creditors report
-                          </p>
-                          <p className="card-text" style={{ color: "black" }}>
-                            petty cash and cash book report
-                          </p>
-                        </div>
+                      <div className="card-body text-primary">
+  <h5 className="card-title">Reporting</h5>
+  <ul style={{ color: "black" }}>
+    <li>
+      <p className="card-text">
+        Sales and Stock report
+      </p>
+    </li>
+    <li>
+      <p className="card-text">
+        Purchase and supply reports
+      </p>
+    </li>
+    <li>
+      <p className="card-text">
+        Debtors and creditors report
+      </p>
+    </li>
+    <li>
+      <p className="card-text">
+        Petty cash and cash book report
+      </p>
+    </li>
+  </ul>
+</div>
+
                       </div>
                     </div>
                     <div className="col-md-6 col-lg-4 mb-4">
-                      <div className="card border-primary" style={{ height: "90%", width: "100%" }}>
-                        <div className="card-body text-primary">
-                          <h5 className="card-title">notifications</h5>
-                          <p className="card-text" style={{ color: "black" }}>
-                            Whatsapp notification on sales reports{" "}
-                          </p>
-                          <p className="card-text" style={{ color: "black" }}>
-                            Monthly and qurtely report on transaction{" "}
-                          </p>
-                          <p className="card-text" style={{ color: "black" }}>
-                            closing and opening stock
-                          </p>
-                        </div>
-                      </div>
-                    </div>
+  <div className="card border-primary" style={{ height: "90%", width: "100%" }}>
+    <div className="card-body text-primary">
+      <h5 className="card-title">Notifications</h5>
+      <ul>
+        <li style={{ color: "black" }}  >
+          <p className="card-text" style={{ color: "black" }}>
+            Whatsapp notification on sales reports
+          </p>
+        </li>
+        <li style={{ color: "black" }}  >
+          <p className="card-text" style={{ color: "black" }}>
+            Monthly and quarterly report on transactions
+          </p>
+        </li>
+        <li  style={{ color: "black" }} >
+          <p className="card-text" style={{ color: "black" }}>
+            Closing and opening stock
+          </p>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
                   </div>
                 </div>
               </div>
@@ -757,7 +854,7 @@ function Home() {
             </div>
             <div className="col-md-3 mb-4 ms-auto">
               <div>
-                <h6 className="font-weight-bolder mb-4">Go Inventory App</h6>
+                <h6 className="font-weight-bolder mb-4">Mega Store</h6>
               </div>
               <div>
                 <ul className="d-flex flex-row ms-n3 nav">
@@ -793,7 +890,7 @@ function Home() {
               <div className="text-center">
                 <p className="text-dark my-4 text-sm font-weight-normal">
                   All rights reserved. Copyright © <script>{new Date().getFullYear()}</script>{" "}
-                  GoMindz Inventory App <a href="https://www.gomindz.com">Gomindz Inc</a>.
+                  MegaStore App <a href="https://www.gomindz.com"></a>.
                 </p>
               </div>
             </div>

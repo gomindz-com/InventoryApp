@@ -1,8 +1,8 @@
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Group, PermissionsMixin, Permission
+from django.contrib.auth.models import Group, PermissionsMixin
 from django.contrib.auth.models import AbstractUser, PermissionsMixin
 from django.db import models
 from django.utils.translation import gettext as _
-from .managers import CustomUserManager, MobileUserManager
+from .managers import CustomUserManager
 from django.utils import timezone
 
 
@@ -33,6 +33,16 @@ class CustomUser(AbstractUser, PermissionsMixin):
     def __str__(self):
         return self.email
  
+
+class UserActivity(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    activity_type = models.CharField(max_length=100)
+    details = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.user.username} - {self.activity_type}'
+
 
 
 

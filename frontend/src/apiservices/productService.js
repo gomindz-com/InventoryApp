@@ -65,3 +65,17 @@ export const editProduct = async (productData) => {
 
   return data;
 }
+
+
+export const getProductsImages = async () => {
+  const data = await axiosConfig
+    .get(`/store/products-images`)
+    .then((response) => {
+      return response;
+    })
+    .catch((err) => { 
+      return err.response
+    });
+
+  return data;
+};

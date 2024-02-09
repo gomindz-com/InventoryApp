@@ -20,7 +20,7 @@ import { Button } from "@mui/material";
 import { AddOrderSchema } from "formValidation/addForm";
 import Select from "react-select";
 import { getProducts } from "apiservices/productService";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 
 import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
@@ -33,6 +33,9 @@ import { getOrders, addOrder, deleteOrder } from "apiservices/orderService";
 import "./index.css";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
+import TextField from '@mui/material/TextField';
+import * as XLSX from "xlsx";
+
 
 function Receipts() {
   const product_options = [];
@@ -85,6 +88,7 @@ function Receipts() {
 
   const [orderData, setOrderData] = useState({
     buyer: "",
+    buyer_phone: "",
     buyer_location: "",
     status: "pending",
     receipt: "",
@@ -96,6 +100,9 @@ function Receipts() {
   const [invoiceData, setInvoiceData] = useState({
     buyer: "",
     buyer_location: "",
+    // buyer_phone: "",
+
+
     status: "pending",
     receipt: "",
     total_price: "",
@@ -106,6 +113,9 @@ function Receipts() {
   const [ordertotalPrice, setOrderTotalPrice] = useState(0.0);
   const [theBuyer, setTheBuyer] = useState("");
   const [theBuyerLocation, setTheBuyerLocation] = useState("");
+  const [theBuyerPhone, setTheBuyerPhone] = useState("");
+
+  
   const [theReceipt, setTheReceipt] = useState("");
 
   const [products, setProducts] = useState([]);
@@ -117,6 +127,8 @@ function Receipts() {
   const [productInputRow, setProductInputRow] = useState([]);
 
   const [otherProducts, setOtherProducts] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
+
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -126,6 +138,7 @@ function Receipts() {
     { name: "id", align: "left" },
     { name: "product", align: "left" },
     { name: "total price", align: "left" },
+    { name: "buyer_phone", align: "left" },
     { name: "buyer", align: "center" },
     { name: "buyer_location", align: "center" },
     { name: "status", align: "center" },
@@ -133,7 +146,37 @@ function Receipts() {
     //{ name: "delete", align: "center" },
   ];
   const rows = [];
-
+  
+  
+  const columnsToExport = [
+    "id",
+    "product",
+    "total_price",
+    "buyer_phone",
+    "buyer",
+    "buyer_location",
+  ];
+  
+  const rowToExcel = currentOrderList.map(order => {
+    const row = {};
+    columnsToExport.forEach(column => {
+      if (column === "product") {
+        row[column] = order.products.map(product => product.name).join(", ");
+      } else {
+        row[column] = order[column];
+      }
+    });
+    return row;
+  });
+  
+  const exportToExcel = () => {
+    const ws = XLSX.utils.json_to_sheet(rowToExcel, { header: columnsToExport });
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Receipt Report");
+    XLSX.writeFile(wb, "Receipt_report.xlsx");
+  };
+  
+  
   const ComponentToPrint = React.forwardRef((props, ref) => {
     return <div ref={ref}>My cool content here!</div>;
   });
@@ -156,7 +199,6 @@ function Receipts() {
     setOrderList([]);
     try {
       const res = await getOrders("receipt");
-
       if (res.data?.status === true) {
         setOrderList(res.data.orders);
         setCurrentOrderList(res.data.orders);
@@ -171,6 +213,23 @@ function Receipts() {
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
+
+
+
+  useEffect(() => {
+    handleGetReceiptList
+}, []);
+
+const handleSearch = (event) => {
+  const query = event.target.value.toLowerCase();
+  setSearchQuery(query);
+  const filteredOrders = orderList.filter(order =>
+      order.buyer.toLowerCase().includes(query) || 
+      order.receipt.includes(query) 
+  );
+  setCurrentOrderList(filteredOrders);
+};
+
 
   const handleDownload = () => {
     const componentNode = componentRef.current;
@@ -188,34 +247,6 @@ function Receipts() {
     }
   };
 
-  // const handleDownload = () => {
-  //   const componentNode = componentRef.current;
-
-  //   if (componentNode) {
-  //     html2canvas(componentNode, {
-  //       width: componentNode.scrollWidth,
-  //       height: componentNode.scrollHeight,
-  //     }).then((canvas) => {
-  //       const imgData = canvas.toDataURL("image/png");
-  //       const pdf = new jsPDF();
-  //       pdf.addImage(imgData, "PNG", 2, 0);
-  //       pdf.save("component.pdf");
-  //     });
-  //   }
-  // };
-
-  // const handleDownload = () => {
-  //   const componentNode = componentRef.current;
-
-  //   if (componentNode) {
-  //     html2canvas(componentNode).then((canvas) => {
-  //       const imgData = canvas.toDataURL("image/png");
-  //       const pdf = new jsPDF();
-  //       pdf.addImage(imgData, "PNG", 0, 0);
-  //       pdf.save("component.pdf");
-  //     });
-  //   }
-  // };
   const handleChangeProduct = async (selectedOption) => {
     setFirstProductId(selectedOption.id);
     setFirstProductPrice(selectedOption.price);
@@ -255,7 +286,7 @@ function Receipts() {
     }
   };
 
-  orderList.map(function (item, i) {
+  currentOrderList.map(function (item, i) {
     rows.push({
       id: (
         <ArgonBox display="flex" alignItems="center" px={3} py={0.5}>
@@ -282,7 +313,15 @@ function Receipts() {
       "total price": (
         <ArgonBox display="flex" flexDirection="column">
           <ArgonTypography variant="caption" fontWeight="medium" color="text">
-            D {item.total_price}
+            GMD {item.total_price}
+          </ArgonTypography>
+          <ArgonTypography variant="caption" color="secondary"></ArgonTypography>
+        </ArgonBox>
+      ),
+      "buyer_phone": (
+        <ArgonBox display="flex" flexDirection="column">
+          <ArgonTypography variant="caption" fontWeight="medium" color="text">
+            {item.buyer_phone}
           </ArgonTypography>
           <ArgonTypography variant="caption" color="secondary"></ArgonTypography>
         </ArgonBox>
@@ -325,6 +364,7 @@ function Receipts() {
             setTheBuyer(item.buyer);
             setTheBuyerLocation(item.buyer_location);
             setTheReceipt(item.receipt);
+            setTheBuyerPhone(item.buyer_phone)
           }}
         >
           <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-bold-down" />
@@ -671,13 +711,13 @@ function Receipts() {
         .then((res) => {
           if (res.status == 201) {
             toast.success("Successfully Added");
-
             setFirstProductId("");
             setIdProductRow(0);
             setProductInputRow([]);
             setOrderData({
               buyer: "",
               buyer_location: "",
+              buyer_phone: "",
               status: "pending",
               ref: "",
               total_price: "",
@@ -757,11 +797,25 @@ function Receipts() {
               <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
                 <ArgonTypography variant="h6">Receipt List</ArgonTypography>
 
+
+                <TextField
+                id="outlined-basic"
+                placeholder="Search"
+                style={{ width: "65%" }}
+                variant="outlined"
+                value={searchQuery}
+                onChange={handleSearch}
+            />
+
+
                 <Button
                   onClick={() => {
                     setOrderData({
                       buyer: "",
                       buyer_location: "",
+                      // buyer_phone: "",
+
+                      
                       status: "",
                       ref: "",
                       total_price: "",
@@ -783,6 +837,18 @@ function Receipts() {
                   <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-fat-add" />
                 </Button>
               </ArgonBox>
+
+
+              <ArgonBox style={{alignSelf: "flex-end", marginRight: 25}}>
+               <Button onClick={exportToExcel} >
+                <h6 style={{ paddingRight: 10 }}>Export to  Excel</h6>
+                
+
+                </Button>
+               </ArgonBox>
+
+
+
               <ArgonBox
                 sx={{
                   "& .MuiTableRow-root:not(:last-child)": {
@@ -951,6 +1017,32 @@ function Receipts() {
                     />
                   </ArgonBox>
 
+
+                  <ArgonBox mb={2} mx={5}>
+                    <ArgonInput
+                      type="name"
+                      name="buyer_phone"
+                      value={orderData.buyer_phone}
+                      placeholder="Buyer Phone number"
+                      size="large"
+                      onChange={handleChange}
+                    />
+                  </ArgonBox>
+
+
+                  {/* <ArgonBox mb={2} mx={5}>
+                    <ArgonInput
+                      type="name"
+                      name="phone"
+                      value={orderData.buyer_phone}
+                      placeholder="Buyer phone number"
+                      size="large"
+                      onChange={handleChange}
+                    />
+                  </ArgonBox> */}
+
+              
+
                   <ArgonBox mb={2} mx={5}>
                     <ArgonInput
                       type="name"
@@ -1063,7 +1155,7 @@ function Receipts() {
                       <div className="row gutters">
                         <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6">
                           <a href="index.html" className="invoice-logo">
-                            GoMindz Inventory
+                            Mega Store
                           </a>
                         </div>
                         <div
@@ -1088,6 +1180,8 @@ function Receipts() {
                               {theBuyer}
                               <br />
                               {theBuyerLocation}
+                              <br/>
+                              {theBuyerPhone}
                             </address>
                           </div>
                         </div>

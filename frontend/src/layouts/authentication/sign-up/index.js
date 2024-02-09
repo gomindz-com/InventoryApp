@@ -1,25 +1,23 @@
+import { useState, useEffect} from "react";
 import { Link } from "react-router-dom";
+import CoverLayout from "layouts/authentication/components/CoverLayout";
 
-// @mui material components
 import Card from "@mui/material/Card";
 import Checkbox from "@mui/material/Checkbox";
-
-// Argon Dashboard 2 MUI components
 import ArgonBox from "components/ArgonBox";
 import ArgonTypography from "components/ArgonTypography";
 import ArgonInput from "components/ArgonInput";
 import ArgonButton from "components/ArgonButton";
-import { useState } from "react";
-
-// Authentication layout components
-import CoverLayout from "layouts/authentication/components/CoverLayout";
 import { registerUser } from "apiservices/authService";
 import { RegisterUserSchema } from "../../../formValidation/addForm";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { Grid } from "@mui/material";
 
 function Cover() {
+
+  const navigate = useNavigate();
+
   const [userData, setUserData] = useState({
     email: "",
     username: "",
@@ -35,15 +33,14 @@ function Cover() {
     region: "",
   });
 
-  const navigate = useNavigate();
-
-
   const handleChange = (e) => {
     setUserData({ ...userData, [e.target.name]: e.target.value });
   };
 
+  const handleChangeContact = (e) => {
+    setUserData({ ...userData, [e.target.name]: "+220" + e.target.value });
+  };
 
-  
   const handleValidateSubmit = async (e) => {
     RegisterUserSchema.validate(userData, { abortEarly: false })
       .then(async () => {
@@ -76,6 +73,14 @@ function Cover() {
       });
   };
 
+
+  useEffect(() => {
+    localStorage.removeItem("admin");
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    localStorage.removeItem("userToken");
+    localStorage.removeItem("adminToken");
+  }, []);
 
   return (
     <CoverLayout
@@ -187,15 +192,27 @@ function Cover() {
             </Grid>
 
             <Grid container spacing={3}>
-              <Grid item xs={12} md={6}>
+              <Grid item xs={12} md={2}>
+                <ArgonBox mb={2}>
+                  <ArgonInput
+                    name="country_code"
+                    type="text"
+                    placeholder="+221"
+                    size="large"
+                    autoComplete="off"
+                    value={"+220"}
+                  />
+                </ArgonBox>
+              </Grid>
+              <Grid item xs={12} md={4}>
                 <ArgonBox mb={2}>
                   <ArgonInput
                     name="contact"
-                    type="text"
+                    type="number"
                     placeholder="Contact Number"
                     size="large"
                     autoComplete="off"
-                    onChange={handleChange}
+                    onChange={handleChangeContact}
                   />
                 </ArgonBox>
               </Grid>

@@ -1,43 +1,17 @@
-from django.shortcuts import render
-
-from twilio.rest import Client
 from django.http import JsonResponse
-from django.http import HttpResponse
-from django.db import Error
 from django.db.models import Sum
-from django.views.decorators.csrf import csrf_exempt
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework import generics
-
-from .models import mProduct,TransactionProducts, Damages,Transaction
+from .models import mProduct, Damages,Transaction
 from .serializers import mProductSerializer, DamagesSerializer,TransactionSerializer
 
 
 # FORM DATA FOR PRODUCT IMAGE
 parser_classes = [MultiPartParser, FormParser]
-
-# TWILIO
-account_sid = '12334'
-authToken = '14456'
-client = Client(account_sid, authToken)
-
-
-@csrf_exempt
-def twilio(request):
-    # message = request.POST["message"]
-    client.messages.create(
-        from_='whatsapp:+14155238886',
-        body="Hi",
-        # media_url='https://www.aims.ca/site/media/aims/2.pdf',
-        # media_url='https://91d7-197-255-199-14.eu.ngrok.io/static/images/gooo.pdf',
-        to='whatsapp:+2207677435',
-    )
-    print(request.POST)
-    return HttpResponse("Hello")
 
 
 # LIST ALL CUSTOMER PRODUCTS / CREATE A PRODUCT
@@ -172,7 +146,7 @@ class DamagesListCreateView(generics.ListCreateAPIView):
 
 
 
-#API to get products on low stock
+#API FOR LOW STOCK
 @api_view(['GET'])
 def lowstockproduct(request):
     product = mProduct.objects.filter()

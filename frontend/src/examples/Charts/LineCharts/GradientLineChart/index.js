@@ -46,7 +46,7 @@ function GradientLineChart({ title, description, height, chart }) {
     const chartDatasets = chart.datasets
       ? chart.datasets.map((dataset) => ({
           ...dataset,
-          tension: 0.4,
+          // tension: 0.4,
           pointRadius: 0,
           borderWidth: 3,
           borderColor: colors[dataset.color]
