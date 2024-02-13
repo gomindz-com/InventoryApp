@@ -245,9 +245,9 @@ function Products() {
     rows.push({
       product: (
         <ArgonBox display="flex" alignItems="center" px={1} py={0.5}>
-          <ArgonBox mr={2}>
+          {/* <ArgonBox mr={2}>
             <ArgonAvatar src={logoSpotify} alt={"name"} size="sm" variant="rounded" />
-          </ArgonBox>
+          </ArgonBox> */}
           <ArgonBox display="flex" flexDirection="column">
             <ArgonTypography variant="button" fontWeight="medium">
               {item.name}
