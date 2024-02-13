@@ -557,6 +557,7 @@ class OrderRetreiveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     def delete(self, request, *args, **kwargs):
         return super().delete(request, *args, **kwargs)
 
+
 # LIST ALL CUSTOMER ORDERS [INVOICE/RECEIPT] / CREATE A CUSTOMER ORDER
 class StoreStatisticsView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
@@ -1219,10 +1220,8 @@ def lowstockproduct(request):
 
 class ProductReportView(APIView):
     def get(self, request, *args, **kwargs):
-        # Retrieve product information
         products = Product.objects.filter(owner=request.user)
 
-        # Prepare the data for each product
         product_data = []
         for product in products:
             product_data.append({
@@ -1235,18 +1234,15 @@ class ProductReportView(APIView):
                 "Added Date": product.created_date
             })
 
-        # Return the data as JSON
-        # safe=False)
         return JsonResponse(status=200, data={'status': 'true', 'message': 'success', 'result': product_data})
 
     def get_stock_out(self, product):
-        # Calculate stock out based on orders with type 'receipt'
         stock_out = product.orderproducts_set.filter(
             order__type='receipt').aggregate(Sum('quantity'))['quantity__sum']
         return stock_out if stock_out else 0
 
 
-# LIST ALL CUSTOMER PRODUCT CATEGORIES / CREATE A PRODUCT CATEGORY
+# LIST STORE INFORMATION
 class StoreInfoListView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = CategorySerializer
