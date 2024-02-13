@@ -6,6 +6,8 @@ import VirtualReality from "layouts/virtual-reality";
 import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
+import PersonIcon from '@mui/icons-material/Person';
+
 
 // Argon Dashboard 2 MUI components
 import ArgonBox from "components/ArgonBox";
@@ -18,6 +20,7 @@ import ContactUs from "layouts/contact";
 import Receipts from "layouts/receipts";
 import Damages from "layouts/damages";
 import ReceiptIcon from "@mui/icons-material/Receipt";
+import Customer from "layouts/customer";
 
 const routes = [
   {
@@ -87,6 +90,25 @@ const routes = [
     icon: <ArgonBox component="i" color="warning" fontSize="14px" className="ni ni-collection" />,
     component: <Report />,
   },
+
+
+
+  {
+    
+      type: "route",
+      name: "Customer",
+      key: "Customer",
+      route: "/Customer",
+      icon: <PersonIcon />,
+      component: <Customer />,
+    
+    
+  },
+
+
+
+
+
 
   { type: "title", title: "Account Pages", key: "account-pages" },
   {
