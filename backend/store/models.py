@@ -26,6 +26,7 @@ class Product(models.Model):
     name = models.CharField(max_length=120)
     description_color = models.CharField(max_length=120, default='')
     price = models.DecimalField(max_digits=120, decimal_places=2)
+    cost_price = models.DecimalField(max_digits=120, decimal_places=2, default=0.0)
     stock = models.PositiveIntegerField(default='')
     status = models.CharField(max_length=120, choices=STATUS_CHOICE, default='')
     supplier = models.CharField(max_length=50, default='')
@@ -34,7 +35,7 @@ class Product(models.Model):
     category = models.ForeignKey('Category', on_delete=models.CASCADE, default='')
     created_date = models.DateField(auto_now_add=True)
     expiry_date = models.DateField(_('Expiry Date'), null=True, blank=True)
-
+    is_active = models.BooleanField(default=True)
 
 
     def __str__(self):

@@ -108,7 +108,7 @@ class ProductListCreateView(generics.ListCreateAPIView):
 
     def get(self, request, *args, **kwargs):
         user = self.request.user
-        queryset = Product.objects.filter(owner=user)
+        queryset = Product.objects.filter(owner=user, is_active=True)
         serializer = self.get_serializer(queryset, many=True)
         response = {
             "status": True,
@@ -120,6 +120,7 @@ class ProductListCreateView(generics.ListCreateAPIView):
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
+        print(request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         response = {
