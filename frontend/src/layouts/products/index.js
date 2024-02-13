@@ -42,19 +42,7 @@ function Products() {
   // MODAL ITEM
   const [modalItem, setModalItem] = useState(null);
 
-  // TABLE ROWS AND COLUMNS UI
-  const columns = [
-    { name: "product", align: "left" },
-    { name: "category", align: "left" },
-    { name: "stock", align: "left" },
-    { name: "status", align: "center" },
-    { name: "price", align: "center" },
-    { name: "edit", align: "center" },
-    { name: "delete", align: "center" },
-  ];
-
-  const rows = [];
-
+  
   const [searchQuery, setSearchQuery] = useState("");
 
   // ADDING EDITING PRODUCTS
@@ -73,6 +61,7 @@ function Products() {
     stock: "",
     description_color: "",
     price: "",
+    cost_price: "",
     status: "in_stock",
     
   });
@@ -105,8 +94,10 @@ function Products() {
     uploadData.append("description_color", productData.description_color);
     uploadData.append("status", productData.status);
     uploadData.append("price", productData.price);
+    uploadData.append("cost_price", productData.cost_price);
     uploadData.append("category", productData.category);
     uploadData.append("stock", productData.stock);
+    uploadData.append("is_active", true);
 
     if(productData?.expiry_date != null || undefined){
       uploadData.append("expiry_date", productData?.expiry_date );
@@ -116,6 +107,10 @@ function Products() {
     }
 
     try {
+
+      console.log("uploadData")
+      console.log(uploadData.is_active)
+
       const res = await addProduct(uploadData);
       if (res.status == 201) {
         toast.success("Added Successfully");
@@ -128,6 +123,7 @@ function Products() {
           stock: "",
           description_color: "",
           price: "",
+          cost_price: "",
           status: "in_stock",
         })
         setProductImage(null)
@@ -202,7 +198,6 @@ function Products() {
   };
 
   const handleDeleteProduct = async () => {
-
     setLoading(true)
     await deleteProduct(modalItem.id)
       .then((res) => {
@@ -210,6 +205,29 @@ function Products() {
           handleGetProductList();
           toggleModal();
           setLoading(false)
+        } else {
+          toast.error("Error Deleting", { autoClose: 80 });
+          setLoading(false)
+        }
+      })
+      .catch((err) => {});
+  };
+
+
+  const handleDeactiveProduct = async () => {
+    setLoading(true)
+    delete modalItem.image;
+    await editProduct({
+      ...modalItem,
+      is_active: false,
+      price: 10
+    })
+      .then((res) => {
+        if (res.status == 200) {
+          handleGetProductList();
+          toggleModal();
+          setLoading(false)
+          toast.success("Successfully Updated", { autoClose: 80 });
         } else {
           toast.error("Error Deleting", { autoClose: 80 });
           setLoading(false)
@@ -263,13 +281,48 @@ function Products() {
     } catch (error) {}
   };
 
+
+
+ // DISPLAY ROWS
+
+
+   // TABLE ROWS AND COLUMNS UI
+   const columns = [
+    { name: "unique id", align: "center" },
+    { name: "product", align: "left" },
+    { name: "category", align: "left" },
+    { name: "stock", align: "left" },
+    { name: "status", align: "center" },
+    { name: "price", align: "center" },
+    { name: "cost price", align: "center" },
+    { name: "edit", align: "center" },
+    { name: "delete", align: "center" },
+  ];
+
+  const rows = [];
+
+
   currentProductList?.map(function (item, i) {
     rows.push({
+
+      'unique id': (
+        <ArgonBox display="flex" flexDirection="column">
+          <ArgonTypography
+            variant="caption"
+            fontWeight="small"
+            fontSize="1.05rem"
+            color={item.stock >= 50 ? "primary" : "error"}
+          >
+            {item.id}
+          </ArgonTypography>
+        </ArgonBox>
+      ),
+
       product: (
         <ArgonBox display="flex" alignItems="center" px={1} py={0.5}>
-          <ArgonBox mr={2}>
+          {/* <ArgonBox mr={2}>
             <ArgonAvatar src={logoSpotify} alt={"name"} size="sm" variant="rounded" />
-          </ArgonBox>
+          </ArgonBox> */}
           <ArgonBox display="flex" flexDirection="column">
             <ArgonTypography variant="button" fontWeight="medium">
               {item.name}
@@ -321,6 +374,11 @@ function Products() {
       price: (
         <ArgonTypography variant="caption" color="secondary" fontWeight="medium">
           {item.price}
+        </ArgonTypography>
+      ),
+      "cost price": (
+        <ArgonTypography variant="caption" color="secondary" fontWeight="medium">
+          {item.cost_price}
         </ArgonTypography>
       ),
       edit: (
@@ -383,7 +441,7 @@ function Products() {
           <Typography>Are you sure you want to delete this item?</Typography>
           <ArgonButton
             style={{ marginRight: "15px", marginTop: "15px" }}
-            onClick={handleDeleteProduct}
+            onClick={handleDeactiveProduct}
             color="info"
             size="large"
           >
@@ -442,6 +500,7 @@ function Products() {
                       stock: "",
                       description_color: "",
                       price: "",
+                      cost_price: "",
                       status: "in_stock",
                     });
 
@@ -574,6 +633,17 @@ function Products() {
                         name="price"
                         value={productData.price}
                         placeholder="unit Price"
+                        size="large"
+                        onChange={handleChange}
+                      />
+                    </ArgonBox>
+                    <ArgonBox mb={2} mx={5}>
+                      <ArgonInput
+                        style={{ borderColor: isNaN(productData.price) && "red" }}
+                        type="number"
+                        name="cost_price"
+                        value={productData.cost_price}
+                        placeholder="Cost Price"
                         size="large"
                         onChange={handleChange}
                       />
