@@ -8,7 +8,7 @@ from django.contrib.auth.password_validation import validate_password
 class SubscriberSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = [ 'id', 'email', 'username', 'password', 'first_name', 'last_name', 'profile', 'company_name', 'contact', 'postcode', 'city', 'is_active']
+        fields = [ 'id', 'email', 'username', 'first_name', 'last_name', 'profile', 'company_name', 'contact', 'postcode', 'city', 'is_active']
 
 
 class SubscriberUpdateSerializer(serializers.ModelSerializer):
