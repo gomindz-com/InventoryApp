@@ -178,7 +178,12 @@ const SettingScreen = () => {
                 {texts[index]}
               </CustomText>
             </View>
-            <View style={styles.iconEnd}>{nextIcon[index]}</View>
+            <View style={styles.iconEnd
+        
+            
+            }>{nextIcon[index]}
+            
+            </View>
           </View>
         </TouchableOpacity>
       </Animated.View>

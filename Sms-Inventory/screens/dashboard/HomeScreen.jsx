@@ -145,7 +145,7 @@ const ProductData = [
     product: "Bannana",
     productType: "Fruite",
     currentStock: "55",
-    quantity: "45",ne
+    quantity: "45",
     remark: "sley",
     date: "22/64/2033",
     status: "IN",
@@ -190,6 +190,7 @@ const HomeScreen = ({ route }) => {
             <CustomText
               style={{
                 color: "#fff",
+                top:10,
                 left: 10,
                 fontWeight: "bold",
                 fontSize: 20,
