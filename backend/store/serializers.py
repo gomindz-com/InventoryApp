@@ -82,7 +82,7 @@ class BuyerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Buyer
         fields = ['id', 'name', 'email', 'address',
-                  'mobile_number', 'tax_id' ]
+                  'mobile_number', 'tax_id', 'owner' ]
 
 
 class ProductOrderSerializer(serializers.ModelSerializer):

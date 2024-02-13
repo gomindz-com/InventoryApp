@@ -3,7 +3,7 @@ import axiosConfig from "./axios-config";
 
 export const getBuyers = async () => {
   const data = await axiosConfig
-    .get(`/api/buyers/`)
+    .get(`/store/buyers`)
     .then((response) => {
       return response;
     })
@@ -17,7 +17,7 @@ export const getBuyers = async () => {
 
 export const editBuyer = async (buyerId, buyerData) => {
   const data = await axiosConfig
-    .put(`/api/buyers/${buyerId}`, buyerData)
+    .put(`/store/buyers/${buyerId}`, buyerData)
     .then((response) => {
       return response;
     })
@@ -49,9 +49,8 @@ export const getBuyerCount = async () => {
 
 export const addBuyer = async (buyerData) => {
   const data = await axiosConfig
-    .post(`/api/buyers/`, buyerData)
+    .post(`/store/buyers`, buyerData)
     .then((response) => {
-
       return response;
     })
     .catch((err) => {

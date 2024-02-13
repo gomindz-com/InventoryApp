@@ -113,6 +113,8 @@ class Buyer(models.Model):
     email = models.EmailField(max_length=220, default='')
     tax_id = models.CharField(max_length=220, default='')
     created_date = models.DateField(auto_now_add=True)
+    owner = models.ForeignKey('users.CustomUser', related_name='buyers', on_delete=models.CASCADE, default='')
+
 
     def __str__(self):
         return self.name
