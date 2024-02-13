@@ -3,6 +3,7 @@ from .views import (
      twilio, 
      CategoryListCreateView, CategoryRetreiveUpdateDeleteView,
      ProductListCreateView, ProductRetreiveUpdateDeleteView, ProductImagesListView,
+     BuyerListCreateView, BuyerOrderListCreateView,
      OrderListCreateView, OrderRetreiveUpdateDeleteView,
      DamagesListCreateView,
      StoreStatisticsView,
@@ -32,6 +33,10 @@ urlpatterns = [
      path('products-images', ProductImagesListView.as_view(), name='ProductImagesListView'),
      path('orders', OrderListCreateView.as_view(), name='listcreateorders'),
      path('orders/<int:pk>', OrderRetreiveUpdateDeleteView.as_view(), name='detaildeleteorders'),
+
+     path('buyers', BuyerListCreateView.as_view(), name='listCreateBuyers'),
+     path('buyers-invoices', BuyerOrderListCreateView.as_view(), name='listBuyerInvoices'),
+
      path('storestatistics', StoreStatisticsView.as_view(), name='liststorestatistics'),
      path('damages', DamagesListCreateView.as_view(), name='listcreatedamages'),
      path('report', ProductReportView.as_view(), name='product_report'),

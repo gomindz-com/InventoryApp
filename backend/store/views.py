@@ -13,7 +13,7 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework import generics
 from rest_framework.views import APIView
 from .models import Product, Category, Damages, OrderProducts, Supplier, Buyer, Order, Delivery, StoreActivity
-from .serializers import ProductSerializer, CategorySerializer, DamagesSerializer, OrderSerializer, StoreActivitySerializer
+from .serializers import ProductSerializer, CategorySerializer, BuyerSerializer, DamagesSerializer, OrderSerializer, StoreActivitySerializer
 from users.models import CustomUser
 
 # FORM DATA FOR PRODUCT IMAGE
@@ -169,6 +169,112 @@ class ProductImagesListView(generics.ListAPIView):
             "message": "Success",
             "images": images
 
+        }
+        return Response(response)
+
+
+# LIST ALL SUBSCRIBER BUYERS / CREATE A BUYER
+class BuyerListCreateView(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = BuyerSerializer
+    queryset = Buyer.objects.all()
+
+    def get_queryset(self):
+        user = self.request.user
+        return Buyer.objects.filter(owner=user)
+
+    def get(self, request, *args, **kwargs):
+        user = self.request.user
+        queryset = Buyer.objects.filter(owner=user)
+        serializer = self.get_serializer(queryset, many=True)
+        response = {
+            "status": True,
+            "message": "",
+            "buyers": serializer.data
+
+        }
+        return Response(response)
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        print(request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        response = {
+            "status": True,
+            "message": "Buyer Successfully Added",
+        }
+        return Response(data=response, status=status.HTTP_201_CREATED)
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
+
+# LIST ALL SUBSCRIBER BUYER ORDERS [INVOICE/RECEIPT] 
+class BuyerOrderListCreateView(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = OrderSerializer
+    queryset = Order.objects.all()
+
+    def get_queryset(self):
+        user = self.request.user
+        return Order.objects.filter(owner=user)
+
+    def get(self, request, *args, **kwargs):
+        user = self.request.user
+        type = self.request.query_params.get('type')
+        buyer = self.request.query_params.get('buyer')
+
+        if (buyer == None):
+            response = {
+                "status": True,
+                "message": "Buyer Does Not Exist"
+            }
+            return Response(data=response, status=status.HTTP_404_NOT_FOUND)
+
+        else:
+            queryset = Order.objects.filter(owner=user).filter(buyer=buyer).filter(type=type)
+           
+
+        orderList = []
+        for item in queryset.iterator():
+            productList = []
+            price = 0
+            productOrders = OrderProducts.objects.filter(order_id=item.id)
+
+            for productsOrdersItem in productOrders.iterator():
+                iProduct = Product.objects.get(
+                    id=productsOrdersItem.product_id)
+                productList.append({
+                    "id": iProduct.id,
+                    "name": iProduct.name,
+                    "description_color": iProduct.description_color,
+                    "price": iProduct.price,
+                    "quantity": productsOrdersItem.quantity,
+                    "amount": iProduct.price * productsOrdersItem.quantity
+                })
+
+                price = price + (iProduct.price * productsOrdersItem.quantity)
+
+            orderList.append(
+                {
+                    "id": item.id,
+                    "buyer": item.buyer,
+                    "buyer_location": item.buyer_location,
+                    "products": productList,
+                    "status": item.status,
+                    "receipt":  item.ref,
+                    "type": item.type,
+                    "buyer_phone": item.buyer_phone,
+                    "total_price":  price,
+                    "price_paid":  item.price_paid,
+                },
+            )
+
+        response = {
+            "status": True,
+            "message": "",
+            "orders": orderList
         }
         return Response(response)
 
@@ -566,8 +672,6 @@ class StoreStatisticsView(generics.ListAPIView):
         return Response(response)
 
 
-
-
 # LIST ALL ORDERS [INVOICE/RECEIPT] 
 class AdminOrderListView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
@@ -630,8 +734,7 @@ class AdminOrderListView(generics.ListAPIView):
         return Response(response)
 
 
-
-# LIST DETAIL OF ONE PRODUCT / UPDATE / DELETE
+# DELETE ORDER OR RECEIPT
 class AdminOrderDeleteView(generics.DestroyAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = OrderSerializer

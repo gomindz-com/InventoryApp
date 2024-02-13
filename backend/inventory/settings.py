@@ -10,6 +10,10 @@ SECRET_KEY = 'k2z9po4i#n+1p(^ny1el2c!om(^-l+_%&ob0azk0-ike*-)81e'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# FILE SIZE UPGRADE
+FILE_UPLOAD_MAX_MEMORY_SIZE = 3 * 1024 * 1024 # (3MEGABYTES)
+DATA_UPLOAD_MAX_MEMORY_SIZE = FILE_UPLOAD_MAX_MEMORY_SIZE
+
 
 # Load environment variables from .env file
 load_dotenv()
