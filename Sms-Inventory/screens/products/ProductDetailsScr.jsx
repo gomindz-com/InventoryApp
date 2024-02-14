@@ -15,10 +15,75 @@ import {
   import { useNavigation } from "@react-navigation/native";
   
   
-  const ProductDetails = ({ route }) => {
+  const ProductDetailsScreen = ({ route }) => {
     // Extracting the item details from the route params
     const { item } = route.params;
-  
+    console.log(item)
+
+
+ const myData = [
+  {
+	id: "1",
+	name: "Earnest Green",
+  },
+  {
+	id: "2",
+	name: "Winston Orn",
+  },
+  {
+	id: "3",
+	name: "Carlton Collins",
+  },
+  {
+	id: "4",
+	name: "Malcolm Labadie",
+  },
+  {
+	id: "5",
+	name: "Michelle Dare",
+  },
+  {
+	id: "6",
+	name: "Carlton Zieme",
+  },
+  {
+	id: "7",
+	name: "Jessie Dickinson",
+  },
+  {
+	id: "8",
+	name: "Julian Gulgowski",
+  },
+  {
+	id: "9",
+	name: "Ellen Veum",
+  },
+  {
+	id: "10",
+	name: "Lorena Rice",
+  },
+
+  {
+	id: "11",
+	name: "Carlton Zieme",
+  },
+  {
+	id: "12",
+	name: "Jessie Dickinson",
+  },
+  {
+	id: "13",
+	name: "Julian Gulgowski",
+  },
+  {
+	id: "14",
+	name: "Ellen Veum",
+  },
+  {
+	id: "15",
+	name: "Lorena Rice",
+  },
+];
   
     return (
         <View style={styles.container}>
@@ -29,7 +94,16 @@ import {
           </View>
           <View style={styles.detailsContainer}>
             <CustomText style={styles.label}>Title:</CustomText>
-            <CustomText>{item.title}</CustomText>
+
+
+           {item.map((dummy)=>{
+            return(
+                <View>
+                 <CustomText>{dummy.name}</CustomText>
+
+                </View>
+            )
+           })}
           </View>
           {/* Add more details as needed */}
         </View>
@@ -48,7 +122,7 @@ import {
         marginBottom: 20,
       },
       detailsContainer: {
-        flexDirection: "row",
+        // flexDirection: "row",
         alignItems: "center",
         marginBottom: 10,
       },
@@ -59,7 +133,7 @@ import {
     });
     
   
-  export default ProductDetails;
+  export default ProductDetailsScreen;
   
   
   

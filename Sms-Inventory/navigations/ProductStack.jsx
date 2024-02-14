@@ -4,8 +4,9 @@ import { StatusBar } from "expo-status-bar";
 import ProductScreen from "../screens/products";
 import { COLORS } from "../constants/Theme";
 import AdProductScreen from "../screens/products/AdProductScreen";
-import ProductDetails from "../screens/products/Productdetails";
+// import ProductDetails from "../screens/products/Productdetails";
 import NewTransactions from "../screens/lowStock/NewTransactions";
+import ProductDetailsScreen from "../screens/products/ProductDetailsScr";
 const Stack = createNativeStackNavigator();
 
 const ProductStack = () => {
@@ -16,7 +17,7 @@ const ProductStack = () => {
         <Stack.Screen name="Product" component={ProductScreen} />
         <Stack.Screen name="addProduct" component={AdProductScreen} />
         <Stack.Screen name="ProductScreen" component={ProductScreen} />
-        <Stack.Screen name="ProductDetails" component={ProductDetails} />
+        <Stack.Screen name="ProductDetails" component={ProductDetailsScreen} />
         <Stack.Screen name="NewTransactions" component={NewTransactions} />
       </Stack.Navigator>
     </>
