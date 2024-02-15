@@ -153,24 +153,24 @@ import {
             marginTop: 60,
             justifyContent: "space-between",
             alignItems: "center",
-            marginHorizontal: 10,
+            marginHorizontal: 25,
           }}
         >
           <CustomButton
             width={100}
             height={45}
-            titleSize={15}
+            titleSize={12}
             title={"Delete"}
-            br={10}
+            br={15}
             bg={"#fff"}
             bc={"#2e9a90"}
-            mx={10}
+            // mx={10}
           />
 
           <CustomButton
-            br={10}
+            br={15}
             height={45}
-            titleSize={15}
+            titleSize={12}
             width={100}
             title={"Edit"}
             bg={"#fff"}
@@ -178,9 +178,9 @@ import {
             mx={10}
           />
           <CustomButton
-            br={10}
+            br={15}
             height={45}
-            titleSize={15}
+            titleSize={12}
             width={120}
             title={"Transactions"}
             bg={"#fff"}
