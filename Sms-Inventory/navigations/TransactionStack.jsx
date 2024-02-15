@@ -4,7 +4,6 @@ import { StatusBar } from "expo-status-bar";
 import TransactionScreen from "../screens/transaction/transaction";
 import { COLORS } from "../constants/Theme";
 import FilterScreen from "../screens/transaction/filter";
-
 const Stack = createNativeStackNavigator();
 
 const TransactionStack = () => {
@@ -14,6 +13,7 @@ const TransactionStack = () => {
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Transaction" component={TransactionScreen} />
         <Stack.Screen name="Filter" component={FilterScreen} />
+     
 
       </Stack.Navigator>
     </>
