@@ -1,296 +1,108 @@
-import {
-    StyleSheet,
-    Text,
-    View,
-    TouchableOpacity,
-    AppRegistry,
-  } from "react-native";
-  import React from "react";
-  import { COLORS } from "../../constants/Theme";
-  import CustomText from "../../components/CustomText";
-  import { AntDesign, Ionicons } from "@expo/vector-icons";
-  import CustomSearch from "../../components/CustomSearch";
-  import CustomCard from "../../components/CustomCard";
-  import CustomInput from "../../components/CustomInput";
-  import { useNavigation } from "@react-navigation/native";
-  import CustomButton from "../../components/CustomButton";
-  
-  
-  const ProductDetailsScreen = ({ route }) => {
-    // Extracting the item details from the route params
-    const { item } = route.params;
-    console.log(item)
+import React from "react";
+import { StyleSheet, View, TouchableOpacity } from "react-native";
+import { COLORS } from "../../constants/Theme";
+import CustomText from "../../components/CustomText";
+import CustomInput from "../../components/CustomInput";
+import { AntDesign } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 
+const ProductDetailsScreen = ({ route }) => {
+  const { item } = route.params;
+  const navigation = useNavigation();
 
-    const navigation = useNavigation();
+  const handleBack = () => {
+    navigation.goBack();
+  };
 
-    const handleBack = () => {
-      navigation.goBack();
-    };
-
-
-    
-
-
- const myData = [
-  {
-	id: "1",
-	name: "Earnest Green",
-  },
-  {
-	id: "2",
-	name: "Winston Orn",
-  },
-  {
-	id: "3",
-	name: "Carlton Collins",
-  },
-  {
-	id: "4",
-	name: "Malcolm Labadie",
-  },
-  {
-	id: "5",
-	name: "Michelle Dare",
-  },
-  {
-	id: "6",
-	name: "Carlton Zieme",
-  },
-  {
-	id: "7",
-	name: "Jessie Dickinson",
-  },
-  {
-	id: "8",
-	name: "Julian Gulgowski",
-  },
-  {
-	id: "9",
-	name: "Ellen Veum",
-  },
-  {
-	id: "10",
-	name: "Lorena Rice",
-  },
-
-  {
-	id: "11",
-	name: "Carlton Zieme",
-  },
-  {
-	id: "12",
-	name: "Jessie Dickinson",
-  },
-  {
-	id: "13",
-	name: "Julian Gulgowski",
-  },
-  {
-	id: "14",
-	name: "Ellen Veum",
-  },
-  {
-	id: "15",
-	name: "Lorena Rice",
-  },
-];
-  
-    return (
-        <View style={styles.container}>
-
-<View style={styles.top}>
+  return (
+    <View style={styles.container}>
+      <View style={styles.top}>
         <View style={styles.flexContainer}>
-          <TouchableOpacity onPress={handleBack}  style={styles.left}>
+          <TouchableOpacity onPress={handleBack} style={styles.left}>
             <AntDesign name="left" size={24} color="#fff" />
-          </TouchableOpacity >
-          <CustomText style={styles.ProductDetailText} color="#fff">ORANGE</CustomText>
-
+          </TouchableOpacity>
+          <CustomText style={styles.ProductDetailText} color="#fff">
+            {item.title}
+          </CustomText>
           <View style={styles.right}>
             <TouchableOpacity onPress={handleBack} style={{ left: 5 }}>
-            <AntDesign name="closecircleo" size={24} color="white" />
+              <AntDesign name="closecircleo" size={24} color="white" />
             </TouchableOpacity>
           </View>
         </View>
-      
       </View>
 
-
-
-
-
-
-          {/* <CustomText style={styles.title}>Product Details pages</CustomText>
-          <View style={styles.detailsContainer}>
-            <CustomText style={styles.label}>ID:</CustomText>
-            <CustomText>{item.id}</CustomText>
-          </View>
-          <View style={styles.detailsContainer}>
-            <CustomText style={styles.label}>Title:</CustomText>
-
-
-           {item.map((dummy)=>{
-            return(
-                <View>
-                 <CustomText>{dummy.name}</CustomText>
-
-                </View>
-            )
-           })}
-          </View> */}
-
-          <View style={styles.input} >
-          <View style={{ marginTop: 2 }}>
-        <CustomInput placeholder={"Product ID:"} mx={10} mt={10} />
-      </View>
-    <View style={{ marginTop: 2 }}>
-  
-        <CustomInput placeholder={"Buy Rate:"} mx={10} mt={20} />
-      </View>
-    <View style={{ marginTop: 2 }}>
-        <CustomInput placeholder={"Total In:"} mx={10} mt={20} />
-      </View>
-    <View style={{ marginTop: 2 }}>
-        <CustomInput placeholder={"In Hand"} mx={10} mt={20} />
-      </View>
-    <View style={{ marginTop: 2 }}>
-        <CustomInput placeholder={"Stock Price:"} mx={10} mt={20} />
-      </View>
-
-      <View
-          style={{
-            flexDirection: "row",
-            marginTop: 60,
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginHorizontal: 25,
-          }}
-        >
-          <CustomButton
-            width={100}
-            height={45}
-            titleSize={12}
-            title={"Delete"}
-            br={15}
-            bg={"#fff"}
-            bc={"#2e9a90"}
-            // mx={10}
-          />
-
-          <CustomButton
-            br={15}
-            height={45}
-            titleSize={12}
-            width={100}
-            title={"Edit"}
-            bg={"#fff"}
-            bc={"#2e9a90"}
-            mx={10}
-          />
-          <CustomButton
-            br={15}
-            height={45}
-            titleSize={12}
-            width={120}
-            title={"Transactions"}
-            bg={"#fff"}
-            bc={"#2e9a90"}
-          />
+      <View style={styles.input}>
+        <View style={{ marginTop: 10 }}>
+        <View style={{ marginTop: 20 }}>
+          <CustomText style={styles.itemField}>Product ID:</CustomText>
+          <CustomInput mx={10} mt={10} value={item.id.toString()} />
         </View>
-  
-
-          </View>
-          
-         
-
-
-         
+        <View style={{ marginTop: 20 }}>
+          <CustomText style={styles.itemField}>Buy Rate:</CustomText>
+          <CustomInput mx={10} mt={10} value={item.BuyRate.toString()} />
         </View>
-      );
-    };
+        <View style={{ marginTop: 20 }}>
+          <CustomText style={styles.itemField}>Total In:</CustomText>
+          <CustomInput mx={10} mt={10} value={item.TotalIn.toString()} />
+        </View>
+        <View style={{ marginTop: 20 }}>
+          <CustomText style={styles.itemField}>In Hand:</CustomText>
+          <CustomInput mx={10} mt={10} value={item.InHand.toString()} />
+        </View>
+        <View style={{ marginTop: 20 }}>
+          <CustomText style={styles.itemField}>Stock Price:</CustomText>
+          <CustomInput mx={10} mt={10} value={item.stockPrice.toString()} />
+        </View>
+      </View>
+      </View>
+    </View>
+  );
+};
 
-
-
-
-    const styles = StyleSheet.create({
-      container: {},
-      top: {
-        height: 150,
-        backgroundColor: COLORS.green,
-      },
-      right: {
-        top:3,
-        flexDirection: "row",
-        justifyContent: "space-between",
-      },
-      input:{
-        top:20,
-      },
-      buttoncustom:{
-    alignSelf: "center",
-    marginTop: 20,
-    paddingVertical: 10,
-    paddingHorizontal: 50,
-    borderWidth: 1,
-    borderColor: "black",
-    borderRadius: 5,
-    backgroundColor: "transparent", // No fill color
-      },
-
-       buttonText: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "black", // Text color
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
   },
-      left: {
-        top:3,
-        flexDirection: "row",
-      },
-      flexContainer: {
-        flexDirection: "row",
-        marginHorizontal: 15,
-        marginTop: 50,
-        justifyContent: "space-between",
-      },
-      ProductDetailText: {
-        justifyContent: "center",
-        alignItems: "center",
-        marginTop: 40,
-        marginHorizontal: 100,
-        color: "#fff",
-        fontSize: 25,
-        fontWeight: "bold",
-      },
-    });
+  top: {
+    height: 150,
+    backgroundColor: COLORS.green,
+  },
+  right: {
+    top: 3,
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  input: {
+    marginTop: 20,
+  },
+  left: {
+    top: 3,
+    flexDirection: "row",
+  },
+  flexContainer: {
+    flexDirection: "row",
+    marginHorizontal: 15,
+    marginTop: 50,
+    justifyContent: "space-between",
+  },
+  ProductDetailText: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 40,
+    marginHorizontal: 100,
+    color: "#fff",
+    fontSize: 25,
+    fontWeight: "bold",
     
-    // const styles = StyleSheet.create({
-    //   container: {
-    //     flex: 1,
-    //     alignItems: "center",
-    //     justifyContent: "center",
-    //   },
-    //   title: {
-    //     fontSize: 24,
-    //     fontWeight: "bold",
-    //     marginBottom: 20,
-    //   },
-    //   detailsContainer: {
-    //     // flexDirection: "row",
-    //     alignItems: "center",
-    //     marginBottom: 10,
-    //   },
-    //   label: {
-    //     fontWeight: "bold",
-    //     marginRight: 10,
-    //   },
-    // });
+  },
+  itemField: {
+    marginHorizontal: 10,
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 1,
+  },
+});
 
-
-
-
-    
-  
-  export default ProductDetailsScreen;
-  
-  
-  
+export default ProductDetailsScreen;
