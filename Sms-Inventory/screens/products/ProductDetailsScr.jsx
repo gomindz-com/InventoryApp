@@ -22,6 +22,16 @@ import {
     console.log(item)
 
 
+    const navigation = useNavigation();
+
+    const handleBack = () => {
+      navigation.goBack();
+    };
+
+
+    
+
+
  const myData = [
   {
 	id: "1",
@@ -91,13 +101,13 @@ import {
 
 <View style={styles.top}>
         <View style={styles.flexContainer}>
-          <TouchableOpacity style={styles.left}>
+          <TouchableOpacity onPress={handleBack}  style={styles.left}>
             <AntDesign name="left" size={24} color="#fff" />
-            <CustomText style={styles.ProductDetailText} color="#fff">ORANGE</CustomText>
-          </TouchableOpacity>
+          </TouchableOpacity >
+          <CustomText style={styles.ProductDetailText} color="#fff">ORANGE</CustomText>
 
           <View style={styles.right}>
-            <TouchableOpacity style={{ left: 5 }}>
+            <TouchableOpacity onPress={handleBack} style={{ left: 5 }}>
             <AntDesign name="closecircleo" size={24} color="white" />
             </TouchableOpacity>
           </View>
