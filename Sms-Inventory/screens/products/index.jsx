@@ -22,7 +22,7 @@ const prductData = [
   },
   {
     id: 2,
-    title: "Orange",
+    title: "Banana",
     BuyRate: 10,
     TotalIn: 10,
     InHand: 5,
@@ -30,7 +30,7 @@ const prductData = [
   },
   {
     id: 3,
-    title: "Orange",
+    title: "Apple",
     BuyRate: 10,
     TotalIn: 10,
     InHand: 5,
@@ -38,7 +38,7 @@ const prductData = [
   },
   {
     id: 4,
-    title: "Orange",
+    title: "Mango",
     BuyRate: 10,
     TotalIn: 10,
     InHand: 5,
@@ -46,7 +46,7 @@ const prductData = [
   },
   {
     id: 5,
-    title: "Orange",
+    title: "Lemon",
     BuyRate: 10,
     TotalIn: 10,
     InHand: 5,
@@ -54,7 +54,7 @@ const prductData = [
   },
   {
     id: 6,
-    title: "Orange",
+    title: "Watermelon",
     BuyRate: 10,
     TotalIn: 10,
     InHand: 5,
@@ -123,7 +123,7 @@ const ProductScreen = () => {
           borderRadius: 10,
           }}
         >
-          <CustomText>{item.title}</CustomText>
+          <CustomText style={styles.title}>{item.title}</CustomText>
           <AntDesign name="right" size={24} color="black" />
         </TouchableOpacity>
       ))}
@@ -149,6 +149,11 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
     marginTop: 50,
     justifyContent: "space-between",
+  },
+  title:{
+    marginLeft:10,
+    fontSize:18,
+
   },
 });
 
