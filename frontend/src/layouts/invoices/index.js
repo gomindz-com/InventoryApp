@@ -15,7 +15,7 @@ import Footer from "examples/Footer";
 import Table from "examples/Tables/Table";
 import ArgonInput from "components/ArgonInput";
 import ArgonButton from "components/ArgonButton";
-import { Button, Modal, Typography, Card, Divider, Grid} from "@mui/material";
+import { Button, Modal, Typography, Card, Divider, Grid } from "@mui/material";
 
 import { useReactToPrint } from "react-to-print";
 import jsPDF from "jspdf";
@@ -35,6 +35,7 @@ import "./index.css";
 import AddCircleOutlinedIcon from "@mui/icons-material/AddCircleOutlined";
 import { getBuyers } from "apiservices/buyerService";
 import { addBuyer } from "apiservices/buyerService";
+import Spinner from "components/Spinner";
 
 function Invoices() {
   // USER
@@ -110,6 +111,7 @@ function Invoices() {
   const [buyerData, setBuyerData] = useState({
     name: "",
     mobile_number: "",
+    address: "",
   });
 
   const [orderData, setOrderData] = useState({
@@ -220,12 +222,15 @@ function Invoices() {
             id: item.id,
             value: item.name,
             label: item.name,
-            mobile: item.mobile_number
+            mobile: item.mobile_number,
+            address: item.address,
           });
         });
 
         setBuyerOptions(buyer_options);
+        setLoading(false)
       } else {
+        setLoading(false)
       }
     } catch (error) {}
   };
@@ -317,6 +322,18 @@ function Invoices() {
   };
 
   const handleComfirm = async () => {
+
+    console.log("orderData")
+    console.log(orderData)
+    console.log(orderData.products[0])
+
+   if(orderData.products[0].id == '' || null){
+
+    toast.error("Please Choose A Product!!");
+    toggleModalAddInvoice();
+    return
+
+   }
     const isValid = await AddOrderSchema.isValid(orderData);
     if (!isValid) {
       toast.error("Please enter all the required fields!!");
@@ -400,26 +417,31 @@ function Invoices() {
   // ADD BUYER
 
   const handleAddBuyer = async () => {
-    
-      toast.success("Adding Buyer!!", { autoClose: 80 });
-      await addBuyer(buyerData)
-        .then((res) => {
-          if (res.status == 201) {
-            setBuyerData({
-              name: "",
-              mobile_number: "",
-            });
 
-            setOrderData
+    setLoadingBuyers(true)
+    toast.success("Adding Buyer!!", { autoClose: 80 });
+    await addBuyer(buyerData)
+      .then((res) => {
+        if (res.status == 201) {
+          setBuyerData({
+            name: "",
+            mobile_number: "",
+            address: "",
+          });
 
-            handleGetBuyerList()
-            toggleModalAddBuyerOpen()
-          } else {
-            toast.error(res.data.message ?? "Error Adding Buyer");
-          }
-        })
-        .catch((err) => {});
-    
+          // setOrderData
+
+          handleGetBuyerList();
+          toggleModalAddBuyerOpen();
+          setLoadingBuyers(false)
+        } else {
+          toast.error(JSON.stringify(res.data) ?? "Error Adding Buyer");
+          setLoadingBuyers(false)
+        }
+      })
+      .catch((err) => {
+        setLoading(false)
+      });
   };
 
   // EDIT INVOICE
@@ -1142,6 +1164,11 @@ function Invoices() {
     );
   });
 
+
+  const [loading, setLoading] = useState(true);
+  const [loadingBuyers, setLoadingBuyers] = useState(false);
+
+
   // USE EFFECT
   useEffect(() => {
     handleGetOrderList();
@@ -1330,6 +1357,17 @@ function Invoices() {
             }}
           />
 
+          <ArgonInput
+            style={{ flex: 5, marginTop: "20px" }}
+            type="text"
+            name="address"
+            placeholder="Address *"
+            size="large"
+            onChange={(e) => {
+              setBuyerData({ ...buyerData, [e.target.name]: e.target.value });
+            }}
+          />
+
           <ArgonButton
             style={{ marginRight: "15px", marginTop: "15px" }}
             onClick={handleAddBuyer}
@@ -1348,7 +1386,9 @@ function Invoices() {
           </ArgonButton>
         </div>
       </Modal>
-      ;
+      
+
+
       <DashboardNavbar
         handleClick={(e) => {
           const filteredOrderList = [];
@@ -1365,6 +1405,13 @@ function Invoices() {
           });
         }}
       />
+      
+
+{  loading ? 
+
+    <Spinner></Spinner> :
+      <>
+      
       <ArgonBox py={3}>
         {showInvoiceTable && (
           <ArgonBox mb={35}>
@@ -1570,30 +1617,33 @@ function Invoices() {
                 <ArgonBox mb={2} mx={5}>
                   <Grid container spacing={3}>
                     <Grid item xs={12} md={10}>
+                    {
+
+                      loadingBuyers ?
+
+                      <Spinner width="30px" height="30px"></Spinner>
+                      :
+                      
                       <ArgonBox mb={2}>
-                        <Select
-                          name="buyer"
-                          placeholder="Buyers"
-                          // defaultValue={}
-                          options={buyerOptions}
-                          onChange={(selectedOption)=>{
+                      <Select
+                        name="buyer"
+                        placeholder="Buyers"
+                        options={buyerOptions}
+                        onChange={(selectedOption) => {
+                          console.log(selectedOption);
+                          setOrderData({
+                            ...orderData,
+                            buyer: selectedOption.value,
+                            buyer_phone: selectedOption.mobile,
+                            buyer_location: selectedOption.address,
+                          });
+                        }}
+                      />
+                    </ArgonBox>
 
-                            console.log(selectedOption)
-                            setOrderData(
-                              { ...orderData, 
-                                buyer: selectedOption.value,
-                                buyer_phone: selectedOption.mobile
-
-                              }
-                              );
-
-                              console.log(orderData)
-
-
-
-                          }}
-                        />
-                      </ArgonBox>
+                    
+                    
+                  }
                     </Grid>
                     <Grid item xs={12} md={2}>
                       <AddCircleOutlinedIcon
@@ -1964,6 +2014,15 @@ function Invoices() {
           </div>
         </div>
       )}
+      </>
+
+    
+
+      
+    
+    }
+
+
       <Footer />
     </DashboardLayout>
   );
