@@ -35,7 +35,7 @@ const DeatailScreen = ({ route }) => {
 
       <ScrollView style={{ marginHorizontal: 20 }}>
         <View style={styles.singleButton}>
-          <CustomText style={styles.h1}>Product:</CustomText>
+          <CustomText style={styles.h1}>Product ID:</CustomText>
           <CustomText style={styles.h4}>{productData.product}</CustomText>
         </View>
 
