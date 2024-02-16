@@ -15,26 +15,50 @@ const prductData = [
   {
     id: 1,
     title: "Orange",
+    BuyRate: 10,
+    TotalIn: 10,
+    InHand: 5,
+    stockPrice: 5,
   },
   {
     id: 2,
     title: "Orange",
+    BuyRate: 10,
+    TotalIn: 10,
+    InHand: 5,
+    stockPrice: 5,
   },
   {
     id: 3,
     title: "Orange",
+    BuyRate: 10,
+    TotalIn: 10,
+    InHand: 5,
+    stockPrice: 5,
   },
   {
     id: 4,
     title: "Orange",
+    BuyRate: 10,
+    TotalIn: 10,
+    InHand: 5,
+    stockPrice: 5,
   },
   {
     id: 5,
     title: "Orange",
+    BuyRate: 10,
+    TotalIn: 10,
+    InHand: 5,
+    stockPrice: 5,
   },
   {
     id: 6,
     title: "Orange",
+    BuyRate: 10,
+    TotalIn: 10,
+    InHand: 5,
+    stockPrice: 5,
   },
 ];
 
@@ -44,9 +68,9 @@ const ProductScreen = () => {
     navigation.navigate("addProduct")
   }
 
-  const navigateToDetails = () => {
+  const navigateToDetails = (item) => {
     // Navigate to the screen where you want to show details of the product
-    navigation.navigate("ProductDetails", { item: prductData });
+    navigation.navigate("ProductDetails", { item });
     // Replace "ProductDetails" with your actual screen name
   };
 
@@ -84,19 +108,19 @@ const ProductScreen = () => {
 
       {prductData.map((item , key ) => (
         <TouchableOpacity
-          key={key}
-          onPress={navigateToDetails} // Add onPress event to navigate when clicked
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            width: 390,
-            height: 50,
-            borderColor: "black",
-            borderWidth: 1,
-            marginHorizontal: 10,
-            marginTop: 10,
-            alignItems: "center",
-            borderRadius: 10,
+        key={key}
+        onPress={() => navigateToDetails(item)} // Pass the item to the navigateToDetails function
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          width: 390,
+          height: 50,
+          borderColor: "black",
+          borderWidth: 1,
+          marginHorizontal: 10,
+          marginTop: 10,
+          alignItems: "center",
+          borderRadius: 10,
           }}
         >
           <CustomText>{item.title}</CustomText>
