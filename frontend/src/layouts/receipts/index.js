@@ -7,6 +7,7 @@ import { useState, useEffect, useRef } from "react";
 import ArgonBox from "components/ArgonBox";
 import ArgonTypography from "components/ArgonTypography";
 import ArgonBadge from "components/ArgonBadge";
+import { addBuyer } from "apiservices/buyerService";
 
 // Argon Dashboard 2 MUI examples
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
@@ -39,9 +40,58 @@ import { getBuyers } from "apiservices/buyerService";
 import AddCircleOutlinedIcon from "@mui/icons-material/AddCircleOutlined";
 import { Grid } from "@mui/material";
 
+import { Divider } from "@mui/material";
+import Spinner from "components/Spinner";
 
 
 function Receipts() {
+
+
+  const [modalAddBuyerOpen, setModalAddBuyerOpen] = useState(false);
+  const toggleModalAddBuyerOpen = () => {
+    setModalAddBuyerOpen(!modalAddBuyerOpen);
+  };
+  const [buyerData, setBuyerData] = useState({
+    name: "",
+    mobile_number: "",
+    address: "",
+  });
+
+  const handleAddBuyer = async () => {
+    setLoadingBuyers(true)
+
+    toast.success("Adding Buyer!!", { autoClose: 80 });
+    await addBuyer(buyerData)
+      .then((res) => {
+
+        
+
+        if (res.status == 201) {
+          setBuyerData({
+            name: "",
+            mobile_number: "",
+            address: "",
+          });
+
+          // setOrderData
+
+          handleGetBuyerList();
+          toggleModalAddBuyerOpen();
+          setLoadingBuyers(false)
+
+        } else {
+          setLoadingBuyers(false)
+
+          toast.error(JSON.stringify(res.data) ?? "Error Adding Buyer");
+        }
+      })
+      .catch((err) => {
+        setLoadingBuyers(false)
+
+      });
+  };
+
+
   const product_options = [];
 
   const [value, setValue] = useState("");
@@ -200,17 +250,26 @@ function Receipts() {
   };
 
   const handleGetReceiptList = async () => {
+
+    setLoading(true)
+
     setOrderList([]);
     try {
       const res = await getOrders("receipt");
       if (res.data?.status === true) {
         setOrderList(res.data.orders);
         setCurrentOrderList(res.data.orders);
+        setLoading(false)
+
       } else {
         setOrderList([]);
+        setLoading(false)
+
       }
     } catch (error) {
       toast.error("Receipt Could Not Be Retrieved");
+      setLoading(false)
+
     }
   };
 
@@ -220,9 +279,7 @@ function Receipts() {
 
 
 
-  useEffect(() => {
-    handleGetReceiptList
-}, []);
+  
 
 const handleSearch = (event) => {
   const query = event.target.value.toLowerCase();
@@ -707,6 +764,14 @@ const handleSearch = (event) => {
   const handleComfirm = async () => {
     const isValid = await AddOrderSchema.isValid(orderData);
 
+    if(orderData.products[0].id == '' || null){
+      toast.error("Please Choose A Product!!");
+      // toggleModalAddInvoice();
+      
+      return
+    }
+
+
     if (!isValid) {
       toast.error("Please enter all the required fields!!");
     } else {
@@ -760,15 +825,29 @@ const handleSearch = (event) => {
             id: item.id,
             value: item.name,
             label: item.name,
-            mobile: item.mobile_number
+            mobile: item.mobile_number,
+            address: item.address,
           });
         });
 
         setBuyerOptions(buyer_options);
+        setLoading(false)
       } else {
+        setLoading(false)
+
       }
-    } catch (error) {}
+    } catch (error) {
+
+    }
   };
+
+
+
+  const [loading, setLoading] = useState(true);
+  const [loadingBuyers, setLoadingBuyers] = useState(false);
+
+
+
 
   useEffect(() => {
     handleGetReceiptList();
@@ -779,6 +858,8 @@ const handleSearch = (event) => {
 
   return (
     <DashboardLayout>
+
+
       {user == null && <Navigate to="/authentication/sign-in" replace={true} />}
       <Modal
         aria-labelledby="transition-modal-title"
@@ -805,6 +886,76 @@ const handleSearch = (event) => {
         </Fade>
       </Modal>
 
+
+      <Modal open={modalAddBuyerOpen} onClose={toggleModalAddBuyerOpen}>
+        <div
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            background: "white",
+            padding: "20px",
+            borderRadius: "8px",
+          }}
+        >
+          <Typography variant="h6">Add Buyer</Typography>
+          <Divider />
+
+          <ArgonInput
+            style={{ flex: 5 }}
+            type="text"
+            name="name"
+            placeholder="Name *"
+            size="large"
+            onChange={(e) => {
+              setBuyerData({ ...buyerData, [e.target.name]: e.target.value });
+            }}
+          />
+
+          <ArgonInput
+            style={{ flex: 5, marginTop: "20px" }}
+            type="text"
+            name="mobile_number"
+            placeholder="Mobile Number *"
+            size="large"
+            onChange={(e) => {
+              setBuyerData({ ...buyerData, [e.target.name]: e.target.value });
+            }}
+          />
+
+          <ArgonInput
+            style={{ flex: 5, marginTop: "20px" }}
+            type="text"
+            name="address"
+            placeholder="Address *"
+            size="large"
+            onChange={(e) => {
+              setBuyerData({ ...buyerData, [e.target.name]: e.target.value });
+            }}
+          />
+
+          <ArgonButton
+            style={{ marginRight: "15px", marginTop: "15px" }}
+            onClick={handleAddBuyer}
+            color="info"
+            size="large"
+          >
+            Confirm
+          </ArgonButton>
+          <ArgonButton
+            style={{ marginRight: "15px", marginTop: "15px" }}
+            onClick={toggleModalAddBuyerOpen}
+            color="info"
+            size="large"
+          >
+            Cancel
+          </ArgonButton>
+        </div>
+      </Modal>
+
+
+
       <DashboardNavbar
         handleClick={(e) => {
           const filteredOrderList = [];
@@ -821,7 +972,14 @@ const handleSearch = (event) => {
           });
         }}
       />
-      <ArgonBox py={3}>
+     {
+     
+     loading ?
+
+     <Spinner></Spinner> :
+
+     <>
+     <ArgonBox py={3}>
         {showOrderTable && (
           <ArgonBox mb={35}>
             <Card>
@@ -1040,6 +1198,14 @@ const handleSearch = (event) => {
                   <ArgonBox mb={2} mx={5}>
                   <Grid container spacing={3}>
                     <Grid item xs={12} md={10}>
+
+                    {
+
+loadingBuyers ?
+
+<Spinner width="30px" height="30px"></Spinner>
+:
+
                       <ArgonBox mb={2}>
                         <Select
                           name="buyer"
@@ -1052,7 +1218,8 @@ const handleSearch = (event) => {
                             setOrderData(
                               { ...orderData, 
                                 buyer: selectedOption.value,
-                                buyer_phone: selectedOption.mobile
+                                buyer_phone: selectedOption.mobile,
+                                buyer_location: selectedOption.address,
 
                               }
                               );
@@ -1064,7 +1231,10 @@ const handleSearch = (event) => {
                           }}
                         />
                       </ArgonBox>
+                        }
+
                     </Grid>
+                    
                     <Grid item xs={12} md={2}>
                       <AddCircleOutlinedIcon
                         fontSize="large"
@@ -1326,6 +1496,12 @@ const handleSearch = (event) => {
           </div>
         </div>
       )}
+      </>
+      
+      }
+
+
+
       <Footer />
     </DashboardLayout>
   );

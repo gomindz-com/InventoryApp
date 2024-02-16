@@ -19,7 +19,7 @@ import logoSpotify from "assets/images/small-logos/logo-spotify.svg";
 import { AddCategorySchema } from "formValidation/addForm";
 import { toast } from "react-toastify";
 import { addCategory,deleteCategory,getCategories,editCategoriee } from "apiservices/categoryService";
-
+import Spinner from "components/Spinner";
 
 function Categories() {
 
@@ -29,6 +29,9 @@ function Categories() {
   const [screenloading, setScreenLoading] = useState(true);
   const [categoryList, setCategoryList] = useState([]);
   const [editFormActive, setEditFormActive] = useState(false);
+
+
+  const [loading, setLoading] = useState(true);
 
   const [categoryData, setCategoryData] = useState({
     name: "",
@@ -93,15 +96,17 @@ function Categories() {
   const handleGetCategoryList = async () => {
     toast.success("Fetching Categories!!", { autoClose: 2000 });
     setCategoryList([]);
-    setScreenLoading(true);
 
     try {
       await getCategories()
         .then((res) => {
           if (res.data.status === true) {
             setCategoryList(res.data.categories);
+            setLoading(false)
           } else {
             setCategoryList([]);
+            setLoading(false)
+
           }
         })
         .catch((err) => {});
@@ -165,102 +170,113 @@ function Categories() {
   return (
     <DashboardLayout>
       <DashboardNavbar />
-      <ArgonBox py={3}>
-        {!showAddCategoryForm ? (
-          <ArgonBox mb={3}>
-            <Card>
-              <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
-                <ArgonTypography variant="h6">Categories List</ArgonTypography>
-                <Button
-                  onClick={() => {
-                    const user = JSON.parse(localStorage.getItem("user"));
-                    setCategoryData({
-                      name: "",
-                      description: "",
-                      userid: user.id,
-                    });
-                    setShowAddCategoryForm(!showAddCategoryForm);
-                  }}
-                >
-                  <h4 style={{ paddingRight: 10 }}>Add Category </h4>
-                  <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-fat-add" />
-                </Button>
-              </ArgonBox>
-              <ArgonBox
-                sx={{
-                  "& .MuiTableRow-root:not(:last-child)": {
-                    "& td": {
-                      borderBottom: ({ borders: { borderWidth, borderColor } }) =>
-                        `${borderWidth[1]} solid ${borderColor}`,
-                    },
-                  },
-                }}
-              >
-                <Table columns={columns} rows={rows} />
-              </ArgonBox>
-            </Card>
-          </ArgonBox>
-        ) : (
-          <ArgonBox mb={3}>
-            <Card>
-              <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
-                <ArgonTypography variant="h6">Categories List</ArgonTypography>
-                <Button onClick={() => setShowAddCategoryForm(!showAddCategoryForm)}>
-                  <h4 style={{ paddingRight: 10 }}>Show Category List </h4>
-                  <ArgonBox
-                    component="i"
-                    color="info"
-                    fontSize="14px"
-                    className="ni ni-bold-right"
-                  />
-                </Button>
-              </ArgonBox>
-              <ArgonBox
-                sx={{
-                  "& .MuiTableRow-root:not(:last-child)": {
-                    "& td": {
-                      borderBottom: ({ borders: { borderWidth, borderColor } }) =>
-                        `${borderWidth[1]} solid ${borderColor}`,
-                    },
-                  },
-                }}
-              >
-                <ArgonBox mb={2} mx={5}>
-                  <ArgonInput
-                    type="title"
-                    name="name"
-                    placeholder="Category Name"
-                    size="large"
-                    onChange={handleChange}
-                    value={categoryData.name}
-                  />
-                </ArgonBox>
+      
+      
+    {
 
-                <ArgonBox mb={2} mx={5}>
-                  <ArgonInput
-                    type="tags"
-                    name="description"
-                    placeholder="Description"
-                    size="large"
-                    value={categoryData.description}
-                    onChange={handleChange}
-                  />
-                </ArgonBox>
-                <ArgonBox mb={2} mx={5}>
-                  <ArgonButton
-                    onClick={editFormActive ? handleEdit : handleSubmit}
-                    color="info"
-                    size="large"
-                    fullWidth
-                  >
-                    {editFormActive ? "Edit Category" : "Add Category"}
-                  </ArgonButton>
-                </ArgonBox>
+      loading ?
+
+      <Spinner></Spinner>
+      :
+      
+      <ArgonBox py={3}>
+      {!showAddCategoryForm ? (
+        <ArgonBox mb={3}>
+          <Card>
+            <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
+              <ArgonTypography variant="h6">Categories List</ArgonTypography>
+              <Button
+                onClick={() => {
+                  const user = JSON.parse(localStorage.getItem("user"));
+                  setCategoryData({
+                    name: "",
+                    description: "",
+                    userid: user.id,
+                  });
+                  setShowAddCategoryForm(!showAddCategoryForm);
+                }}
+              >
+                <h4 style={{ paddingRight: 10 }}>Add Category </h4>
+                <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-fat-add" />
+              </Button>
+            </ArgonBox>
+            <ArgonBox
+              sx={{
+                "& .MuiTableRow-root:not(:last-child)": {
+                  "& td": {
+                    borderBottom: ({ borders: { borderWidth, borderColor } }) =>
+                      `${borderWidth[1]} solid ${borderColor}`,
+                  },
+                },
+              }}
+            >
+              <Table columns={columns} rows={rows} />
+            </ArgonBox>
+          </Card>
+        </ArgonBox>
+      ) : (
+        <ArgonBox mb={3}>
+          <Card>
+            <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
+              <ArgonTypography variant="h6">Categories List</ArgonTypography>
+              <Button onClick={() => setShowAddCategoryForm(!showAddCategoryForm)}>
+                <h4 style={{ paddingRight: 10 }}>Show Category List </h4>
+                <ArgonBox
+                  component="i"
+                  color="info"
+                  fontSize="14px"
+                  className="ni ni-bold-right"
+                />
+              </Button>
+            </ArgonBox>
+            <ArgonBox
+              sx={{
+                "& .MuiTableRow-root:not(:last-child)": {
+                  "& td": {
+                    borderBottom: ({ borders: { borderWidth, borderColor } }) =>
+                      `${borderWidth[1]} solid ${borderColor}`,
+                  },
+                },
+              }}
+            >
+              <ArgonBox mb={2} mx={5}>
+                <ArgonInput
+                  type="title"
+                  name="name"
+                  placeholder="Category Name"
+                  size="large"
+                  onChange={handleChange}
+                  value={categoryData.name}
+                />
               </ArgonBox>
-            </Card>
-          </ArgonBox>
-        )}
-      </ArgonBox>
+
+              <ArgonBox mb={2} mx={5}>
+                <ArgonInput
+                  type="tags"
+                  name="description"
+                  placeholder="Description"
+                  size="large"
+                  value={categoryData.description}
+                  onChange={handleChange}
+                />
+              </ArgonBox>
+              <ArgonBox mb={2} mx={5}>
+                <ArgonButton
+                  onClick={editFormActive ? handleEdit : handleSubmit}
+                  color="info"
+                  size="large"
+                  fullWidth
+                >
+                  {editFormActive ? "Edit Category" : "Add Category"}
+                </ArgonButton>
+              </ArgonBox>
+            </ArgonBox>
+          </Card>
+        </ArgonBox>
+      )}
+    </ArgonBox>}
+
+
       <Footer />
     </DashboardLayout>
   );

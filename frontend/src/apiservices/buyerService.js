@@ -77,10 +77,28 @@ export const deleteBuyer = async (id) => {
   return data;
 };
 
+
+
+export const getBuyersInvoices = async (type, name) => {
+  const data = await axiosConfig
+    .get(`/store/buyers-invoices?type=${type}&buyer=${name}`)
+    .then((response) => {
+      return response;
+    })
+    .catch((err) => {
+      return(err);
+    });
+
+  return data;
+};
+
+
+
 const buyerService = {
   getBuyers,
   addBuyer,
-  deleteBuyer
+  deleteBuyer,
+  getBuyersInvoices
 };
 
 export default buyerService;
