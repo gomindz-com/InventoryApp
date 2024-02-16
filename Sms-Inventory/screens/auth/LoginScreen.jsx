@@ -62,18 +62,51 @@ const LoginScreen = () => {
       .required("Password is required"),
   });
 
+
   const handleLogin = async () => {
     try {
       await loginSchema.validate(data, { abortEarly: false });
-      HomeScreen();
+  
+      const res = await axios.post('http://10.0.2.2:8000/api/users/login', {
+        email: data.email,
+        password: data.password
+      });
+  
+      console.log("Login successful", res.data);
+  
+      // Handle successful login response here
+  
     } catch (error) {
       const newErrors = {};
-      error.inner.forEach((err) => {
-        newErrors[err.path] = err.message;
-      });
+      if (error?.inner) {
+        error.inner.forEach((err) => {
+          newErrors[err.path] = err.message;
+        });
+      } else {
+        newErrors.general = error.message || "An error occurred";
+      }
       setErrors(newErrors);
     }
   };
+  
+  
+
+  // const handleLogin = async () => {
+  //   try {
+  //     await loginSchema.validate(data, { abortEarly: false });
+
+      
+
+
+  //     HomeScreen();
+  //   } catch (error) {
+  //     const newErrors = {};
+  //     error.inner.forEach((err) => {
+  //       newErrors[err.path] = err.message;
+  //     });
+  //     setErrors(newErrors);
+  //   }
+  // };
 
   return (
     <SafeAreaView style={{ flex: 1, justifyContent: "center" }}>
