@@ -221,10 +221,10 @@ function Overview() {
                   onclick={() => setEditFormActive(!editFormActive)}
                   description=""
                   info={{
-                    fullName: user.first_name + " " + user.last_name,
-                    mobile: user.contact,
-                    email: user.email,
-                    location: user.city,
+                    fullName: user?.first_name + " " + user.last_name,
+                    mobile: user?.contact,
+                    email: user?.email,
+                    location: user?.city,
                   }}
                   social={[
                     {

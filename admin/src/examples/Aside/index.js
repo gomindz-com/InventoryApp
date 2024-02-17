@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 export default function Aside({ showAside, setShowAside, matches, activePage }) {
   const navigate = useNavigate();
   const location = useLocation();
-  // console.log(location.pathname);
 
   return (
     <>

@@ -16,7 +16,6 @@ import ArgonInput from "components/ArgonInput";
 import ArgonButton from "components/ArgonButton";
 import { Button } from "@mui/material";
 import { getProducts } from "apiservices/productService";
-import logoSpotify from "assets/images/small-logos/logo-spotify.svg";
 import { AddProductSchema } from "formValidation/addForm";
 import { toast } from "react-toastify";
 import Select from "react-select";
@@ -29,10 +28,7 @@ import Spinner from "components/Spinner";
 import "react-datetime/css/react-datetime.css";
 
 function Products() {
-
-  // USER
-  const user = JSON.parse(localStorage.getItem("user"));
-
+  
   // MODAL VARIABLES
   const [modalOpen, setModalOpen] = useState(false);
   const toggleModal = () => {
@@ -42,7 +38,6 @@ function Products() {
   // MODAL ITEM
   const [modalItem, setModalItem] = useState(null);
 
-  
   const [searchQuery, setSearchQuery] = useState("");
 
   // ADDING EDITING PRODUCTS
@@ -63,7 +58,6 @@ function Products() {
     price: "",
     cost_price: "",
     status: "in_stock",
-    
   });
 
   const status_options = [
@@ -78,8 +72,6 @@ function Products() {
       id: 1,
     },
   ];
-
-
 
   const handleAddProduct = async () => {
     const isValid = await AddProductSchema.isValid(productData);
@@ -99,18 +91,14 @@ function Products() {
     uploadData.append("stock", productData.stock);
     uploadData.append("is_active", true);
 
-    if(productData?.expiry_date != null || undefined){
-      uploadData.append("expiry_date", productData?.expiry_date );
+    if (productData?.expiry_date != null || undefined) {
+      uploadData.append("expiry_date", productData?.expiry_date);
     }
-    if(productImage != null || undefined){
+    if (productImage != null || undefined) {
       uploadData.append("image", productImage?.image[0]);
     }
 
     try {
-
-      console.log("uploadData")
-      console.log(uploadData.is_active)
-
       const res = await addProduct(uploadData);
       if (res.status == 201) {
         toast.success("Added Successfully");
@@ -125,21 +113,16 @@ function Products() {
           price: "",
           cost_price: "",
           status: "in_stock",
-        })
-        setProductImage(null)
-      } 
-      
-      else if (res.status == 413) {
+        });
+        setProductImage(null);
+      } else if (res.status == 413) {
         toast.error("The image entity is larger than limits defined by server");
-        setProductImage(null)
+        setProductImage(null);
         setLoading(false);
-      } 
-      
-      else {
+      } else {
         toast.error(res.data?.message ?? "Product Could Not Be Added");
         setLoading(false);
-        setProductImage(null)
-
+        setProductImage(null);
       }
     } catch (error) {
       toast.error("Product Could Not Be Added");
@@ -198,39 +181,38 @@ function Products() {
   };
 
   const handleDeleteProduct = async () => {
-    setLoading(true)
+    setLoading(true);
     await deleteProduct(modalItem.id)
       .then((res) => {
         if (res.status == 204) {
           handleGetProductList();
           toggleModal();
-          setLoading(false)
+          setLoading(false);
         } else {
           toast.error("Error Deleting", { autoClose: 80 });
-          setLoading(false)
+          setLoading(false);
         }
       })
       .catch((err) => {});
   };
 
-
   const handleDeactiveProduct = async () => {
-    setLoading(true)
+    setLoading(true);
     delete modalItem.image;
     await editProduct({
       ...modalItem,
       is_active: false,
-      price: 10
+      price: 10,
     })
       .then((res) => {
         if (res.status == 200) {
           handleGetProductList();
           toggleModal();
-          setLoading(false)
-          toast.success("Successfully Updated", { autoClose: 80 });
+          setLoading(false);
+          toast.success("Successfully Inactivated", { autoClose: 80 });
         } else {
           toast.error("Error Deleting", { autoClose: 80 });
-          setLoading(false)
+          setLoading(false);
         }
       })
       .catch((err) => {});
@@ -281,13 +263,10 @@ function Products() {
     } catch (error) {}
   };
 
+  // DISPLAY ROWS
 
-
- // DISPLAY ROWS
-
-
-   // TABLE ROWS AND COLUMNS UI
-   const columns = [
+  // TABLE ROWS AND COLUMNS UI
+  const columns = [
     { name: "unique id", align: "center" },
     { name: "product", align: "left" },
     { name: "category", align: "left" },
@@ -301,11 +280,9 @@ function Products() {
 
   const rows = [];
 
-
   currentProductList?.map(function (item, i) {
     rows.push({
-
-      'unique id': (
+      "unique id": (
         <ArgonBox display="flex" flexDirection="column">
           <ArgonTypography
             variant="caption"
@@ -406,7 +383,7 @@ function Products() {
         <Button
           onClick={() => {
             setModalItem(item);
-            toggleModal()
+            toggleModal();
           }}
         >
           <ArgonBox component="i" color="red" fontSize="34px" className="ni ni-fat-remove" />
@@ -422,7 +399,6 @@ function Products() {
 
   return (
     <DashboardLayout>
-
       {/* MODALS */}
       <Modal open={modalOpen} onClose={toggleModal}>
         <div
@@ -532,7 +508,6 @@ function Products() {
             </Card>
           </ArgonBox>
         ) : (
-
           // ADD PRODUCT FORM
           <ArgonBox mb={3}>
             <Card>
