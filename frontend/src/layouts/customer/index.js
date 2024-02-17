@@ -190,10 +190,10 @@ function Customer() {
         .then((res) => {
           if (res.data.status === true) {
             setBuyerList(res.data.buyers);
-            setLoading(false)
+            setLoading(false);
           } else {
             setBuyerList([]);
-            setLoading(false)
+            setLoading(false);
           }
         })
         .catch((err) => {});
@@ -201,19 +201,17 @@ function Customer() {
   };
 
   const handleGetBuyersInvoiceList = async (type, username) => {
-
-    setLoading(true)
+    setLoading(true);
     // toast.success("Fetching Buyers [Customers] Invoices!!", { autoClose: 2000 });
     try {
       await getBuyersInvoices(type, username)
         .then((res) => {
           if (res.data.status === true) {
             setBuyerInvoicesList(res.data.orders);
-            setLoading(false)
+            setLoading(false);
           } else {
             setBuyerInvoicesList([]);
-            setLoading(false)
-
+            setLoading(false);
           }
         })
         .catch((err) => {});
@@ -240,11 +238,9 @@ function Customer() {
     <DashboardLayout>
       <DashboardNavbar />
 
-      {
-
-        loading ?
-
-        <Spinner></Spinner> :
+      {loading ? (
+        <Spinner></Spinner>
+      ) : (
         <>
           <ArgonBox py={3}>
             <ArgonBox mb={3}>
@@ -259,15 +255,12 @@ function Customer() {
                       rows={buyerList.map((row) => ({
                         ...row,
                         Invoice: (
-                          // <Button variant="contained" onClick={(openInvoiceCard)}>
                           <Button
                             variant="contained"
                             onClick={() => {
-                              console.log(row.id);
                               setShowTableCard(false);
                               setShowInvoiceCard(true);
                               setShowReceiptCard(false);
-
                               handleGetBuyersInvoiceList("invoice", row.name);
                             }}
                           >
@@ -275,7 +268,6 @@ function Customer() {
                           </Button>
                         ),
                         Receipt: (
-                          // <Button variant="contained" onClick={openReceiptCard}>
                           <Button
                             variant="contained"
                             onClick={() => {
@@ -350,7 +342,7 @@ function Customer() {
             </Card>
           )}
         </>
-      }
+      )}
 
       <Footer />
     </DashboardLayout>

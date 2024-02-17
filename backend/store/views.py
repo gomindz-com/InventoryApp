@@ -414,7 +414,7 @@ class OrderListCreateView(generics.ListCreateAPIView):
             for product in data['products']:
                 iproductstock = Product.objects.get(pk=product['id']).stock
 
-                if (iproductstock - product['amount'] < 0):
+                if (iproductstock - int(product['amount']) < 0):
                     order.delete()
                     response = {
                         "status": True,

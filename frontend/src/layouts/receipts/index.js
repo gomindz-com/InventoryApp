@@ -18,7 +18,7 @@ import Table from "examples/Tables/Table";
 import ArgonInput from "components/ArgonInput";
 import ArgonButton from "components/ArgonButton";
 import { Button } from "@mui/material";
-import { AddOrderSchema } from "formValidation/addForm";
+import { AddOrderSchema, AddBuyerSchema } from "formValidation/addForm";
 import Select from "react-select";
 import { getProducts } from "apiservices/productService";
 import { toast } from "react-toastify";
@@ -34,7 +34,7 @@ import { getOrders, addOrder, deleteOrder } from "apiservices/orderService";
 import "./index.css";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
-import TextField from '@mui/material/TextField';
+import TextField from "@mui/material/TextField";
 import * as XLSX from "xlsx";
 import { getBuyers } from "apiservices/buyerService";
 import AddCircleOutlinedIcon from "@mui/icons-material/AddCircleOutlined";
@@ -43,10 +43,7 @@ import { Grid } from "@mui/material";
 import { Divider } from "@mui/material";
 import Spinner from "components/Spinner";
 
-
 function Receipts() {
-
-
   const [modalAddBuyerOpen, setModalAddBuyerOpen] = useState(false);
   const toggleModalAddBuyerOpen = () => {
     setModalAddBuyerOpen(!modalAddBuyerOpen);
@@ -58,14 +55,17 @@ function Receipts() {
   });
 
   const handleAddBuyer = async () => {
-    setLoadingBuyers(true)
+    const isValid = await AddBuyerSchema.isValid(buyerData);
+    if (!isValid) {
+      toast.error("Please enter all the required fields!!");
+      return;
+    }
+
+    setLoadingBuyers(true);
 
     toast.success("Adding Buyer!!", { autoClose: 80 });
     await addBuyer(buyerData)
       .then((res) => {
-
-        
-
         if (res.status == 201) {
           setBuyerData({
             name: "",
@@ -77,20 +77,17 @@ function Receipts() {
 
           handleGetBuyerList();
           toggleModalAddBuyerOpen();
-          setLoadingBuyers(false)
-
+          setLoadingBuyers(false);
         } else {
-          setLoadingBuyers(false)
+          setLoadingBuyers(false);
 
           toast.error(JSON.stringify(res.data) ?? "Error Adding Buyer");
         }
       })
       .catch((err) => {
-        setLoadingBuyers(false)
-
+        setLoadingBuyers(false);
       });
   };
-
 
   const product_options = [];
 
@@ -156,7 +153,6 @@ function Receipts() {
     buyer_location: "",
     // buyer_phone: "",
 
-
     status: "pending",
     receipt: "",
     total_price: "",
@@ -169,7 +165,6 @@ function Receipts() {
   const [theBuyerLocation, setTheBuyerLocation] = useState("");
   const [theBuyerPhone, setTheBuyerPhone] = useState("");
 
-  
   const [theReceipt, setTheReceipt] = useState("");
 
   const [products, setProducts] = useState([]);
@@ -181,8 +176,7 @@ function Receipts() {
   const [productInputRow, setProductInputRow] = useState([]);
 
   const [otherProducts, setOtherProducts] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
-
+  const [searchQuery, setSearchQuery] = useState("");
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -200,8 +194,7 @@ function Receipts() {
     //{ name: "delete", align: "center" },
   ];
   const rows = [];
-  
-  
+
   const columnsToExport = [
     "id",
     "product",
@@ -210,27 +203,26 @@ function Receipts() {
     "buyer",
     "buyer_location",
   ];
-  
-  const rowToExcel = currentOrderList.map(order => {
+
+  const rowToExcel = currentOrderList.map((order) => {
     const row = {};
-    columnsToExport.forEach(column => {
+    columnsToExport.forEach((column) => {
       if (column === "product") {
-        row[column] = order.products.map(product => product.name).join(", ");
+        row[column] = order.products.map((product) => product.name).join(", ");
       } else {
         row[column] = order[column];
       }
     });
     return row;
   });
-  
+
   const exportToExcel = () => {
     const ws = XLSX.utils.json_to_sheet(rowToExcel, { header: columnsToExport });
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Receipt Report");
     XLSX.writeFile(wb, "Receipt_report.xlsx");
   };
-  
-  
+
   const ComponentToPrint = React.forwardRef((props, ref) => {
     return <div ref={ref}>My cool content here!</div>;
   });
@@ -250,8 +242,7 @@ function Receipts() {
   };
 
   const handleGetReceiptList = async () => {
-
-    setLoading(true)
+    setLoading(true);
 
     setOrderList([]);
     try {
@@ -259,17 +250,14 @@ function Receipts() {
       if (res.data?.status === true) {
         setOrderList(res.data.orders);
         setCurrentOrderList(res.data.orders);
-        setLoading(false)
-
+        setLoading(false);
       } else {
         setOrderList([]);
-        setLoading(false)
-
+        setLoading(false);
       }
     } catch (error) {
       toast.error("Receipt Could Not Be Retrieved");
-      setLoading(false)
-
+      setLoading(false);
     }
   };
 
@@ -277,20 +265,14 @@ function Receipts() {
     content: () => componentRef.current,
   });
 
-
-
-  
-
-const handleSearch = (event) => {
-  const query = event.target.value.toLowerCase();
-  setSearchQuery(query);
-  const filteredOrders = orderList.filter(order =>
-      order.buyer.toLowerCase().includes(query) || 
-      order.receipt.includes(query) 
-  );
-  setCurrentOrderList(filteredOrders);
-};
-
+  const handleSearch = (event) => {
+    const query = event.target.value.toLowerCase();
+    setSearchQuery(query);
+    const filteredOrders = orderList.filter(
+      (order) => order.buyer.toLowerCase().includes(query) || order.receipt.includes(query)
+    );
+    setCurrentOrderList(filteredOrders);
+  };
 
   const handleDownload = () => {
     const componentNode = componentRef.current;
@@ -379,7 +361,7 @@ const handleSearch = (event) => {
           <ArgonTypography variant="caption" color="secondary"></ArgonTypography>
         </ArgonBox>
       ),
-      "buyer_phone": (
+      buyer_phone: (
         <ArgonBox display="flex" flexDirection="column">
           <ArgonTypography variant="caption" fontWeight="medium" color="text">
             {item.buyer_phone}
@@ -425,7 +407,7 @@ const handleSearch = (event) => {
             setTheBuyer(item.buyer);
             setTheBuyerLocation(item.buyer_location);
             setTheReceipt(item.receipt);
-            setTheBuyerPhone(item.buyer_phone)
+            setTheBuyerPhone(item.buyer_phone);
           }}
         >
           <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-bold-down" />
@@ -764,13 +746,12 @@ const handleSearch = (event) => {
   const handleComfirm = async () => {
     const isValid = await AddOrderSchema.isValid(orderData);
 
-    if(orderData.products[0].id == '' || null){
+    if (orderData.products[0].id == "" || null) {
       toast.error("Please Choose A Product!!");
       // toggleModalAddInvoice();
-      
-      return
-    }
 
+      return;
+    }
 
     if (!isValid) {
       toast.error("Please enter all the required fields!!");
@@ -810,7 +791,6 @@ const handleSearch = (event) => {
     }
   };
 
-
   // GET BUYER LIST
 
   const buyer_options = [];
@@ -831,35 +811,24 @@ const handleSearch = (event) => {
         });
 
         setBuyerOptions(buyer_options);
-        setLoading(false)
+        setLoading(false);
       } else {
-        setLoading(false)
-
+        setLoading(false);
       }
-    } catch (error) {
-
-    }
+    } catch (error) {}
   };
-
-
 
   const [loading, setLoading] = useState(true);
   const [loadingBuyers, setLoadingBuyers] = useState(false);
-
-
-
 
   useEffect(() => {
     handleGetReceiptList();
     handleGetProductList();
     handleGetBuyerList();
-
   }, []);
 
   return (
     <DashboardLayout>
-
-
       {user == null && <Navigate to="/authentication/sign-in" replace={true} />}
       <Modal
         aria-labelledby="transition-modal-title"
@@ -885,7 +854,6 @@ const handleSearch = (event) => {
           </Box>
         </Fade>
       </Modal>
-
 
       <Modal open={modalAddBuyerOpen} onClose={toggleModalAddBuyerOpen}>
         <div
@@ -915,7 +883,7 @@ const handleSearch = (event) => {
 
           <ArgonInput
             style={{ flex: 5, marginTop: "20px" }}
-            type="text"
+            type="number"
             name="mobile_number"
             placeholder="Mobile Number *"
             size="large"
@@ -954,8 +922,6 @@ const handleSearch = (event) => {
         </div>
       </Modal>
 
-
-
       <DashboardNavbar
         handleClick={(e) => {
           const filteredOrderList = [];
@@ -972,306 +938,289 @@ const handleSearch = (event) => {
           });
         }}
       />
-     {
-     
-     loading ?
+      {loading ? (
+        <Spinner></Spinner>
+      ) : (
+        <>
+          <ArgonBox py={3}>
+            {showOrderTable && (
+              <ArgonBox mb={35}>
+                <Card>
+                  <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
+                    <ArgonTypography variant="h6">Receipt List</ArgonTypography>
 
-     <Spinner></Spinner> :
+                    <TextField
+                      id="outlined-basic"
+                      placeholder="Search"
+                      style={{ width: "65%" }}
+                      variant="outlined"
+                      value={searchQuery}
+                      onChange={handleSearch}
+                    />
 
-     <>
-     <ArgonBox py={3}>
-        {showOrderTable && (
-          <ArgonBox mb={35}>
-            <Card>
-              <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
-                <ArgonTypography variant="h6">Receipt List</ArgonTypography>
+                    <Button
+                      onClick={() => {
+                        setOrderData({
+                          buyer: "",
+                          buyer_location: "",
+                          // buyer_phone: "",
 
+                          status: "",
+                          ref: "",
+                          total_price: "",
+                          type: "",
+                          products: [],
+                        });
+                        setViewOrderActive(false);
+                        setOtherProducts([]);
+                        setProductInputRow([]);
+                        setQuantity(0);
+                        setTotalPrice(0);
+                        setOrderTotalPrice(0.0);
+                        setFirstProductTotalPrice(null);
+                        setShowAddForm(true);
+                        setShowOrderTable(false);
+                      }}
+                    >
+                      <h4 style={{ paddingRight: 10 }}>Add Receipts </h4>
+                      <ArgonBox
+                        component="i"
+                        color="info"
+                        fontSize="14px"
+                        className="ni ni-fat-add"
+                      />
+                    </Button>
+                  </ArgonBox>
 
-                <TextField
-                id="outlined-basic"
-                placeholder="Search"
-                style={{ width: "65%" }}
-                variant="outlined"
-                value={searchQuery}
-                onChange={handleSearch}
-            />
+                  <ArgonBox style={{ alignSelf: "flex-end", marginRight: 25 }}>
+                    <Button onClick={exportToExcel}>
+                      <h6 style={{ paddingRight: 10 }}>Export to Excel</h6>
+                    </Button>
+                  </ArgonBox>
 
-
-                <Button
-                  onClick={() => {
-                    setOrderData({
-                      buyer: "",
-                      buyer_location: "",
-                      // buyer_phone: "",
-
-                      
-                      status: "",
-                      ref: "",
-                      total_price: "",
-                      type: "",
-                      products: [],
-                    });
-                    setViewOrderActive(false);
-                    setOtherProducts([]);
-                    setProductInputRow([]);
-                    setQuantity(0);
-                    setTotalPrice(0);
-                    setOrderTotalPrice(0.0);
-                    setFirstProductTotalPrice(null);
-                    setShowAddForm(true);
-                    setShowOrderTable(false);
-                  }}
-                >
-                  <h4 style={{ paddingRight: 10 }}>Add Receipts </h4>
-                  <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-fat-add" />
-                </Button>
-              </ArgonBox>
-
-
-              <ArgonBox style={{alignSelf: "flex-end", marginRight: 25}}>
-               <Button onClick={exportToExcel} >
-                <h6 style={{ paddingRight: 10 }}>Export to  Excel</h6>
-                
-
-                </Button>
-               </ArgonBox>
-
-
-
-              <ArgonBox
-                sx={{
-                  "& .MuiTableRow-root:not(:last-child)": {
-                    "& td": {
-                      borderBottom: ({ borders: { borderWidth, borderColor } }) =>
-                        `${borderWidth[1]} solid ${borderColor}`,
-                    },
-                  },
-                }}
-              >
-                <Table columns={columns} rows={rows} />
-              </ArgonBox>
-            </Card>
-          </ArgonBox>
-        )}
-
-        {showAddForm && (
-          <>
-            <ArgonBox mb={3} pb={20}>
-              <Card>
-                <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
-                  <ArgonTypography variant="h6">Receipt</ArgonTypography>
-                  <Button
-                    onClick={() => {
-                      setShowOrderTable(true);
-                      setShowAddForm(false);
+                  <ArgonBox
+                    sx={{
+                      "& .MuiTableRow-root:not(:last-child)": {
+                        "& td": {
+                          borderBottom: ({ borders: { borderWidth, borderColor } }) =>
+                            `${borderWidth[1]} solid ${borderColor}`,
+                        },
+                      },
                     }}
                   >
-                    <h4 style={{ paddingRight: 10 }}>Receipt List </h4>
+                    <Table columns={columns} rows={rows} />
+                  </ArgonBox>
+                </Card>
+              </ArgonBox>
+            )}
+
+            {showAddForm && (
+              <>
+                <ArgonBox mb={3} pb={20}>
+                  <Card>
                     <ArgonBox
-                      component="i"
-                      color="info"
-                      fontSize="14px"
-                      className="ni ni-bold-right"
-                    />
-                  </Button>
-                </ArgonBox>
-                <ArgonBox
-                  sx={{
-                    "& .MuiTableRow-root:not(:last-child)": {
-                      "& td": {
-                        borderBottom: ({ borders: { borderWidth, borderColor } }) =>
-                          `${borderWidth[1]} solid ${borderColor}`,
-                      },
-                    },
-                  }}
-                >
-                  {viewOrderActive == false && (
-                    // 1ST PRODUCT ORDER INPUT ROW
-                    <ArgonBox mb={2} mx={5} display="flex">
-                      <div style={{ flex: 5, paddingRight: 10 }}>
-                        <Select
-                          name="product"
-                          placeholder="Products"
-                          options={productOptions}
-                          onChange={(selectedOption) => {
-                            setValue(1);
-
-                            const currentfirstProductTotalPrice = firstProductTotalPrice;
-                            const currentordertotalPrice = isNaN(ordertotalPrice)
-                              ? 0
-                              : ordertotalPrice;
-
-                            setFirstProductId(selectedOption.id);
-                            setFirstProductPrice(selectedOption.price);
-                            setQuantity(1);
-                            setFirstProductTotalPrice(selectedOption.price);
-
-                            if (ordertotalPrice == 0) {
-                              setOrderTotalPrice(selectedOption.price);
-                            } else {
-                              setOrderTotalPrice(
-                                parseFloat(currentordertotalPrice) -
-                                  parseFloat(currentfirstProductTotalPrice) +
-                                  parseFloat(selectedOption.price)
-                              );
-                            }
-                          }}
+                      display="flex"
+                      justifyContent="space-between"
+                      alignItems="center"
+                      p={3}
+                    >
+                      <ArgonTypography variant="h6">Receipt</ArgonTypography>
+                      <Button
+                        onClick={() => {
+                          setShowOrderTable(true);
+                          setShowAddForm(false);
+                        }}
+                      >
+                        <h4 style={{ paddingRight: 10 }}>Receipt List </h4>
+                        <ArgonBox
+                          component="i"
+                          color="info"
+                          fontSize="14px"
+                          className="ni ni-bold-right"
                         />
-                      </div>
-                      <div style={{ flex: 3, paddingRight: 10 }}>
-                        <div style={{ display: "flex" }}>
-                          <ArgonInput
-                            style={{ flex: 5 }}
-                            type="text"
-                            placeholder="Amount"
-                            value={value}
-                            size="large"
-                            onChange={async (event) => {
-                              if (event.target.value.replace(/\D/g, "") == null) {
-                                alert("ddddd");
-                              }
+                      </Button>
+                    </ArgonBox>
+                    <ArgonBox
+                      sx={{
+                        "& .MuiTableRow-root:not(:last-child)": {
+                          "& td": {
+                            borderBottom: ({ borders: { borderWidth, borderColor } }) =>
+                              `${borderWidth[1]} solid ${borderColor}`,
+                          },
+                        },
+                      }}
+                    >
+                      {viewOrderActive == false && (
+                        // 1ST PRODUCT ORDER INPUT ROW
+                        <ArgonBox mb={2} mx={5} display="flex">
+                          <div style={{ flex: 5, paddingRight: 10 }}>
+                            <Select
+                              name="product"
+                              placeholder="Products"
+                              options={productOptions}
+                              onChange={(selectedOption) => {
+                                setValue(1);
 
-                              if (firstProductId === "") {
-                                toast.error("Please Choose a Product!!", { autoClose: 80 });
-                              } else {
-                                const result = event.target.value.replace(/\D/g, "");
-                                setValue(result);
-                                setQuantity(result);
-                                setFirstProductTotalPrice(result * firstProductPrice);
+                                const currentfirstProductTotalPrice = firstProductTotalPrice;
+                                const currentordertotalPrice = isNaN(ordertotalPrice)
+                                  ? 0
+                                  : ordertotalPrice;
 
-                                if (productInputRow.length == 0) {
-                                  setOrderTotalPrice(result * parseFloat(firstProductPrice));
+                                setFirstProductId(selectedOption.id);
+                                setFirstProductPrice(selectedOption.price);
+                                setQuantity(1);
+                                setFirstProductTotalPrice(selectedOption.price);
+
+                                if (ordertotalPrice == 0) {
+                                  setOrderTotalPrice(selectedOption.price);
                                 } else {
-                                  const currentfirstProductTotalPrice = firstProductTotalPrice;
-                                  const currentordertotalPrice = isNaN(ordertotalPrice)
-                                    ? 0
-                                    : ordertotalPrice;
-
                                   setOrderTotalPrice(
                                     parseFloat(currentordertotalPrice) -
-                                      parseFloat(currentfirstProductTotalPrice)
+                                      parseFloat(currentfirstProductTotalPrice) +
+                                      parseFloat(selectedOption.price)
                                   );
                                 }
+                              }}
+                            />
+                          </div>
+                          <div style={{ flex: 3, paddingRight: 10 }}>
+                            <div style={{ display: "flex" }}>
+                              <ArgonInput
+                                style={{ flex: 5 }}
+                                type="text"
+                                placeholder="Amount"
+                                value={value}
+                                size="large"
+                                onChange={async (event) => {
+                                  if (event.target.value.replace(/\D/g, "") == null) {
+                                    alert("ddddd");
+                                  }
+
+                                  if (firstProductId === "") {
+                                    toast.error("Please Choose a Product!!", { autoClose: 80 });
+                                  } else {
+                                    const result = event.target.value.replace(/\D/g, "");
+                                    setValue(result);
+                                    setQuantity(result);
+                                    setFirstProductTotalPrice(result * firstProductPrice);
+
+                                    if (productInputRow.length == 0) {
+                                      setOrderTotalPrice(result * parseFloat(firstProductPrice));
+                                    } else {
+                                      const currentfirstProductTotalPrice = firstProductTotalPrice;
+                                      const currentordertotalPrice = isNaN(ordertotalPrice)
+                                        ? 0
+                                        : ordertotalPrice;
+
+                                      setOrderTotalPrice(
+                                        parseFloat(currentordertotalPrice) -
+                                          parseFloat(currentfirstProductTotalPrice)
+                                      );
+                                    }
+                                  }
+                                }}
+                              />
+                            </div>
+                          </div>
+                          <div style={{ flex: 3 }}>
+                            <ArgonInput
+                              type="name"
+                              name="price"
+                              placeholder="Price"
+                              value={firstProductTotalPrice}
+                              size="large"
+                            />
+                          </div>
+                          <div style={{ alignSelf: "center", flex: 2.3 }}>
+                            <Button
+                              style={{ flex: 1, alignSelf: "center" }}
+                              onClick={
+                                firstProductId == ""
+                                  ? async () => {
+                                      toast.error("Please Choose a Product!!", { autoClose: 80 });
+                                    }
+                                  : async () => {
+                                      if (productInputRow.length == 0) {
+                                        setProductInputRow((current) => [
+                                          ...current,
+                                          { row: 0, amount: 0 },
+                                        ]);
+                                        setIdProductRow(1);
+                                      } else {
+                                        toast.error("Use The Other Add Button!!");
+                                      }
+                                    }
                               }
-                            }}
-                          />
-                        </div>
-                      </div>
-                      <div style={{ flex: 3 }}>
+                            >
+                              Add
+                            </Button>
+                          </div>
+                        </ArgonBox>
+                      )}
+
+                      {renderColumns}
+
+                      <ArgonBox mb={2} mx={5}>
+                        <Grid container spacing={3}>
+                          <Grid item xs={12} md={10}>
+                            {loadingBuyers ? (
+                              <Spinner width="30px" height="30px"></Spinner>
+                            ) : (
+                              <ArgonBox mb={2}>
+                                <Select
+                                  name="buyer"
+                                  placeholder="Buyers"
+                                  options={buyerOptions}
+                                  onChange={(selectedOption) => {
+                                    setOrderData({
+                                      ...orderData,
+                                      buyer: selectedOption.value,
+                                      buyer_phone: selectedOption.mobile,
+                                      buyer_location: selectedOption.address,
+                                    });
+                                  }}
+                                />
+                              </ArgonBox>
+                            )}
+                          </Grid>
+
+                          <Grid item xs={12} md={2}>
+                            <AddCircleOutlinedIcon
+                              fontSize="large"
+                              color="primary"
+                              onClick={() => {
+                                setModalAddBuyerOpen(true);
+                              }}
+                            />
+                          </Grid>
+                        </Grid>
+                      </ArgonBox>
+
+                      <ArgonBox mb={2} mx={5}>
                         <ArgonInput
                           type="name"
-                          name="price"
-                          placeholder="Price"
-                          value={firstProductTotalPrice}
-                          size="large"
-                        />
-                      </div>
-                      <div style={{ alignSelf: "center", flex: 2.3 }}>
-                        <Button
-                          style={{ flex: 1, alignSelf: "center" }}
-                          onClick={
-                            firstProductId == ""
-                              ? async () => {
-                                  toast.error("Please Choose a Product!!", { autoClose: 80 });
-                                }
-                              : async () => {
-                                  if (productInputRow.length == 0) {
-                                    setProductInputRow((current) => [
-                                      ...current,
-                                      { row: 0, amount: 0 },
-                                    ]);
-                                    setIdProductRow(1);
-                                  } else {
-                                    toast.error("Use The Other Add Button!!");
-                                  }
-                                }
-                          }
-                        >
-                          Add
-                        </Button>
-                      </div>
-                    </ArgonBox>
-                  )}
-
-                  {renderColumns}
-
-                  <ArgonBox mb={2} mx={5}>
-                  <Grid container spacing={3}>
-                    <Grid item xs={12} md={10}>
-
-                    {
-
-loadingBuyers ?
-
-<Spinner width="30px" height="30px"></Spinner>
-:
-
-                      <ArgonBox mb={2}>
-                        <Select
                           name="buyer"
-                          placeholder="Buyers"
-                          // defaultValue={}
-                          options={buyerOptions}
-                          onChange={(selectedOption)=>{
-
-                            console.log(selectedOption)
-                            setOrderData(
-                              { ...orderData, 
-                                buyer: selectedOption.value,
-                                buyer_phone: selectedOption.mobile,
-                                buyer_location: selectedOption.address,
-
-                              }
-                              );
-
-                              console.log(orderData)
-
-
-
-                          }}
+                          value={orderData.buyer}
+                          placeholder="Buyer"
+                          size="large"
+                          onChange={handleChange}
+                          readOnly
                         />
                       </ArgonBox>
-                        }
 
-                    </Grid>
-                    
-                    <Grid item xs={12} md={2}>
-                      <AddCircleOutlinedIcon
-                        fontSize="large"
-                        color="primary"
-                        onClick={() => {
-                          setModalAddBuyerOpen(true);
-                        }}
-                      />
-                    </Grid>
-                  </Grid>
-                </ArgonBox>
+                      <ArgonBox mb={2} mx={5}>
+                        <ArgonInput
+                          type="name"
+                          name="buyer_phone"
+                          value={orderData.buyer_phone}
+                          placeholder="Buyer Phone number"
+                          size="large"
+                          onChange={handleChange}
+                          readOnly
+                        />
+                      </ArgonBox>
 
-                  <ArgonBox mb={2} mx={5}>
-                    <ArgonInput
-                      type="name"
-                      name="buyer"
-                      value={orderData.buyer}
-                      placeholder="Buyer"
-                      size="large"
-                      onChange={handleChange}
-                    />
-                  </ArgonBox>
-
-
-                  <ArgonBox mb={2} mx={5}>
-                    <ArgonInput
-                      type="name"
-                      name="buyer_phone"
-                      value={orderData.buyer_phone}
-                      placeholder="Buyer Phone number"
-                      size="large"
-                      onChange={handleChange}
-                    />
-                  </ArgonBox>
-
-
-                  {/* <ArgonBox mb={2} mx={5}>
+                      {/* <ArgonBox mb={2} mx={5}>
                     <ArgonInput
                       type="name"
                       name="phone"
@@ -1282,225 +1231,224 @@ loadingBuyers ?
                     />
                   </ArgonBox> */}
 
-              
+                      <ArgonBox mb={2} mx={5}>
+                        <ArgonInput
+                          type="name"
+                          name="buyer_location"
+                          value={orderData.buyer_location}
+                          placeholder="Buyer Location"
+                          size="large"
+                          onChange={handleChange}
+                          readOnly
+                        />
+                      </ArgonBox>
 
-                  <ArgonBox mb={2} mx={5}>
-                    <ArgonInput
-                      type="name"
-                      name="buyer_location"
-                      value={orderData.buyer_location}
-                      placeholder="Buyer Location"
-                      size="large"
-                      onChange={handleChange}
-                    />
-                  </ArgonBox>
+                      <ArgonBox mb={2} mx={5}>
+                        <ArgonInput
+                          type="name"
+                          name="total_price"
+                          value={`Total Price : ${Math.round(ordertotalPrice * 100) / 100}`}
+                          placeholder={`Total Price : ${Math.round(ordertotalPrice * 100) / 100}`}
+                          size="large"
+                        />
+                      </ArgonBox>
+                      <ArgonBox mb={2} mx={5}>
+                        <ArgonInput
+                          type="name"
+                          name="ref"
+                          placeholder={`Receipt ID : XxxxxxxxxxxxxX`}
+                          readOnly={true}
+                          size="large"
+                          onChange={handleChange}
+                        />
+                      </ArgonBox>
 
-                  <ArgonBox mb={2} mx={5}>
-                    <ArgonInput
-                      type="name"
-                      name="total_price"
-                      value={`Total Price : ${Math.round(ordertotalPrice * 100) / 100}`}
-                      placeholder={`Total Price : ${Math.round(ordertotalPrice * 100) / 100}`}
-                      size="large"
-                    />
-                  </ArgonBox>
-                  <ArgonBox mb={2} mx={5}>
-                    <ArgonInput
-                      type="name"
-                      name="ref"
-                      placeholder={`Receipt ID : XxxxxxxxxxxxxX`}
-                      readOnly={true}
-                      size="large"
-                      onChange={handleChange}
-                    />
-                  </ArgonBox>
-
-                  <ArgonBox mb={"20%"} display="flex" mx={5}>
-                    <ArgonButton
-                      onClick={async () => {
-                        viewOrderActive ? handlePrint() : handleSubmit();
-                      }}
-                      color="info"
-                      size="large"
-                      fullWidth
-                    >
-                      {viewOrderActive ? "Print" : "Add"}
-                    </ArgonButton>
-                  </ArgonBox>
-                </ArgonBox>
-              </Card>
-            </ArgonBox>
-          </>
-        )}
-      </ArgonBox>
-
-      {showPrintView && (
-        <div className="container card">
-          <div className="row gutters">
-            <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6">
-              <div style={{ justifyContent: "flex-start" }} className="custom-actions-btns mb-2">
-                <a
-                  onClick={() => {
-                    setShowPrintView(false);
-                    setShowAddForm(false);
-                    setShowOrderTable(true);
-                  }}
-                  className="btn btn-secondary"
-                >
-                  <i className="icon-printer"></i> Show Receipt List
-                </a>
-              </div>
-            </div>
-            <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6">
-              <div className="custom-actions-btns mb-2">
-                <a
-                  onClick={() => {
-                    toast.success("Loading Sucessful!!");
-                    handleDownload();
-                  }}
-                  className="btn btn-primary"
-                >
-                  <i className="icon-download"></i> Download
-                </a>
-                <a
-                  onClick={() => {
-                    toast.success("Loading Printer!!");
-                    handlePrint();
-                  }}
-                  className="btn btn-secondary"
-                >
-                  <i className="icon-printer"></i> Print
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <Button
-            style={{ alignSelf: "flex-end" }}
-            onClick={() => {
-              setShowPrintView(false);
-              setShowAddForm(false);
-              setShowOrderTable(true);
-            }}
-          >
-            <h5 style={{ paddingRight: 10 }}>Back </h5>
-            <ArgonBox component="i" color="info" fontSize="20px" className="ni ni-bold-right" />
-          </Button>
-
-          <div style={{ marginTop: 20 }} ref={componentRef} className="row gutters">
-            <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-              <div className="card">
-                <div className="card-body p-0">
-                  <div className="invoice-container">
-                    <div className="invoice-header">
-                      <div className="row gutters">
-                        <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6">
-                          <a href="index.html" className="invoice-logo">
-                            Mega Store
-                          </a>
-                        </div>
-                        <div
-                          style={{ justifyContent: "flex-end" }}
-                          className="col-lg-6 col-md-6 col-sm-6"
+                      <ArgonBox mb={"20%"} display="flex" mx={5}>
+                        <ArgonButton
+                          onClick={async () => {
+                            viewOrderActive ? handlePrint() : handleSubmit();
+                          }}
+                          color="info"
+                          size="large"
+                          fullWidth
                         >
-                          <br />
-                          <address style={{ textAlign: "end" }} className="text-right">
-                            <br />
-                            {user?.company_name}
-                            <br />
-                            {user?.city}
-                            <br />
-                            {user?.contact}
-                          </address>
-                        </div>
-                      </div>
-                      <div className="row gutters">
-                        <div className="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
-                          <div className="invoice-details">
-                            <address>
-                              {theBuyer}
+                          {viewOrderActive ? "Print" : "Add"}
+                        </ArgonButton>
+                      </ArgonBox>
+                    </ArgonBox>
+                  </Card>
+                </ArgonBox>
+              </>
+            )}
+          </ArgonBox>
+
+          {showPrintView && (
+            <div className="container card">
+              <div className="row gutters">
+                <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                  <div
+                    style={{ justifyContent: "flex-start" }}
+                    className="custom-actions-btns mb-2"
+                  >
+                    <a
+                      onClick={() => {
+                        setShowPrintView(false);
+                        setShowAddForm(false);
+                        setShowOrderTable(true);
+                      }}
+                      className="btn btn-secondary"
+                    >
+                      <i className="icon-printer"></i> Show Receipt List
+                    </a>
+                  </div>
+                </div>
+                <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                  <div className="custom-actions-btns mb-2">
+                    <a
+                      onClick={() => {
+                        toast.success("Loading Sucessful!!");
+                        handleDownload();
+                      }}
+                      className="btn btn-primary"
+                    >
+                      <i className="icon-download"></i> Download
+                    </a>
+                    <a
+                      onClick={() => {
+                        toast.success("Loading Printer!!");
+                        handlePrint();
+                      }}
+                      className="btn btn-secondary"
+                    >
+                      <i className="icon-printer"></i> Print
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <Button
+                style={{ alignSelf: "flex-end" }}
+                onClick={() => {
+                  setShowPrintView(false);
+                  setShowAddForm(false);
+                  setShowOrderTable(true);
+                }}
+              >
+                <h5 style={{ paddingRight: 10 }}>Back </h5>
+                <ArgonBox component="i" color="info" fontSize="20px" className="ni ni-bold-right" />
+              </Button>
+
+              <div style={{ marginTop: 20 }} ref={componentRef} className="row gutters">
+                <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                  <div className="card">
+                    <div className="card-body p-0">
+                      <div className="invoice-container">
+                        <div className="invoice-header">
+                          <div className="row gutters">
+                            <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                              <a href="index.html" className="invoice-logo">
+                                Mega Store
+                              </a>
+                            </div>
+                            <div
+                              style={{ justifyContent: "flex-end" }}
+                              className="col-lg-6 col-md-6 col-sm-6"
+                            >
                               <br />
-                              {theBuyerLocation}
-                              <br/>
-                              {theBuyerPhone}
-                            </address>
+                              <address style={{ textAlign: "end" }} className="text-right">
+                                <br />
+                                {user?.company_name}
+                                <br />
+                                {user?.city}
+                                <br />
+                                {user?.contact}
+                              </address>
+                            </div>
                           </div>
-                        </div>
-                        <div className="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
-                          <div className="invoice-details">
-                            <div className="invoice-num">
-                              <div>Order Receipt - #{theReceipt}</div>
-                              <div>{new Date().toLocaleString() + ""}</div>
+                          <div className="row gutters">
+                            <div className="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
+                              <div className="invoice-details">
+                                <address>
+                                  {theBuyer}
+                                  <br />
+                                  {theBuyerLocation}
+                                  <br />
+                                  {theBuyerPhone}
+                                </address>
+                              </div>
+                            </div>
+                            <div className="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
+                              <div className="invoice-details">
+                                <div className="invoice-num">
+                                  <div>Order Receipt - #{theReceipt}</div>
+                                  <div>{new Date().toLocaleString() + ""}</div>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    </div>
-                    <div className="invoice-body">
-                      <div className="row gutters">
-                        <div className="col-lg-12 col-md-12 col-sm-12">
-                          <div className="table-responsive">
-                            <table className="table custom-table m-0">
-                              <thead>
-                                <tr>
-                                  <th>Items</th>
-                                  <th>Unit Price</th>
-                                  <th>Quantity</th>
-                                  <th>Sub Total</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {productInputRow?.map((row, i) => {
-                                  return (
-                                    <tr key={row}>
-                                      <td>
-                                        {row.name}
-                                        <p className="m-0 text-muted">{row.label}</p>
-                                      </td>
-                                      <td>D{row.price}</td>
-                                      <td>{row.quantity}</td>
-                                      <td>D{row.price * row.quantity}</td>
+                        <div className="invoice-body">
+                          <div className="row gutters">
+                            <div className="col-lg-12 col-md-12 col-sm-12">
+                              <div className="table-responsive">
+                                <table className="table custom-table m-0">
+                                  <thead>
+                                    <tr>
+                                      <th>Items</th>
+                                      <th>Unit Price</th>
+                                      <th>Quantity</th>
+                                      <th>Sub Total</th>
                                     </tr>
-                                  );
-                                })}
+                                  </thead>
+                                  <tbody>
+                                    {productInputRow?.map((row, i) => {
+                                      return (
+                                        <tr key={row}>
+                                          <td>
+                                            {row.name}
+                                            <p className="m-0 text-muted">{row.label}</p>
+                                          </td>
+                                          <td>D{row.price}</td>
+                                          <td>{row.quantity}</td>
+                                          <td>D{row.price * row.quantity}</td>
+                                        </tr>
+                                      );
+                                    })}
 
-                                <tr>
-                                  <td>&nbsp;</td>
-                                  <td colSpan={2}>
-                                    <h5 className="text-success">
-                                      <strong>Grand Total</strong>
-                                    </h5>
-                                  </td>
-                                  <td>
-                                    {/* <p>
+                                    <tr>
+                                      <td>&nbsp;</td>
+                                      <td colSpan={2}>
+                                        <h5 className="text-success">
+                                          <strong>Grand Total</strong>
+                                        </h5>
+                                      </td>
+                                      <td>
+                                        {/* <p>
 															$5000.00<br/>
 															$100.00<br/>
 															$49.00<br/>
 														</p> */}
-                                    <h5 className="text-success">
-                                      <strong>D{ordertotalPrice}</strong>
-                                    </h5>
-                                  </td>
-                                </tr>
-                              </tbody>
-                            </table>
+                                        <h5 className="text-success">
+                                          <strong>D{ordertotalPrice}</strong>
+                                        </h5>
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
                           </div>
                         </div>
+                        <div className="invoice-footer">Thank you for your Business.</div>
                       </div>
                     </div>
-                    <div className="invoice-footer">Thank you for your Business.</div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
+          )}
+        </>
       )}
-      </>
-      
-      }
-
-
 
       <Footer />
     </DashboardLayout>
