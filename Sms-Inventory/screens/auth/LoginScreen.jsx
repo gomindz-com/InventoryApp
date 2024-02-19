@@ -14,6 +14,7 @@ import CustomText from "../../components/CustomText";
 import { Ionicons } from "@expo/vector-icons";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import * as Yup from "yup";
+import axios from "axios";
 
 const LoginScreen = () => {
   const navigation = useNavigation();
@@ -65,6 +66,13 @@ const LoginScreen = () => {
   const handleLogin = async () => {
     try {
       await loginSchema.validate(data, { abortEarly: false });
+      console.log(data);
+
+      const res = await axios.post("http://127.0.0.1:8000/api/users/login", {
+        email: data.email,
+        password: data.password,
+      });
+      console.log("Hello ", res.data);
       HomeScreen();
     } catch (error) {
       const newErrors = {};
@@ -112,7 +120,7 @@ const LoginScreen = () => {
             }}
             keyboardType="email-address"
             onChangeText={(text) => {
-              setData({ ...data, email: text });
+              setData({ ...data, email: text.toLowerCase() }); // Convert text to lowercase
               setErrors({ ...errors, email: "" });
             }}
           />

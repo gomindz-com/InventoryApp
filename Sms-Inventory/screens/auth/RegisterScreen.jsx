@@ -12,6 +12,7 @@ import { useNavigation } from "@react-navigation/native";
 import * as Yup from "yup";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import CustomText from "../../components/CustomText";
+import axios from "axios";
 
 const RegisterScreen = () => {
   const navigation = useNavigation();
@@ -29,12 +30,16 @@ const RegisterScreen = () => {
     email: "",
     password: "",
     fullName: "",
+    lastName: "",
+    userName: "",
   });
 
   const [errors, setErrors] = useState({
     email: "",
     password: "",
     fullName: "",
+    lastName: "",
+    userName: "",
   });
 
   const handlePasswordChange = (val) => {
@@ -57,15 +62,43 @@ const RegisterScreen = () => {
       .min(6, "Password must be at least 6 characters")
       .required("Password is required"),
     fullName: Yup.string().required("Full name is required"),
+    lastName: Yup.string().required("Last name is required"),
+    userName: Yup.string().required("user name is required"),
   });
 
   const handleRegister = async () => {
     try {
       await registerSchema.validate(data, { abortEarly: false });
-      // Validation passed, proceed with registration logic
-      HomeScreen();
+      console.log(data);
+
+      const registrationData = {
+        email: data.email,
+        first_name: data.fullName.split(" ")[0],
+        last_name: data.fullName.split(" ")[1],
+        username: data.userName,
+        password: data.password,
+        is_active: true,
+      };
+
+      const response = await axios.post(
+        "http://127.0.0.1:8000/api/users/register",
+        {
+          email: data.email,
+          first_name: data.fullName,
+          last_name: data.fullName,
+          username: data.userName,
+          password: data.password,
+          is_active: true,
+        }
+      );
+
+      if (response.status === 200 || response.status === 201) {
+        console.log("Helllo", response.data);
+        // HomeScreen();
+      } else {
+        console.log("Registration failed:", response.data);
+      }
     } catch (error) {
-      // Validation failed, set error messages
       const newErrors = {};
       error.inner.forEach((err) => {
         newErrors[err.path] = err.message;
@@ -107,7 +140,8 @@ const RegisterScreen = () => {
             }}
             keyboardType="email-address"
             onChangeText={(text) => {
-              setData({ ...data, email: text });
+              setData({ ...data, email: text.toLowerCase() });
+
               setErrors({ ...errors, email: "" }); // Clear email error when typing
             }}
           />
@@ -142,6 +176,64 @@ const RegisterScreen = () => {
 
         {errors.fullName ? (
           <Text style={styles.error}>{errors.fullName}</Text>
+        ) : null}
+
+        <View style={{ flexDirection: "row" }}>
+          <Ionicons
+            name="person-outline"
+            size={24}
+            color="#666"
+            style={{ marginRight: 5 }}
+          />
+          <TextInput
+            placeholder="Last name"
+            style={{
+              width: "86%",
+              paddingVertical: 0,
+              color: "#337037",
+              borderBottomColor: "#ccc",
+              borderBottomWidth: 1,
+              paddingBottom: 8,
+              marginBottom: 10,
+            }}
+            onChangeText={(text) => {
+              setData({ ...data, lastName: text });
+              setErrors({ ...errors, lastName: "" }); // Clear full name error when typing
+            }}
+          />
+        </View>
+
+        {errors.lastName ? (
+          <Text style={styles.error}>{errors.lastName}</Text>
+        ) : null}
+
+        <View style={{ flexDirection: "row" }}>
+          <Ionicons
+            name="person-outline"
+            size={24}
+            color="#666"
+            style={{ marginRight: 5 }}
+          />
+          <TextInput
+            placeholder="user name"
+            style={{
+              width: "86%",
+              paddingVertical: 0,
+              color: "#337037",
+              borderBottomColor: "#ccc",
+              borderBottomWidth: 1,
+              paddingBottom: 8,
+              marginBottom: 10,
+            }}
+            onChangeText={(text) => {
+              setData({ ...data, userName: text });
+              setErrors({ ...errors, userName: "" }); // Clear full name error when typing
+            }}
+          />
+        </View>
+
+        {errors.userName ? (
+          <Text style={styles.error}>{errors.userName}</Text>
         ) : null}
 
         <View style={{ flexDirection: "row" }}>

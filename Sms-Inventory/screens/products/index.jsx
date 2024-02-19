@@ -1,8 +1,4 @@
-import {
-  StyleSheet,
-  View,
-  TouchableOpacity,
-} from "react-native";
+import { StyleSheet, View, TouchableOpacity } from "react-native";
 import React from "react";
 import { COLORS } from "../../constants/Theme";
 import CustomText from "../../components/CustomText";
@@ -39,15 +35,13 @@ const prductData = [
 ];
 
 const ProductScreen = () => {
-  const navigation = useNavigation() 
-  const addproductscreen = () =>{
-    navigation.navigate("addProduct")
-  }
+  const navigation = useNavigation();
+  const addproductscreen = () => {
+    navigation.navigate("addProduct");
+  };
 
   const navigateToDetails = () => {
-    // Navigate to the screen where you want to show details of the product
     navigation.navigate("ProductDetails", { item: prductData });
-    // Replace "ProductDetails" with your actual screen name
   };
 
   return (
@@ -82,7 +76,7 @@ const ProductScreen = () => {
         <CustomText style={{ marginTop: 5 }}>Total Product:</CustomText>
       </CustomCard>
 
-      {prductData.map((item , key ) => (
+      {prductData.map((item, key) => (
         <TouchableOpacity
           key={key}
           onPress={navigateToDetails} // Add onPress event to navigate when clicked
