@@ -3,7 +3,7 @@ from rest_framework import generics
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .serializers import RegisterSerializer, LoginSerializer, MobileSerializer, UserActivitySerializer
+from .serializers import RegisterSerializer, LoginSerializer, MobileUserSerializer, UserActivitySerializer
 from rest_framework.permissions import AllowAny, IsAuthenticated ##, UpdateUserProfileSerializer, UpdatePasswordSerializer, ResetPasswordSerializer,  SubscriberSerializer, SubscriberUpdateSerializer, 
 from rest_framework.request import Request
 from django.contrib.auth import authenticate
@@ -44,7 +44,7 @@ class LoginUser(APIView):
         if user is not None:
             user_logged_in.send(sender=self.__class__, request=request, user=user)
             token, created = AuthToken.objects.get_or_create(user=user)
-            serializer = MobileSerializer(user)
+            serializer = MobileUserSerializer(user)
             response = {
                 "status": True,
                 "message": "login Successful",
@@ -79,3 +79,26 @@ class UserActivityListView(generics.ListAPIView):
                 }
         return Response(response)
         
+
+
+class UserRetrieveView(generics.RetrieveAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = MobileUserSerializer
+    queryset = MobileUser.objects.all()
+
+    def get_object(self):
+        queryset = self.filter_queryset(self.get_queryset())
+        obj = queryset.get(pk=self.request.user.id)
+        self.check_object_permissions(self.request, obj)
+        return obj
+
+    def get(self, request, format=None):
+        serializer = MobileUserSerializer(request.user)
+        response = {
+                    "status": True,
+                    "message": "",
+                    "user" : serializer.data
+                
+
+                }
+        return Response(data=response)
