@@ -4,7 +4,7 @@ from .models import MobileUser, UserActivity
 # from django.contrib.auth.password_validation import validate_password
 
 
-class MobileSerializer(serializers.ModelSerializer):
+class MobileUserSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(required=True)
     username = serializers.CharField(required=True)
     password = serializers.CharField(min_length=8, write_only=True)
@@ -19,9 +19,9 @@ class MobileSerializer(serializers.ModelSerializer):
         }
 
 
-class RegisterSerializer(MobileSerializer):
-    class Meta(MobileSerializer.Meta):
-        fields = MobileSerializer.Meta.fields + ['email', 'username', 'password', 'first_name', 'last_name']
+class RegisterSerializer(MobileUserSerializer):
+    class Meta(MobileUserSerializer.Meta):
+        fields = MobileUserSerializer.Meta.fields + ['email', 'username', 'password', 'first_name', 'last_name']
 
     # def validate(self, attrs):
     #     if attrs['password'] != attrs['password2']:

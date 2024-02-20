@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 
 # Create your models here.
 class mProduct(models.Model):
-    name = models.CharField(max_length=120, unique=True)
+    name = models.CharField(max_length=120)
     description_color = models.CharField(max_length=120, default='')
     buy_rate = models.DecimalField(max_digits=120, decimal_places=2)
     stock= models.PositiveIntegerField(default=0)
@@ -19,10 +19,10 @@ class Transaction(models.Model):
         ('in', 'In'),
         ('out', 'Out'),
     )
+    products = models.ForeignKey(mProduct, on_delete=models.CASCADE)
     current_stock = models.PositiveIntegerField(default=0)
     quantity = models.PositiveIntegerField(default=0) 
     remark = models.CharField(max_length=120, default='')
-    products = models.ForeignKey(mProduct, on_delete=models.CASCADE)
     type=models.CharField(max_length=20, choices=TYPE_CHOICE, default='')
     created_date = models.DateField(auto_now_add=True)
     owner = models.ForeignKey('users.MobileUser', related_name='transaction', on_delete=models.CASCADE, default=1)
