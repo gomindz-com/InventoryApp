@@ -5,16 +5,14 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  secureTextEntry,
   View,
 } from "react-native";
-import React, { useContext } from "react";
-import { IMAGES, COLORS } from "../../constants/Theme";
+import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
+import * as Yup from "yup";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import CustomText from "../../components/CustomText";
-import { Ionicons } from "@expo/vector-icons";
-import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-
+import axios from "axios";
 
 const RegisterScreen = () => {
   const navigation = useNavigation();
@@ -23,16 +21,25 @@ const RegisterScreen = () => {
     navigation.navigate("Main");
   };
 
-  const RegisterScreen = () => {
-    navigation.navigate("Register");
-  };
-
   const LoginScreen = () => {
     navigation.navigate("Login");
   };
 
-  const [data, setData] = React.useState({
+  const [data, setData] = useState({
     secureTextEntry: true,
+    email: "",
+    password: "",
+    fullName: "",
+    lastName: "",
+    userName: "",
+  });
+
+  const [errors, setErrors] = useState({
+    email: "",
+    password: "",
+    fullName: "",
+    lastName: "",
+    userName: "",
   });
 
   const handlePasswordChange = (val) => {
@@ -49,6 +56,57 @@ const RegisterScreen = () => {
     });
   };
 
+  const registerSchema = Yup.object().shape({
+    email: Yup.string().email("Invalid email").required("Email is required"),
+    password: Yup.string()
+      .min(6, "Password must be at least 6 characters")
+      .required("Password is required"),
+    fullName: Yup.string().required("Full name is required"),
+    lastName: Yup.string().required("Last name is required"),
+    userName: Yup.string().required("user name is required"),
+  });
+
+  const handleRegister = async () => {
+    try {
+      await registerSchema.validate(data, { abortEarly: false });
+      console.log(data);
+
+      const registrationData = {
+        email: data.email,
+        first_name: data.fullName.split(" ")[0],
+        last_name: data.fullName.split(" ")[1],
+        username: data.userName,
+        password: data.password,
+        is_active: true,
+      };
+
+      const response = await axios.post(
+        "http://127.0.0.1:8000/api/users/register",
+        {
+          email: data.email,
+          first_name: data.fullName,
+          last_name: data.fullName,
+          username: data.userName,
+          password: data.password,
+          is_active: true,
+        }
+      );
+
+      if (response.status === 200 || response.status === 201) {
+        console.log("Helllo", response.data);
+        // HomeScreen();
+      } else {
+        console.log("Registration failed:", response.data);
+      }
+    } catch (error) {
+      const newErrors = {};
+      error.inner.forEach((err) => {
+        newErrors[err.path] = err.message;
+      });
+      setErrors(newErrors);
+    }
+  };
+
   return (
     <SafeAreaView style={{ flex: 1, justifyContent: "center" }}>
       <View style={{ paddingHorizontal: 25 }}>
@@ -62,12 +120,7 @@ const RegisterScreen = () => {
           Sign up
         </Text>
 
-        <View
-          style={{
-            flexDirection: "row",
-            
-          }}
-        >
+        <View style={{ flexDirection: "row" }}>
           <Ionicons
             name="at-sharp"
             size={24}
@@ -76,36 +129,114 @@ const RegisterScreen = () => {
           />
           <TextInput
             placeholder="Email"
-            style={{ width: "86%", paddingVertical: 0, color: "#337037", borderBottomColor: "#ccc",
-            borderBottomWidth: 1,
-            paddingBottom: 8,
-            marginBottom: 25, }}
+            style={{
+              width: "86%",
+              paddingVertical: 0,
+              color: "#337037",
+              borderBottomColor: "#ccc",
+              borderBottomWidth: 1,
+              paddingBottom: 8,
+              marginBottom: 10,
+            }}
             keyboardType="email-address"
+            onChangeText={(text) => {
+              setData({ ...data, email: text.toLowerCase() });
+
+              setErrors({ ...errors, email: "" }); // Clear email error when typing
+            }}
           />
         </View>
 
-        <View
-          style={{
-            flexDirection: "row",
-            
-          }}
-        >
-          <Ionicons name="person-outline" size={24} color="#666" style={{ marginRight: 5 }} />
+        {errors.email ? <Text style={styles.error}>{errors.email}</Text> : null}
+
+        <View style={{ flexDirection: "row" }}>
+          <Ionicons
+            name="person-outline"
+            size={24}
+            color="#666"
+            style={{ marginRight: 5 }}
+          />
           <TextInput
             placeholder="Full name"
-            style={{ width: "86%", paddingVertical: 0, color: "#337037", borderBottomColor: "#ccc",
-            borderBottomWidth: 1,
-            paddingBottom: 8,
-            marginBottom: 25, }}
-            keyboardType="email-address"
+            style={{
+              width: "86%",
+              paddingVertical: 0,
+              color: "#337037",
+              borderBottomColor: "#ccc",
+              borderBottomWidth: 1,
+              paddingBottom: 8,
+              marginBottom: 10,
+            }}
+            onChangeText={(text) => {
+              setData({ ...data, fullName: text });
+              setErrors({ ...errors, fullName: "" }); // Clear full name error when typing
+            }}
           />
         </View>
 
-        <View
-          style={{
-            flexDirection: "row",
-          }}
-        >
+        {errors.fullName ? (
+          <Text style={styles.error}>{errors.fullName}</Text>
+        ) : null}
+
+        <View style={{ flexDirection: "row" }}>
+          <Ionicons
+            name="person-outline"
+            size={24}
+            color="#666"
+            style={{ marginRight: 5 }}
+          />
+          <TextInput
+            placeholder="Last name"
+            style={{
+              width: "86%",
+              paddingVertical: 0,
+              color: "#337037",
+              borderBottomColor: "#ccc",
+              borderBottomWidth: 1,
+              paddingBottom: 8,
+              marginBottom: 10,
+            }}
+            onChangeText={(text) => {
+              setData({ ...data, lastName: text });
+              setErrors({ ...errors, lastName: "" }); // Clear full name error when typing
+            }}
+          />
+        </View>
+
+        {errors.lastName ? (
+          <Text style={styles.error}>{errors.lastName}</Text>
+        ) : null}
+
+        <View style={{ flexDirection: "row" }}>
+          <Ionicons
+            name="person-outline"
+            size={24}
+            color="#666"
+            style={{ marginRight: 5 }}
+          />
+          <TextInput
+            placeholder="user name"
+            style={{
+              width: "86%",
+              paddingVertical: 0,
+              color: "#337037",
+              borderBottomColor: "#ccc",
+              borderBottomWidth: 1,
+              paddingBottom: 8,
+              marginBottom: 10,
+            }}
+            onChangeText={(text) => {
+              setData({ ...data, userName: text });
+              setErrors({ ...errors, userName: "" }); // Clear full name error when typing
+            }}
+          />
+        </View>
+
+        {errors.userName ? (
+          <Text style={styles.error}>{errors.userName}</Text>
+        ) : null}
+
+        <View style={{ flexDirection: "row" }}>
           <MaterialIcons
             name="lock-outline"
             size={24}
@@ -113,7 +244,13 @@ const RegisterScreen = () => {
             style={{ marginRight: 5 }}
           />
           <TextInput
-          style={{borderBottomWidth: 1, borderBottomColor: "#ccc", paddingBottom: 8, flex: 1,  color: "#337037"}}
+            style={{
+              borderBottomWidth: 1,
+              borderBottomColor: "#ccc",
+              paddingBottom: 8,
+              flex: 1,
+              color: "#337037",
+            }}
             placeholder="Password"
             onChangeText={(val) => handlePasswordChange(val)}
             secureTextEntry={data.secureTextEntry ? true : false}
@@ -126,15 +263,22 @@ const RegisterScreen = () => {
             )}
           </TouchableOpacity>
         </View>
+        {errors.password ? (
+          <Text style={styles.error}>{errors.password}</Text>
+        ) : null}
 
-        <View style={{marginTop: 15, marginBottom: 20,}}>
-        <Text style={{color: "#666", fontSize: 15}}>By signing up you've agree to our <Text style={{color: "#337037"}}>Terms & Conditions</Text> </Text>
-        <Text style={{color: "#666", fontSize: 15}}>and <Text style={{color: "#337037"}}>Privacy Policy</Text></Text>
+        <View style={{ marginTop: 15, marginBottom: 20 }}>
+          <Text style={{ color: "#666", fontSize: 15 }}>
+            By signing up you've agree to our{" "}
+            <Text style={{ color: "#337037" }}>Terms & Conditions</Text>{" "}
+          </Text>
+          <Text style={{ color: "#666", fontSize: 15 }}>
+            and <Text style={{ color: "#337037" }}>Privacy Policy</Text>
+          </Text>
         </View>
 
-
         <TouchableOpacity
-          onPress={() => {}}
+          onPress={handleRegister}
           style={{
             backgroundColor: "#337037",
             padding: 15,
@@ -156,11 +300,11 @@ const RegisterScreen = () => {
         </TouchableOpacity>
 
         <View style={styles.Accounts}>
-          <CustomText fontSize={15} fw={"normal"} color={"#666"} >
+          <CustomText fontSize={15} fw={"normal"} color={"#666"}>
             Joined us before?
           </CustomText>
 
-          <TouchableOpacity style= {{marginLeft:5}}>
+          <TouchableOpacity style={{ marginLeft: 5 }}>
             <CustomText
               fw={"bold"}
               fontSize={15}
@@ -171,8 +315,6 @@ const RegisterScreen = () => {
             </CustomText>
           </TouchableOpacity>
         </View>
-       
-       
       </View>
     </SafeAreaView>
   );
@@ -191,5 +333,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     marginTop: 10,
-  }
+  },
+  error: {
+    color: "red",
+    fontSize: 12,
+    marginTop: 5,
+  },
 });

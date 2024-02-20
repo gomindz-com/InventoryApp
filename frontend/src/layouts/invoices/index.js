@@ -15,7 +15,7 @@ import Footer from "examples/Footer";
 import Table from "examples/Tables/Table";
 import ArgonInput from "components/ArgonInput";
 import ArgonButton from "components/ArgonButton";
-import { Button, Modal, Typography, Card, Divider } from "@mui/material";
+import { Button, Modal, Typography, Card, Divider, Grid} from "@mui/material";
 
 import { useReactToPrint } from "react-to-print";
 import jsPDF from "jspdf";
@@ -31,6 +31,10 @@ import { getProducts } from "apiservices/productService";
 
 import { toast } from "react-toastify";
 import "./index.css";
+
+import AddCircleOutlinedIcon from "@mui/icons-material/AddCircleOutlined";
+import { getBuyers } from "apiservices/buyerService";
+import { addBuyer } from "apiservices/buyerService";
 
 function Invoices() {
   // USER
@@ -57,6 +61,11 @@ function Invoices() {
     setModalApproveReceiptOpen(!modalApproveReceiptOpen);
   };
 
+  const [modalAddBuyerOpen, setModalAddBuyerOpen] = useState(false);
+  const toggleModalAddBuyerOpen = () => {
+    setModalAddBuyerOpen(!modalAddBuyerOpen);
+  };
+
   // MODAL ITEM
   const [modalItem, setModalItem] = useState(null);
 
@@ -68,11 +77,15 @@ function Invoices() {
   const [viewOrderActive, setViewOrderActive] = useState(true);
 
   const product_options = [];
+  const [productOptions, setProductOptions] = useState([]);
+
+  const buyer_options = [];
+  const [buyerOptions, setBuyerOptions] = useState([]);
+
   const [value, setValue] = useState("");
 
   const [orderList, setOrderList] = useState([]);
   const [currentOrderList, setCurrentOrderList] = useState([]);
-  const [productOptions, setProductOptions] = useState(null);
   const [productPrice, setProductPrice] = useState(0);
   const [quantity, setQuantity] = useState(0);
 
@@ -94,6 +107,11 @@ function Invoices() {
   const [totalPriceEditData, setTotalPriceEditData] = useState(0);
   const [searchQuery, setSearchQuery] = useState(null);
 
+  const [buyerData, setBuyerData] = useState({
+    name: "",
+    mobile_number: "",
+  });
+
   const [orderData, setOrderData] = useState({
     buyer: "",
     buyer_phone: "",
@@ -105,22 +123,6 @@ function Invoices() {
     products: [],
   });
 
-  const rowss = currentOrderList.map((order) => ({
-    id: order.id,
-    product: order.products.map((product) => product.name).join(", "),
-    "total price": order.total_price,
-    buyer_phone: order.buyer_phone,
-    buyer: order.buyer,
-    buyer_location: order.buyer_location,
-  }));
-
-  const exportToExcel = () => {
-    const ws = XLSX.utils.json_to_sheet(rowss, { header: columns.map((column) => column.name) });
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Invoice Report");
-    XLSX.writeFile(wb, "invoice_report.xlsx");
-  };
-
   const [idProductRow, setIdProductRow] = useState(0);
   const [productInputRow, setProductInputRow] = useState([]);
 
@@ -130,7 +132,7 @@ function Invoices() {
 
   const [partPaymentAmount, setPartPaymentAmount] = useState(null);
 
-  // DOWNLOAD AND PRINT
+  // DOWNLOAD AND PRINT AND EXPORT
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
@@ -148,6 +150,15 @@ function Invoices() {
         pdf.save("component.pdf");
       });
     }
+  };
+
+  const exportToExcel = () => {
+    const ws = XLSX.utils.json_to_sheet(reportRows, {
+      header: reportColumns.map((column) => column.name),
+    });
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Invoice Report");
+    XLSX.writeFile(wb, "invoice_report.xlsx");
   };
 
   // SEARCH FUNCTIONALITY
@@ -184,7 +195,7 @@ function Invoices() {
     try {
       const res = await getProducts();
       if (res.data?.status == true) {
-        res.data?.products.map((item) => {
+        res.data?.products?.map((item) => {
           product_options.push({
             value: item.name,
             label: item.name,
@@ -199,9 +210,29 @@ function Invoices() {
     } catch (error) {}
   };
 
+  // GET BUYER LIST
+  const handleGetBuyerList = async () => {
+    try {
+      const res = await getBuyers();
+      if (res.data?.status == true) {
+        res.data?.buyers?.map((item) => {
+          buyer_options.push({
+            id: item.id,
+            value: item.name,
+            label: item.name,
+            mobile: item.mobile_number
+          });
+        });
+
+        setBuyerOptions(buyer_options);
+      } else {
+      }
+    } catch (error) {}
+  };
+
   // APPROVE AS RECEIPT
   const handleApproveAsReceipt = async () => {
-    const newState = modalItem.products.map((obj) => {
+    const newState = modalItem.products?.map((obj) => {
       return {
         ...obj,
         amount: obj.quantity,
@@ -289,6 +320,7 @@ function Invoices() {
     const isValid = await AddOrderSchema.isValid(orderData);
     if (!isValid) {
       toast.error("Please enter all the required fields!!");
+      toggleModalAddInvoice();
     } else {
       toast.success("Adding Invoice!!", { autoClose: 80 });
       await addOrder("invoice", orderData)
@@ -365,6 +397,31 @@ function Invoices() {
     toggleModalAddInvoice();
   };
 
+  // ADD BUYER
+
+  const handleAddBuyer = async () => {
+    
+      toast.success("Adding Buyer!!", { autoClose: 80 });
+      await addBuyer(buyerData)
+        .then((res) => {
+          if (res.status == 201) {
+            setBuyerData({
+              name: "",
+              mobile_number: "",
+            });
+
+            setOrderData
+
+            handleGetBuyerList()
+            toggleModalAddBuyerOpen()
+          } else {
+            toast.error(res.data.message ?? "Error Adding Buyer");
+          }
+        })
+        .catch((err) => {});
+    
+  };
+
   // EDIT INVOICE
   const handleEditOrderInvoice = async (id) => {
     toast.success("Editing Invoice!!", { autoClose: 80 });
@@ -401,7 +458,28 @@ function Invoices() {
     { name: "edit", align: "center" },
     { name: "delete", align: "center" },
   ];
+  const reportColumns = [
+    { name: "ID", align: "left" },
+    { name: "Product(s)", align: "left" },
+    { name: "Order Price", align: "center" },
+    { name: "Price Paid", align: "center" },
+    { name: "Balance", align: "center" },
+    { name: "Buyer Name", align: "center" },
+    { name: "Buyer Phone", align: "center" },
+    { name: "Order Status", align: "center" },
+  ];
   const rows = [];
+
+  const reportRows = currentOrderList.map((order) => ({
+    ID: order.id,
+    "Product(s)": order.products.map((product) => product.name).join(", "),
+    "Order Price": order.total_price,
+    "Price Paid": order.price_paid,
+    Balance: order.total_price - order.price_paid,
+    "Buyer Name": order.buyer,
+    "Buyer Phone": order.buyer_phone,
+    "Order Status": order.status,
+  }));
 
   currentOrderList.map(function (item, i) {
     rows.push({
@@ -446,7 +524,7 @@ function Invoices() {
       "buyer phone": (
         <ArgonBox display="flex" flexDirection="column">
           <ArgonTypography variant="caption" fontWeight="medium" color="text">
-            {item.buyer_phone ?? "NAN"}
+            {item.buyer_phone ?? "NA"}
           </ArgonTypography>
           <ArgonTypography variant="caption" color="secondary"></ArgonTypography>
         </ArgonBox>
@@ -504,7 +582,6 @@ function Invoices() {
       "View & Print": (
         <Button
           onClick={async () => {
-
             setShowPrintView(true);
             setShowAddForm(false);
             setshowInvoiceTable(false);
@@ -519,7 +596,8 @@ function Invoices() {
             setTheBuyer(item.buyer);
             setTheBuyerPhone(item.buyer_phone);
             setTheBuyerLocation(item.buyer_location);
-            setTheReceipt(item.ref);
+            // setTheReceipt(item.ref);
+            setTheReceipt(item.receipt);
           }}
         >
           <ArgonBox component="i" color="info" fontSize="14px" className="ni ni-bold-down" />
@@ -1068,9 +1146,10 @@ function Invoices() {
   useEffect(() => {
     handleGetOrderList();
     handleGetProductList();
+    handleGetBuyerList();
   }, []);
 
-  // RETURN UI
+  // MAIN UI
   return (
     <DashboardLayout>
       {/* MODALS */}
@@ -1107,7 +1186,6 @@ function Invoices() {
           </ArgonButton>
         </div>
       </Modal>
-      ;
       <Modal open={modalAddInvoicOpen} onClose={toggleModalAddInvoice}>
         <div
           style={{
@@ -1140,7 +1218,6 @@ function Invoices() {
           </ArgonButton>
         </div>
       </Modal>
-      ;
       <Modal open={modalPartPaymentOpen} onClose={toggleModalPartPayment}>
         <div
           style={{
@@ -1184,7 +1261,6 @@ function Invoices() {
           </ArgonButton>
         </div>
       </Modal>
-      ;
       <Modal open={modalApproveReceiptOpen} onClose={toggleModalApproveReceipt}>
         <div
           style={{
@@ -1210,6 +1286,61 @@ function Invoices() {
           <ArgonButton
             style={{ marginRight: "15px", marginTop: "15px" }}
             onClick={toggleModalApproveReceipt}
+            color="info"
+            size="large"
+          >
+            Cancel
+          </ArgonButton>
+        </div>
+      </Modal>
+      <Modal open={modalAddBuyerOpen} onClose={toggleModalAddBuyerOpen}>
+        <div
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            background: "white",
+            padding: "20px",
+            borderRadius: "8px",
+          }}
+        >
+          <Typography variant="h6">Add Buyer</Typography>
+          <Divider />
+
+          <ArgonInput
+            style={{ flex: 5 }}
+            type="text"
+            name="name"
+            placeholder="Name *"
+            size="large"
+            onChange={(e) => {
+              setBuyerData({ ...buyerData, [e.target.name]: e.target.value });
+            }}
+          />
+
+          <ArgonInput
+            style={{ flex: 5, marginTop: "20px" }}
+            type="text"
+            name="mobile_number"
+            placeholder="Mobile Number *"
+            size="large"
+            onChange={(e) => {
+              setBuyerData({ ...buyerData, [e.target.name]: e.target.value });
+            }}
+          />
+
+          <ArgonButton
+            style={{ marginRight: "15px", marginTop: "15px" }}
+            onClick={handleAddBuyer}
+            color="info"
+            size="large"
+          >
+            Confirm
+          </ArgonButton>
+          <ArgonButton
+            style={{ marginRight: "15px", marginTop: "15px" }}
+            onClick={toggleModalAddBuyerOpen}
             color="info"
             size="large"
           >
@@ -1435,6 +1566,46 @@ function Invoices() {
                 )}
 
                 {renderColumns}
+
+                <ArgonBox mb={2} mx={5}>
+                  <Grid container spacing={3}>
+                    <Grid item xs={12} md={10}>
+                      <ArgonBox mb={2}>
+                        <Select
+                          name="buyer"
+                          placeholder="Buyers"
+                          // defaultValue={}
+                          options={buyerOptions}
+                          onChange={(selectedOption)=>{
+
+                            console.log(selectedOption)
+                            setOrderData(
+                              { ...orderData, 
+                                buyer: selectedOption.value,
+                                buyer_phone: selectedOption.mobile
+
+                              }
+                              );
+
+                              console.log(orderData)
+
+
+
+                          }}
+                        />
+                      </ArgonBox>
+                    </Grid>
+                    <Grid item xs={12} md={2}>
+                      <AddCircleOutlinedIcon
+                        fontSize="large"
+                        color="primary"
+                        onClick={() => {
+                          setModalAddBuyerOpen(true);
+                        }}
+                      />
+                    </Grid>
+                  </Grid>
+                </ArgonBox>
 
                 <ArgonBox mb={2} mx={5}>
                   <ArgonInput
@@ -1671,8 +1842,6 @@ function Invoices() {
                         <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6">
                           <a href="index.html" className="invoice-logo">
                             Mega Store
-
-                            
                           </a>
                         </div>
                         <div
@@ -1739,8 +1908,8 @@ function Invoices() {
                                 })}
 
                                 <tr>
-                                  <td style={{ borderRight: '0px' }}>&nbsp;</td>
-                                  <td colSpan={2} className=''>
+                                  <td style={{ borderRight: "0px" }}>&nbsp;</td>
+                                  <td colSpan={2} style={{ borderLeft: "0px" }}>
                                     <h5 className="text-success">
                                       <strong>Price Paid</strong>
                                     </h5>
@@ -1750,22 +1919,22 @@ function Invoices() {
                                       <strong>D{orderData.price_paid}</strong>
                                     </h5>
                                   </td>
-                                  
                                 </tr>
 
                                 <tr>
-                                  <td style={{ borderRight: '0px' }}>&nbsp;</td>
-                                  <td colSpan={2}>
+                                  <td style={{ borderRight: "0px" }}>&nbsp;</td>
+                                  <td style={{ borderLeft: "0px" }} colSpan={2}>
                                     <h5 className="text-success">
                                       <strong>Balance</strong>
                                     </h5>
                                   </td>
                                   <td>
                                     <h5 className="text-success">
-                                      <strong>D{orderData.total_price - orderData.price_paid}</strong>
+                                      <strong>
+                                        D{orderData.total_price - orderData.price_paid}
+                                      </strong>
                                     </h5>
                                   </td>
-                                  
                                 </tr>
 
                                 <tr>
@@ -1781,7 +1950,6 @@ function Invoices() {
                                     </h5>
                                   </td>
                                 </tr>
-                                
                               </tbody>
                             </table>
                           </div>

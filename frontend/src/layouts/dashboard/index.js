@@ -31,7 +31,6 @@ import { getProductsImages } from "apiservices/productService";
 
 import Spinner from "components/Spinner";
 
-
 function Default() {
   const userProfileInfo = useSelector((state) => state.user.value);
   const [loading, setLoading] = useState(true);
@@ -110,9 +109,9 @@ function Default() {
         .then((res) => {
           if (res.status == 200) {
             setProductImages(res.data.images);
-            setLoading(false)
+            setLoading(false);
           } else {
-            setLoading(false)
+            setLoading(false);
             setProductImages({});
           }
         })
@@ -128,6 +127,8 @@ function Default() {
 
   return (
     <DashboardLayout>
+      {user == null && <Navigate to="/authentication/sign-in" replace={true} />}
+
       <DashboardNavbar />
       {loading ? (
         <Spinner></Spinner>

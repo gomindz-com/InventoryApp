@@ -26,7 +26,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ('id', 'name', 'description_color', 'price', 'stock', 'status', 'owner', 'category', 'image', 'expiry_date', 'created_date')
+        fields = ('id', 'is_active', 'name', 'description_color', 'price', 'cost_price', 'stock', 'status', 'owner', 'category', 'image', 'expiry_date', 'created_date')
 
 
 
@@ -82,7 +82,7 @@ class BuyerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Buyer
         fields = ['id', 'name', 'email', 'address',
-                  'mobile_number', 'tax_id' ]
+                  'mobile_number', 'tax_id', 'owner' ]
 
 
 class ProductOrderSerializer(serializers.ModelSerializer):

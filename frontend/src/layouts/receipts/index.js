@@ -35,6 +35,10 @@ import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import TextField from '@mui/material/TextField';
 import * as XLSX from "xlsx";
+import { getBuyers } from "apiservices/buyerService";
+import AddCircleOutlinedIcon from "@mui/icons-material/AddCircleOutlined";
+import { Grid } from "@mui/material";
+
 
 
 function Receipts() {
@@ -148,22 +152,34 @@ function Receipts() {
   const rows = [];
   
   
-  const rowss = currentOrderList.map(order => ({
-    id: order.id,
-    product: order.products.map(product => product.name).join(", "), 
-    'total price': order.total_price, 
-    buyer_phone: order.buyer_phone,
-    buyer: order.buyer,
-    buyer_location: order.buyer_location,
-    // status: order.status,
-  }));
+  const columnsToExport = [
+    "id",
+    "product",
+    "total_price",
+    "buyer_phone",
+    "buyer",
+    "buyer_location",
+  ];
+  
+  const rowToExcel = currentOrderList.map(order => {
+    const row = {};
+    columnsToExport.forEach(column => {
+      if (column === "product") {
+        row[column] = order.products.map(product => product.name).join(", ");
+      } else {
+        row[column] = order[column];
+      }
+    });
+    return row;
+  });
   
   const exportToExcel = () => {
-    const ws = XLSX.utils.json_to_sheet(rowss, { header: columns.map(column => column.name) });
+    const ws = XLSX.utils.json_to_sheet(rowToExcel, { header: columnsToExport });
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Receipt Report");
-    XLSX.writeFile(wb, "Receipt_reports.xlsx");
+    XLSX.writeFile(wb, "Receipt_report.xlsx");
   };
+  
   
   const ComponentToPrint = React.forwardRef((props, ref) => {
     return <div ref={ref}>My cool content here!</div>;
@@ -729,9 +745,36 @@ const handleSearch = (event) => {
     }
   };
 
+
+  // GET BUYER LIST
+
+  const buyer_options = [];
+  const [buyerOptions, setBuyerOptions] = useState(null);
+
+  const handleGetBuyerList = async () => {
+    try {
+      const res = await getBuyers();
+      if (res.data?.status == true) {
+        res.data?.buyers.map((item) => {
+          buyer_options.push({
+            id: item.id,
+            value: item.name,
+            label: item.name,
+            mobile: item.mobile_number
+          });
+        });
+
+        setBuyerOptions(buyer_options);
+      } else {
+      }
+    } catch (error) {}
+  };
+
   useEffect(() => {
     handleGetReceiptList();
     handleGetProductList();
+    handleGetBuyerList();
+
   }, []);
 
   return (
@@ -993,6 +1036,46 @@ const handleSearch = (event) => {
                   )}
 
                   {renderColumns}
+
+                  <ArgonBox mb={2} mx={5}>
+                  <Grid container spacing={3}>
+                    <Grid item xs={12} md={10}>
+                      <ArgonBox mb={2}>
+                        <Select
+                          name="buyer"
+                          placeholder="Buyers"
+                          // defaultValue={}
+                          options={buyerOptions}
+                          onChange={(selectedOption)=>{
+
+                            console.log(selectedOption)
+                            setOrderData(
+                              { ...orderData, 
+                                buyer: selectedOption.value,
+                                buyer_phone: selectedOption.mobile
+
+                              }
+                              );
+
+                              console.log(orderData)
+
+
+
+                          }}
+                        />
+                      </ArgonBox>
+                    </Grid>
+                    <Grid item xs={12} md={2}>
+                      <AddCircleOutlinedIcon
+                        fontSize="large"
+                        color="primary"
+                        onClick={() => {
+                          setModalAddBuyerOpen(true);
+                        }}
+                      />
+                    </Grid>
+                  </Grid>
+                </ArgonBox>
 
                   <ArgonBox mb={2} mx={5}>
                     <ArgonInput
