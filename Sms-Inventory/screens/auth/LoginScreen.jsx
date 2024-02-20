@@ -5,16 +5,15 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  secureTextEntry,
   View,
 } from "react-native";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { IMAGES, COLORS } from "../../constants/Theme";
 import { useNavigation } from "@react-navigation/native";
 import CustomText from "../../components/CustomText";
 import { Ionicons } from "@expo/vector-icons";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-
+import * as Yup from "yup";
 
 const LoginScreen = () => {
   const navigation = useNavigation();
@@ -29,10 +28,17 @@ const LoginScreen = () => {
 
   const ForgotPassword = () => {
     navigation.navigate("Forgot");
-  }
+  };
 
-  const [data, setData] = React.useState({
+  const [data, setData] = useState({
     secureTextEntry: true,
+    email: "",
+    password: "",
+  });
+
+  const [errors, setErrors] = useState({
+    email: "",
+    password: "",
   });
 
   const handlePasswordChange = (val) => {
@@ -47,6 +53,59 @@ const LoginScreen = () => {
       ...data,
       secureTextEntry: !data.secureTextEntry,
     });
+  };
+
+  const loginSchema = Yup.object().shape({
+    email: Yup.string().email("Invalid email").required("Email is required"),
+    password: Yup.string()
+      .min(8, "Password must be at least 8 characters")
+      .required("Password is required"),
+  });
+
+
+  // const handleLogin = async () => {
+  //   try {
+  //     await loginSchema.validate(data, { abortEarly: false });
+  
+  //     const res = await axios.post('http://10.0.2.2:8000/api/users/login', {
+  //       email: data.email,
+  //       password: data.password
+  //     });
+  
+  //     console.log("Login successful", res.data);
+  
+  //     // Handle successful login response here
+  
+  //   } catch (error) {
+  //     const newErrors = {};
+  //     if (error?.inner) {
+  //       error.inner.forEach((err) => {
+  //         newErrors[err.path] = err.message;
+  //       });
+  //     } else {
+  //       newErrors.general = error.message || "An error occurred";
+  //     }
+  //     setErrors(newErrors);
+  //   }
+  // };
+  
+  
+
+  const handleLogin = async () => {
+    try {
+      await loginSchema.validate(data, { abortEarly: false });
+
+      
+
+
+      HomeScreen();
+    } catch (error) {
+      const newErrors = {};
+      error.inner.forEach((err) => {
+        newErrors[err.path] = err.message;
+      });
+      setErrors(newErrors);
+    }
   };
 
   return (
@@ -65,7 +124,6 @@ const LoginScreen = () => {
         <View
           style={{
             flexDirection: "row",
-            
           }}
         >
           <Ionicons
@@ -76,13 +134,24 @@ const LoginScreen = () => {
           />
           <TextInput
             placeholder="Email"
-            style={{ width: "87%", paddingVertical: 0, color: "#337037", borderBottomColor: "#ccc",
-            borderBottomWidth: 1,
-            paddingBottom: 8,
-            marginBottom: 25, }}
+            style={{
+              width: "87%",
+              paddingVertical: 0,
+              color: "#337037",
+              borderBottomColor: "#ccc",
+              borderBottomWidth: 1,
+              paddingBottom: 8,
+              marginBottom: 15,
+            }}
             keyboardType="email-address"
+            onChangeText={(text) => {
+              setData({ ...data, email: text });
+              setErrors({ ...errors, email: "" });
+            }}
           />
         </View>
+
+        {errors.email ? <Text style={styles.error}>{errors.email}</Text> : null}
 
         <View
           style={{
@@ -96,7 +165,13 @@ const LoginScreen = () => {
             style={{ marginRight: 5 }}
           />
           <TextInput
-          style={{borderBottomWidth: 1, borderBottomColor: "#ccc", paddingBottom: 8, flex: 1,  color: "#337037"}}
+            style={{
+              borderBottomWidth: 1,
+              borderBottomColor: "#ccc",
+              paddingBottom: 8,
+              flex: 1,
+              color: "#337037",
+            }}
             placeholder="Password"
             onChangeText={(val) => handlePasswordChange(val)}
             secureTextEntry={data.secureTextEntry ? true : false}
@@ -109,15 +184,21 @@ const LoginScreen = () => {
             )}
           </TouchableOpacity>
         </View>
+        {errors.password ? (
+          <Text style={styles.error}>{errors.password}</Text>
+        ) : null}
 
-        <TouchableOpacity style={{ alignItems: "flex-end", marginTop: 15}} onPress={ForgotPassword}>
+        <TouchableOpacity
+          style={{ alignItems: "flex-end", marginTop: 15 }}
+          onPress={ForgotPassword}
+        >
           <CustomText color="#337037" fw={"500"}>
             Forgot Password?
           </CustomText>
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={HomeScreen}
+          onPress={handleLogin}
           style={{
             backgroundColor: "#337037",
             padding: 15,
@@ -186,17 +267,23 @@ const LoginScreen = () => {
             source={require("../../../Sms-Inventory/assets/images/icons8-google-48.png")}
             style={{ justifyContent: "center", marginRight: 70 }}
           />
-          <Text style={{ color: "#000", textAlignVertical: "center" }}>
+          <Text
+            style={{
+              color: "#000",
+              textAlignVertical: "center",
+              alignSelf: "center",
+            }}
+          >
             Login with Google
           </Text>
         </TouchableOpacity>
 
         <View style={styles.Accounts}>
-          <CustomText fontSize={15} fw={"normal"} color={"#666"} >
+          <CustomText fontSize={15} fw={"normal"} color={"#666"}>
             New to Stocks?
           </CustomText>
 
-          <TouchableOpacity style= {{marginLeft:5}}>
+          <TouchableOpacity style={{ marginLeft: 5 }}>
             <CustomText
               fw={"bold"}
               fontSize={15}
@@ -225,5 +312,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     marginTop: 10,
+  },
+  error: {
+    color: "red",
+    fontSize: 12,
+    marginTop: 10,
+    marginBottom: 10,
   },
 });

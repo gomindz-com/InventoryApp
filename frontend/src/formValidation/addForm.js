@@ -36,8 +36,8 @@ export const AddSupplierSchema = Yup.object().shape({
     name: Yup.string().required("Name is required"),
     address: Yup.string().required("Required"),
     mobile_number: Yup.string().required("Required"),
-    tax_id: Yup.string().required("Required"),
-    email: Yup.string().email("Email is required").required("Required"),
+    tax_id: Yup.string(),
+    email: Yup.string().email("Email is required"),
 });
 
 
