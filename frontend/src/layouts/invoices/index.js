@@ -361,6 +361,7 @@ function Invoices() {
       toast.error("Please enter all the required fields!!");
       toggleModalAddInvoice();
     } else {
+      setLoading(true)
       toast.success("Adding Invoice!!", { autoClose: 80 });
       await addOrder("invoice", orderData)
         .then((res) => {
@@ -388,14 +389,17 @@ function Invoices() {
             setShowAddForm(false);
             setshowInvoiceTable(true);
             toggleModalAddInvoice();
-
             handleGetOrderList();
+            setLoading(false)
+
           } else {
             toast.error(res.data.message);
+            setLoading(false)
             toggleModalAddInvoice();
           }
         })
         .catch((err) => {
+          setLoading(false)
           toggleModalAddInvoice();
         });
     }

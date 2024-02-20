@@ -47,11 +47,11 @@ function Categories() {
       await addCategory(categoryData)
         .then((res) => {
           if (res.status == 201) {
-            toast.success(" Successfully Added ");
+            toast.success("Successfully Added ");
             handleGetCategoryList();
             setShowAddCategoryForm(false);
           } else {
-            toast.error("Category Could Not Be Added");
+            toast.error( res.data.message ?? "Category Could Not Be Added");
           }
         })
         .catch((err) => {});

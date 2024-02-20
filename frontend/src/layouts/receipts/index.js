@@ -72,9 +72,6 @@ function Receipts() {
             mobile_number: "",
             address: "",
           });
-
-          // setOrderData
-
           handleGetBuyerList();
           toggleModalAddBuyerOpen();
           setLoadingBuyers(false);
@@ -151,8 +148,6 @@ function Receipts() {
   const [invoiceData, setInvoiceData] = useState({
     buyer: "",
     buyer_location: "",
-    // buyer_phone: "",
-
     status: "pending",
     receipt: "",
     total_price: "",
@@ -191,7 +186,6 @@ function Receipts() {
     { name: "buyer_location", align: "center" },
     { name: "status", align: "center" },
     { name: "View & Print", align: "center" },
-    //{ name: "delete", align: "center" },
   ];
   const rows = [];
 
@@ -223,12 +217,6 @@ function Receipts() {
     XLSX.writeFile(wb, "Receipt_report.xlsx");
   };
 
-  const ComponentToPrint = React.forwardRef((props, ref) => {
-    return <div ref={ref}>My cool content here!</div>;
-  });
-
-  const navigate = useNavigate();
-
   const style = {
     position: "absolute",
     top: "50%",
@@ -243,7 +231,6 @@ function Receipts() {
 
   const handleGetReceiptList = async () => {
     setLoading(true);
-
     setOrderList([]);
     try {
       const res = await getOrders("receipt");
@@ -281,7 +268,6 @@ function Receipts() {
       html2canvas(componentNode).then((canvas) => {
         const imgData = canvas.toDataURL("image/png");
         const pdf = new jsPDF();
-        // Set canvas height and width to match component size
         const imgWidth = 210;
         const imgHeight = (canvas.height * imgWidth) / canvas.width;
         pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
@@ -290,19 +276,6 @@ function Receipts() {
     }
   };
 
-  const handleChangeProduct = async (selectedOption) => {
-    setFirstProductId(selectedOption.id);
-    setFirstProductPrice(selectedOption.price);
-
-    if (firstProductId === "") {
-      setQuantity(quantity + 1);
-      setFirstProductTotalPrice(selectedOption.price);
-      setOrderTotalPrice(selectedOption.price);
-    } else {
-      setFirstProductTotalPrice(quantity * selectedOption.price);
-      setOrderTotalPrice(quantity * parseFloat(selectedOption.price));
-    }
-  };
 
   const handleChange = (e) => {
     setOrderData({ ...orderData, [e.target.name]: e.target.value });
@@ -426,6 +399,7 @@ function Receipts() {
   });
 
   const renderColumns = productInputRow.map(({ row, amount }, key) => {
+    
     const handleChangeOtherProduct = async (selectedOption) => {
       if (otherProducts[row] == undefined) {
         setOtherProducts((current) => [
@@ -488,8 +462,6 @@ function Receipts() {
             currentprice +
             parseFloat(productInputRow[row].amount * selectedOption.price)
         );
-
-        //
       }
     };
 
@@ -748,8 +720,6 @@ function Receipts() {
 
     if (orderData.products[0].id == "" || null) {
       toast.error("Please Choose A Product!!");
-      // toggleModalAddInvoice();
-
       return;
     }
 
@@ -792,7 +762,6 @@ function Receipts() {
   };
 
   // GET BUYER LIST
-
   const buyer_options = [];
   const [buyerOptions, setBuyerOptions] = useState(null);
 
@@ -963,8 +932,6 @@ function Receipts() {
                         setOrderData({
                           buyer: "",
                           buyer_location: "",
-                          // buyer_phone: "",
-
                           status: "",
                           ref: "",
                           total_price: "",
@@ -1423,11 +1390,6 @@ function Receipts() {
                                         </h5>
                                       </td>
                                       <td>
-                                        {/* <p>
-															$5000.00<br/>
-															$100.00<br/>
-															$49.00<br/>
-														</p> */}
                                         <h5 className="text-success">
                                           <strong>D{ordertotalPrice}</strong>
                                         </h5>

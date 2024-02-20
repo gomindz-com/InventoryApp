@@ -58,6 +58,14 @@ class CategoryListCreateView(generics.ListCreateAPIView):
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
+        category_name = request.data.get('name')
+
+        if Category.objects.filter(name=category_name, owner=self.request.user).exists():
+            return Response(
+                data={"status": False, "message": "Category Already Exists"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+           
         if serializer.is_valid():
             self.perform_create(serializer)
             return Response(
@@ -106,6 +114,8 @@ class ProductListCreateView(generics.ListCreateAPIView):
         user = self.request.user
         return Product.objects.filter(owner=user)
 
+    
+
     def get(self, request, *args, **kwargs):
         user = self.request.user
         queryset = Product.objects.filter(owner=user, is_active=True)
@@ -118,9 +128,13 @@ class ProductListCreateView(generics.ListCreateAPIView):
         }
         return Response(response)
 
+    def get_serializer(self, *args, **kwargs):
+        kwargs['user'] = self.request.user
+        return super().get_serializer(*args, **kwargs)
+
+
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
-        print(request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         response = {
@@ -197,7 +211,6 @@ class BuyerListCreateView(generics.ListCreateAPIView):
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
-        print(request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         response = {
@@ -1123,7 +1136,6 @@ def cash_invoice(request):
     order = Order.objects.filter(type="invoice")
     totalPending = 0
     totalPending += order.all().aggregate(TOTAL=Sum('total_price'))['TOTAL']
-    print(totalPending)
     return JsonResponse(status=200, data={'status': 'true', 'message': 'success', 'result': totalPending})
 
 
