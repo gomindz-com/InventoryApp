@@ -6,13 +6,14 @@ import { AntDesign } from "@expo/vector-icons";
 import CustomSearch from "../../components/CustomSearch";
 import CustomCard from "../../components/CustomCard";
 import { useNavigation } from "@react-navigation/native";
-
 const Lowstock = () => {
-  const navigation = useNavigation();
-
-  const navigateToNewTransactionScreen  = () => {
-    navigation.navigate('New Transactions');
+  const navigation = useNavigation()
+  const navigateToNewTransactionScreen = () => {
+    navigation.navigate('NewTransactionScreen');
   };
+  
+
+
 
   return (
     <View style={styles.container}>
@@ -20,8 +21,8 @@ const Lowstock = () => {
         <View style={styles.flexContainer}>
           <TouchableOpacity style={styles.left}>
             <AntDesign name="left" size={24} color="#fff" />
-            <CustomText color="#fff">LOW STOCK</CustomText>
           </TouchableOpacity>
+          <CustomText style={styles.lowstocktitle} color="#fff">LOW STOCK</CustomText>
 
           <View style={styles.right}>
             <TouchableOpacity style={{ left: 2 }}>
@@ -67,6 +68,12 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
     marginTop: 50,
     justifyContent: "space-between",
+  },
+  lowstocktitle: {
+
+    top:10,
+    fontSize:20,
+
   },
 });
 

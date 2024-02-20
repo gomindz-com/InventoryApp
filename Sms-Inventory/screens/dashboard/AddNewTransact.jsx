@@ -59,11 +59,11 @@ const AddNewTransact = () => {
       <View style={styles.top}>
         <View style={styles.topButton}>
           <TouchableOpacity onPress={goBackScreen}>
-            <AntDesign name="left" size={35} color="white" />
+            <AntDesign name="left" size={25} color="white" />
           </TouchableOpacity>
 
           <TouchableOpacity onPress={handleSubmit}>
-            <AntDesign name="check" size={40} color="white" />
+            <AntDesign name="check" size={25} color="white" />
           </TouchableOpacity>
         </View>
 
@@ -76,6 +76,7 @@ const AddNewTransact = () => {
           alignSelf: "center",
           width: "95%",
           height: "65%",
+          top:20,
         }}
       >
         <ScrollView showsVerticalScrollIndicator={false}>
@@ -116,6 +117,7 @@ const AddNewTransact = () => {
               justifyContent: "center",
               borderRadius: 10,
               elevation: 12,
+
             }}
             options={["Product In", "Product Out"]}
           />
@@ -145,6 +147,7 @@ export default AddNewTransact;
 const styles = StyleSheet.create({
   top: {
     height: 150,
+
     backgroundColor: COLORS.green,
   },
   topButton: {
@@ -152,18 +155,19 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     flexDirection: "row",
     justifyContent: "space-between",
+    top:10,
   },
   textTitle: {
     textAlign: "center",
     marginTop: 10,
-    fontSize: 30,
+    fontSize: 23,
     color: "#fff",
   },
   inputesStylesConatiner: {
     marginHorizontal: 10,
   },
   mainContainer: {
-    backgroundColor: COLORS.green,
+    backgroundColor: COLORS.white,
     flex: 1,
   },
 });

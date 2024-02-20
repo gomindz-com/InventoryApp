@@ -27,7 +27,7 @@ const DeatailScreen = ({ route }) => {
     <View>
       <View style={styles.top}>
         <TouchableOpacity style={styles.goBackButton} onPress={goBackScreen}>
-          <AntDesign name="left" size={35} color="white" />
+          <AntDesign style={{top:15}} name="left" size={25} color="white" />
         </TouchableOpacity>
 
         <CustomText style={styles.title}>{productData.product}</CustomText>
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginTop: 10,
     color: "#fff",
-    fontSize: 40,
+    fontSize: 30,
     fontWeight: "bold",
   },
 

@@ -52,45 +52,47 @@ const SettingScreen = () => {
       // Handle touchable press
     };
 
+
     const icons = [
+     
       <AntDesign
         name="appstore-o"
-        style={{ alignSelf: "center" }}
+        style={{ alignSelf: "center" , left:10, marginHorizontal:10, }}
         size={35}
         color="#2e9a90"
       />,
       <MaterialIcons
         name="date-range"
-        style={{ alignSelf: "center" }}
+        style={{ alignSelf: "center" , left:10, marginHorizontal:10,  }}
         size={35}
         color="#2e9a90"
       />,
       <MaterialCommunityIcons
         name="lock-reset"
-        style={{ alignSelf: "center" }}
+        style={{ alignSelf: "center" , left:10 , marginHorizontal:10,  }}
         size={35}
         color="#2e9a90"
       />,
       <FontAwesome5
-        style={{ alignSelf: "center" }}
+        style={{ alignSelf: "center" , left:10 , marginHorizontal:10,  }}
         name="file-export"
         size={35}
         color="#2e9a90"
       />,
       <MaterialIcons
-        style={{ alignSelf: "center" }}
+        style={{ alignSelf: "center" , left:10 , marginHorizontal:10,  }}
         name="backup"
         size={35}
         color="#2e9a90"
       />,
       <Entypo
-        style={{ alignSelf: "center" }}
+        style={{ alignSelf: "center" , left:10 , marginHorizontal:10,  }}
         name="share"
         size={35}
         color="#2e9a90"
       />,
       <MaterialIcons
-        style={{ alignSelf: "center" }}
+        style={{ alignSelf: "center", left:10 , marginHorizontal:10, }}
         name="clear-all"
         size={35}
         color="#2e9a90"
@@ -194,7 +196,7 @@ const SettingScreen = () => {
     <View style={styles.container}>
       <View style={styles.top}>
         <TouchableOpacity onPress={goBackScreen} style={styles.backtouch}>
-          <AntDesign name="left" size={40} color="#fff" />
+          <AntDesign name="left" size={30} color="#fff" />
         </TouchableOpacity>
 
         <CustomText style={styles.settingText}>Settings</CustomText>
@@ -226,16 +228,24 @@ const styles = StyleSheet.create({
   backtouch: {
     marginTop: 50,
     left: 20,
+    top:10,
   },
   buttonContainer: {
     height: 40,
     backgroundColor: "#fff",
   },
   settingText: {
-    alignSelf: "center",
-    marginTop: 10,
+    // alignSelf: "center",
+    // marginTop: 10,
+    // color: "#fff",
+    // fontSize: 40,
+    // fontWeight: "bold",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 0,
+    marginHorizontal: 140,
     color: "#fff",
-    fontSize: 40,
+    fontSize: 30,
     fontWeight: "bold",
   },
   stylesButtonCopntainer: {

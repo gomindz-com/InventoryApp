@@ -16,8 +16,10 @@ import CustomButton from "../../components/CustomButton";
 import { useNavigation } from "@react-navigation/native";
 import { useRoute } from "@react-navigation/native";
 
-const ProductData = [
+const ProductData = [ 
+
   {
+ 
     id: 1,
     product: "orange",
     productType: "Fruite",
@@ -186,22 +188,26 @@ const HomeScreen = ({ route }) => {
             onPress={SettingScreen}
             style={{ flexDirection: "row" }}
           >
-            <Feather name="settings" size={30} color="#fff" />
-            <CustomText
+            <Feather style={{top:15}} name="settings" size={30} color="#fff" />
+            
+          </TouchableOpacity>
+
+          <CustomText
               style={{
                 color: "#fff",
-                top:10,
+                top:20,
                 left: 10,
                 fontWeight: "bold",
-                fontSize: 20,
+                fontSize: 25,
+                textAlign:'center',
+                marginHorizontal:100,
               }}
             >
               DASHBOARD
             </CustomText>
-          </TouchableOpacity>
 
           <TouchableOpacity onPress={AddNewTansact}>
-            <Feather name="more-vertical" size={30} color="#fff" />
+            <Feather style={{top:15, right:10,}} name="more-vertical" size={30} color="#fff" />
           </TouchableOpacity>
         </View>
       </View>
@@ -273,7 +279,7 @@ const HomeScreen = ({ route }) => {
                   </CustomText>
                 </View>
                 <View>
-                  <CustomText>{item.date}</CustomText>
+                  <CustomText style={{right:10,}}>{item.date}</CustomText>
                 </View>
               </View>
               <View

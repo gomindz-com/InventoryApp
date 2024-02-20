@@ -27,8 +27,8 @@ import {
           <View style={styles.flexContainer}>
             <TouchableOpacity style={styles.left}>
               <AntDesign name="left" size={24} color="#fff" />
-              <CustomText color="#fff">All Transaction</CustomText>
             </TouchableOpacity>
+            <CustomText style={styles.transtitle} color="#fff">All Transaction</CustomText>
   
             <View style={styles.right}>
               <TouchableOpacity onPress={moveAddTransaction} style={{ left: 2 }}>
@@ -102,11 +102,16 @@ import {
     },
     left: {
       flexDirection: "row",
+      top:5,
     },
     flexContainer: {
       flexDirection: "row",
       marginHorizontal: 15,
       marginTop: 50,
       justifyContent: "space-between",
+    },
+    transtitle:{
+      top:15,
+      fontSize:23,
     },
   });

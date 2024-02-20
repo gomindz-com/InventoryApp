@@ -80,8 +80,8 @@ const ProductScreen = () => {
         <View style={styles.flexContainer}>
           <TouchableOpacity style={styles.left}>
             <AntDesign name="left" size={24} color="#fff" />
-            <CustomText color="#fff">PRODUCTS</CustomText>
           </TouchableOpacity>
+          <CustomText style={styles.producttitle} color="#fff">PRODUCTS</CustomText>
 
           <View style={styles.right}>
             <TouchableOpacity onPress={addproductscreen} style={{ right: 10 }}>
@@ -143,6 +143,7 @@ const styles = StyleSheet.create({
   },
   left: {
     flexDirection: "row",
+    top:5,
   },
   flexContainer: {
     flexDirection: "row",
@@ -153,6 +154,11 @@ const styles = StyleSheet.create({
   title:{
     marginLeft:10,
     fontSize:18,
+
+  },
+  producttitle:{
+    top:15,
+    fontSize:20,
 
   },
 });
