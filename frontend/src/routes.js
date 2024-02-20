@@ -98,7 +98,7 @@ const routes = [
       type: "route",
       name: "Customer",
       key: "Customer",
-      route: "/Customer",
+      route: "/customer",
       icon: <PersonIcon />,
       component: <Customer />,
     

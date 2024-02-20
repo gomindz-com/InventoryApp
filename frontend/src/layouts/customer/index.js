@@ -15,6 +15,9 @@ import ToggleButton from "@mui/material/ToggleButton";
 import CheckIcon from "@mui/icons-material/Check";
 import PaidIcon from "@mui/icons-material/Paid";
 import Spinner from "components/Spinner";
+import TextField from "@mui/material/TextField";
+
+
 
 function Customer() {
   const [buyerInvoicesList, setBuyerInvoicesList] = useState([]);
@@ -26,27 +29,10 @@ function Customer() {
     { name: "name", align: "left" },
     { name: "mobile_number", align: "center" },
     { name: "address", align: "center" },
-    // { name: "Stock In Hand", align: "center" },
     { name: "Invoice", align: "center" },
     { name: "Receipt", align: "center" },
   ];
 
-  const InvoiceColumns = [
-    { name: "id", align: "left" },
-    { name: "buyer", align: "center" },
-    { name: "total_price", align: "left" },
-    { name: "price_paid", align: "center" },
-    { name: "balance", align: "center" },
-    { name: "buyer", align: "left" },
-  ];
-
-  const ReceiptColumns = [
-    { name: "id", align: "left" },
-    { name: "Item", align: "left" },
-    { name: "Unit price", align: "center" },
-    { name: "Sub Total", align: "center" },
-    { name: "Grant Total", align: "center" },
-  ];
 
   const invoiceRows = [];
 
@@ -124,52 +110,10 @@ function Customer() {
     });
   });
 
-  const dummyData = [
-    {
-      id: 1,
-      Name: "John Doe",
-      BUYER_PHONE: "123-456-7890",
-      Location: "City A",
-      "Stock In Hand": 50,
-    },
-    {
-      id: 2,
-      Name: "Jane Smith",
-      BUYER_PHONE: "987-654-3210",
-      Location: "City B",
-      "Stock In Hand": 30,
-    },
-  ];
 
-  const invoiceDummyData = [
-    { id: 1, Item: "Product 1", "Unit price": 10, "Sub Total": 10, "Grant Total": 10 },
-    { id: 2, Item: "Product 2", "Unit price": 20, "Sub Total": 40, "Grant Total": 40 },
-    { id: 3, Item: "Product 3", "Unit price": 15, "Sub Total": 45, "Grant Total": 45 },
-  ];
-
-  const receiptDummyData = [
-    { id: 1, Item: "Service 1", "Unit price": 50, "Sub Total": 50, "Grant Total": 50 },
-    { id: 2, Item: "Service 2", "Unit price": 30, "Sub Total": 60, "Grant Total": 60 },
-    { id: 3, Item: "Service 3", "Unit price": 25, "Sub Total": 75, "Grant Total": 75 },
-  ];
-
-  const [showTableCard, setShowTableCard] = useState(true); // State variable for table card visibility
-  const [showInvoiceCard, setShowInvoiceCard] = useState(false); // State variable for invoice card visibility
-  const [showReceiptCard, setShowReceiptCard] = useState(false); // State variable for receipt card visibility
-
-  // Function to handle opening the invoice card
-  const openInvoiceCard = () => {
-    setShowTableCard(false);
-    setShowInvoiceCard(true);
-    setShowReceiptCard(false); // Close receipt card if open
-  };
-
-  // Function to handle opening the receipt card
-  const openReceiptCard = () => {
-    setShowTableCard(false);
-    setShowReceiptCard(true);
-    setShowInvoiceCard(false); // Close invoice card if open
-  };
+  const [showTableCard, setShowTableCard] = useState(true); 
+  const [showInvoiceCard, setShowInvoiceCard] = useState(false); 
+  const [showReceiptCard, setShowReceiptCard] = useState(false);
 
   // Function to handle closing all cards and showing the table card
   const closeAllCards = () => {
@@ -183,13 +127,12 @@ function Customer() {
   const handleGetBuyersList = async () => {
     toast.success("Fetching Buyers [Customers]!!", { autoClose: 2000 });
     setBuyerList([]);
-    // setScreenLoading(true);
-
     try {
       await getBuyers()
         .then((res) => {
           if (res.data.status === true) {
             setBuyerList(res.data.buyers);
+            setCurrentBuyerList(res.data.buyers);
             setLoading(false);
           } else {
             setBuyerList([]);
@@ -202,12 +145,12 @@ function Customer() {
 
   const handleGetBuyersInvoiceList = async (type, username) => {
     setLoading(true);
-    // toast.success("Fetching Buyers [Customers] Invoices!!", { autoClose: 2000 });
     try {
       await getBuyersInvoices(type, username)
         .then((res) => {
           if (res.data.status === true) {
             setBuyerInvoicesList(res.data.orders);
+            setCurrentBuyerInvoiceList(res.data.orders)
             setLoading(false);
           } else {
             setBuyerInvoicesList([]);
@@ -230,13 +173,40 @@ function Customer() {
     { name: "", align: "left" },
   ];
 
+
+   // SEARCH FUNCTIONALITY
+   const [searchQuery, setSearchQuery] = useState(null);
+   const [currentBuyerList, setCurrentBuyerList] = useState([]);
+   const [currentBuyerInvoiceList, setCurrentBuyerInvoiceList] = useState([]);
+   const [currentBuyerReceiptList, setCurrentBuyerReceiptList] = useState([]);
+
+   const handleSearch = (event) => {
+    const query = event.target.value.toLowerCase();
+    setSearchQuery(query);
+    const filteredBuyersList = buyerList.filter(
+      (buyer) => buyer.name.toLowerCase().includes(query) || buyer.name.includes(query)
+    );
+    setCurrentBuyerList(filteredBuyersList);
+  };
+
+
+  const handleInvoiceSearch = (event) => {
+    const query = event.target.value.toLowerCase();
+    setSearchQuery(query);
+    const filteredBuyersInvoiceList = buyerInvoicesList.filter(
+      (order) => order.buyer.toLowerCase().includes(query) || order.receipt.includes(query)
+    );
+    setCurrentBuyerInvoiceList(filteredBuyersInvoiceList);
+  };
+
+
   useEffect(() => {
     handleGetBuyersList();
   }, []);
 
   return (
     <DashboardLayout>
-      <DashboardNavbar />
+      <DashboardNavbar/>
 
       {loading ? (
         <Spinner></Spinner>
@@ -248,11 +218,20 @@ function Customer() {
                 <Card>
                   <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
                     <ArgonTypography variant="h6">Customer Details</ArgonTypography>
+                    <TextField
+                      id="outlined-basic"
+                      placeholder="Search"
+                      style={{ width: "65%" }}
+                      variant="outlined"
+                      value={searchQuery}
+                      onChange={handleSearch}
+                      autoComplete={"off"}
+                    />
                   </ArgonBox>
                   <ArgonBox pl={1}>
                     <Table
                       columns={columns}
-                      rows={buyerList.map((row) => ({
+                      rows={currentBuyerList.map((row) => ({
                         ...row,
                         Invoice: (
                           <Button
@@ -293,8 +272,18 @@ function Customer() {
             <Card>
               <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
                 <ArgonTypography variant="h6">Customer Invoice</ArgonTypography>
+                <TextField
+                      id="outlined-basic"
+                      placeholder="Search"
+                      style={{ width: "40%" }}
+                      variant="outlined"
+                      value={searchQuery}
+                      onChange={handleInvoiceSearch}
+                      autoComplete={"off"}
+                    />
                 <Button onClick={closeAllCards}>
                   <h4 style={{ paddingRight: 10 }}>Customer List </h4>
+                  
                   <ArgonBox
                     component="i"
                     color="info"
@@ -305,7 +294,7 @@ function Customer() {
               </ArgonBox>
 
               <ArgonBox pl={1}>
-                {buyerInvoicesList.length == 0 ? (
+                {currentBuyerInvoiceList.length == 0 ? (
                   <ArgonTypography style={{ padding: "10px" }} variant="h6">
                     Customer Has No Invoices
                   </ArgonTypography>
@@ -318,7 +307,16 @@ function Customer() {
           {showReceiptCard && (
             <Card>
               <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
-                <ArgonTypography variant="h6">Customer Receipt</ArgonTypography>
+                <ArgonTypography variant="h6">Customer Receipt(s)</ArgonTypography>
+                <TextField
+                      id="outlined-basic"
+                      placeholder="Search"
+                      style={{ width: "40%" }}
+                      variant="outlined"
+                      value={searchQuery}
+                      onChange={handleInvoiceSearch}
+                      autoComplete={"off"}
+                    />
                 <Button onClick={closeAllCards}>
                   <h4 style={{ paddingRight: 10 }}>Customer List </h4>
                   <ArgonBox

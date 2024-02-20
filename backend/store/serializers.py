@@ -15,10 +15,11 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
+
     category = serializers.SlugRelatedField(
                 read_only=False,
                 slug_field="name",
-                queryset=Category.objects.all()
+                queryset=Category.objects.none()
                 )
     owner = serializers.PrimaryKeyRelatedField(
         read_only=True,
@@ -27,6 +28,12 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ('id', 'is_active', 'name', 'description_color', 'price', 'cost_price', 'stock', 'status', 'owner', 'category', 'image', 'expiry_date', 'created_date')
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super(ProductSerializer, self).__init__(*args, **kwargs)
+        if user:
+            self.fields['category'].queryset = Category.objects.filter(owner=user)
 
 
 
