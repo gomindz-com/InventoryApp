@@ -1,11 +1,11 @@
-// Spinner.js
 import React from 'react';
-import './Spinner.css'; // Import CSS for styling
+import './Spinner.css'; 
 
-const Spinner = () => {
+const Spinner = ({height, width}) => {
   return (
     <div className="spinner-container">
-      <div className="spinner"></div>
+      <div className="spinner" 
+     style={{ width, height}}></div>
     </div>
   );
 };
