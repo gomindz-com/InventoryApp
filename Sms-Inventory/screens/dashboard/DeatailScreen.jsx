@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     elevation: 5,
     backgroundColor: "#f5faf8",
     borderRadius: 10,
-    marginTop: 10,
+    marginTop: 10, 
   },
   h4: {
     marginLeft: 10,
