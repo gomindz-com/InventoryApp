@@ -96,7 +96,7 @@ class UserRetrieveView(generics.RetrieveAPIView):
         serializer = MobileUserSerializer(request.user)
         response = {
                     "status": True,
-                    "message": "",
+                    "message": "User details",
                     "user" : serializer.data
                 
 
