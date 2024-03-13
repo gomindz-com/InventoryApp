@@ -9,11 +9,7 @@ import Footer from "examples/Footer";
 import Table from "examples/Tables/Table";
 import { getBuyers, getBuyersInvoices } from "apiservices/buyerService";
 import { toast } from "react-toastify";
-
 import ArgonBadge from "components/ArgonBadge";
-import ToggleButton from "@mui/material/ToggleButton";
-import CheckIcon from "@mui/icons-material/Check";
-import PaidIcon from "@mui/icons-material/Paid";
 import Spinner from "components/Spinner";
 import TextField from "@mui/material/TextField";
 

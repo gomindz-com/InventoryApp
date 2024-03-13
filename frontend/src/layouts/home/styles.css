@@ -3,3 +3,41 @@
     font-weight: bold !important; 
     color: #fff !important
 }
+
+
+.mobile-bar {
+    display: none;
+  }
+
+  .mobile-bar-tap {
+    display: none;
+  }
+  
+  @media only screen and (max-width: 768px) {
+    .mobile-bar {
+      display: block;
+      background-color: white;
+      padding-top: 0.5rem;
+      padding-bottom: 0.5rem;
+      border-radius: 1rem;
+      position: relative;
+      width: 100%;
+      color: #344767;
+    }
+
+    .mobile-bar-tap {
+        display: block;
+        
+      }
+
+      .laptop-bar {
+        display: none;
+      }
+  }
+
+
+
+
+  .navbar.navbar-transparent .nav-link, .navbar.navbar-transparent .nav-link i {
+    color: #271919 !important;
+}

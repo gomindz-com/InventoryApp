@@ -28,7 +28,7 @@ const stepper = {
       padding: `0 ${pxToRem(12)}`,
 
       "&.MuiPaper-root": {
-        backgroundColor: transparent.main,
+        // backgroundColor: transparent.main,
       },
     },
   },

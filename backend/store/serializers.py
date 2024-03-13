@@ -37,6 +37,23 @@ class ProductSerializer(serializers.ModelSerializer):
 
 
 
+class ProductEditSerializer(serializers.ModelSerializer):
+
+    category = serializers.SlugRelatedField(
+                read_only=False,
+                slug_field="name",
+                queryset=Category.objects.all()
+                )
+    owner = serializers.PrimaryKeyRelatedField(
+        read_only=True,
+    )
+
+    class Meta:
+        model = Product
+        fields = ('id', 'is_active', 'name', 'description_color', 'price', 'cost_price', 'stock', 'status', 'owner', 'category', 'image', 'expiry_date', 'created_date')
+
+    
+
 class OrderSerializer(serializers.ModelSerializer):    
     owner = serializers.PrimaryKeyRelatedField(
         read_only=True,
