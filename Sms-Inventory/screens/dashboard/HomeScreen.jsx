@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   FlatList,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CustomCard from "../../components/CustomCard";
 import { COLORS } from "../../constants/Theme";
 import { Feather } from "@expo/vector-icons";
@@ -15,11 +15,11 @@ import { BottomSheet } from "react-native-btr";
 import CustomButton from "../../components/CustomButton";
 import { useNavigation } from "@react-navigation/native";
 import { useRoute } from "@react-navigation/native";
+import { getStatictData } from "../apiService/productApi";
+import { getTransactiondata } from "../apiService/transationApi";
 
-const ProductData = [ 
-
+const ProductData = [
   {
- 
     id: 1,
     product: "orange",
     productType: "Fruite",
@@ -160,6 +160,43 @@ const HomeScreen = ({ route }) => {
   const navigation = useNavigation();
   const [bottomsheet, setButtomsheet] = useState(false);
   const [productDataValue, setProductDataValue] = useState(inputValues);
+  const [statiticData, setStaticData] = useState([]);
+  const [transactionData, setTransationData] = useState([]);
+  console.log("datat", transactionData);
+
+  useEffect(() => {
+    const staticData = async () => {
+      try {
+        const response = await getStatictData();
+        if (response.data.status) {
+          setStaticData(response.data.statistics); // Set product data in state
+        } else {
+          console.error("API returned false status:", response.data.message);
+        }
+      } catch (error) {
+        console.error("Error fetching product data:", error);
+      }
+    };
+
+    staticData();
+  }, []);
+
+  useEffect(() => {
+    const getTransationData = async () => {
+      try {
+        const response = await getTransactiondata();
+        if (response.data) {
+          setTransationData(response.data);
+        } else {
+          console.error(response.data.message);
+        }
+      } catch (error) {
+        console.error("Error fetching product data:", error);
+      }
+    };
+
+    getTransationData();
+  }, []);
 
   const togoleButtomSheet = () => {
     setButtomsheet(!bottomsheet);
@@ -188,26 +225,35 @@ const HomeScreen = ({ route }) => {
             onPress={SettingScreen}
             style={{ flexDirection: "row" }}
           >
-            <Feather style={{top:15}} name="settings" size={30} color="#fff" />
-            
+            <Feather
+              style={{ top: 15 }}
+              name="settings"
+              size={30}
+              color="#fff"
+            />
           </TouchableOpacity>
 
           <CustomText
-              style={{
-                color: "#fff",
-                top:20,
-                left: 10,
-                fontWeight: "bold",
-                fontSize: 25,
-                textAlign:'center',
-                marginHorizontal:100,
-              }}
-            >
-              DASHBOARD
-            </CustomText>
+            style={{
+              color: "#fff",
+              top: 20,
+              left: 10,
+              fontWeight: "bold",
+              fontSize: 25,
+              textAlign: "center",
+              marginHorizontal: 100,
+            }}
+          >
+            DASHBOARD
+          </CustomText>
 
           <TouchableOpacity onPress={AddNewTansact}>
-            <Feather style={{top:15, right:10,}} name="more-vertical" size={30} color="#fff" />
+            <Feather
+              style={{ top: 15, right: 10 }}
+              name="more-vertical"
+              size={30}
+              color="#fff"
+            />
           </TouchableOpacity>
         </View>
       </View>
@@ -240,17 +286,23 @@ const HomeScreen = ({ route }) => {
           <View style={styles.leftButtonContainer}>
             <View style={styles.pieChate}>
               <View style={styles.buttonIn}></View>
-              <CustomText style={{ left: 5, top: 4 }}>100 Out</CustomText>
+              <CustomText style={{ left: 5, top: 4 }}>
+                {statiticData.stock_in} In
+              </CustomText>
             </View>
 
             <View style={styles.pieChate}>
               <View style={styles.buttonout}></View>
-              <CustomText style={{ left: 5, top: 15 }}>630 In</CustomText>
+              <CustomText style={{ left: 5, top: 15 }}>
+                {statiticData.stock_out} Out
+              </CustomText>
             </View>
 
             <View style={styles.pieChate}>
               <View style={styles.buttonInHand}></View>
-              <CustomText style={{ left: 5, top: 15 }}>530 In-Hand</CustomText>
+              <CustomText style={{ left: 5, top: 15 }}>
+                {statiticData.stock_inhand} In hand
+              </CustomText>
             </View>
           </View>
         </View>
@@ -262,7 +314,7 @@ const HomeScreen = ({ route }) => {
       </View>
 
       <FlatList
-        data={ProductData}
+        data={transactionData}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) => (
           <TouchableOpacity
@@ -272,23 +324,23 @@ const HomeScreen = ({ route }) => {
               <View style={styles.transctContainer}>
                 <View style={{ left: 40 }}>
                   <CustomText style={{ fontWeight: "bold", left: 10 }}>
-                    {item.currentStock}
+                    {item.quantity}
                   </CustomText>
                   <CustomText style={{ fontWeight: "bold" }}>
-                    {item.product}
+                    {item.products}
                   </CustomText>
                 </View>
                 <View>
-                  <CustomText style={{right:10,}}>{item.date}</CustomText>
+                  <CustomText style={{ right: 10 }}>{item.date}</CustomText>
                 </View>
               </View>
               <View
                 style={[
                   styles.taranctIn,
-                  item.status === "IN" ? { backgroundColor: "red" } : null,
+                  item.type === "in" ? { backgroundColor: "red" } : null,
                 ]}
               >
-                <CustomText style={{ color: "#fff" }}>{item.status}</CustomText>
+                <CustomText style={{ color: "#fff" }}>{item.type}</CustomText>
               </View>
             </View>
           </TouchableOpacity>

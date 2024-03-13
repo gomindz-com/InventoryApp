@@ -27,7 +27,7 @@ const DeatailScreen = ({ route }) => {
     <View>
       <View style={styles.top}>
         <TouchableOpacity style={styles.goBackButton} onPress={goBackScreen}>
-          <AntDesign style={{top:15}} name="left" size={25} color="white" />
+          <AntDesign style={{ top: 15 }} name="left" size={25} color="white" />
         </TouchableOpacity>
 
         <CustomText style={styles.title}>{productData.product}</CustomText>
@@ -36,17 +36,12 @@ const DeatailScreen = ({ route }) => {
       <ScrollView style={{ marginHorizontal: 20 }}>
         <View style={styles.singleButton}>
           <CustomText style={styles.h1}>Product ID:</CustomText>
-          <CustomText style={styles.h4}>{productData.product}</CustomText>
-        </View>
-
-        <View style={styles.singleButton}>
-          <CustomText style={styles.h1}>Type:</CustomText>
-          <CustomText style={styles.h4}>{productData.status}</CustomText>
+          <CustomText style={styles.h4}>{productData.id}</CustomText>
         </View>
 
         <View style={styles.singleButton}>
           <CustomText style={styles.h1}>Product Type:</CustomText>
-          <CustomText style={styles.h4}>{productData.productType}</CustomText>
+          <CustomText style={styles.h4}>{productData.type}</CustomText>
         </View>
 
         <View style={styles.singleButton}>
@@ -56,7 +51,7 @@ const DeatailScreen = ({ route }) => {
 
         <View style={styles.singleButton}>
           <CustomText style={styles.h1}>CurrentStock:</CustomText>
-          <CustomText style={styles.h4}>{productData.currentStock}</CustomText>
+          <CustomText style={styles.h4}>{productData.current_stock}</CustomText>
         </View>
 
         <View style={styles.singleButton}>
@@ -124,7 +119,7 @@ const styles = StyleSheet.create({
     elevation: 5,
     backgroundColor: "#f5faf8",
     borderRadius: 10,
-    marginTop: 10, 
+    marginTop: 10,
   },
   h4: {
     marginLeft: 10,

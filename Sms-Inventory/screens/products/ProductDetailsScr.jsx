@@ -9,6 +9,7 @@ import CustomButton from "../../components/CustomButton";
 
 const ProductDetailsScreen = ({ route }) => {
   const { item } = route.params;
+  console.log("heeee", item);
   const navigation = useNavigation();
 
   const handleBack = () => {
@@ -23,7 +24,7 @@ const ProductDetailsScreen = ({ route }) => {
             <AntDesign name="left" size={24} color="#fff" />
           </TouchableOpacity>
           <CustomText style={styles.ProductDetailText} color="#fff">
-            {item.title}
+            {item.name}
           </CustomText>
           <View style={styles.right}>
             <TouchableOpacity onPress={handleBack} style={{ left: 5 }}>
@@ -44,15 +45,15 @@ const ProductDetailsScreen = ({ route }) => {
         </View>
         <View style={styles.singleButton}>
           <CustomText style={styles.h1}>Buy Rate:</CustomText>
-          <CustomText style={styles.h4}>{item.BuyRate}</CustomText>
+          <CustomText style={styles.h4}>{item.buy_rate}</CustomText>
         </View>
         <View style={styles.singleButton}>
           <CustomText style={styles.h1}>Total In:</CustomText>
-          <CustomText style={styles.h4}>{item.BuyRate}</CustomText>
+          <CustomText style={styles.h4}>{item.stock}</CustomText>
         </View>
         <View style={styles.singleButton}>
           <CustomText style={styles.h1}>In Hand:</CustomText>
-          <CustomText style={styles.h4}>{item.BuyRate}</CustomText>
+          <CustomText style={styles.h4}>{item.owner}</CustomText>
         </View>
         <View style={styles.singleButton}>
           <CustomText style={styles.h1}>Stock Price:</CustomText>
@@ -82,49 +83,46 @@ const ProductDetailsScreen = ({ route }) => {
         <CustomButton title={"Transactions"} onPress={() => {}} />
       </View> */}
 
-
       <View
-          style={{
-            flexDirection: "row",
-            marginTop: 60,
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginHorizontal: 25,
-          }}
-        >
-          <CustomButton
-            width={100}
-            height={45}
-            titleSize={12}
-            title={"Delete"}
-            br={15}
-            bg={"#fff"}
-            bc={"#2e9a90"}
-            // mx={10}
-          />
+        style={{
+          flexDirection: "row",
+          marginTop: 60,
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginHorizontal: 25,
+        }}
+      >
+        <CustomButton
+          width={100}
+          height={45}
+          titleSize={12}
+          title={"Delete"}
+          br={15}
+          bg={"#fff"}
+          bc={"#2e9a90"}
+          // mx={10}
+        />
 
-          <CustomButton
-            br={15}
-            height={45}
-            titleSize={12}
-            width={100}
-            title={"Edit"}
-            bg={"#fff"}
-            bc={"#2e9a90"}
-            mx={10}
-          />
-          <CustomButton
-            br={15}
-            height={45}
-            titleSize={12}
-            width={120}
-            title={"Transactions"}
-            bg={"#fff"}
-            bc={"#2e9a90"}
-          />
-        </View>
-
-      
+        <CustomButton
+          br={15}
+          height={45}
+          titleSize={12}
+          width={100}
+          title={"Edit"}
+          bg={"#fff"}
+          bc={"#2e9a90"}
+          mx={10}
+        />
+        <CustomButton
+          br={15}
+          height={45}
+          titleSize={12}
+          width={120}
+          title={"Transactions"}
+          bg={"#fff"}
+          bc={"#2e9a90"}
+        />
+      </View>
     </View>
   );
 };
@@ -164,8 +162,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#f5faf8",
     borderRadius: 10,
     marginTop: 10,
-    marginLeft:10,
-    marginRight:100,
+    marginLeft: 10,
+    marginRight: 100,
   },
   ProductDetailText: {
     justifyContent: "center",
@@ -208,7 +206,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginHorizontal: 25,
   },
-  buttoncustom:{
+  buttoncustom: {
     alignSelf: "center",
     marginTop: 20,
     paddingVertical: 10,
@@ -217,9 +215,9 @@ const styles = StyleSheet.create({
     borderColor: "black",
     borderRadius: 5,
     backgroundColor: "transparent", // No fill color
-      },
+  },
 
-       buttonText: {
+  buttonText: {
     fontSize: 16,
     fontWeight: "bold",
     color: "black", // Text color
