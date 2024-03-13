@@ -6,6 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  ActivityIndicator,
 } from "react-native";
 import React, { useContext, useState } from "react";
 import { IMAGES, COLORS } from "../../constants/Theme";
@@ -14,6 +15,8 @@ import CustomText from "../../components/CustomText";
 import { Ionicons } from "@expo/vector-icons";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import * as Yup from "yup";
+import authApi from "../apiService/authApi";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const LoginScreen = () => {
   const navigation = useNavigation();
@@ -62,55 +65,55 @@ const LoginScreen = () => {
       .required("Password is required"),
   });
 
-
-  // const handleLogin = async () => {
-  //   try {
-  //     await loginSchema.validate(data, { abortEarly: false });
-  
-  //     const res = await axios.post('http://10.0.2.2:8000/api/users/login', {
-  //       email: data.email,
-  //       password: data.password
-  //     });
-  
-  //     console.log("Login successful", res.data);
-  
-  //     // Handle successful login response here
-  
-  //   } catch (error) {
-  //     const newErrors = {};
-  //     if (error?.inner) {
-  //       error.inner.forEach((err) => {
-  //         newErrors[err.path] = err.message;
-  //       });
-  //     } else {
-  //       newErrors.general = error.message || "An error occurred";
-  //     }
-  //     setErrors(newErrors);
-  //   }
-  // };
-  
-  
-
   const handleLogin = async () => {
     try {
+      // Validate data
       await loginSchema.validate(data, { abortEarly: false });
 
-      
+      // Call the login API function with user data
+      const userData = {
+        email: data.email,
+        password: data.password,
+      };
+      setLoading(true);
+      const res = await authApi.login(userData);
+      setLoading(false);
+      console.log("response", res.data);
 
+      const token = res.data.token;
 
+      // Store the token in AsyncStorage
+      await AsyncStorage.setItem("token", token);
+
+      // Navigate to the home screen or perform any other necessary actions
       HomeScreen();
     } catch (error) {
-      const newErrors = {};
-      error.inner.forEach((err) => {
-        newErrors[err.path] = err.message;
-      });
-      setErrors(newErrors);
+      // Handle validation errors or API errors
+      console.error(error);
+      if (error.inner) {
+        const newErrors = {};
+        error.inner.forEach((err) => {
+          newErrors[err.path] = err.message;
+        });
+        setErrors(newErrors);
+      } else {
+        // Handle other types of errors
+      }
     }
   };
 
+  const [loading, setLoading] = useState(false);
   return (
     <SafeAreaView style={{ flex: 1, justifyContent: "center" }}>
       <View style={{ paddingHorizontal: 25 }}>
+        {loading && (
+          <ActivityIndicator
+            size="large"
+            color="#337037"
+            style={{ marginTop: 20 }}
+          />
+        )}
+
         <View style={{ alignItems: "center" }}>
           <Image
             source={require("../../../Sms-Inventory/assets/images/loginn.png")}
@@ -145,7 +148,7 @@ const LoginScreen = () => {
             }}
             keyboardType="email-address"
             onChangeText={(text) => {
-              setData({ ...data, email: text });
+              setData({ ...data, email: text.toLowerCase() });
               setErrors({ ...errors, email: "" });
             }}
           />

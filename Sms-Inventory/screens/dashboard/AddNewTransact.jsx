@@ -1,27 +1,19 @@
+import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
   View,
   TouchableOpacity,
   ScrollView,
+  TextInput,
 } from "react-native";
-import React, { useState } from "react";
-import { COLORS } from "../../constants/Theme";
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import CustomText from "../../components/CustomText";
-import CustomInput from "../../components/CustomInput";
-import CustomCard from "../../components/CustomCard";
-import CustomDatePickerFine from "../../components/CustomDatePicker";
-import SelectDropdown from "react-native-select-dropdown";
+import * as Yup from "yup"; // Import Yup
 import ModalDropdown from "react-native-modal-dropdown";
-
-const countries = ["Product In", "Product Out"];
-
-const options = [
-  { label: "Product IN", value: "IN" },
-  { label: "Product OUT", value: "OUT" },
-];
+import { COLORS } from "../../constants/Theme";
+import CustomCard from "../../components/CustomCard";
+import { AddTransaction } from "../apiService/transationApi";
 
 const AddNewTransact = () => {
   const navigation = useNavigation();
@@ -37,24 +29,50 @@ const AddNewTransact = () => {
   const [remark, setRemark] = useState("");
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedValue, setSelectedValue] = useState(null);
+  const [errors, setErrors] = useState({
+    product: "",
+    productType: "",
+    currentStock: "",
+    quantity: "",
+    remark: "",
+    selectedValue: "",
+  });
 
-  // const handleDateChange = (date) => {
-  //   setSelectedDate(date);
-  // };
+  // Define validation schema
+  const schema = Yup.object().shape({
+    product: Yup.string().required("Product is required"),
+    productType: Yup.string().required("Product Type is required"),
+    currentStock: Yup.string().required("Current Stock is required"),
+    quantity: Yup.number()
+      .required("Quantity is required")
+      .positive("Quantity must be positive"),
+    remark: Yup.string(),
+    selectedValue: Yup.string().required("Status is required"),
+  });
 
-  const handleValueChange = (value) => {
-    setSelectedValue(value);
-  };
+  const handleSubmit = async () => {
+    const productData = {
+      quantity,
+      remark,
+      products: product,
+      type: selectedValue === "Product In" ? "in" : "out",
+    };
 
-  const handleSubmit = () => {
+    try {
+      const response = await AddTransaction(productData);
+      console.log("Transaction response:", response.data);
 
-    navigation.navigate("Home");
+      // if (response.status === 200) {
+      //   navigation.navigate("Home");
+      // } else {
+      //   console.log("Error:", response.data.error);
+      // }
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   return (
-    // <>
-    //   <CustomText>Hello</CustomText>
-    // </>
     <View style={styles.mainContainer}>
       <View style={styles.top}>
         <View style={styles.topButton}>
@@ -67,7 +85,7 @@ const AddNewTransact = () => {
           </TouchableOpacity>
         </View>
 
-        <CustomText style={styles.textTitle}>Add New Transaction</CustomText>
+        <Text style={styles.textTitle}>Add New Transaction</Text>
       </View>
 
       <CustomCard
@@ -75,68 +93,62 @@ const AddNewTransact = () => {
           marginHorizontal: 30,
           alignSelf: "center",
           width: "95%",
-          height: "65%",
-          top:20,
+          top: 20,
         }}
       >
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <CustomDatePickerFine />
+        <TextInput
+          style={styles.inputfiles}
+          placeholder={"Product"}
+          value={product}
+          onChangeText={setProduct}
+        />
+        {errors.product ? (
+          <Text style={styles.error}>{errors.product}</Text>
+        ) : null}
 
-          <CustomInput mt={10} placeholder={"Product"} bg="#f5faf8" bw={0} />
+        <TextInput
+          style={styles.inputfiles}
+          placeholder={"Quantity"}
+          value={quantity}
+          onChangeText={setQuantity}
+          keyboardType="numeric"
+        />
+        {errors.quantity ? (
+          <Text style={styles.error}>{errors.quantity}</Text>
+        ) : null}
 
-          <CustomInput
-            mt={10}
-            placeholder={"Product Type"}
-            bg="#f5faf8"
-            bw={0}
-          />
+        <TextInput
+          style={styles.inputfiles}
+          placeholder={"Remark"}
+          value={remark}
+          onChangeText={setRemark}
+        />
+        {errors.remark ? (
+          <Text style={styles.error}>{errors.remark}</Text>
+        ) : null}
 
-          <CustomInput
-            mt={10}
-            placeholder={"Current Stock"}
-            bg="#f5faf8"
-            bw={0}
-          />
-
-          <CustomInput mt={10} placeholder={"Quantity"} bg="#f5faf8" bw={0} />
-
-          <CustomInput mt={10} placeholder={"remark"} bg="#f5faf8" bw={0} />
-
-          <ModalDropdown
-            defaultValue={"Select Status"}
-            animated={true}
-            dropdownTextStyle={{ fontSize: 20, fontWeight: "bold" }}
-            dropdownStyle={{ height: 100 }}
-            isFullWidth={true}
-            textStyle={{ fontSize: 20, fontWeight: "bold" }}
-            style={{
-              marginTop: 10,
-              height: 50,
-              width: "100%",
-              backgroundColor: "#f5faf8",
-              justifyContent: "center",
-              borderRadius: 10,
-              elevation: 12,
-
-            }}
-            options={["Product In", "Product Out"]}
-          />
-
-          {/* <SelectDropdown
-            data={countries}
-            onSelect={(selectedItem, index) => {}}
-            buttonTextAfterSelection={(selectedItem, index) => {
-              // text represented after item is selected
-              // if data array is an array of objects then return selectedItem.property to render after item is selected
-              return selectedItem;
-            }}
-            rowTextForSelection={(item, index) => {
-              // text represented for each item in dropdown
-              // if data array is an array of objects then return item.property to represent item in dropdown
-              return item;
-            }}
-          /> */}
-        </ScrollView>
+        <ModalDropdown
+          defaultValue={"Select Status"}
+          animated={true}
+          dropdownTextStyle={{ fontSize: 20, fontWeight: "bold" }}
+          dropdownStyle={{ height: 100 }}
+          isFullWidth={true}
+          textStyle={{ fontSize: 20, fontWeight: "bold" }}
+          style={{
+            marginTop: 10,
+            height: 50,
+            width: "100%",
+            backgroundColor: "#f5faf8",
+            justifyContent: "center",
+            borderRadius: 10,
+            elevation: 12,
+          }}
+          options={["Product In", "Product Out"]}
+          onSelect={(value) => setSelectedValue(value)}
+        />
+        {errors.selectedValue ? (
+          <Text style={styles.error}>{errors.selectedValue}</Text>
+        ) : null}
       </CustomCard>
     </View>
   );
@@ -147,7 +159,6 @@ export default AddNewTransact;
 const styles = StyleSheet.create({
   top: {
     height: 150,
-
     backgroundColor: COLORS.green,
   },
   topButton: {
@@ -155,7 +166,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     flexDirection: "row",
     justifyContent: "space-between",
-    top:10,
+    top: 10,
   },
   textTitle: {
     textAlign: "center",
@@ -167,7 +178,19 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
   mainContainer: {
-    backgroundColor: COLORS.white,
     flex: 1,
+  },
+  inputfiles: {
+    height: 50,
+    width: "100%",
+    borderRadius: 10,
+    borderWidth: 0.5,
+    marginBottom: 10,
+    paddingHorizontal: 10,
+  },
+  error: {
+    color: "red",
+    marginBottom: 5,
+    marginLeft: 10,
   },
 });

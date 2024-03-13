@@ -1,8 +1,4 @@
-import {
-  StyleSheet,
-  View,
-  TouchableOpacity,
-} from "react-native";
+import { StyleSheet, View, TouchableOpacity, FlatList } from "react-native";
 import React from "react";
 import { COLORS } from "../../constants/Theme";
 import CustomText from "../../components/CustomText";
@@ -10,6 +6,14 @@ import { AntDesign, Ionicons } from "@expo/vector-icons";
 import CustomSearch from "../../components/CustomSearch";
 import CustomCard from "../../components/CustomCard";
 import { useNavigation } from "@react-navigation/native";
+import { getToken } from "../apiService/tokenConfig";
+const endPoint = "/mobile/mobileProducts";
+import apis from "../apiService/api";
+import axios from "axios";
+import { getAddProduct } from "../apiService/productApi";
+
+import addProductApi from "../apiService/productApi";
+import { useState, useEffect } from "react";
 
 const prductData = [
   {
@@ -63,16 +67,54 @@ const prductData = [
 ];
 
 const ProductScreen = () => {
-  const navigation = useNavigation() 
-  const addproductscreen = () =>{
-    navigation.navigate("addProduct")
-  }
+  const [productData, setProductData] = useState([]);
+  console.log("here  we gogg", productData);
+  const navigation = useNavigation();
+  const addproductscreen = () => {
+    navigation.navigate("addProduct");
+  };
 
   const navigateToDetails = (item) => {
-    // Navigate to the screen where you want to show details of the product
     navigation.navigate("ProductDetails", { item });
-    // Replace "ProductDetails" with your actual screen name
   };
+
+  const renderItem = ({ item }) => (
+    <TouchableOpacity
+      onPress={() => navigateToDetails(item)}
+      style={{
+        flexDirection: "row",
+        justifyContent: "space-between",
+        width: 390,
+        height: 50,
+        borderColor: "black",
+        borderWidth: 1,
+        marginHorizontal: 10,
+        marginTop: 10,
+        alignItems: "center",
+        borderRadius: 10,
+      }}
+    >
+      <CustomText style={styles.title}>{item.name}</CustomText>
+      <AntDesign name="right" size={24} color="black" />
+    </TouchableOpacity>
+  );
+
+  useEffect(() => {
+    const fetchProductData = async () => {
+      try {
+        const response = await getAddProduct();
+        if (response.data.status) {
+          setProductData(response.data.products); // Set product data in state
+        } else {
+          console.error("API returned false status:", response.data.message);
+        }
+      } catch (error) {
+        console.error("Error fetching product data:", error);
+      }
+    };
+
+    fetchProductData();
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -81,7 +123,9 @@ const ProductScreen = () => {
           <TouchableOpacity style={styles.left}>
             <AntDesign name="left" size={24} color="#fff" />
           </TouchableOpacity>
-          <CustomText style={styles.producttitle} color="#fff">PRODUCTS</CustomText>
+          <CustomText style={styles.producttitle} color="#fff">
+            PRODUCTS
+          </CustomText>
 
           <View style={styles.right}>
             <TouchableOpacity onPress={addproductscreen} style={{ right: 10 }}>
@@ -106,27 +150,33 @@ const ProductScreen = () => {
         <CustomText style={{ marginTop: 5 }}>Total Product:</CustomText>
       </CustomCard>
 
-      {prductData.map((item , key ) => (
+      {/* {productData.map((item, key) => (
         <TouchableOpacity
-        key={key}
-        onPress={() => navigateToDetails(item)} // Pass the item to the navigateToDetails function
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          width: 390,
-          height: 50,
-          borderColor: "black",
-          borderWidth: 1,
-          marginHorizontal: 10,
-          marginTop: 10,
-          alignItems: "center",
-          borderRadius: 10,
+          key={key}
+          onPress={() => navigateToDetails(item)} // Pass the item to the navigateToDetails function
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            width: 390,
+            height: 50,
+            borderColor: "black",
+            borderWidth: 1,
+            marginHorizontal: 10,
+            marginTop: 10,
+            alignItems: "center",
+            borderRadius: 10,
           }}
         >
-          <CustomText style={styles.title}>{item.title}</CustomText>
+          <CustomText style={styles.title}>{item.name}</CustomText>
           <AntDesign name="right" size={24} color="black" />
         </TouchableOpacity>
-      ))}
+      ))} */}
+
+      <FlatList
+        data={productData}
+        renderItem={renderItem}
+        keyExtractor={(item, index) => index.toString()} // or use a unique identifier from your data, like item.id
+      />
     </View>
   );
 };
@@ -143,7 +193,7 @@ const styles = StyleSheet.create({
   },
   left: {
     flexDirection: "row",
-    top:5,
+    top: 5,
   },
   flexContainer: {
     flexDirection: "row",
@@ -151,15 +201,13 @@ const styles = StyleSheet.create({
     marginTop: 50,
     justifyContent: "space-between",
   },
-  title:{
-    marginLeft:10,
-    fontSize:18,
-
+  title: {
+    marginLeft: 10,
+    fontSize: 18,
   },
-  producttitle:{
-    top:15,
-    fontSize:20,
-
+  producttitle: {
+    top: 15,
+    fontSize: 20,
   },
 });
 
