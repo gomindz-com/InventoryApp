@@ -16,9 +16,7 @@ import multipleUser from "../../assets/images/multipleUser.png";
 import notified from "../../assets/images/notified.png";
 import werehousing from "../../assets/images/werehousing.png";
 import { Swiper, SwiperSlide } from "swiper/react";
-import Switch from '@mui/material/Switch';
-
-
+import Switch from "@mui/material/Switch";
 
 import "swiper/swiper.min.css";
 import "swiper/components/navigation/navigation.min.css";
@@ -39,11 +37,9 @@ function Home() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
+  const [clicked, setClicked] = useState(false);
 
   // const [isDarkMode, setIsDarkMode] = useState(false);
-
-
-
 
   // const toggleMode = () => {
   //   setIsDarkMode(prevMode => !prevMode);
@@ -52,16 +48,16 @@ function Home() {
   // const [isMonthSelected, setIsMonthSelected] = useState(true);
   const [isMonthly, setIsMonthly] = useState(true);
 
-
   const handleSwitchToggle = () => {
     setIsMonthly(!isMonthly);
   };
 
+  const label = { inputProps: { "aria-label": "Switch demo" } };
 
-  const label = { inputProps: { 'aria-label': 'Switch demo' } };
-
-
- 
+  const handleClicked = () => {
+    console.log("click");
+    setClicked(!clicked);
+  };
 
   useEffect(() => {
     setLayout(dispatch, "home");
@@ -71,78 +67,163 @@ function Home() {
     <div className="about-us bg-gray-200">
       <nav className="navbar navbar-expand-lg position-absolute top-0 z-index-3 w-100 shadow-none my-3  navbar-transparent ">
         <div className="container">
-          <div className="navbar-brand title">
-            Mega Store
-          </div>
-          <button
-            className="navbar-toggler shadow-none ms-2"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="navigation"
-            aria-controls="navigation"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span className="navbar-toggler-icon mt-2">
-              <span className="navbar-toggler-bar bar1"></span>
-              <span className="navbar-toggler-bar bar2"></span>
-              <span className="navbar-toggler-bar bar3"></span>
-            </span>
-          </button>
-          <div
-            className="collapse navbar-collapse w-100 pt-3 pb-2 py-lg-0 ms-lg-12 ps-lg-5"
-            id="navigation"
-          >
-            <ul className="navbar-nav navbar-nav-hover ms-auto">
-              <Link
-                onClick={() => {
-                  navigate("/dashboard");
-                }}
-                to="/dashboard"
-                className="nav-link ps-2 d-flex justify-content-between cursor-pointer align-items-center"
-                id="dropdownMenuPages8"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                <i className="material-icons opacity-6 me-2 text-md">dashboard</i>
-                Dashboard
-              </Link>
+          <div className="navbar-brand title">Mega Store</div>
 
-              <li className="nav-item dropdown dropdown-hover mx-2 ms-lg-6">
+          {!clicked ? (
+            <button
+              onClick={handleClicked}
+              className=" mobile-bar-tap navbar-toggler shadow-none ms-2"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="navigation"
+              aria-controls="navigation"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
+              <span className="navbar-toggler-icon mt-2">
+                <span className="navbar-toggler-bar bar1"></span>
+                <span className="navbar-toggler-bar bar2"></span>
+                <span className="navbar-toggler-bar bar3"></span>
+              </span>
+            </button>
+          ) : (
+            <button
+              onClick={handleClicked}
+              class=" mobile-bar-tap navbar-toggler shadow-none ms-2"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#navigation"
+              aria-controls="navigation"
+              aria-expanded="true"
+              aria-label="Toggle navigation"
+            >
+              <span className="navbar-toggler-icon mt-2">
+                <span className="navbar-toggler-bar bar1"></span>
+                <span className="navbar-toggler-bar bar2"></span>
+                <span className="navbar-toggler-bar bar3"></span>
+              </span>
+            </button>
+          )}
+
+          {clicked && (
+            <div style={{}} className="mobile-bar" id="navigation">
+              <ul className="navbar-nav mx-auto">
+                <li className="nav-item">
+                  <Link
+                    onClick={() => {
+                      navigate("/dashboard");
+                    }}
+                    className="nav-link d-flex align-items-center me-2 active"
+                    aria-current="page"
+                    to="/dashboard"
+                  >
+                    <i className="fa fa-chart-pie opacity-6  me-1"></i>
+                    Dashboard
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link
+                    
+                    className="nav-link me-2"
+                    to="/profile"
+                  >
+                    <i className="fa fa-user opacity-6  me-1"></i>
+                    Profile
+                  </Link>
+                </li>
+                <li class="nav-item">
+                  <Link
+                    
+                    className="nav-link me-2"
+                    to="/authentication/sign-up"
+                  >
+                    <i className="fas fa-user-circle opacity-6  me-1"></i>
+                    Sign Up
+                  </Link>
+                </li>
+                <li class="nav-item">
+                  <Link
+                    onClick={() => {
+                      localStorage.removeItem("user");
+                      localStorage.removeItem("token");
+                    }}
+                    to='/authentication/sign-in'
+                    className="nav-link me-2"
+                    >
+                    <i class="fas fa-key opacity-6  me-1"></i>
+                    Sign Out
+                  </Link>
+                </li>
+              </ul>
+              {/* <ul class="navbar-nav d-lg-block d-none">
+                <li class="nav-item">
+                  <a
+                    href="https://www.creative-tim.com/product/argon-dashboard"
+                    class="btn btn-sm mb-0 me-1 bg-gradient-light"
+                  >
+                    Free Download
+                  </a>
+                </li>
+              </ul> */}
+            </div>
+          )}
+
+          {
+            <div
+              className="laptop-bar collapse navbar-collapse w-100 pt-3 pb-2 py-lg-0 ms-lg-12 ps-lg-5"
+              id="navigation"
+            >
+              <ul className="navbar-nav navbar-nav-hover ms-auto">
                 <Link
-                  to=""
                   onClick={() => {
-                    localStorage.removeItem("user");
-                    localStorage.removeItem("token");
-                    navigate("/authentication/sign-in");
+                    navigate("/dashboard");
                   }}
+                  to="/dashboard"
                   className="nav-link ps-2 d-flex justify-content-between cursor-pointer align-items-center"
                   id="dropdownMenuPages8"
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                 >
-                  <i className="material-icons opacity-6 me-2 text-md">logout</i>
-                  {user ? "Sign Out" : "Sign In"}
+                  <i className="material-icons opacity-6 me-2 text-md">dashboard</i>
+                  Dashboard
                 </Link>
-              </li>
 
-              {user != null && (
-                <li className="nav-item my-auto ms-3 ms-lg-0">
-                  <p
-                    style={{
-                      backgroundColor: "#030305",
-                      fontSize: 10,
-                      paddingLeft: 10,
-                      paddingRight: 10,
+                <li className="nav-item dropdown dropdown-hover mx-2 ms-lg-6">
+                  <Link
+                    to=""
+                    onClick={() => {
+                      localStorage.removeItem("user");
+                      localStorage.removeItem("token");
+                      navigate("/authentication/sign-in");
                     }}
-                    className="btn btn-sm  mb-0 me-1 mt-2 mt-md-0"
+                    className="nav-link ps-2 d-flex justify-content-between cursor-pointer align-items-center"
+                    id="dropdownMenuPages8"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
                   >
-                    {" Welcome " + user?.first_name}
-                  </p>
+                    <i className="material-icons opacity-6 me-2 text-md">logout</i>
+                    {user ? "Sign Out" : "Sign In"}
+                  </Link>
                 </li>
-              )}
-            </ul>
-          </div>
+
+                {user != null && (
+                  <li className="nav-item my-auto ms-3 ms-lg-0">
+                    <p
+                      style={{
+                        backgroundColor: "#030305",
+                        fontSize: 10,
+                        paddingLeft: 10,
+                        paddingRight: 10,
+                      }}
+                      className="btn btn-sm  mb-0 me-1 mt-2 mt-md-0"
+                    >
+                      {" Welcome " + user?.first_name}
+                    </p>
+                  </li>
+                )}
+              </ul>
+            </div>
+          }
         </div>
       </nav>
 
@@ -440,15 +521,12 @@ function Home() {
                   <h3 className="text-black z-index-1 position-relative">Payment methods</h3>
                 </div>
               </div>
-               
-
 
               <div className="d-flex flex-row align-items-center">
-        <h4  style={{marginRight: 15}}  >Month</h4>
-        <Switch onChange={handleSwitchToggle} checked={isMonthly} />
-        <h4 style={{marginLeft: 20}} >Year</h4>
-      </div>
-   
+                <h4 style={{ marginRight: 15 }}>Month</h4>
+                <Switch onChange={handleSwitchToggle} checked={isMonthly} />
+                <h4 style={{ marginLeft: 20 }}>Year</h4>
+              </div>
 
               <div className="row mt-4">
                 {/* first card */}
@@ -480,8 +558,7 @@ function Home() {
                           className="align-bottom"
                           style={{ fontSize: "16px", lineHeight: "40px" }}
                         >
-                           {isMonthly ? "Year" : "Month"}
-
+                          {isMonthly ? "Year" : "Month"}
                         </small>
                       </h1>
                       <a className="btn btn-info px-4 py-2" href="">
@@ -532,7 +609,7 @@ function Home() {
                           className="align-bottom"
                           style={{ fontSize: "16px", lineHeight: "40px" }}
                         >
-                        {isMonthly ? "Year" : "Month"}
+                          {isMonthly ? "Year" : "Month"}
                         </small>
                       </h1>
                       <a className="btn btn-info px-4 py-2" href="">
@@ -592,7 +669,7 @@ function Home() {
                           className="align-bottom"
                           style={{ fontSize: "16px", lineHeight: "40px" }}
                         >
-                        {isMonthly ? "Year" : "Month"}
+                          {isMonthly ? "Year" : "Month"}
                         </small>
                       </h1>
                       <a className="btn btn-info px-4 py-2" href="">
@@ -635,161 +712,139 @@ function Home() {
                   <div className="row justify-content-start">
                     <div className="col-md-6 col-lg-4 mb-4">
                       <div className="card border-primary" style={{ width: "100%", height: "90%" }}>
-                      <div className="card-body text-primary">
-  <h5 className="card-title">Stock Management</h5>
-  <ul style={{ color: "black" }}>
-    <li>
-      <p className="card-text">
-        Track and monitor quantity of products
-      </p>
-    </li>
-    <li>
-      <p className="card-text">
-        Reconcile your purchase with current stock
-      </p>
-    </li>
-    <li>
-      <p className="card-text">
-        Keep track of suppliers and products
-      </p>
-    </li>
-  </ul>
-</div>
-
+                        <div className="card-body text-primary">
+                          <h5 className="card-title">Stock Management</h5>
+                          <ul style={{ color: "black" }}>
+                            <li>
+                              <p className="card-text">Track and monitor quantity of products</p>
+                            </li>
+                            <li>
+                              <p className="card-text">
+                                Reconcile your purchase with current stock
+                              </p>
+                            </li>
+                            <li>
+                              <p className="card-text">Keep track of suppliers and products</p>
+                            </li>
+                          </ul>
+                        </div>
                       </div>
                     </div>
                     <div className="col-md-6 col-lg-4 mb-4">
                       <div className="card border-primary" style={{ height: "90%", width: "100%" }}>
-                      <div className="card-body text-primary">
-  <h5 className="card-title">Expiry Management</h5>
-  <ul style={{ color: "black" }}>
-    <li>
-      <p className="card-text">
-        Keep track of and monitor expired/expiring items in the stock
-      </p>
-    </li>
-    <li>
-      <p className="card-text">
-        Pre-notifications on items about to expire
-      </p>
-    </li>
-    <li>
-      <p className="card-text">
-        Get a report of all expired items in one click
-      </p>
-    </li>
-  </ul>
-</div>
-
+                        <div className="card-body text-primary">
+                          <h5 className="card-title">Expiry Management</h5>
+                          <ul style={{ color: "black" }}>
+                            <li>
+                              <p className="card-text">
+                                Keep track of and monitor expired/expiring items in the stock
+                              </p>
+                            </li>
+                            <li>
+                              <p className="card-text">
+                                Pre-notifications on items about to expire
+                              </p>
+                            </li>
+                            <li>
+                              <p className="card-text">
+                                Get a report of all expired items in one click
+                              </p>
+                            </li>
+                          </ul>
+                        </div>
                       </div>
                     </div>
                     <div className="col-md-6 col-lg-4 mb-4">
                       <div className="card border-primary" style={{ height: "90%", width: "100%" }}>
-                      <div className="card-body text-primary">
-  <h5 className="card-title">User friendly interface</h5>
-  <ul style={{ color: "black" }}>
-    <li>
-      <p className="card-text">
-        Comprehensive and modern user-friendly interface
-      </p>
-    </li>
-    <li>
-      <p className="card-text">
-        Faster service experience
-      </p>
-    </li>
-    <li>
-      <p className="card-text">
-        Different user themes: light mode or Dark mode
-      </p>
-    </li>
-  </ul>
-</div>
-
+                        <div className="card-body text-primary">
+                          <h5 className="card-title">User friendly interface</h5>
+                          <ul style={{ color: "black" }}>
+                            <li>
+                              <p className="card-text">
+                                Comprehensive and modern user-friendly interface
+                              </p>
+                            </li>
+                            <li>
+                              <p className="card-text">Faster service experience</p>
+                            </li>
+                            <li>
+                              <p className="card-text">
+                                Different user themes: light mode or Dark mode
+                              </p>
+                            </li>
+                          </ul>
+                        </div>
                       </div>
                     </div>
                   </div>
                   <div className="row justify-content-start mt-4">
                     <div className="col-md-6 col-lg-4 mb-4">
                       <div className="card border-primary" style={{ height: "90%", width: "100%" }}>
-                      <div className="card-body text-primary">
-  <h5 className="card-title">Sales management</h5>
-  <ul style={{ color: "black" }}>
-    <li>
-      <p className="card-text">
-        Calculate profit on different products and categories in real time
-      </p>
-    </li>
-    <li>
-      <p className="card-text">
-        Automatically update stock after each sale
-      </p>
-    </li>
-    <li>
-      <p className="card-text">
-        Notify on product shortage
-      </p>
-    </li>
-  </ul>
-</div>
-
+                        <div className="card-body text-primary">
+                          <h5 className="card-title">Sales management</h5>
+                          <ul style={{ color: "black" }}>
+                            <li>
+                              <p className="card-text">
+                                Calculate profit on different products and categories in real time
+                              </p>
+                            </li>
+                            <li>
+                              <p className="card-text">
+                                Automatically update stock after each sale
+                              </p>
+                            </li>
+                            <li>
+                              <p className="card-text">Notify on product shortage</p>
+                            </li>
+                          </ul>
+                        </div>
                       </div>
                     </div>
                     <div className="col-md-6 col-lg-4 mb-4">
                       <div className="card border-primary" style={{ height: "90%", width: "100%" }}>
-                      <div className="card-body text-primary">
-  <h5 className="card-title">Reporting</h5>
-  <ul style={{ color: "black" }}>
-    <li>
-      <p className="card-text">
-        Sales and Stock report
-      </p>
-    </li>
-    <li>
-      <p className="card-text">
-        Purchase and supply reports
-      </p>
-    </li>
-    <li>
-      <p className="card-text">
-        Debtors and creditors report
-      </p>
-    </li>
-    <li>
-      <p className="card-text">
-        Petty cash and cash book report
-      </p>
-    </li>
-  </ul>
-</div>
-
+                        <div className="card-body text-primary">
+                          <h5 className="card-title">Reporting</h5>
+                          <ul style={{ color: "black" }}>
+                            <li>
+                              <p className="card-text">Sales and Stock report</p>
+                            </li>
+                            <li>
+                              <p className="card-text">Purchase and supply reports</p>
+                            </li>
+                            <li>
+                              <p className="card-text">Debtors and creditors report</p>
+                            </li>
+                            <li>
+                              <p className="card-text">Petty cash and cash book report</p>
+                            </li>
+                          </ul>
+                        </div>
                       </div>
                     </div>
                     <div className="col-md-6 col-lg-4 mb-4">
-  <div className="card border-primary" style={{ height: "90%", width: "100%" }}>
-    <div className="card-body text-primary">
-      <h5 className="card-title">Notifications</h5>
-      <ul>
-        <li style={{ color: "black" }}  >
-          <p className="card-text" style={{ color: "black" }}>
-            Whatsapp notification on sales reports
-          </p>
-        </li>
-        <li style={{ color: "black" }}  >
-          <p className="card-text" style={{ color: "black" }}>
-            Monthly and quarterly report on transactions
-          </p>
-        </li>
-        <li  style={{ color: "black" }} >
-          <p className="card-text" style={{ color: "black" }}>
-            Closing and opening stock
-          </p>
-        </li>
-      </ul>
-    </div>
-  </div>
-</div>
-
+                      <div className="card border-primary" style={{ height: "90%", width: "100%" }}>
+                        <div className="card-body text-primary">
+                          <h5 className="card-title">Notifications</h5>
+                          <ul>
+                            <li style={{ color: "black" }}>
+                              <p className="card-text" style={{ color: "black" }}>
+                                Whatsapp notification on sales reports
+                              </p>
+                            </li>
+                            <li style={{ color: "black" }}>
+                              <p className="card-text" style={{ color: "black" }}>
+                                Monthly and quarterly report on transactions
+                              </p>
+                            </li>
+                            <li style={{ color: "black" }}>
+                              <p className="card-text" style={{ color: "black" }}>
+                                Closing and opening stock
+                              </p>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

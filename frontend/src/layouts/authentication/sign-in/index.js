@@ -20,11 +20,13 @@ import { loginUser } from "apiservices/authService";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "Redux/slices/User";
+import Spinner from "components/Spinner";
 
 function Illustration() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [rememberMe, setRememberMe] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const userProfileInfo = useSelector((state) => state.user.value);
 
@@ -57,6 +59,8 @@ function Illustration() {
   };
 
   const handleSubmit = async () => {
+
+    setLoading(true)
     const { email, password, isChecked } = userData;
     if (isChecked && email !== "") {
       localStorage.setItem("email", email);
@@ -72,15 +76,22 @@ function Illustration() {
           setUser(res.data.user);
           dispatch(login(res.data.user));
           toast.success("Login Successful", { draggable: false });
+          setLoading(false)
           navigate("/dashboard");
         } else if (res.status == 0) {
           toast.error("Contact Sytem Administration: Server Error", { draggable: false });
+          setLoading(false)
+
         } else {
           toast.error("Incorrect Credentials");
+          setLoading(false)
+
         }
       })
       .catch((err) => {
         console.log("Response is : ", err);
+        setLoading(false)
+
       });
   };
 
@@ -111,59 +122,70 @@ function Illustration() {
         description: "The more difficult management looks, the more easy we make it for you.",
       }}
     >
-      <ArgonBox component="form" role="form">
-        <ArgonBox mb={2}>
-          <ArgonInput
-            name="email"
-            type="email"
-            placeholder="Email"
-            value={userData.email}
-            size="large"
-            onChange={handleChange}
-          />
-        </ArgonBox>
-        <ArgonBox mb={2}>
-          <ArgonInput
-            name="password"
-            type="password"
-            placeholder="Password"
-            size="large"
-            value={userData.password}
-            onChange={handleChange}
-          />
-        </ArgonBox>
-        <ArgonBox display="flex" alignItems="center">
-          <Switch checked={userData.isChecked} onChange={handleSetRememberMe} />
-          <ArgonTypography
-            variant="button"
-            fontWeight="regular"
-            onClick={handleSetRememberMe}
-            sx={{ cursor: "pointer", userSelect: "none" }}
-          >
-            &nbsp;&nbsp;Remember me
-          </ArgonTypography>
-        </ArgonBox>
-        <ArgonBox mt={4} mb={1}>
-          <ArgonButton onClick={() => handleValidateSubmit()} color="info" size="large" fullWidth>
-            Sign In
-          </ArgonButton>
-        </ArgonBox>
+      
 
-        <ArgonBox mt={3} textAlign="center">
-          <ArgonTypography variant="button" color="text" fontWeight="regular">
-            Don&apos;t have an account?{" "}
+        
+        <ArgonBox component="form" role="form">
+          <ArgonBox mb={2}>
+            <ArgonInput
+              name="email"
+              type="email"
+              placeholder="Email"
+              value={userData.email}
+              size="large"
+              onChange={handleChange}
+            />
+          </ArgonBox>
+          <ArgonBox mb={2}>
+            <ArgonInput
+              name="password"
+              type="password"
+              placeholder="Password"
+              size="large"
+              value={userData.password}
+              onChange={handleChange}
+            />
+          </ArgonBox>
+          <ArgonBox display="flex" alignItems="center">
+            <Switch checked={userData.isChecked} onChange={handleSetRememberMe} />
             <ArgonTypography
-              component={Link}
-              to="/authentication/sign-up"
               variant="button"
-              color="info"
-              fontWeight="medium"
+              fontWeight="regular"
+              onClick={handleSetRememberMe}
+              sx={{ cursor: "pointer", userSelect: "none" }}
             >
-              Sign up
+              &nbsp;&nbsp;Remember me
             </ArgonTypography>
-          </ArgonTypography>
+          </ArgonBox>
+
+          {loading ?
+            <Spinner height={"30px"} width={"30px"}></Spinner> :
+
+<ArgonBox mt={4} mb={1}>
+            <ArgonButton onClick={() => handleValidateSubmit()} color="info" size="large" fullWidth>
+              Sign In
+            </ArgonButton>
+          </ArgonBox>
+
+          }
+          
+
+          <ArgonBox mt={3} textAlign="center">
+            <ArgonTypography variant="button" color="text" fontWeight="regular">
+              Don&apos;t have an account?{" "}
+              <ArgonTypography
+                component={Link}
+                to="/authentication/sign-up"
+                variant="button"
+                color="info"
+                fontWeight="medium"
+              >
+                Sign up
+              </ArgonTypography>
+            </ArgonTypography>
+          </ArgonBox>
         </ArgonBox>
-      </ArgonBox>
+     
     </IllustrationLayout>
   );
 }

@@ -13,7 +13,7 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework import generics
 from rest_framework.views import APIView
 from .models import Product, Category, Damages, OrderProducts, Supplier, Buyer, Order, Delivery, StoreActivity
-from .serializers import ProductSerializer, CategorySerializer, BuyerSerializer, DamagesSerializer, OrderSerializer, StoreActivitySerializer
+from .serializers import ProductSerializer,ProductEditSerializer, CategorySerializer, BuyerSerializer, DamagesSerializer, OrderSerializer, StoreActivitySerializer
 from users.models import CustomUser
 
 # FORM DATA FOR PRODUCT IMAGE
@@ -150,7 +150,7 @@ class ProductListCreateView(generics.ListCreateAPIView):
 # LIST DETAIL OF ONE PRODUCT / UPDATE / DELETE
 class ProductRetreiveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]
-    serializer_class = ProductSerializer
+    serializer_class = ProductEditSerializer
     queryset = Product.objects.all()
 
     def get_queryset(self):
