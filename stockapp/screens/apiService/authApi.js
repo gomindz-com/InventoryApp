@@ -1,4 +1,5 @@
 import apis from "./api";
+
 const endPoint = "/users";
 
 const login = (userData) => apis.post(`${endPoint}/login`, userData);
