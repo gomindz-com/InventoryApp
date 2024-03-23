@@ -27,6 +27,68 @@ import { Modal, Typography, Card, Divider } from "@mui/material";
 import Spinner from "components/Spinner";
 import "react-datetime/css/react-datetime.css";
 
+
+
+// Open or create IndexedDB database
+const openDatabase = () => {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open('inventoryDataDB1', 1);
+
+    request.onupgradeneeded = (event) => {
+      const db = event.target.result;
+      // Create object store for user data
+      db.createObjectStore('productData', { keyPath: 'id' });
+    };
+
+    request.onsuccess = (event) => {
+      const db = event.target.result;
+      resolve(db);
+    };
+
+    request.onerror = (event) => {
+      reject(event.target.error);
+    };
+  });
+};
+
+
+// Add or update user data in IndexedDB
+const saveProductDataToDB = async (productData) => {
+  const db = await openDatabase();
+  const transaction = db.transaction(['productData'], 'readwrite');
+  const store = transaction.objectStore('productData');
+
+  // Iterate over each in the array and store it in the object store
+  productData.forEach(product => {
+    store.put(product);
+  });
+
+
+  transaction.oncomplete = () => {
+    console.log('Product data saved to IndexedDB');
+  };
+};
+
+
+// Retrieve user data from IndexedDB
+const loadProductDataFromDB = async () => {
+  const db = await openDatabase();
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction(['productData'], 'readonly');
+    const store = transaction.objectStore('productData');
+    const request = store.getAll();
+    request.onsuccess = (event) => {
+      const productData = event.target.result;
+      resolve(productData);
+    };
+    request.onerror = (event) => {
+      reject(event.target.error);
+    };
+  });
+};
+
+
+
 function Products() {
   
   // MODAL VARIABLES
@@ -226,6 +288,8 @@ function Products() {
       if (res.data?.status) {
         setProductList(res.data.products);
         setCurrentProductList(res.data.products);
+        console.log(res.data.products)
+        saveProductDataToDB(res.data.products)
         setLoading(false);
       } else {
         setProductList([]);
@@ -392,10 +456,24 @@ function Products() {
     });
   });
 
-  useEffect(() => {
-    handleGetProductList();
-    handleGetCategoryList();
+
+  useEffect(() => {    
+    if (navigator.onLine) {
+      handleGetProductList();
+      handleGetCategoryList();
+    }
+
+    else{
+      loadProductDataFromDB().then((productData) => {
+        setCurrentProductList(productData)
+        setLoading(false);        
+      }).catch((error) => {
+        console.error('Error loading Products data from IndexedDB:', error);
+      });
+    }
+
   }, []);
+
 
   return (
     <DashboardLayout>

@@ -238,13 +238,15 @@ function Receipts() {
         setOrderList(res.data.orders);
         setCurrentOrderList(res.data.orders);
         setLoading(false);
-      } else {
+      } 
+      else if(res.status == 0 ){
+      }
+      else {
         setOrderList([]);
         setLoading(false);
       }
     } catch (error) {
       toast.error("Receipt Could Not Be Retrieved");
-      setLoading(false);
     }
   };
 
@@ -792,8 +794,8 @@ function Receipts() {
 
   useEffect(() => {
     handleGetReceiptList();
-    handleGetProductList();
-    handleGetBuyerList();
+    // handleGetProductList();
+    // handleGetBuyerList();
   }, []);
 
   return (
