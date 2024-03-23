@@ -37,6 +37,68 @@ import { getBuyers } from "apiservices/buyerService";
 import { addBuyer } from "apiservices/buyerService";
 import Spinner from "components/Spinner";
 
+
+
+  // Open or create IndexedDB database
+  const openDatabase = () => {
+    return new Promise((resolve, reject) => {
+      const request = indexedDB.open('inventoryDataDB', 1);
+  
+      request.onupgradeneeded = (event) => {
+        const db = event.target.result;
+        // Create object store for user data
+        db.createObjectStore('invoiceData', { keyPath: 'id' });
+      };
+  
+      request.onsuccess = (event) => {
+        const db = event.target.result;
+        resolve(db);
+      };
+  
+      request.onerror = (event) => {
+        reject(event.target.error);
+      };
+    });
+  };
+  
+  
+  // Add or update user data in IndexedDB
+  const saveInvoiceDataToDB = async (invoiceData) => {
+    const db = await openDatabase();
+    const transaction = db.transaction(['invoiceData'], 'readwrite');
+    const store = transaction.objectStore('invoiceData');
+
+    // Iterate over each in the array and store it in the object store
+    invoiceData.forEach(invoice => {
+      store.put(invoice);
+    });
+
+  
+    transaction.oncomplete = () => {
+      console.log('Invoice data saved to IndexedDB');
+    };
+  };
+  
+  
+  // Retrieve user data from IndexedDB
+  const loadInvoiceDataFromDB = async () => {
+    const db = await openDatabase();
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction(['invoiceData'], 'readonly');
+      const store = transaction.objectStore('invoiceData');
+      const request = store.getAll();
+      request.onsuccess = (event) => {
+        const invoiceData = event.target.result;
+        resolve(invoiceData);
+      };
+      request.onerror = (event) => {
+        reject(event.target.error);
+      };
+    });
+  };
+
+  
+
 function Invoices() {
   // USER
   const user = useState(JSON.parse(localStorage.getItem("user")));
@@ -177,6 +239,7 @@ function Invoices() {
       if (res.data?.status === true) {
         setOrderList(res.data.orders);
         setCurrentOrderList(res.data.orders);
+        saveInvoiceDataToDB(res.data?.orders);
       } else {
         setOrderList([]);
       }
@@ -1075,10 +1138,23 @@ function Invoices() {
     );
   });
 
-  useEffect(() => {
-    handleGetOrderList();
-    handleGetProductList();
-    handleGetBuyerList();
+
+  useEffect(() => {    
+    if (navigator.onLine) {
+      handleGetOrderList();
+      handleGetProductList();
+      handleGetBuyerList();
+    }
+
+    else{
+      loadInvoiceDataFromDB().then((invoiceData) => {
+        setCurrentOrderList(invoiceData)
+        setLoading(false);        
+      }).catch((error) => {
+        console.error('Error loading Invoice data from IndexedDB:', error);
+      });
+    }
+
   }, []);
 
   // MAIN UI
@@ -1294,6 +1370,8 @@ function Invoices() {
         </Modal>
       </>
 
+     
+
       <DashboardNavbar
         handleClick={(e) => {
           const filteredOrderList = [];
@@ -1321,7 +1399,10 @@ function Invoices() {
                 <Card>
                   <ArgonBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
                     <ArgonTypography variant="h6">Invoice List</ArgonTypography>
-                    <TextField
+
+                    {/* {JSON.stringify(invoiceData, null, 2)} */}
+
+                    {/* <TextField
                       id="outlined-basic"
                       placeholder="Search"
                       style={{ width: "65%" }}
@@ -1329,7 +1410,7 @@ function Invoices() {
                       value={searchQuery}
                       onChange={handleSearch}
                       autoComplete={"off"}
-                    />
+                    /> */}
 
                     <Button
                       onClick={() => {

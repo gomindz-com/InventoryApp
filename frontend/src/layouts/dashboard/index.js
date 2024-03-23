@@ -41,7 +41,7 @@ function Default() {
   const [orderCount, setOrderCount] = useState({});
   const [categoryStatList, setCategoryStatList] = useState([]);
   const categoriesListStatData = [];
-  const [productImages, setProductImages] = useState({});
+  const [productImages, setProductImages] = useState([]);
 
   categoryStatList.map(function (item, i) {
     categoriesListStatData.push({
@@ -112,7 +112,7 @@ function Default() {
             setLoading(false);
           } else {
             setLoading(false);
-            setProductImages({});
+            setProductImages([]);
           }
         })
         .catch((err) => {});
