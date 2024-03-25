@@ -15,8 +15,8 @@ import CustomText from "../../components/CustomText";
 import { Ionicons } from "@expo/vector-icons";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import * as Yup from "yup";
-import authApi from "../apiService/authApi";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { loginUser } from "../apiService/authenticationApi";
 
 const LoginScreen = () => {
   const navigation = useNavigation();
@@ -67,40 +67,79 @@ const LoginScreen = () => {
 
   const handleLogin = async () => {
     try {
-      // Validate data
+      // Validate data using the loginSchema
       await loginSchema.validate(data, { abortEarly: false });
 
-      // Call the login API function with user data
+      // Prepare user data for login
       const userData = {
         email: data.email,
         password: data.password,
       };
+
       setLoading(true);
-      const res = await authApi.login(userData);
-      setLoading(false);
-      console.log("response", res.data);
 
-      const token = res.data.token;
+      loginUser(userData)
+        .then(async (res) => {
+          setLoading(false);
+          console.log("response", res.data);
 
-      // Store the token in AsyncStorage
-      await AsyncStorage.setItem("token", token);
+          const token = res.data.token;
 
-      // Navigate to the home screen or perform any other necessary actions
-      HomeScreen();
-    } catch (error) {
-      // Handle validation errors or API errors
-      console.error(error);
-      if (error.inner) {
-        const newErrors = {};
-        error.inner.forEach((err) => {
-          newErrors[err.path] = err.message;
+          await AsyncStorage.setItem("token", token);
+
+          HomeScreen();
+        })
+        .catch((error) => {
+          console.error("API Error:", error);
+          Alert.alert("An error occurred. Please try again later.");
         });
-        setErrors(newErrors);
-      } else {
-        // Handle other types of errors
-      }
+    } catch (error) {
+      console.error("Validation Error:", error);
+
+      const newErrors = {};
+      error.inner.forEach((err) => {
+        newErrors[err.path] = err.message;
+      });
+      setErrors(newErrors);
     }
   };
+
+  // const handleLogin = async () => {
+  //   try {
+  //     // Validate data
+  //     await loginSchema.validate(data, { abortEarly: false });
+
+  //     // Call the login API function with user data
+  //     const userData = {
+  //       email: data.email,
+  //       password: data.password,
+  //     };
+  //     setLoading(true);
+  //     const res = await authApi.login(userData);
+  //     setLoading(false);
+  //     console.log("response", res.data);
+
+  //     const token = res.data.token;
+
+  //     // Store the token in AsyncStorage
+  //     await AsyncStorage.setItem("token", token);
+
+  //     // Navigate to the home screen or perform any other necessary actions
+  //     HomeScreen();
+  //   } catch (error) {
+  //     // Handle validation errors or API errors
+  //     console.error(error);
+  //     if (error.inner) {
+  //       const newErrors = {};
+  //       error.inner.forEach((err) => {
+  //         newErrors[err.path] = err.message;
+  //       });
+  //       setErrors(newErrors);
+  //     } else {
+  //       // Handle other types of errors
+  //     }
+  //   }
+  // };
 
   const [loading, setLoading] = useState(false);
   return (
