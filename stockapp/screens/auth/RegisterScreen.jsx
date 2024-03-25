@@ -6,24 +6,21 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-  Alert
+  Alert,
 } from "react-native";
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import * as Yup from "yup";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import CustomText from "../../components/CustomText";
-import authApi from "../apiService/authApi";
-import axios from 'axios';
+import axios from "axios";
 import { registerUser } from "../apiService/authenticationApi";
-
 
 const RegisterScreen = () => {
   const navigation = useNavigation();
 
-
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const HomeScreen = () => {
     navigation.navigate("Main");
@@ -74,10 +71,9 @@ const RegisterScreen = () => {
     userName: Yup.string().required("User name is required"),
   });
 
-
   const handleRegister = async () => {
-
-    registerSchema.validate(data, { abortEarly: false })
+    registerSchema
+      .validate(data, { abortEarly: false })
       .then(async () => {
         const userData = {
           email: data.email,
@@ -87,28 +83,27 @@ const RegisterScreen = () => {
           username: data.userName,
           is_active: true,
         };
-  
-        await registerUser(userData)
-        .then(async (res) => {
-          if (res.status == 201) {
-            Alert.alert("Successfully Registered");
-            LoginScreen()
-          } else {
-            Alert.alert("User Could Not Be Registered");
-          }
-        })
-        .catch((err) => {
-          Alert.alert("Server Errror");
-        });
 
+        await registerUser(userData)
+          .then(async (res) => {
+            if (res.status == 201) {
+              Alert.alert("Successfully Registered");
+              LoginScreen();
+            } else {
+              Alert.alert("User Could Not Be Registered");
+            }
+          })
+          .catch((err) => {
+            Alert.alert("Server Errror");
+          });
       })
       .catch((err) => {
         const newErrors = {};
         err.inner.forEach((err) => {
-        newErrors[err.path] = err.message;
+          newErrors[err.path] = err.message;
         });
         setErrors(newErrors);
-      });    
+      });
   };
 
   return (

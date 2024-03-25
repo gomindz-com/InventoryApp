@@ -1,9 +1,10 @@
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { baseUrl } from "./api";
+import { baseApiUrl } from "./axios-config";
 
 const axiosConfig = axios.create({
-  baseURL: baseUrl,
+  baseURL: baseApiUrl,
   headers: {
     "Content-Type": "application/json",
   },
