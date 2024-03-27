@@ -17,7 +17,8 @@ import { useNavigation } from "@react-navigation/native";
 import { useRoute } from "@react-navigation/native";
 import { getStatictData } from "../apiService/productApi";
 import { getTransactiondata } from "../apiService/transationApi";
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign } from "@expo/vector-icons";
+import HeaderCom from "../../components/HeaderCom";
 
 const ProductData = [
   {
@@ -213,70 +214,10 @@ const HomeScreen = ({ route }) => {
 
   return (
     <View>
-      <View style={styles.top}>
-        <View
-          style={{
-            marginTop: 40,
-            flexDirection: "row",
-            justifyContent: "space-between",
-            marginHorizontal: 10,
-          }}
-        >
-          {/* <TouchableOpacity
-            onPress={SettingScreen}
-            style={{ flexDirection: "row" }}
-          >
-            <Feather
-              style={{ top: 15 }}
-              name="settings"
-              size={30}
-              color="#fff"
-            />
-          </TouchableOpacity> */}
-          <TouchableOpacity
-            // onPress={SettingScreen}
-            style={{ flexDirection: "row" }}
-          >
-
-          <AntDesign style={{ top: 15 }}
-              name="user"
-              size={30}
-              color="#fff" />
-          <CustomText style={{ top: 20, left:5, color:'white',fontWeight:'bold',fontSize:18, }}>JT</CustomText>
-          {/* <Text style={{ color: '#fff', fontSize: 18 }}>{getInitials(username)}</Text> Display initials */}
-          </TouchableOpacity>
-
-         
-
-          <CustomText
-            style={{
-              color: "#fff",
-              top: 20,
-              right:20,
-              fontWeight: "bold",
-              fontSize: 25,
-              textAlign: "center",
-              marginHorizontal: 100,
-            }}
-          >
-            DASHBOARD
-          </CustomText>
-
-
-
-          
-        </View>
-      </View>
-
+      <HeaderCom title={"DASHBOARD"} />
       <TouchableOpacity style={styles.iconContainer} onPress={AddNewTansact}>
-            <Feather
-              name="plus-circle"
-              size={40}
-              color="green"
-            />
-          </TouchableOpacity>
-
-
+        <Feather name="plus-circle" size={40} color="green" />
+      </TouchableOpacity>
 
       <CustomCard mx={7} style={{ top: -30 }}>
         <View style={styles.flexContainer}>
@@ -428,9 +369,9 @@ const styles = StyleSheet.create({
   iconContainer: {
     position: "absolute",
     bottom: -280,
-    right:15,
-     // Adjust this value as needed
-    alignSelf: 'center', // Align icon horizontally to the center
+    right: 15,
+    // Adjust this value as needed
+    alignSelf: "center", // Align icon horizontally to the center
     zIndex: 999, // Optional: Adjust the z-index to ensure it's above other content
   },
 
@@ -524,3 +465,55 @@ const styles = StyleSheet.create({
     borderColor: "#70ff7e",
   },
 });
+
+{
+  /* <View style={styles.top}>
+        <View
+          style={{
+            marginTop: 40,
+            flexDirection: "row",
+            justifyContent: "space-between",
+            marginHorizontal: 10,
+          }}
+        >
+          {/* <TouchableOpacity
+            onPress={SettingScreen}
+            style={{ flexDirection: "row" }}
+          >
+            <Feather
+              style={{ top: 15 }}
+              name="settings"
+              size={30}
+              color="#fff"
+            />
+          </TouchableOpacity> */
+}
+//     <TouchableOpacity
+//       // onPress={SettingScreen}
+//       style={{ flexDirection: "row" }}
+//     >
+
+//     <AntDesign style={{ top: 15 }}
+//         name="user"
+//         size={30}
+//         color="#fff" />
+//     <CustomText style={{ top: 20, left:5, color:'white',fontWeight:'bold',fontSize:18, }}>JT</CustomText>
+//     {/* <Text style={{ color: '#fff', fontSize: 18 }}>{getInitials(username)}</Text> Display initials */}
+//     </TouchableOpacity>
+
+//     <CustomText
+//       style={{
+//         color: "#fff",
+//         top: 20,
+//         right:20,
+//         fontWeight: "bold",
+//         fontSize: 25,
+//         textAlign: "center",
+//         marginHorizontal: 100,
+//       }}
+//     >
+//       DASHBOARD
+//     </CustomText>
+
+//   </View>
+// </View> */}
