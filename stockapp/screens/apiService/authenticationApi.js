@@ -12,7 +12,7 @@ export const loginUser = async (userData) => {
   return data;
 };
 
-export const registerUser = async (userData) => {  
+export const registerUser = async (userData) => {
   const data = await axiosConfig
     .post(`/users/register`, userData)
     .then((response) => {
@@ -25,3 +25,16 @@ export const registerUser = async (userData) => {
   return data;
 };
 
+export const userDetails = async (userData) => {
+  const data = await axiosConfig
+    .get(`/users/details`, userData)
+    .then((response) => {
+      return response;
+    })
+
+    .catch((error) => {
+      return error.response;
+    });
+
+  return data;
+};
