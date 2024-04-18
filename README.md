@@ -67,6 +67,10 @@ python manage.py runserver
 
 
 
+
+
+
+
 # Gomindz Inventory App Frontend
 
 ## Get Started
