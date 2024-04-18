@@ -94,3 +94,31 @@ npm fund
 ```diff
 npm start
 ```
+
+
+
+
+
+# Stock App
+
+## Get Started
+
+```diff
++ git clone {the url to the GitHub repo}
+```
+
+```
+cd stockapp
+```
+
+```diff
+npm install --legacy-peer-deps
+```
+
+```diff
+npm fund
+```
+
+```diff
+npm start
+```
