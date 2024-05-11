@@ -8,7 +8,7 @@ def upload_to(instance, filename):
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=120)
+    name = models.CharField(max_length=65)
     description = models.CharField(max_length=220)
     created_date = models.DateField(auto_now_add=True)
     owner = models.ForeignKey('users.CustomUser', related_name='categories', on_delete=models.CASCADE, default='')
@@ -23,12 +23,12 @@ class Product(models.Model):
         ('in_stock', 'In Stock'),
         ('out_of_stock', 'Out of Stock'),
     )
-    name = models.CharField(max_length=120)
-    description_color = models.CharField(max_length=120, default='')
-    price = models.DecimalField(max_digits=120, decimal_places=2)
-    cost_price = models.DecimalField(max_digits=120, decimal_places=2, default=0.0)
+    name = models.CharField(max_length=65)
+    description_color = models.CharField(max_length=65, default='')
+    price = models.DecimalField(max_digits=65, decimal_places=2)
+    cost_price = models.DecimalField(max_digits=60, decimal_places=2, default=0.0)
     stock = models.PositiveIntegerField(default='')
-    status = models.CharField(max_length=120, choices=STATUS_CHOICE, default='')
+    status = models.CharField(max_length=65, choices=STATUS_CHOICE, default='')
     supplier = models.CharField(max_length=50, default='')
     image = models.ImageField(_('Image'), upload_to= upload_to, default='products/default.png')
     owner = models.ForeignKey('users.CustomUser', related_name='%(class)s_products', on_delete=models.CASCADE,  default=1)
@@ -99,7 +99,7 @@ class Supplier(models.Model):
     additional_information= models.CharField(max_length=200,blank=True, default='')
     additional_files= models.CharField(max_length=200,blank=True, default='')
     created_date = models.DateField(auto_now_add=True)
-    name = models.CharField(max_length=120,blank=True)
+    name = models.CharField(max_length=65,blank=True)
     address = models.CharField(max_length=220)
 
     def __str__(self):
@@ -107,7 +107,7 @@ class Supplier(models.Model):
 
 
 class Buyer(models.Model):
-    name = models.CharField(max_length=120, unique=True)
+    name = models.CharField(max_length=65, unique=True)
     address = models.CharField(max_length=220, default='')
     mobile_number = models.CharField(max_length=220, default='')
     email = models.EmailField(max_length=220, default='')
@@ -125,11 +125,11 @@ class Delivery(models.Model):
         ('delivered', 'delivered'),
         ('pending', 'pending'),
     )
-    reference=models.CharField(max_length=120, default='')
+    reference=models.CharField(max_length=65, default='')
     status=models.CharField(max_length=20, choices=STATUS_CHOICE, default='')
-    reciept=models.CharField(max_length=120, default='')
+    reciept=models.CharField(max_length=65, default='')
     order = models.ForeignKey('Order', on_delete=models.CASCADE, default='')
-    courier_name = models.CharField(max_length=120,default='')
+    courier_name = models.CharField(max_length=65,default='')
     created_date = models.DateField(auto_now_add=True)
 
     def __str__(self):

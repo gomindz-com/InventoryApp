@@ -22,7 +22,7 @@ class CustomUser(AbstractUser, PermissionsMixin):
     postcode = models.CharField(max_length=120, default='')
     is_staff = models.BooleanField(default=False)
     is_mobile_user = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=False)
     groups = models.ManyToManyField(Group, blank=True, related_name='custom_users')
     
     USERNAME_FIELD = 'email'

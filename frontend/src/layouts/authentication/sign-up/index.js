@@ -56,7 +56,7 @@ function Cover() {
       .then(async (res) => {
         if (res.status == 201) {
           localStorage.clear();
-          toast.success("Successful Sign Up", {
+          toast.success("Successful Sign Up, Contact Administrator {+220 350 2246} To Activate Account", {
             onClose: () => {
               navigate("/authentication/sign-in");
             },
