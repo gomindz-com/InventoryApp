@@ -15,6 +15,8 @@ function Illustration() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    localStorage.removeItem("adminToken");
+
     const isValid = await UserSchema.isValid(userData);
     if (!isValid) {
       toast.error("Please enter all the required fields!!");
