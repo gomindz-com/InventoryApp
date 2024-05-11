@@ -23,6 +23,7 @@ function Report() {
     { name: "Stock In", align: "center" },
     { name: "Stock Out", align: "center" },
     { name: "Stock In Hand", align: "center" },
+    { name: "Damages", align: "center" },
     { name: "Added Date", align: "center" },
     { name: "Expiry Date", align: "center" },
   ];
