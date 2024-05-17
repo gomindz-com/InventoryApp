@@ -1236,12 +1236,19 @@ class ProductReportView(APIView):
 
         product_data = []
         for product in products:
+
+            damages = 0
+            product_damages = Damages.objects.filter(product_id=product)
+            for product_damage in product_damages:
+                damages = damages + product_damage.damages
+    
             product_data.append({
                 "Name": product.name,
                 "Category": product.category.name if product.category else "",
                 "Stock In": product.stock,
                 "Stock Out": self.get_stock_out(product),
                 "Stock In Hand": product.stock - self.get_stock_out(product),
+                "Damages": damages,
                 "Expiry Date": product.expiry_date.strftime('%Y-%m-%d') if product.expiry_date else "",
                 "Added Date": product.created_date
             })
