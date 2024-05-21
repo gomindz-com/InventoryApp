@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     # Third-party apps
     'rest_framework',
     'corsheaders',
-    'rest_framework.authtoken'
+    'rest_framework.authtoken', 
+    'django_crontab'
 ]
 
 MIDDLEWARE = [
@@ -194,3 +195,8 @@ ALLOWED_HOSTS = ["*"]
 
 
 CSRF_TRUSTED_ORIGINS = ['http://localhost:8080']
+
+
+CRONJOBS = [
+    ('0 0 * * *', 'store.management.commands.check_expired_products.my_scheduled_job')
+]

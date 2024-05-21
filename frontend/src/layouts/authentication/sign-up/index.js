@@ -60,7 +60,6 @@ function Cover() {
             onClose: () => {
               navigate("/authentication/sign-in");
             },
-            autoClose: 1000,
           });
         } else {
           const entries = Object.entries(res.data);
