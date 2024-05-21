@@ -331,7 +331,7 @@ function Default() {
                     </div>
                     <div className="text-end pt-1">
                       <p className="text-sm mb-0 text-capitalize">New Clients</p>
-                      <h4 className="mb-0">3,462</h4>
+                      <h4 className="mb-0">Coming Soon </h4>
                     </div>
                   </div>
                   <hr className="dark horizontal my-0" />
@@ -351,7 +351,7 @@ function Default() {
                     </div>
                     <div className="text-end pt-1">
                       <p className="text-sm mb-0 text-capitalize">Sales</p>
-                      <h4 className="mb-0">$103,430</h4>
+                      <h4 className="mb-0">Coming Soon</h4>
                     </div>
                   </div>
                   <hr className="dark horizontal my-0" />
