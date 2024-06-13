@@ -59,17 +59,10 @@ const AddNewTransact = () => {
     };
 
     try {
-      console.log("dfgdfg", productData);
       const response = await AddTransaction(productData);
       navigation.navigate("Home");
-
-      // if (response.status === 200) {
-      //   navigation.navigate("Home");
-      // } else {
-      //   console.log("Error:", response.data.error);
-      // }
     } catch (error) {
-      console.error(" here  we  go  err Error:", error);
+      console.error("Error Adding Transaction:", error);
     }
   };
 

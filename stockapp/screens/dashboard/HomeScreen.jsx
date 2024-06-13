@@ -164,7 +164,6 @@ const HomeScreen = ({ route }) => {
   const [productDataValue, setProductDataValue] = useState(inputValues);
   const [statiticData, setStaticData] = useState([]);
   const [transactionData, setTransationData] = useState([]);
-  console.log("datat", transactionData);
 
   useEffect(() => {
     const staticData = async () => {
