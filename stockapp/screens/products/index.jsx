@@ -68,7 +68,6 @@ const prductData = [
 
 const ProductScreen = () => {
   const [productData, setProductData] = useState([]);
-  console.log("here  we gogg", productData);
   const navigation = useNavigation();
   const addproductscreen = () => {
     navigation.navigate("addProduct");

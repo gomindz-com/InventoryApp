@@ -81,10 +81,7 @@ const LoginScreen = () => {
       loginUser(userData)
         .then(async (res) => {
           setLoading(false);
-          console.log("response", res.data);
-
           const token = res.data.token;
-
           await AsyncStorage.setItem("token", token);
 
           HomeScreen();
@@ -103,43 +100,6 @@ const LoginScreen = () => {
       setErrors(newErrors);
     }
   };
-
-  // const handleLogin = async () => {
-  //   try {
-  //     // Validate data
-  //     await loginSchema.validate(data, { abortEarly: false });
-
-  //     // Call the login API function with user data
-  //     const userData = {
-  //       email: data.email,
-  //       password: data.password,
-  //     };
-  //     setLoading(true);
-  //     const res = await authApi.login(userData);
-  //     setLoading(false);
-  //     console.log("response", res.data);
-
-  //     const token = res.data.token;
-
-  //     // Store the token in AsyncStorage
-  //     await AsyncStorage.setItem("token", token);
-
-  //     // Navigate to the home screen or perform any other necessary actions
-  //     HomeScreen();
-  //   } catch (error) {
-  //     // Handle validation errors or API errors
-  //     console.error(error);
-  //     if (error.inner) {
-  //       const newErrors = {};
-  //       error.inner.forEach((err) => {
-  //         newErrors[err.path] = err.message;
-  //       });
-  //       setErrors(newErrors);
-  //     } else {
-  //       // Handle other types of errors
-  //     }
-  //   }
-  // };
 
   const [loading, setLoading] = useState(false);
   return (

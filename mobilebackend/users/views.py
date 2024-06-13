@@ -34,12 +34,17 @@ class RegisterUser(generics.CreateAPIView):
     
 
 class LoginUser(APIView):
+
+    print("User Login EndPoint Called")
     permission_classes = [AllowAny]
     def post(self, request: Request):
         serializer = LoginSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         email = request.data.get('email')
         password = request.data.get('password')
+        print(email)
+        print(password)
+
         user = authenticate(email=email, password=password)
         if user is not None:
             user_logged_in.send(sender=self.__class__, request=request, user=user)

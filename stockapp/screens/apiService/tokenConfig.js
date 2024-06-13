@@ -12,8 +12,6 @@ const axiosConfig = axios.create({
 
 axiosConfig.interceptors.request.use(async function (config) {
   const token = await AsyncStorage.getItem("token");
-  console.log("User Token");
-  console.log(token);
   config.headers.Authorization = token ? `Token ${token}` : "";
   return config;
 });

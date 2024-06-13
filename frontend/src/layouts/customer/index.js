@@ -18,7 +18,10 @@ import TextField from "@mui/material/TextField";
 function Customer() {
   const [buyerInvoicesList, setBuyerInvoicesList] = useState([]);
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading ] = useState(true);
+
+
+  
 
   const columns = [
     { name: "id", align: "left" },
