@@ -23,11 +23,20 @@ class RegisterUser(generics.CreateAPIView):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
+        user = serializer.save()
+        
+        # Get the token that was created by the serializer
+        token, created = Token.objects.get_or_create(user=user)
+        
+        # Serialize user data for response
+        user_serializer = CustomUserSerializer(user)
+        
         response = {
             "status": True,
             "message": "User Successfully Registered",
-                }                
+            "user": user_serializer.data,
+            "token": token.key
+        }                
         return Response(data=response, status=status.HTTP_201_CREATED)
 
     
@@ -43,12 +52,15 @@ class LoginUser(APIView):
         if user is not None:
             user_logged_in.send(sender=self.__class__, request=request, user=user)
 
+            # Get or create token if it doesn't exist
+            token, created = Token.objects.get_or_create(user=user)
+
             serializer = CustomUserSerializer(user)
             response = {
                 "status": True,
                 "message": "login Successful",
                 "user": serializer.data,
-                "token": user.auth_token.key
+                "token": token.key
                 
             }
             return Response(data=response, status=status.HTTP_200_OK)
