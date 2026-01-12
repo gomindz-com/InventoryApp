@@ -35,8 +35,8 @@ class RegisterSerializer(serializers.ModelSerializer):
             required=True,
             validators=[UniqueValidator(queryset=CustomUser.objects.all())]
             )
-    password = serializers.CharField(write_only=True, required=True, min_length=8)
-    password2 = serializers.CharField(write_only=True, required=True)
+    password = serializers.CharField(write_only=True, required=True, min_length=8, allow_blank=False)
+    password2 = serializers.CharField(write_only=True, required=True, allow_blank=False)
 
     class Meta:
         model = CustomUser
@@ -51,7 +51,13 @@ class RegisterSerializer(serializers.ModelSerializer):
         }
 
     def validate(self, attrs):
-        if attrs['password'] != attrs['password2']:
+        password = attrs.get('password', '')
+        password2 = attrs.get('password2', '')
+        
+        if not password2:
+            raise serializers.ValidationError({"password2": "Please confirm your password."})
+        
+        if password != password2:
             raise serializers.ValidationError({"password": "Password fields didn't match."})
 
         return attrs
