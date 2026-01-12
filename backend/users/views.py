@@ -21,8 +21,20 @@ class RegisterUser(generics.CreateAPIView):
     serializer_class = RegisterSerializer
 
     def create(self, request, *args, **kwargs):
+        # Log received data for debugging
+        logger.info(f"Registration attempt with data: {request.data}")
+        
         serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
+        
+        if not serializer.is_valid():
+            logger.warning(f"Registration validation failed: {serializer.errors}")
+            response = {
+                "status": False,
+                "message": "Validation Error",
+                "errors": serializer.errors
+            }
+            return Response(data=response, status=status.HTTP_400_BAD_REQUEST)
+        
         user = serializer.save()
         
         # Get the token that was created by the serializer

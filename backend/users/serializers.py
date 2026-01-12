@@ -35,7 +35,7 @@ class RegisterSerializer(serializers.ModelSerializer):
             required=True,
             validators=[UniqueValidator(queryset=CustomUser.objects.all())]
             )
-    password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
+    password = serializers.CharField(write_only=True, required=True, min_length=8)
     password2 = serializers.CharField(write_only=True, required=True)
 
     class Meta:
@@ -43,7 +43,11 @@ class RegisterSerializer(serializers.ModelSerializer):
         fields = [ 'email', 'username', 'password', 'password2', 'first_name', 'last_name', 'company_name', 'contact', 'postcode', 'city']
         extra_kwargs = {
             'first_name': {'required': True},
-            'last_name': {'required': True}
+            'last_name': {'required': True},
+            'company_name': {'required': False, 'allow_blank': True},
+            'contact': {'required': False, 'allow_blank': True},
+            'postcode': {'required': False, 'allow_blank': True},
+            'city': {'required': False, 'allow_blank': True}
         }
 
     def validate(self, attrs):
@@ -53,16 +57,19 @@ class RegisterSerializer(serializers.ModelSerializer):
         return attrs
 
     def create(self, validated_data):
+        # Remove password2 from validated_data as it's not needed for user creation
+        validated_data.pop('password2', None)
+        
         user = CustomUser.objects.create(
             username=validated_data['username'],
             email=validated_data['email'],
             first_name=validated_data['first_name'],
             last_name=validated_data['last_name'],
-            profile = 'profiles/default.png',
-            company_name=validated_data['company_name'],
-            contact=validated_data['contact'],
-            postcode=validated_data['postcode'],
-            city=validated_data['city']
+            profile='profiles/default.png',
+            company_name=validated_data.get('company_name', ''),
+            contact=validated_data.get('contact', ''),
+            postcode=validated_data.get('postcode', ''),
+            city=validated_data.get('city', '')
         )
 
         user.set_password(validated_data['password'])
